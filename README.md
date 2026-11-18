@@ -6,7 +6,7 @@
 
 I build web products, apps and bots. I use AI to automate routine work on client projects and in my own products.
 
-[Русский](README.ru.md) · [Portfolio site](https://luvlarion4ik.github.io/luvlarion4ik/) · [Contact Me](https://t.me/luvlarion4ik_bot?start=contact_en)
+[Русский](README.ru.md) · [Portfolio site](https://luvlarion4ik.github.io/luvlarion4ik/) · [Message me on Telegram](https://t.me/LuvLarion4ik)
 
 ## Selected work
 
@@ -88,8 +88,8 @@ I lead projects from requirements and prototypes to development and launch. The 
 
 ## Get in touch
 
-Send a project brief or proposal through the contact form in my Telegram bot.
+Message me on Telegram to discuss a project or working together.
 
-[Contact Me](https://t.me/luvlarion4ik_bot?start=contact_en) · The Telegram contact form is being set up.
+[Message me on Telegram](https://t.me/LuvLarion4ik)
 
 [Share profile](https://luvlarion4ik.github.io/luvlarion4ik/)

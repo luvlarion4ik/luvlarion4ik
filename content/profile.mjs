@@ -3,7 +3,7 @@ export const identity = {
   nameRu: "Илья Ларионов",
   brand: "DevLarion",
   github: "https://github.com/luvlarion4ik",
-  telegram: "https://t.me/luvlarion4ik_bot",
+  telegram: "https://t.me/LuvLarion4ik",
   portfolio: "https://luvlarion4ik.github.io/luvlarion4ik/",
   orientSite: "https://orientlogic.ru/",
   copilotUpstream: "https://github.com/Magerko/copilot",
@@ -17,6 +17,8 @@ export const work = {
 
 export const copy = {
   en: {
+    title: "Ilia Larionov — AI / Full-Stack Developer",
+    description: "Ilia Larionov’s portfolio: web apps, Telegram bots, AI projects and achievements",
     role: "Independent full-stack developer and founder of DevLarion",
     currentTitle: "Currently building",
     current: [["wrist-ai", "Wrist AI", "AI assistant for Apple Watch"], ["city-technologies", "City Technologies", "City services platform for YNAO"]],
@@ -25,11 +27,10 @@ export const copy = {
     intro: "I build web products, apps and bots. I use AI to automate routine work on client projects and in my own products.",
     nav: ["Selected work", "Studio & products", "Milestones"],
     language: "Русский",
-    contact: "Contact Me",
+    contact: "Message me on Telegram",
     iconCredit: "Send icon · 21st.dev",
     contactTitle: "Get in touch",
-    contactCopy: "Send a project brief or proposal through the contact form in my Telegram bot.",
-    contactStatus: "The Telegram contact form is being set up.",
+    contactCopy: "Message me on Telegram to discuss a project or working together.",
     projectLink: "Open live site",
     projects: [
       {
@@ -116,6 +117,8 @@ export const copy = {
     share: { action: "Share profile", copied: "Profile link copied", manual: "Copy this profile link" }
   },
   ru: {
+    title: "Илья Ларионов — AI / Full-Stack Developer",
+    description: "Портфолио Ильи Ларионова: веб-приложения, Telegram-боты, AI-проекты и достижения",
     role: "Независимый full-stack разработчик и основатель DevLarion",
     currentTitle: "Сейчас в работе",
     current: [["wrist-ai", "Wrist AI", "AI-помощник для Apple Watch"], ["city-technologies", "Технологии города", "Платформа городских услуг для ЯНАО"]],
@@ -124,11 +127,10 @@ export const copy = {
     intro: "Разрабатываю веб-продукты, приложения и ботов. В студии веду коммерческие проекты, а в собственных продуктах проверяю, где ИИ упрощает повседневные задачи.",
     nav: ["Избранные работы", "Студия и продукты", "Достижения"],
     language: "English",
-    contact: "Написать мне",
+    contact: "Написать в Telegram",
     iconCredit: "Иконка отправки · 21st.dev",
     contactTitle: "Связаться со мной",
-    contactCopy: "Расскажите о задаче или отправьте предложение через форму связи в Telegram-боте.",
-    contactStatus: "Форма связи в Telegram настраивается.",
+    contactCopy: "Напиши мне в Telegram — обсудим проект или сотрудничество.",
     projectLink: "Открыть сайт",
     projects: [
       {

@@ -6,7 +6,7 @@
 
 Разрабатываю веб-продукты, приложения и ботов. В студии веду коммерческие проекты, а в собственных продуктах проверяю, где ИИ упрощает повседневные задачи.
 
-[English](README.md) · [Сайт-портфолио](https://luvlarion4ik.github.io/luvlarion4ik/ru/) · [Написать мне](https://t.me/luvlarion4ik_bot?start=contact_ru)
+[English](README.md) · [Сайт-портфолио](https://luvlarion4ik.github.io/luvlarion4ik/ru/) · [Написать в Telegram](https://t.me/LuvLarion4ik)
 
 ## Избранные работы
 
@@ -88,8 +88,8 @@
 
 ## Связаться со мной
 
-Расскажите о задаче или отправьте предложение через форму связи в Telegram-боте.
+Напиши мне в Telegram — обсудим проект или сотрудничество.
 
-[Написать мне](https://t.me/luvlarion4ik_bot?start=contact_ru) · Форма связи в Telegram настраивается.
+[Написать в Telegram](https://t.me/LuvLarion4ik)
 
 [Поделиться профилем](https://luvlarion4ik.github.io/luvlarion4ik/ru/)
