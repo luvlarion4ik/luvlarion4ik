@@ -9,14 +9,29 @@ export const contacts = {
 const orient = {
   name: 'Orient Logic',
   image: 'work/orient.webp',
+  size: [1280, 675],
   href: 'https://orientlogic.ru/',
   tags: ['Next.js', 'TypeScript', 'Telegram'],
 };
 
 const kitchens = {
   image: 'work/kitchens.webp',
+  size: [1344, 770],
   href: 'https://luvlarion4ik.github.io/kuhni/',
   tags: ['MAX', 'FastAPI', 'SQLite'],
+};
+
+const modular = {
+  name: 'Modular Houses',
+  image: 'work/modular-houses.webp',
+  size: [1440, 900],
+  href: 'https://luvlarion4ik.github.io/modular_houses/',
+};
+
+const printed = {
+  image: 'work/3d-dom.webp',
+  size: [1440, 900],
+  href: 'https://luvlarion4ik.github.io/3dDom/',
 };
 
 export const cases = {
@@ -38,6 +53,25 @@ export const cases = {
       result: 'У дизайнера в одной заявке собраны параметры кухни и контакт покупателя. Разговор можно начать с проекта.',
       alt: 'Сайт мебельного салона «Интерьер» с переходом к подбору кухни в MAX',
     },
+    {
+      ...modular,
+      type: 'Модульные дома · демо',
+      task: 'Помочь покупателю подобрать модульный дом под свой участок.',
+      solution: 'Собрали каталог из трёх моделей. В карточках показали планировку, площадь, отделку и базовую комплектацию.',
+      result: 'Посетитель может сравнить варианты и перейти в Telegram с подготовленным текстом запроса.',
+      tags: ['Каталог', 'Telegram'],
+      alt: 'Каталог Modular Houses с моделями панорамных домов',
+    },
+    {
+      ...printed,
+      name: 'Дома из 3D-принтера',
+      type: 'Строительные технологии · демо',
+      task: 'Объяснить покупателю, как печатают дом и в каком виде его можно получить.',
+      solution: 'Разложили процесс по этапам и показали четыре варианта готовности — от коробки до полной отделки.',
+      result: 'Можно посмотреть состав работ по каждому варианту и выбрать, на каком этапе принимать дом.',
+      tags: ['3D-печать', 'Каталог комплектаций'],
+      alt: 'Демонстрационный сайт о строительстве домов методом 3D-печати',
+    },
   ],
   en: [
     {
@@ -56,6 +90,25 @@ export const cases = {
       solution: 'We linked a gallery of installations to a questionnaire in MAX. Buyers choose layouts and materials, and showroom staff edit questions in an admin panel.',
       result: 'The designer receives kitchen specifications and buyer contact details in a single enquiry, ready for a design conversation.',
       alt: 'Interier showroom website with a link to start choosing a kitchen in MAX',
+    },
+    {
+      ...modular,
+      type: 'Modular housing · demo',
+      task: 'Help a buyer choose a modular home for their plot.',
+      solution: 'We built a three-model catalogue covering floor plans, size, finishes and standard fittings.',
+      result: 'A visitor can compare the options and open Telegram with an enquiry already drafted.',
+      tags: ['Product catalogue', 'Telegram'],
+      alt: 'Modular Houses catalogue of panoramic homes',
+    },
+    {
+      ...printed,
+      name: '3D-printed homes',
+      type: 'Construction technology · demo',
+      task: 'Show prospective buyers how a house is printed and what they can expect at handover.',
+      solution: 'We documented the construction stages and four handover options, from a structural shell to a fully finished home.',
+      result: 'Buyers can review the work included at each handover stage and choose the option that suits them.',
+      tags: ['3D printing', 'Specifications'],
+      alt: 'Demonstration website explaining 3D-printed housing',
     },
   ],
 };

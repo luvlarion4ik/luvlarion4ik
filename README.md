@@ -10,6 +10,8 @@ We build multi-agent systems, deploy models on your infrastructure and develop s
 
 - [Orient Logic](https://orientlogic.ru/) — An importer submits a request online. The freight team receives the shipment details in its working chat.
 - [Interier kitchen showroom](https://luvlarion4ik.github.io/kuhni/) — The designer receives kitchen specifications and buyer contact details in a single enquiry, ready for a design conversation.
+- [Modular Houses](https://luvlarion4ik.github.io/modular_houses/) — A visitor can compare the options and open Telegram with an enquiry already drafted.
+- [3D-printed homes](https://luvlarion4ik.github.io/3dDom/) — Buyers can review the work included at each handover stage and choose the option that suits them.
 
 ## Bureau products
 

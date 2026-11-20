@@ -9,7 +9,8 @@ const esc=s=>String(s).replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceA
 const link=(label,url,style="link",goal="")=>`<a class="${style}" href="${esc(url)}" ${goal?'data-goal="'+goal+'"':''}>${esc(label)} ${icons.diagonal}</a>`;
 const routes=["","links/","aurawatch/","privacy/"];
 const url=(l,r="")=>base+(l==="ru"?"ru/":"")+r;
-const pic=(file,alt)=>`<img loading="lazy" width="${file.includes("orient")?1280:1344}" height="${file.includes("orient")?675:770}" src="${asset+file}" alt="${esc(alt)}">`;
+const serviceIcon={agents:"ai","private-ai":"server",web:"web",platform:"layers",mini:"mini",mobile:"mobile",automation:"bot",design:"design",custom:"spark",support:"support"};
+const pic=(file,alt,size)=>`<img loading="lazy" width="${size[0]}" height="${size[1]}" src="${asset+file}" alt="${esc(alt)}">`;
 for(const lang of ["ru","en"]){
  const ru=lang==="ru", other=ru?"en":"ru", t=copy[lang], l=(a,b)=>ru?a:b, home=url(lang), person=id.founder[lang];
  const tg=link(t.cta,id.telegram,"button","telegram"), beta=link(l("Хочу в закрытую бету","Join the closed beta"),id.telegram+"?text="+encodeURIComponent(l("Хочу участвовать в закрытой бете AuraWatch.","I'd like to join the AuraWatch closed beta.")),"button","beta");
@@ -25,10 +26,20 @@ for(const lang of ["ru","en"]){
  const section=(key,title,content,cls="")=>`<section id="${key}" class="section wrap ${cls}"><h2>${title}</h2>${content}</section>`;
  const watch=`<div class="watch" role="img" aria-label="${l("Демонстрация экрана AuraWatch","AuraWatch screen demo")}"><div><small>AuraWatch</small><b data-watch>${l("Какие следующие шаги?","What are the next steps?")}</b><i></i></div></div>`;
  const watchIntro=l("Ассистент для iPhone и Apple Watch в закрытом бета-тестировании. В режиме «Тихий суфлёр» подсказка появляется на затемнённом экране часов.","An assistant for iPhone and Apple Watch, currently in closed beta. Silent Prompter displays a suggestion on the dimmed watch face.");
- const caseHTML=work.map(c=>`<article class="case">${c.image?pic(c.image,c.alt):""}<div><small>${esc(c.type)}</small><h3>${esc(c.name)}</h3><dl>${[c.task,c.solution,c.result].map((s,i)=>`<dt>${l(["Задача","Решение","Результат"],["Brief","Build","Outcome"])[i]}</dt><dd>${esc(s)}</dd>`).join("")}</dl><p class="tags">${c.tags.map(esc).join(" · ")}</p>${link(l("Открыть проект","View project"),c.href)}</div></article>`).join("");
+ const caseHTML = '<div class="work-gallery">' + work.map(c => {
+   return `<article class="case exhibit">
+     <a class="case-cover" href="${esc(c.href)}" aria-label="${esc(c.name)}">
+       <div class="case-window">${pic(c.image,c.alt,c.size)}</div>
+     </a>
+     <div class="exhibit-copy"><small>${esc(c.type)}</small><h3>${esc(c.name)}</h3>
+       <p>${esc(c.result)}</p><details><summary>${l("Задача и решение","Project details")}</summary>
+       <dl><dt>${l("Задача","Brief")}</dt><dd>${esc(c.task)}</dd><dt>${l("Решение","Build")}</dt><dd>${esc(c.solution)}</dd></dl></details>
+       <div class="exhibit-foot"><span class="tags">${c.tags.map(esc).join(" · ")}</span>${link(l("Смотреть","View project"),c.href)}</div>
+     </div></article>`;
+ }).join("") + '</div>';
  const homeHTML=`<section class="hero"><div class="wrap hero-grid"><div class="hero-copy"><p class="eyebrow"><i></i>${t.eyebrow}</p><h1>${t.title}</h1><p class="intro">${t.intro}</p><p class="hero-pricing">${l("ИИ-пилот","AI pilot")} · ${esc(services.find(s=>s.id==="agents").price.replace(/^(Пилот |Pilot )/,""))}</p><div class="actions">${tg}<a class="ghost" href="#work">${t.cases} ↓</a></div><a class="byline" href="#bureau">${person} · ${t.about}</a></div><picture class="hero-art"><source media="(max-width: 700px)" srcset="${brand}optic-small.webp"><img class="optic" src="${brand}optic.webp" srcset="${brand}optic-small.webp 600w, ${brand}optic.webp 1200w" sizes="(max-width:740px) 100vw, 50vw" width="1200" height="800" alt="" fetchpriority="high"></picture></div></section>
  <div class="stack"><div class="wrap stack-rail">${[false,true].map(repeat=>`<div class="stack-track" ${repeat?'aria-hidden="true"':""}>Python <i>/</i> FastAPI <i>/</i> SwiftUI <i>/</i> Next.js <i>/</i> Telegram <i>/</i> On-premise AI <i>/</i></div>`).join("")}</div></div>
- ${section("services",t.services,`<div class="service-grid">${services.map((s,i)=>`<article>${icons[["ai","server","web","layers","mobile","mobile","bot","design","support","spark"][i%10]]}<h3>${esc(s.title)}</h3><p>${esc(s.description)}</p><div class="rate"><strong>${esc(s.price)}</strong><span>${esc(s.term)}</span></div></article>`).join("")}</div><p>${link(t.estimate,"#quiz")}</p>`)}
+ ${section("services",t.services,`<div class="service-grid">${services.map(s=>`<article><span class="service-mark">${icons[serviceIcon[s.id]]}</span><h3>${esc(s.title)}</h3><p>${esc(s.description)}</p><div class="rate"><strong>${esc(s.price)}</strong><span>${esc(s.term)}</span></div></article>`).join("")}</div><p>${link(t.estimate,"#quiz")}</p>`)}
  ${section("work",t.work,caseHTML)}
  ${section("process",t.process,`<ol class="steps">${t.steps.map(([h,p])=>`<li><h3>${h}</h3><p>${p}</p></li>`).join("")}</ol>`)}
  <section class="product-feature wrap"><div><small>watchOS / iOS</small><h2>AuraWatch</h2><p>${watchIntro}</p><div class="actions">${beta}${link(l("Подробнее","Explore"),home+"aurawatch/")}</div></div>${watch}</section>
