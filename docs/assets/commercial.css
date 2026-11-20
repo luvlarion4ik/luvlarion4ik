@@ -18,7 +18,7 @@
   right: 0;
   top: calc(100% + .35rem);
   z-index: 1;
-  width: min(18rem, 85vw);
+  width: min(22rem, calc(100vw - 2rem));
   background: var(--paper);
   color: var(--ink);
   border: 1px solid var(--rule);
@@ -46,6 +46,15 @@
 .header-share { border: 0; color: inherit; }
 .header-share:hover { background: #ffffff16; }
 .header-share svg { width: 1.2em; height: 1.2em; }
+@media (min-width: 481px) {
+  .header-social {
+    display: inline-grid;
+    place-items: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .header-social:hover { background: #ffffff16; }
+}
 .share-control { font-size: .86rem; color: var(--accent); }
 .share-control:hover { text-decoration: underline; text-underline-offset: .22em; }
 .share-actions { width: min(28rem, 90vw); min-width: 0; padding: 1.3rem; }
@@ -152,7 +161,7 @@
     position: fixed;
     top: 3.75rem;
     inset-inline: 1rem;
-    width: min(18rem, calc(100% - 2rem));
+    width: min(22rem, calc(100% - 2rem));
     margin-inline: auto;
   }
 }
@@ -164,14 +173,20 @@
   .service-grid article:focus-within .service-mark > svg,
   [data-solution][aria-selected="true"]:focus-visible > span > svg,
   [data-company-panel] summary:focus-visible > span > svg,
-  .social-icon:focus-visible > svg {
+  .social-icon:is(:focus-visible, :active) > svg,
+  .header-social:is(:focus-visible, :active) > svg,
+  .header-share:is(:focus-visible, :active) > svg,
+  #theme:is(:focus-visible, :active) > svg {
     animation: service-icon-react 430ms ease-out both;
   }
   @media (hover: hover) {
     .service-grid article:hover .service-mark > svg,
     [data-solution]:hover > span > svg,
     [data-company-panel] summary:hover > span > svg,
-    .social-icon:hover > svg {
+    .social-icon:hover > svg,
+    .header-social:hover > svg,
+    .header-share:hover > svg,
+    #theme:hover > svg {
       animation: service-icon-react 430ms ease-out both;
     }
   }
@@ -190,26 +205,81 @@
   max-height: calc(100dvh - 5.5rem);
   overflow-y: auto;
 }
-.currency-quick {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .2rem .55rem;
-  margin-bottom: .85rem;
+.region-panel .currency-quick {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: .35rem;
+  margin-bottom: 1rem;
 }
-.currency-quick label { gap: .3rem; }
+.currency-quick legend { margin-bottom: .6rem; }
+.region-panel .currency-quick label { display: block; position: relative; min-width: 0; }
+.currency-quick input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+}
+.currency-quick label span {
+  display: grid;
+  min-height: 42px;
+  place-items: center;
+  padding-inline: .14rem;
+  border: 1px solid var(--rule);
+  border-radius: .3rem;
+  font-size: .85rem;
+  font-weight: 650;
+}
+.currency-quick label:hover span { background: var(--surface); }
+.currency-quick input:checked + span {
+  color: var(--accent);
+  border-color: currentColor;
+  background: color-mix(in srgb, var(--accent) 12%, var(--paper));
+}
+.currency-quick input:focus-visible + span {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
 .currency-list > label { min-height: 0; font-weight: 650; margin-bottom: .35rem; }
-.currency-list input,
-.currency-list select {
+.currency-list input {
   display: block;
   width: 100%;
-  padding: .5rem .65rem;
+  margin-bottom: .45rem;
+  padding: .55rem .65rem;
   border: 1px solid var(--rule);
   background: var(--surface);
   color: var(--ink);
   font: inherit;
-  font-size: .95rem;
-  border-radius: .2rem;
+  border-radius: .3rem;
 }
-.currency-list input { margin-bottom: .45rem; }
+.currency-list ul {
+  max-height: min(14rem, 40dvh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+  margin: 0;
+  padding: .2rem;
+  border: 1px solid var(--rule);
+  border-radius: .3rem;
+}
+.currency-list button {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  align-items: center;
+  gap: .55rem;
+  width: 100%;
+  min-height: 44px;
+  padding: .45rem .55rem;
+  border-radius: .15rem;
+  text-align: start;
+  font-size: .92rem;
+}
+.currency-list button:is(:hover, :focus-visible, [aria-pressed="true"]) {
+  background: var(--surface);
+  color: var(--accent);
+}
+.currency-list button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
 .region-panel [data-currency-status]:empty { display: none; }
 .region-panel [data-currency-status] { margin-top: .65rem; }
