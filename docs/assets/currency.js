@@ -9,6 +9,7 @@
   const summary = details.querySelector('summary');
   const radios = [...control.querySelectorAll('input[name=region]')];
   const picker = control.querySelector('[data-currency-picker]');
+  const quickChoices = new Set(radios.map(input => input.value));
   const search = picker.querySelector('[data-currency-search]');
   const list = picker.querySelector('[data-currency-list]');
   const empty = picker.querySelector('[data-currency-empty]');
@@ -88,16 +89,32 @@
   function renderList() {
     const normalize = value => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase(locale);
     const query = normalize(search.value.trim());
-    const options = [];
+    const rows = [];
     for (const code of Array.from(rates.keys()).sort()) {
+      if (!query && quickChoices.has(code)) continue;
       const name = displayNames?.of(code) ?? code;
-      const text = name === code ? code : code + ' · ' + name;
-      if (normalize(text).includes(query)) options.push(new Option(text, code));
+      if (!normalize(code + ' ' + name).includes(query)) continue;
+      const row = document.createElement('li');
+      const option = document.createElement('button');
+      option.type = 'button';
+      option.dataset.currency = code;
+      option.tabIndex = rows.length ? -1 : 0;
+      option.setAttribute('aria-pressed', String(code === selected));
+      const currencyCode = document.createElement('strong');
+      currencyCode.textContent = code;
+      option.append(currencyCode);
+      if (name !== code) {
+        const currencyName = document.createElement('span');
+        currencyName.textContent = name;
+        option.append(currencyName);
+      }
+      row.append(option);
+      rows.push(row);
     }
-    list.replaceChildren(...options);
-    list.value = selected;
-    list.hidden = !options.length;
-    empty.hidden = !!options.length;
+    list.replaceChildren(...rows);
+    list.scrollTop = 0;
+    list.hidden = !rows.length;
+    empty.hidden = !!rows.length;
   }
 
   function choose(code) {
@@ -112,7 +129,6 @@
     }
     show(code);
     search.value = '';
-    renderList();
     details.open = false;
     summary.focus();
   }
@@ -120,11 +136,47 @@
   show(preferred());
   control.hidden = false;
   radios.forEach(input => input.addEventListener('change', () => choose(input.value)));
+  details.addEventListener('toggle', () => {
+    if (details.open && !picker.hidden) renderList();
+  });
   search.addEventListener('input', renderList);
   search.addEventListener('keydown', event => {
-    if (event.key === 'Enter' && list.options.length === 1) choose(list.options[0].value);
+    const first = list.querySelector('button');
+    if (!first) return;
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      first.focus();
+    }
+    if (event.key === 'Enter') {
+      const exact = Array.from(list.querySelectorAll('button'))
+        .find(option => option.dataset.currency === search.value.trim().toUpperCase());
+      if (exact || list.childElementCount === 1) choose((exact || first).dataset.currency);
+    }
   });
-  list.addEventListener('change', () => choose(list.value));
+  list.addEventListener('click', event => {
+    const option = event.target.closest('button[data-currency]');
+    if (option) choose(option.dataset.currency);
+  });
+  list.addEventListener('focusin', event => {
+    const active = event.target;
+    if (active.matches('button')) {
+      list.querySelector('button[tabindex="0"]')?.setAttribute('tabindex', '-1');
+      active.tabIndex = 0;
+    }
+  });
+  list.addEventListener('keydown', event => {
+    if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
+    const row = event.target.closest('li');
+    const next = {
+      ArrowDown: row?.nextElementSibling,
+      ArrowUp: row?.previousElementSibling,
+      Home: list.firstElementChild,
+      End: list.lastElementChild,
+    }[event.key];
+    event.preventDefault();
+    if (event.key === 'ArrowUp' && !next) search.focus();
+    else next?.querySelector('button').focus();
+  });
   document.addEventListener('pointerdown', event => {
     if (!control.contains(event.target)) details.open = false;
   });
@@ -187,12 +239,12 @@
       Object.assign(countries, snapshot.territories);
       show(modifiedByVisitor ? selected : preferred());
       picker.hidden = false;
-      renderList();
+      if (details.open) renderList();
       refreshIfStale(snapshot.asOf);
     })
     .catch(() => {
       // Prices and the five quick options remain available if the snapshot cannot load.
       picker.hidden = false;
-      renderList();
+      if (details.open) renderList();
     });
 })();

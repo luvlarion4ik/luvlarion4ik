@@ -54,7 +54,7 @@ export function regionControl(lang, asset) {
         <div class="currency-list" data-currency-picker hidden>
           <label for="currency-search">${t('Все валюты', 'All currencies')}</label>
           <input type="search" id="currency-search" data-currency-search placeholder="${t('Код или название', 'Code or name')}" autocomplete="off">
-          <select data-currency-list aria-label="${t('Доступные валюты', 'Available currencies')}" size="5"></select>
+          <ul data-currency-list aria-label="${t('Доступные валюты', 'Available currencies')}"></ul>
           <p data-currency-empty role="status" hidden>${t('Валюты не найдены.', 'No matching currencies.')}</p>
         </div>
         <p data-currency-status role="status"></p>
@@ -100,22 +100,6 @@ export function renderTeam(lang, { bio, work, home, asset, link }) {
       </ol>
     </aside>
   </div>${partners.length ? `<div class="team-grid">${partners.map(renderPerson).join('')}</div>` : ''}`;
-}
-
-export function renderAchievements(lang, work) {
-  const l = (ru, en) => localized(lang, ru, en);
-  const projectTitles = {
-    'orient-logic': l('Сайт с ассистентом, приёмом заявок, CRM и кабинетом', 'Website with an assistant, intake, CRM and customer access'),
-    kitchens: l('Каталог кухни и сценарий визуализации по фото в MAX', 'Kitchen catalogue and photo visualisation workflow in MAX'),
-  };
-  const entries = [
-    ...work.filter(project => projectTitles[project.id]).map(project => [project.name, projectTitles[project.id], '#' + project.id, l('Кейс', 'Case study')]),
-    ...site.achievements.map(entry => [entry[lang].title, entry[lang].result, entry.proof, l('Подтверждение', 'Evidence')]),
-  ];
-  return `<div class="results-table"><table>
-    <thead><tr><th scope="col">${l('Проект или достижение', 'Project or achievement')}</th><th scope="col">${l('Результат', 'Outcome')}</th><th scope="col">${l('Источник', 'Source')}</th></tr></thead>
-    <tbody>${entries.map(([title, result, href, label]) => `<tr><th scope="row">${esc(title)}</th><td>${esc(result)}</td><td><a class="underlined" href="${esc(href)}">${label}</a></td></tr>`).join('')}</tbody>
-  </table></div>`;
 }
 
 export function renderCaseFilter(lang, work) {

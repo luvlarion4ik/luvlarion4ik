@@ -4,7 +4,7 @@ import { identity as id, copy } from "../content/profile.mjs";
 import { cases, products, contacts } from "../content/work.mjs";
 import { starterPackages, renderQuiz } from "../content/pricing.mjs";
 import { offerPages, renderOfferPage, renderOffers, renderCompanySolutions, renderReadySolutions } from "../content/solutions.mjs";
-import { site, esc, formatStartingPrice, regionControl, renderTeam, renderAchievements, renderCaseFilter, renderCaseDetails, renderCurators, renderProductDetails, renderReferral, renderLegal } from "../content/site.mjs";
+import { site, esc, formatStartingPrice, regionControl, renderTeam, renderCaseFilter, renderCaseDetails, renderCurators, renderProductDetails, renderReferral, renderLegal } from "../content/site.mjs";
 import { validateSite } from "./validate-site.mjs";
 
 await validateSite(site);
@@ -162,7 +162,6 @@ for(const lang of ["ru","en"]){
  ${section("products",t.products,`<div class="lab product-list">${lab.map(p=>`<article class="${p.preview?"product-card":"product-lead"}">${productPreviews[p.preview] ?? ""}<div><small>${esc(p.status)}</small><h3>${esc(p.name)}</h3><p>${esc(p.summary)}</p>${renderProductDetails(lang,p.details)}${p.links.length?`<div class="product-links">${p.links.map(a=>link(a.label,a.href)).join("")}</div>`:""}</div></article>`).join("")}</div>`)}
  ${section("about",l("О студии","About the studio"),`<p class="intro">${l("Devlarion разрабатывает сайты, ботов, мобильные приложения и ИИ-сервисы для бизнеса. Ведём проект от аналитики и дизайна до запуска и поддержки. Работаем по договору с ИП. Состав, смету и этапы согласуем до начала работ.","Devlarion builds websites, bots, mobile apps and AI services for businesses. We cover discovery, design, delivery and support, with the scope, budget and milestones agreed before work begins.")}</p>`)}
  ${section("bureau",t.bureau,renderTeam(lang,{bio:t.bio,work,home,asset,link}))}
- ${section("results",l("Результаты и достижения","Results and achievements"),renderAchievements(lang,work))}
  ${section("faq",t.faq,t.faqs.map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join(""))}
  ${section("quiz",t.estimate,renderQuiz(lang,id.telegram,site.pricing)+renderReferral(lang,id.telegram)+social)}
  ${section("contact",t.ask,`<p class="intro">${t.close}</p><div class="actions">${tg}</div>${social}`)}`;
