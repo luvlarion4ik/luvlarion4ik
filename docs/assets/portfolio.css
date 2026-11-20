@@ -12,3 +12,4 @@ footer{padding:2rem 0}.fine{margin-top:1.5rem;flex-wrap:wrap}.sub{padding:4rem 0
 .menu{display:none}.stack .stack-rail{display:flex;gap:0;overflow:hidden}.stack-track{min-width:100%;flex:none;display:flex;align-items:center;justify-content:space-around;gap:1.5rem;padding-right:1.5rem}.stack-track[aria-hidden]{display:none}@media(prefers-reduced-motion:no-preference){.stack-track,.stack-track[aria-hidden]{display:flex;animation:ticker 48s linear infinite}.stack:hover .stack-track{animation-play-state:paused}@keyframes ticker{to{transform:translateX(-100%)}}}@media(max-width:950px){.menu{display:inline-block;font-size:1rem;padding:3px}}@media(max-width:480px){.header-social{display:none}.stack-track{min-width:550px}}
 
 .hero-art{display:contents}
+.hero .intro{margin-bottom:1rem}.hero-pricing{font-weight:600;margin-bottom:1.25rem;color:#efc6a6}.byline{display:inline-block;color:#d6c7bc;margin-top:1.2rem;font-size:.85rem}
