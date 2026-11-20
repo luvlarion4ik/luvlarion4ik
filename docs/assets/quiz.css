@@ -49,8 +49,5 @@
 .quiz-edit { padding: .7rem .3rem; text-decoration: underline; text-underline-offset: .2em; }
 .estimate-form .estimate-result { padding: 0; margin: 0; }
 .estimate-result [data-track] { margin-top: .6rem; color: var(--sub); }
-.quiz-costs { margin: 1.4rem 0 1rem; }
-.quiz-costs div { display: flex; justify-content: space-between; gap: 1rem; padding: .6rem 0; border-top: 1px solid var(--rule); }
-.quiz-costs dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
 .estimate-result .quiz-guidance { margin-bottom: 1.3rem; white-space: pre-line; color: var(--sub); }
 .estimate-result [data-copy-status]:not(:empty) { white-space: pre-line; margin-top: 1rem; }

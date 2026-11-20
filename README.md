@@ -6,6 +6,14 @@ I help businesses take enquiries and cut manual work. I build catalogue websites
 
 [View our work](https://luvlarion4ik.github.io/luvlarion4ik/#work) · [Estimate a project](https://luvlarion4ik.github.io/luvlarion4ik/#quiz) · [Discuss a project](https://t.me/LuvLarion4ik) · [Threads](https://www.threads.com/@luvlarion4ik) · [Русский](README.ru.md)
 
+## Project pricing
+
+- [Enquiry website](https://luvlarion4ik.github.io/luvlarion4ik/#small-business) — from RUB 30,000
+- [Telegram booking bot](https://luvlarion4ik.github.io/luvlarion4ik/#small-business) — from RUB 20,000
+- [Catalogue mini app](https://luvlarion4ik.github.io/luvlarion4ik/#small-business) — from RUB 45,000
+
+For companies of any size, we tailor the terms and discuss any applicable discount. We send the final quote after our call.
+
 ## Selected work
 
 - [Orient Logic](https://orientlogic.ru/) — An importer submits a request online. The freight team receives the shipment details in its working chat.

@@ -128,15 +128,15 @@ const keyway = (text, upstream) => [
 
 export const products = {
   ru: [
-    { name: 'Технологии города', cover: 'city.webp', status: 'B2B / B2G · NDA', summary: 'Интегрируем коммерческий сервис в государственный, чтобы пользователю было проще получить услугу. Подробности проекта защищены соглашением о конфиденциальности.', links: [] },
+    { name: 'Технологии города', preview: 'city', status: 'B2B / B2G · NDA', summary: 'Интегрируем коммерческий сервис в государственный, чтобы пользователю было проще получить услугу. Подробности проекта защищены соглашением о конфиденциальности.', links: [] },
     { name: 'Larion Keyway', status: 'Бета · подготовка к лицензированию', summary: 'Приложение для macOS с управлением с клавиатуры, созданное на основе открытого Copilot от Magerko. Готовим коммерческий выпуск по лицензии.', links: keyway('Обсудить бету или лицензию', 'Исходный проект · MIT') },
-    { name: 'Cognivue', cover: 'cognivue.webp', status: 'Прототип', summary: 'Инструмент для команд, которые хотят оценить реакцию аудитории на интерфейс или рекламный материал до запуска.', links: [] },
-    { name: 'Аксента', cover: 'axenta.webp', status: 'Прототип', summary: 'ИИ-репетитор, который определяет уровень ученика и помогает разбирать задания по конспектам и фотографиям тетрадей.', links: [] },
+    { name: 'Cognivue', preview: 'cognivue', status: 'Прототип', summary: 'Инструмент для команд, которые хотят оценить реакцию аудитории на интерфейс или рекламный материал до запуска.', links: [] },
+    { name: 'Аксента', preview: 'axenta', status: 'Прототип', summary: 'ИИ-репетитор, который определяет уровень ученика и помогает разбирать задания по конспектам и фотографиям тетрадей.', links: [] },
   ],
   en: [
-    { name: 'City Technologies', cover: 'city.webp', status: 'B2B / B2G · NDA', summary: 'We are integrating a commercial service into a public-sector platform to simplify access for users. Project details are covered by a confidentiality agreement.', links: [] },
+    { name: 'City Technologies', preview: 'city', status: 'B2B / B2G · NDA', summary: 'We are integrating a commercial service into a public-sector platform to simplify access for users. Project details are covered by a confidentiality agreement.', links: [] },
     { name: 'Larion Keyway', status: 'Beta · preparing for licensing', summary: 'A keyboard-driven macOS app based on Magerko’s open-source Copilot. We are preparing a licensed commercial release.', links: keyway('Discuss beta access or licensing', 'Upstream project · MIT') },
-    { name: 'Cognivue', cover: 'cognivue.webp', status: 'Prototype', summary: 'A tool for teams exploring how an audience might respond to an interface or advertising creative before launch.', links: [] },
-    { name: 'Axenta', cover: 'axenta.webp', status: 'Prototype', summary: 'An AI tutor that assesses a learner’s level and helps explain assignments using notes and photos of their work.', links: [] },
+    { name: 'Cognivue', preview: 'cognivue', status: 'Prototype', summary: 'A tool for teams exploring how an audience might respond to an interface or advertising creative before launch.', links: [] },
+    { name: 'Axenta', preview: 'axenta', status: 'Prototype', summary: 'An AI tutor that assesses a learner’s level and helps explain assignments using notes and photos of their work.', links: [] },
   ],
 };

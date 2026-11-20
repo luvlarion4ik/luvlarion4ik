@@ -6,6 +6,14 @@
 
 [Смотреть кейсы](https://luvlarion4ik.github.io/luvlarion4ik/ru/#work) · [Рассчитать проект](https://luvlarion4ik.github.io/luvlarion4ik/ru/#quiz) · [Обсудить проект](https://t.me/LuvLarion4ik) · [Threads](https://www.threads.com/@luvlarion4ik) · [English](README.md)
 
+## Стоимость разработки
+
+- [Сайт для заявок](https://luvlarion4ik.github.io/luvlarion4ik/ru/#small-business) — от 30 000 ₽
+- [Telegram-бот для записи](https://luvlarion4ik.github.io/luvlarion4ik/ru/#small-business) — от 20 000 ₽
+- [Мини-приложение с каталогом](https://luvlarion4ik.github.io/luvlarion4ik/ru/#small-business) — от 45 000 ₽
+
+Для компаний любого размера подбираем условия и возможную скидку индивидуально. Итоговую стоимость сообщим после созвона.
+
 ## Избранные кейсы
 
 - [Orient Logic](https://orientlogic.ru/) — Импортёр отправляет запрос с сайта, а менеджер получает данные для расчёта в рабочем чате.
