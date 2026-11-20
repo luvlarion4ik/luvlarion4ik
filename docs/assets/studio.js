@@ -61,3 +61,16 @@ if(!reduced.matches){
   });
   document.querySelectorAll('.service-grid article,.lab article,.case,.steps li').forEach(el=>observer.observe(el));
 }
+document.querySelector('[data-menu]').addEventListener('click',()=>dialog.showModal());
+if(matchMedia('(hover: hover) and (pointer: fine)').matches && !reduced.matches){
+  for(const card of document.querySelectorAll('.case img,.hero .button')){
+    card.addEventListener('pointermove',event=>{
+      if(reduced.matches)return;
+      const box=card.getBoundingClientRect();
+      const x=(event.clientX-box.left)/box.width-.5;
+      const y=(event.clientY-box.top)/box.height-.5;
+      card.style.transform=card.matches('img')?`perspective(900px) rotateY(${x*3}deg) rotateX(${-y*3}deg)`:`translate(${x*5}px,${y*5}px)`;
+    });
+    card.addEventListener('pointerleave',()=>card.style.removeProperty('transform'));
+  }
+}
