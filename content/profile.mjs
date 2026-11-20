@@ -4,12 +4,7 @@ export const identity = {
   github: "https://github.com/luvlarion4ik",
   telegram: "https://t.me/LuvLarion4ik",
   threads: "https://www.threads.com/@luvlarion4ik",
-  channel: "",
-  portfolio: "https://luvlarion4ik.github.io/luvlarion4ik/",
-  // Fill in all three fields to enable opt-in analytics after rebuilding.
-  metrika: "",
-  privacyOperator: "",
-  privacyEmail: ""
+  portfolio: "https://luvlarion4ik.github.io/luvlarion4ik/"
 };
 export const copy = {
  ru: {

@@ -26,8 +26,26 @@ if(watch){
   let current=0;
   setInterval(()=>{if(!document.hidden && !reduced.matches && !watch.closest('.watch').matches(':hover')) watch.textContent=scenes[++current%scenes.length];},3600);
 }
-const counter=document.body.dataset.counter;
+const settings=window.devLarionSettings || {};
+if (/^https:\/\/t\.me\/[A-Za-z0-9_]+\/?$/.test(settings.channel)){
+  for(const slot of document.querySelectorAll('[data-channel]')){
+    const a=document.createElement('a');
+    a.href=settings.channel;
+    a.textContent=ru?'Telegram-канал':'Telegram channel';
+    a.dataset.goal='channel';
+    slot.replaceWith(a);
+  }
+}
+const counter=settings.privacyOperator?.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(settings.privacyEmail) ? settings.metrika : '';
 if (/^[1-9]\d+$/.test(counter)) {
+  document.querySelector('[data-preferences]').hidden=false;
+  const policyText=document.querySelector('[data-analytics-policy]');
+  if(policyText){
+    policyText.textContent=ru?'С вашего согласия Яндекс Метрика использует cookies для оценки источников и нажатий. Вебвизор записывает взаимодействия со страницей. Поля калькулятора скрыты от записи. Вы можете изменить решение в настройках аналитики внизу страницы.':'With your consent, Yandex Metrica uses cookies to measure traffic sources and clicks. Webvisor records page interactions. The estimator fields are masked. You can change your choice using Analytics preferences in the footer.';
+    const contact=document.createElement('a');
+    contact.textContent=settings.privacyEmail;contact.href='mailto:'+settings.privacyEmail;
+    document.querySelector('[data-operator]').append((ru?'Оператор — ':'Operator — ')+settings.privacyOperator+' · ',contact);
+  }
   const choiceKey='devlarion-analytics';
   function load(){
     window.ym=window.ym || function(){(window.ym.a=window.ym.a || []).push(arguments);};

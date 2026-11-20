@@ -1,39 +1,13 @@
-name: Build and publish bureau
-on:
-  push:
-    branches: [main]
-  pull_request:
-  workflow_dispatch:
+name: Check generated site
+on: [push, pull_request]
 permissions:
   contents: read
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: node scripts/build.mjs
       - run: node scripts/build.mjs --check
-      - uses: actions/upload-pages-artifact@v3
-        if: github.event_name != 'pull_request'
-        with:
-          path: docs
-  deploy:
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.publish.outputs.page_url }}
-    concurrency:
-      group: pages
-      cancel-in-progress: false
-    steps:
-      - name: Publish
-        id: publish
-        uses: actions/deploy-pages@v4
