@@ -1,0 +1,50 @@
+.work-subheading {
+  margin: 0 0 1rem;
+  font-size: clamp(1.25rem, 2vw, 1.55rem);
+  font-weight: 500;
+}
+
+.work-gallery + .work-subheading {
+  margin-top: clamp(2.5rem, 5vw, 5rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+
+.case-cover {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 5%;
+  aspect-ratio: 1.65;
+}
+
+.case-cover .case-window {
+  width: 89%;
+}
+
+.case-cover .case-mobile {
+  position: absolute;
+  right: 4%;
+  bottom: 7%;
+  width: 20%;
+  height: auto;
+  overflow: hidden;
+  border: 3px solid #2b2724;
+  border-radius: 10% / 5%;
+  box-shadow: 0 6px 16px #23180e4d;
+}
+
+@media (min-width: 741px) {
+  .case-cover .case-mobile {
+    border-width: 4px;
+  }
+}
+
+.exhibit-copy h4 {
+  margin: .45rem 0 .65rem;
+  font-size: clamp(1.3rem, 2vw, 2rem);
+  line-height: 1.18;
+  letter-spacing: -.035em;
+  font-weight: 600;
+}

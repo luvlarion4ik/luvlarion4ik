@@ -1,0 +1,21 @@
+.service-group {scroll-margin-top:1.25rem}
+.service-group + .service-group {margin-top:clamp(2.75rem,5vw,5rem)}
+.service-group > h3 {font:400 clamp(1.85rem,3.2vw,3rem)/1.12 'Bureau Serif',Georgia,serif}
+.service-group > p {max-width:68ch;color:var(--sub);margin:.75rem 0 1.5rem}
+.service-group h4 {margin:0;font-size:clamp(1.2rem,1.7vw,1.55rem);letter-spacing:-.028em;line-height:1.2}
+#small-business .link {margin-top:auto;padding-top:.65rem;color:var(--accent);font-weight:600}
+.service-support {display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;background:var(--surface);padding:1.35rem 1.6rem}
+.service-support p {color:var(--sub);margin-top:.25rem}
+.founder-contact {margin-top:1.25rem;font-weight:600}
+.product-list {grid-template-columns:repeat(3,minmax(0,1fr));gap:1.35rem;border:0}
+.product-list article {padding:0;border:0}
+.product-list .product-lead {order:-1;grid-column:1/-1;background:var(--surface);border-left:3px solid var(--accent);padding:clamp(1.3rem,3vw,2.4rem);margin-bottom:.3rem}
+.product-list p,.meeting p {margin-top:.75rem;max-width:72ch;color:var(--sub)}
+.product-links {display:flex;flex-wrap:wrap;gap:.6rem 1.6rem;margin-top:1rem}
+.product-card img {width:100%;height:auto;display:block;border-radius:3px}
+.founder-grid {display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,6vw,6rem)}
+.founder-grid .intro {margin:1rem 0}
+.meeting {background:var(--surface);align-self:start}
+.meeting img {width:100%;aspect-ratio:2.9;object-fit:cover;display:block}
+.meeting div {padding:1.4rem}
+@media(max-width:740px){.product-list,.founder-grid{grid-template-columns:1fr}.product-card+.product-card{margin-top:1rem}}
