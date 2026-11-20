@@ -5,6 +5,7 @@
     "build": "node scripts/build.mjs",
     "check": "node scripts/build.mjs --check",
     "admin": "node scripts/admin.mjs",
-    "referrals": "node scripts/referrals.mjs"
+    "referrals": "node scripts/referrals.mjs",
+    "rates": "node scripts/update-exchange.mjs && node scripts/build.mjs"
   }
 }
