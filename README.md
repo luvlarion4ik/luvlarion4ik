@@ -1,6 +1,6 @@
 # Devlarion
 
-Independent software bureau · Ilia Larionov
+Devlarion development studio · Ilia Larionov
 
 I help businesses take enquiries and cut manual work. I build catalogue websites, booking bots and tools that connect the systems your team uses.
 
@@ -8,23 +8,25 @@ I help businesses take enquiries and cut manual work. I build catalogue websites
 
 ## Project pricing
 
-- [Enquiry website](https://luvlarion4ik.github.io/luvlarion4ik/#small-business) — from RUB 30,000
-- [Telegram booking bot](https://luvlarion4ik.github.io/luvlarion4ik/#small-business) — from RUB 20,000
-- [Catalogue mini app](https://luvlarion4ik.github.io/luvlarion4ik/#small-business) — from RUB 45,000
+- [Enquiry website](https://luvlarion4ik.github.io/luvlarion4ik/#small-business) — from RUB 25,000
+- [Telegram or MAX bot](https://luvlarion4ik.github.io/luvlarion4ik/#small-business) — from RUB 20,000
+- [Catalogue mini app](https://luvlarion4ik.github.io/luvlarion4ik/#small-business) — from RUB 55,000
 
 For companies of any size, we tailor the terms and discuss any applicable discount. We send the final quote after our call.
 
 ## Selected work
 
-- [Orient Logic](https://orientlogic.ru/) — An importer submits a request online. The freight team receives the shipment details in its working chat.
-- [Interier kitchen showroom](https://luvlarion4ik.github.io/kuhni/) — The designer receives kitchen specifications and buyer contact details in a single enquiry, ready for a design conversation.
-- [Modular Houses](https://luvlarion4ik.github.io/modular_houses/) — A visitor can compare the options and open Telegram with an enquiry already drafted.
+- [Orient Logic](https://orientlogic.ru/) — Clients can clarify terms and send enquiries online. The freight team handles them in the CRM, and clients can track their orders in their accounts.
+- [Kitchen Showroom](https://luvlarion4ik.github.io/kuhni/) — The showroom receives the selection, photo, visualisation and estimate in one enquiry. Staff confirm the final specification and price.
+- [Modular House](https://luvlarion4ik.github.io/modular_houses/) — Visitors can compare models and request a quote or leave an enquiry in Telegram.
 - [3D-printed homes](https://luvlarion4ik.github.io/3dDom/) — Buyers can review the work included at each handover stage and choose the option that suits them.
 
-## Bureau products
+## Devlarion products
 
 - [AuraWatch](https://luvlarion4ik.github.io/luvlarion4ik/aurawatch/) — An assistant for iPhone and Apple Watch, currently in closed beta. Silent Prompter displays a suggestion on the dimmed watch face.
 - **City Technologies** — We are integrating a commercial service into a public-sector platform to simplify access for users. Project details are covered by a confidentiality agreement.
 - **Larion Keyway** — A keyboard-driven macOS app based on Magerko’s open-source Copilot. We are preparing a licensed commercial release.
 - **Cognivue** — A tool for teams exploring how an audience might respond to an interface or advertising creative before launch.
 - **Axenta** — An AI tutor that assesses a learner’s level and helps explain assignments using notes and photos of their work.
+
+See the [site maintenance guide](scripts/README.md) for the editor and referral ledger.
