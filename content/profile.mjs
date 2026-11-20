@@ -6,7 +6,10 @@ export const identity = {
   threads: "https://www.threads.com/@luvlarion4ik",
   channel: "",
   portfolio: "https://luvlarion4ik.github.io/luvlarion4ik/",
-  metrika: ""
+  // Fill in all three fields to enable opt-in analytics after rebuilding.
+  metrika: "",
+  privacyOperator: "",
+  privacyEmail: ""
 };
 export const copy = {
  ru: {

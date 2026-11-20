@@ -40,13 +40,17 @@ if (/^[1-9]\d+$/.test(counter)) {
   }
   let saved;try{saved=localStorage.getItem(choiceKey);}catch{}
   if(saved==='yes')load();
-  if(!saved){
-    const box=document.createElement('div');box.className='notice';box.setAttribute('role','region');
+  function promptConsent(){
+    document.querySelector('[data-consent]')?.remove();
+    const box=document.createElement('div');box.dataset.consent='';box.className='notice';box.setAttribute('role','region');
     box.textContent=ru?'Разрешить Яндекс Метрику и запись сеанса Вебвизором? ':'Allow Yandex Metrica analytics and Webvisor session recording? ';
+    const policy=document.createElement('a');policy.href=document.body.dataset.privacyUrl;policy.textContent=ru?'Подробнее':'Privacy';box.append(policy);
     for(const [value,label] of [['yes',ru?'Разрешить':'Allow'],['no',ru?'Отклонить':'Decline']]){
-      const button=document.createElement('button');button.textContent=label;button.onclick=()=>{try{localStorage.setItem(choiceKey,value);}catch{}box.remove();if(value==='yes')load();};box.append(button);
+      const button=document.createElement('button');button.textContent=label;button.onclick=()=>{try{localStorage.setItem(choiceKey,value);}catch{}box.remove();if(value==='yes' && saved!=='yes')load();if(value==='no' && saved==='yes')location.reload();saved=value;};box.append(button);
     }document.body.append(box);
   }
+  if(!saved)promptConsent();
+  document.querySelector('[data-preferences]')?.addEventListener('click',promptConsent);
 }
 document.querySelector('.select-theme')?.addEventListener('click',()=>{
   dialog.close();

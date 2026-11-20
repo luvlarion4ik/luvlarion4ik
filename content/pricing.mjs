@@ -92,7 +92,7 @@ export function renderQuiz(lang, telegramURL) {
   const budgets = [300000, 600000, 1500000].map(n => money(n, lang));
   const budgetLabels = [t('Открыт к оценке', 'Open to an estimate'), t('До ', 'Under ') + budgets[0], budgets[0] + ' – ' + budgets[1], budgets[1] + ' – ' + budgets[2], t('Больше ', 'Above ') + budgets[2]];
   const safeTelegram = telegramURL.replaceAll('&', '&amp;').replaceAll('"', '&quot;');
-  return `<form class="estimate-form" data-estimate data-lang="${lang}" data-usd-rate="${usdRate}" data-telegram="${safeTelegram}" hidden>
+  return `<form class="estimate-form ym-hide-content" data-estimate data-lang="${lang}" data-usd-rate="${usdRate}" data-telegram="${safeTelegram}" hidden>
     <div class="estimate-fields">
       ${select('service', t('Что нужно разработать?', 'What do you need?'), types)}
       ${select('scope', t('Какой объём работ?', 'How large is the scope?'), options([t('Один сценарий', 'One workflow'), t('Несколько сценариев и интеграций', 'Multiple workflows and integrations'), t('Несколько подразделений и систем', 'Multiple teams and systems')]))}
