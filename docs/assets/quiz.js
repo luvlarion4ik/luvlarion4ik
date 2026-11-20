@@ -65,11 +65,12 @@
     const amount = new Intl.NumberFormat(locale, {
       style: 'currency',
       currency: conversion.currency,
-      maximumFractionDigits: conversion.currency === 'BYN' ? 2 : 0
+      maximumFractionDigits: 0
     });
     const [low, high] = rate.map(rub => amount.format(rub * conversion.rate));
-    if (tier === 'small') return t(`от ${low}`, `from ${low}`);
-    return low === high ? low : t(`от ${low} до ${high}`, `${low} to ${high}`);
+    const approx = conversion.currency === 'RUB' ? '' : '≈ ';
+    if (tier === 'small') return t(`от ${approx}${low}`, `from ${approx}${low}`);
+    return approx + (low === high ? low : t(`от ${low} до ${high}`, `${low} to ${high}`));
   }
 
   function addLine(list, name, value) {
@@ -102,7 +103,7 @@
     const rub = {currency: 'RUB', rate: 1};
     const region = window.devlarionRegion ?? rub;
     const requestOnly = region.code === 'other';
-    const converted = !requestOnly && ['BYN', 'KZT'].includes(region.currency)
+    const converted = !requestOnly && ['BYN', 'KZT', 'USD', 'EUR'].includes(region.currency)
       && Number.isFinite(region.rate) && region.rate > 0;
     const active = converted ? region : rub;
     const quote = t('По ТЗ', 'Quoted after scoping');
@@ -115,12 +116,12 @@
     currencyNote.hidden = !converted;
     if (converted) {
       const formattedDate = region.date ? new Intl.DateTimeFormat(t('ru-RU', 'en-GB'), {
-        timeZone: 'UTC', day: '2-digit', month: '2-digit', year: 'numeric',
+        timeZone: 'UTC', day: 'numeric', month: ru ? 'numeric' : 'short', year: 'numeric',
       }).format(new Date(region.date)) : '';
       const rateDate = formattedDate ? ' (' + formattedDate + ')' : '';
       currencyNote.textContent = t(
         `Пересчёт в ${region.currency} по курсу Банка России${rateDate}. Расчёт ведётся в рублях.`,
-        `Approximate conversion to ${region.currency} at the Bank of Russia rate${rateDate}. Estimates are calculated in rubles.`
+        `Approximate conversion to ${region.currency} at the Bank of Russia rate${rateDate}. We agree on the billing currency in the contract.`
       );
     }
 
@@ -149,9 +150,11 @@
       'Referral code added. We confirm the discount after the referred client pays for their first stage.'));
     form.querySelector('[data-guidance]').textContent = guidance.join('\n');
 
+    const international = ['usd', 'eur'].includes(region.code);
+    const briefCurrency = ru && !international ? rub : active;
     const briefRows = selected.map(input => {
       const rate = inputRate(input, tier);
-      return `${label(input)} — ${rate ? formatRate(rate, tier, rub) : quote}`;
+      return `${label(input)} — ${rate ? formatRate(rate, tier, briefCurrency) : quote}`;
     });
     const timeline = form.elements.timeline;
     const source = ['utm_source', 'utm_medium', 'utm_campaign'].map(key => page.searchParams.get(key)?.slice(0, 64)).filter(Boolean);
@@ -161,10 +164,11 @@
       `${t('Масштаб проекта', 'Project size')} — ${profile}`,
       ...briefRows,
       discount && `${t('Комбо-скидка', 'Bundle discount')} — ${discount}%`,
-      min && `${t('Разовые работы', 'One-off work')} — ${formatRate(total, tier, rub)}`,
-      support && `${label(support)} — ${supportRate ? formatRate(supportRate, tier, rub) : quote}`,
+      min && `${t('Разовые работы', 'One-off work')} — ${formatRate(total, tier, briefCurrency)}`,
+      support && `${label(support)} — ${supportRate ? formatRate(supportRate, tier, briefCurrency) : quote}`,
       timeline.value && `${t('Желаемый срок', 'Target delivery')} — ${timeline.selectedOptions[0].textContent}`,
-      region.code && `${t('Регион', 'Region')} — ${region.code.toUpperCase()}`,
+      ru && region.code && !international && `Регион — ${region.code.toUpperCase()}`,
+      international && converted && currencyNote.textContent,
       source.length && `${t('Источник', 'Source')} — ${source.join(' / ')}`,
       code && `${t('Реферальный код', 'Referral code')} — ${code}`,
       ...guidance
@@ -182,6 +186,7 @@
     share.searchParams.set('service', serviceChoices.map(input => input.value).join(' '));
     share.searchParams.set('tier', tier);
     if (optionChoices.length) share.searchParams.set('options', optionChoices.map(input => input.value).join(' '));
+    if (region.code) share.searchParams.set(ru ? 'region' : 'currency', region.code);
     share.searchParams.set('calculated', '1');
     const shareButton = form.querySelector('[data-share]');
     shareButton.dataset.shareUrl = share.href;

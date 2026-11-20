@@ -1,6 +1,50 @@
-.featured-offers > h2,
-.ready-solutions > h2 {
+.offer-panel-heading,
+.ready-solutions > :is(h1, h2) {
   max-width: 20ch;
+}
+
+.offer-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.offer-tabs a {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: .6rem .85rem;
+  border-bottom: 2px solid transparent;
+  font-size: clamp(1rem, 1.6vw, 1.22rem);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.offer-tabs a:is(:hover, [aria-selected='true']) {
+  background: var(--surface);
+}
+
+.offer-tabs a[aria-selected='true'] {
+  border-bottom-color: var(--accent);
+}
+
+.offer-panel + .offer-panel {
+  margin-top: 2rem;
+}
+
+[data-offers-enhanced] .offer-panel {
+  margin-top: 0;
+}
+
+[data-offers-enhanced] .offer-panel-heading {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .featured-offers .service-grid article,
@@ -19,7 +63,8 @@
 
 .offer-actions a,
 .solution-actions .link,
-.ready-catalog-link {
+.solution-audit .link,
+.ready-catalog-link.link {
   min-height: 44px;
   font-weight: 600;
   color: var(--accent);
@@ -29,7 +74,7 @@
   margin: clamp(2rem, 4vw, 3.4rem) 0 .65rem;
 }
 
-.featured-offers > p {
+.offer-panel > p {
   margin-bottom: 1.1rem;
 }
 
@@ -119,6 +164,20 @@
   margin: 0 0 .85rem;
 }
 
+.solution-content .solution-audit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .3rem 1rem;
+  border-top: 1px solid var(--rule);
+  margin-top: 1rem;
+  padding-top: .6rem;
+}
+
+.solution-content .solution-audit .solution-scope {
+  margin: 0;
+}
+
 .ready-catalog-link {
   margin-top: .7rem;
 }
@@ -128,6 +187,16 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
   border-top: 1px solid var(--rule);
   border-left: 1px solid var(--rule);
+}
+
+.ready-solutions-preview {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ready-solutions-preview h3 a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
 
 .ready-solutions-grid article {
@@ -247,6 +316,11 @@
 }
 
 @media (max-width: 700px) {
+  .offer-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .ready-solutions-grid {
     grid-template-columns: 1fr;
   }

@@ -22,6 +22,7 @@ footer{padding:2rem 0}.fine{margin-top:1.5rem;flex-wrap:wrap}.sub{padding:4rem 0
 #theme-choices legend{position:absolute;clip-path:inset(50%);width:1px;height:1px;overflow:hidden}
 #theme-choices label{display:flex;align-items:center;gap:.65rem;min-height:42px;padding:0 .7rem;border-radius:.2rem;cursor:pointer}
 #theme-choices label:hover,#theme-choices label:focus-within{background:var(--surface)}
+#theme-choices label:has(input:checked){background:var(--surface);font-weight:650}
 #theme-choices input{accent-color:var(--accent)}
 #theme-choices input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 @media(max-width:950px){button.menu{display:inline-flex}}

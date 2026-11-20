@@ -12,22 +12,24 @@
     document.documentElement.dataset.theme = choice === 'auto' ? (system.matches ? 'midnight' : 'copper') : choice;
   }
   apply();
-  system.addEventListener('change', apply);
+  if (system.addEventListener) system.addEventListener('change', apply);
+  else system.addListener?.(apply);
 
   addEventListener('DOMContentLoaded', () => {
     const picker = document.querySelector('.theme-picker');
+    if (!picker) return;
     const button = picker.querySelector('button');
     const options = picker.querySelector('fieldset');
     picker.querySelector('input[value="' + choice + '"]').checked = true;
     picker.hidden = false;
 
-    function toggle(open) {
+    function toggle(open, moveFocus = false) {
       options.hidden = !open;
       button.setAttribute('aria-expanded', String(open));
-      if (open) (picker.querySelector('input:checked') || picker.querySelector('input')).focus();
+      if (open && moveFocus) (picker.querySelector('input:checked') || picker.querySelector('input')).focus();
     }
 
-    button.addEventListener('click', () => toggle(options.hidden));
+    button.addEventListener('click', event => toggle(options.hidden, event.detail === 0));
     options.addEventListener('change', event => {
       choice = event.target.value;
       try { localStorage.setItem(key, choice); } catch {}
@@ -39,15 +41,15 @@
         button.focus();
       }
     });
-    picker.addEventListener('focusout', event => {
-      if (!picker.contains(event.relatedTarget)) toggle(false);
+    document.addEventListener('focusin', event => {
+      if (!options.hidden && !picker.contains(event.target)) toggle(false);
     });
     document.addEventListener('pointerdown', event => {
       if (!picker.contains(event.target) && !options.hidden) toggle(false);
     });
 
     let clicks = 0;
-    document.querySelector('footer .wordmark').addEventListener('click', event => {
+    document.querySelector('footer .wordmark')?.addEventListener('click', event => {
       if (!event.detail || location.href !== event.currentTarget.href) return;
       if (++clicks <= 5) event.preventDefault();
       if (clicks === 5) {

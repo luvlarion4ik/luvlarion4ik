@@ -139,11 +139,16 @@ export async function validateSite(value) {
   const keys = ['exchange', 'legal', 'pricing', 'ready', 'caseOverrides', 'founderPhoto', 'team', 'achievements', 'referral'];
   record(value, 'site.json', keys, keys);
   const { exchange, legal, referral } = value;
-  record(exchange, 'exchange', ['date', 'BYN', 'KZT'], ['date', 'BYN', 'KZT']);
+  const currencies = { BYN: 1, KZT: 100, USD: 1, EUR: 1 };
+  const exchangeKeys = ['date', ...Object.keys(currencies)];
+  record(exchange, 'exchange', exchangeKeys, exchangeKeys);
   date(exchange.date, 'exchange.date');
-  positive(exchange.BYN, 'exchange.BYN');
-  positive(exchange.KZT, 'exchange.KZT');
-  check(Number.isFinite(1 / exchange.BYN) && Number.isFinite(100 / exchange.KZT), 'exchange', 'укажите конечный курс');
+  for (const [currency, units] of Object.entries(currencies)) {
+    const field = 'exchange.' + currency;
+    const rate = exchange[currency];
+    positive(rate, field);
+    check(Number.isFinite(units / rate), field, 'укажите конечный курс');
+  }
 
   record(legal, 'legal', ['name', 'inn', 'ogrnip'], ['name', 'inn', 'ogrnip']);
   string(legal.name, 'legal.name', true);

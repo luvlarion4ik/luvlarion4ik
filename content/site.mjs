@@ -19,9 +19,33 @@ export const projectTeam = [
 
 const localized = (lang, ru, en) => lang === 'ru' ? ru : en;
 
-export function regionControl() {
-  const { date, BYN, KZT } = site.exchange;
-  return `<div class="region-control" data-region-control data-rate-date="${esc(date)}" data-byn-rate="${1 / BYN}" data-kzt-rate="${100 / KZT}" hidden>
+export function formatStartingPrice(rubles, lang) {
+  const ru = lang === 'ru';
+  const currency = ru ? 'RUB' : 'USD';
+  const amount = ru ? rubles : rubles / site.exchange.USD;
+  const price = new Intl.NumberFormat(ru ? 'ru-RU' : 'en-US', {
+    currency, style: 'currency', maximumFractionDigits: 0,
+  }).format(amount);
+  return ru ? price : '≈ ' + price;
+}
+
+export function regionControl(lang = 'ru') {
+  const { date, BYN, KZT, USD, EUR } = site.exchange;
+  if (lang === 'en') {
+    return `<div class="region-control" data-region-control data-rate-date="${esc(date)}" data-usd-rate="${1 / USD}" data-eur-rate="${1 / EUR}" hidden>
+      <details><summary aria-label="Currency"><span data-region-label>USD · $</span></summary>
+        <div class="region-panel">
+          <fieldset>
+            <legend>Currency</legend>
+            <label><input type="radio" name="region" value="usd" checked> US dollar · USD</label>
+            <label><input type="radio" name="region" value="eur"> Euro · EUR</label>
+          </fieldset>
+          <p>Converted prices are approximate. We agree on the billing currency in the contract.</p>
+        </div>
+      </details>
+    </div>`;
+  }
+  return `<div class="region-control" data-region-control data-rate-date="${esc(date)}" data-byn-rate="${1 / BYN}" data-kzt-rate="${100 / KZT}" data-usd-rate="${1 / USD}" data-eur-rate="${1 / EUR}" hidden>
     <details><summary aria-label="Регион и валюта"><span data-region-label>RU · ₽</span></summary>
       <div class="region-panel">
         <fieldset>
@@ -29,6 +53,8 @@ export function regionControl() {
           <label><input type="radio" name="region" value="ru" checked> Россия · ₽</label>
           <label><input type="radio" name="region" value="by"> Беларусь · BYN</label>
           <label><input type="radio" name="region" value="kz"> Казахстан · KZT</label>
+          <label><input type="radio" name="region" value="usd"> Доллар США · USD</label>
+          <label><input type="radio" name="region" value="eur"> Евро · EUR</label>
           <label><input type="radio" name="region" value="other"> Другая страна</label>
         </fieldset>
         <p>Расчёт ведётся в рублях. Валюту счёта и способ оплаты согласуем в договоре.</p>
@@ -65,7 +91,6 @@ export function renderTeam(lang, { bio, work, home, asset, link }) {
   return `<div class="founder-grid">
     ${renderPerson(founder)}
     <aside class="discovery">
-      <img src="${asset}products/meeting.webp" alt="" width="768" height="512" loading="lazy">
       <h3>${l('На первом созвоне', 'On the first call')}</h3>
       <ol>
         <li>${l('Разбираем текущий процесс и требования к результату.', 'We review the current workflow and intended outcomes.')}</li>

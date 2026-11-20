@@ -1,4 +1,5 @@
 import { startingPrice } from './pricing.mjs';
+import { formatStartingPrice } from './site.mjs';
 
 const companySolutions = [
   {
@@ -149,33 +150,34 @@ const companySolutions = [
       task: 'Обновить сайт или спроектировать новый продукт с единым дизайном.',
       implementation: 'Проводим аудит, собираем прототип и систему компонентов. При редизайне планируем перенос контента, адресов страниц и аналитики. Можно объединить дизайн, разработку и запуск в один проект.',
       result: 'Согласованный дизайн или готовый к запуску сервис, материалы для команды и план поддержки.',
-      scope: 'Базовый редизайн',
+      scope: 'Дизайн одной ключевой страницы',
     },
     en: {
       title: 'Design, redesign and end-to-end development',
       task: 'Update an existing site or design a new product with a consistent interface.',
       implementation: 'We review the current experience, prototype the key journeys and build a component system. Redesigns include planning for content, URLs and analytics. Design, development and launch can be delivered together.',
       result: 'An approved design or a launch-ready service, handover materials and a support plan.',
-      scope: 'Base redesign',
+      scope: 'Design for one key page',
     },
   },
   {
-    id: 'fine-tuning', icon: 'spark', service: 'fine-tuning', tier: 'small',
+    id: 'fine-tuning', icon: 'spark', service: 'fine-tuning', tier: 'medium',
+    audit: true,
     ru: {
       title: 'Дообучение моделей',
       task: 'Адаптировать готовую модель к отраслевым терминам, классификации заявок, полям документа или формату ответа.',
       implementation: 'Согласуем право использования данных, собираем контрольную выборку и сравниваем исходную модель с дообученной. Для часто обновляемых документов проверяем поиск по базе знаний (RAG).',
       result: 'Оценка данных, пилот с отчётом о качестве или внедрение согласованной модели. Разметку, вычисления и поддержку считаем отдельно.',
-      action: 'Оценить данные для дообучения',
-      scope: 'Аудит данных',
+      action: 'Рассчитать пилот',
+      scope: 'Пилот дообучения',
     },
     en: {
       title: 'Model fine-tuning',
       task: 'Adapt an existing model to industry terms, enquiry classification, document fields or a consistent output format.',
       implementation: 'We agree on usage rights, reserve a held-out test set, and compare the base and tuned models. For frequently updated documents, we evaluate retrieval from a knowledge base (RAG).',
       result: 'A data audit, a measured pilot or deployment of the agreed model. Annotation, compute and support are quoted separately.',
-      action: 'Estimate a data audit',
-      scope: 'Data audit',
+      action: 'Estimate a fine-tuning pilot',
+      scope: 'Fine-tuning pilot',
     },
   },
 ];
@@ -273,14 +275,52 @@ function offerCard(offer, lang, icons, titleLevel) {
   </article>`;
 }
 
-export function renderOffers(lang, icons) {
-  return `<section class="section wrap featured-offers" aria-labelledby="offers-title">
-    <h2 id="offers-title">${pick(lang, 'Популярные задачи', 'Common projects')}</h2>
-    <div class="service-grid">${primaryOffers.map(offer => offerCard(offer, lang, icons, 'h3')).join('')}</div>
-    <h3 class="offer-bundle-title">${pick(lang, 'Комбо-пакеты', 'Project bundles')}</h3>
-    <p>${pick(lang, 'Соберите несколько услуг в одном проекте. Калькулятор учтёт скидку за объём.', 'Combine services in one project. The estimator applies a bundle discount.')}</p>
-    <div class="service-grid offer-bundles">${bundles.map(offer => offerCard(offer, lang, icons, 'h4')).join('')}</div>
+function readyStatusBadge(solution, status, lang) {
+  const labels = {
+    ready: pick(lang, 'Готово', 'Ready'),
+    progress: pick(lang, 'В работе', 'In development'),
+    soon: pick(lang, 'Скоро', 'Planned'),
+  };
+  const value = Object.hasOwn(labels, status) ? status : solution.status;
+  return { value, html: `<small class="solution-status" data-status="${value}">${labels[value]}</small>` };
+}
+
+export function renderOffers(lang, icons, statusOverrides = {}) {
+  const popular = pick(lang, 'Популярные задачи', 'Common projects');
+  const ready = pick(lang, 'Готовые решения Devlarion', 'Ready-made Devlarion solutions');
+  const preview = readySolutions.slice(0, 2).map(solution => {
+    const [title, description] = solution[lang];
+    const status = readyStatusBadge(solution, statusOverrides[solution.id], lang);
+    return `<article>
+      ${status.html}
+      <h3><a href="solutions/#ready-${solution.id}">${title}</a></h3>
+      <p>${description}</p>
+    </article>`;
+  }).join('');
+  return `<section class="section wrap featured-offers" data-featured-offers aria-label="${pick(lang, 'Услуги и решения Devlarion', 'Devlarion services and solutions')}">
+    <nav class="offer-tabs" aria-label="${pick(lang, 'Услуги и готовые решения', 'Services and ready-made solutions')}">
+      <a id="offer-tab-popular" href="#popular-projects">${popular}</a>
+      <a id="offer-tab-ready" href="#ready-solutions">${ready}</a>
+    </nav>
+    <div class="offer-panel" id="popular-projects">
+      <h2 class="offer-panel-heading">${popular}</h2>
+      <div class="service-grid">${primaryOffers.map(offer => offerCard(offer, lang, icons, 'h3')).join('')}</div>
+      <h3 class="offer-bundle-title">${pick(lang, 'Комбо-пакеты', 'Project bundles')}</h3>
+      <p>${pick(lang, 'Соберите несколько услуг в одном проекте. Калькулятор учтёт скидку за объём.', 'Combine services in one project. The estimator applies a bundle discount.')}</p>
+      <div class="service-grid offer-bundles">${bundles.map(offer => offerCard(offer, lang, icons, 'h4')).join('')}</div>
+    </div>
+    <div class="offer-panel" id="ready-solutions">
+      <h2 class="offer-panel-heading">${ready}</h2>
+      <div class="ready-solutions-grid ready-solutions-preview">${preview}</div>
+      <a class="button ready-catalog-link" href="solutions/">${pick(lang, 'Открыть каталог из 12 решений', 'Browse all 12 solutions')}</a>
+    </div>
   </section>`;
+}
+
+function startingPriceLine(lang, rubles, scope) {
+  if (rubles == null) return '';
+  const prefix = pick(lang, 'от', 'from');
+  return `<p class="solution-scope" data-region-price-row>${scope ? scope + ' · ' : ''}${prefix} <span data-region-price="${rubles}">${formatStartingPrice(rubles, lang)}</span></p>`;
 }
 
 export function renderCompanySolutions(lang, icons, pricingOverrides = {}) {
@@ -291,7 +331,7 @@ export function renderCompanySolutions(lang, icons, pricingOverrides = {}) {
   const panels = companySolutions.map(solution => {
     const { title, task, implementation, result, action, scope } = solution[lang];
     const price = startingPrice(solution.service, solution.tier, pricingOverrides);
-    const priceLabel = price == null ? '' : `<p class="solution-scope" data-region-price-row>${scope ? `${scope} · ` : ''}${pick(lang, 'от', 'from')} <span data-region-price="${price}">${new Intl.NumberFormat(pick(lang, 'ru-RU', 'en-US')).format(price)} ₽</span></p>`;
+    const auditPrice = solution.audit ? startingPrice(solution.service, 'small', pricingOverrides) : null;
     return `<details id="solution-${solution.id}" data-company-panel="${solution.id}" open>
       <summary><span aria-hidden="true">${icons[solution.icon] || ''}</span>${title}</summary>
       <div class="solution-content" id="solution-panel-${solution.id}">
@@ -301,11 +341,15 @@ export function renderCompanySolutions(lang, icons, pricingOverrides = {}) {
           <dt>${pick(lang, 'Работы', 'Implementation')}</dt><dd>${implementation}</dd>
           <dt>${pick(lang, 'На выходе', 'Deliverables')}</dt><dd>${result}</dd>
         </dl>
-        ${priceLabel}
+        ${startingPriceLine(lang, price, scope)}
         <div class="solution-actions">
           ${estimateLink(action || pick(lang, 'Посчитать проект', 'Estimate this project'), solution.service, solution.tier, null, 'button')}
           ${solution.example ? `<a class="link" href="${solution.example[1]}">${solution.example[0]}</a>` : ''}
         </div>
+        ${solution.audit ? `<div class="solution-audit">
+          ${startingPriceLine(lang, auditPrice, pick(lang, 'Аудит данных', 'Data audit'))}
+          ${estimateLink(pick(lang, 'Рассчитать аудит данных', 'Estimate a data audit'), solution.service, 'small')}
+        </div>` : ''}
       </div>
     </details>`;
   }).join('');
@@ -318,22 +362,16 @@ export function renderCompanySolutions(lang, icons, pricingOverrides = {}) {
 
 export function renderReadySolutions(lang, telegramUrl, statusOverrides = {}, home) {
   const heading = home ? "h1" : "h2";
-  const statuses = {
-    ready: pick(lang, 'Готово', 'Ready'),
-    progress: pick(lang, 'В работе', 'In development'),
-    soon: pick(lang, 'Скоро', 'Planned'),
-  };
   const cards = readySolutions.map(solution => {
     const [title, description] = solution[lang];
-    const candidate = statusOverrides[solution.id];
-    const status = Object.hasOwn(statuses, candidate) ? candidate : solution.status;
+    const { value: status, html: statusBadge } = readyStatusBadge(solution, statusOverrides[solution.id], lang);
     const telegram = new URL(telegramUrl);
     const comment = status === 'ready'
       ? pick(lang, 'Хочу обсудить запуск решения', 'I’d like to discuss launching')
       : pick(lang, 'Хочу узнать о запуске решения', 'Keep me updated about');
     telegram.searchParams.set('text', `${comment} «${title}» [sol_${solution.id.replaceAll('-', '_')}]`);
     return `<article id="ready-${solution.id}">
-      <small class="solution-status" data-status="${status}">${statuses[status]}</small>
+      ${statusBadge}
       <h3>${title}</h3>
       <p>${description}</p>
       <div class="offer-actions">
@@ -428,12 +466,12 @@ export function renderOfferPage(lang, route, home, pricingOverrides = {}) {
     <a class="link" href="${home}#services">${pick(lang, 'Все услуги', 'All services')}</a>
     <h1>${title}</h1>
     <p class="intro">${description}</p>
-    ${price == null ? '' : `<p class="solution-scope" data-region-price-row>${pick(lang, 'от', 'from')} <span data-region-price="${price}">${new Intl.NumberFormat(pick(lang, 'ru-RU', 'en-US')).format(price)} ₽</span></p>`}
+    ${startingPriceLine(lang, price)}
     <p data-region-note hidden></p>
     <div class="actions">
       <a class="button" href="${markup(estimate)}">${pick(lang, 'Рассчитать проект', 'Estimate a project')}</a>
       <a class="link" href="${markup(exampleUrl)}">${example[0]}</a>
-      ${service === 'landing' ? `<a class="link" href="${markup(estimate.href.replace('service=landing', 'service=design'))}">${pick(lang, 'Рассчитать редизайн', 'Estimate a redesign')}</a>` : ''}
+      ${service === 'landing' ? `<a class="link" href="${markup(home)}?service=design&amp;tier=medium#quiz">${pick(lang, 'Рассчитать редизайн', 'Estimate a redesign')}</a>` : ''}
     </div>
     <h2>${pick(lang, 'Как проходит работа', 'How we work')}</h2>
     <p>${process}</p>
