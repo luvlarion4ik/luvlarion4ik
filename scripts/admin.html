@@ -63,6 +63,8 @@
         <label><span>Дата</span><input name="date" type="date" required></label>
         <label><span>За 1 BYN</span><input name="BYN" type="number" min="0.000001" step="any" required></label>
         <label><span>За 100 KZT</span><input name="KZT" type="number" min="0.000001" step="any" required></label>
+        <label><span>За 1 USD</span><input name="USD" type="number" min="0.000001" step="any" required></label>
+        <label><span>За 1 EUR</span><input name="EUR" type="number" min="0.000001" step="any" required></label>
       </div>
     </section>
     <section class="panel" aria-labelledby="rates-title">
@@ -198,7 +200,7 @@
     const text = name => fields[name].value.trim();
     const number = name => fields[name].valueAsNumber;
     const config = {
-      exchange: {date: text('date'), BYN: number('BYN'), KZT: number('KZT')},
+      exchange: {date: text('date'), BYN: number('BYN'), KZT: number('KZT'), USD: number('USD'), EUR: number('EUR')},
       legal: {name: text('legalName'), inn: text('inn'), ogrnip: text('ogrnip')},
       pricing: {},
       ready: {},

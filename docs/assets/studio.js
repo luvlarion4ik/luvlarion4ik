@@ -62,7 +62,7 @@ document.querySelector('.select-theme')?.addEventListener('click',()=>{
   dialog.close();
   document.querySelector('#theme').click();
 });
-if(!reduced.matches){
+if (!reduced.matches && 'IntersectionObserver' in window) {
   const observer=new IntersectionObserver(entries=>{
     for(const entry of entries)if(entry.isIntersecting){
       entry.target.classList.add('seen');
@@ -70,6 +70,15 @@ if(!reduced.matches){
     }
   });
   document.querySelectorAll('.service-grid article,.lab article,.case,.steps li').forEach(el=>observer.observe(el));
+  const iconObserver = new IntersectionObserver(entries => {
+    for (const { target, isIntersecting } of entries) {
+      if (!isIntersecting) continue;
+      target.classList.add('icon-seen');
+      iconObserver.unobserve(target);
+    }
+  }, { threshold: .35 });
+  document.querySelectorAll('.service-mark, [data-company-panel] summary > span, [data-solution] > span')
+    .forEach(icon => iconObserver.observe(icon));
 }
 document.querySelector('[data-menu]').addEventListener('click',()=>dialog.showModal());
 if(matchMedia('(hover: hover) and (pointer: fine)').matches && !reduced.matches){

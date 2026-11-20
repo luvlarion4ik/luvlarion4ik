@@ -70,8 +70,6 @@
 .team-person .button { margin-top: 1.35rem; }
 .team-projects ul { margin-bottom: 0; padding-left: 1.15rem; }
 .team-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1rem; }
-.discovery img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; margin-bottom: 1.15rem; }
-.discovery ol { padding-left: 1.25rem; }
 
 .results-table { max-width: 100%; overflow-x: auto; }
 .results-table table { width: 100%; border-collapse: collapse; font-size: .92rem; }
@@ -106,8 +104,8 @@
 .case-gallery-frame { margin: 1.1rem 0; }
 .case-gallery-frame img { display: block; width: 100%; max-width: 60rem; height: auto; border: 1px solid var(--rule); }
 .case-gallery-frame figcaption { color: var(--sub); margin-top: .4rem; }
-.product-visual .watch-photo { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; }
-.product-visual { overflow: hidden; border-radius: 4px; }
+.product-visual { min-width: 0; overflow: hidden; border-radius: 4px; }
+.product-visual img { display: block; width: 100%; height: auto; }
 
 .referral {
   margin-top: 1.5rem;
@@ -147,14 +145,6 @@
 #contact .social--icons,
 #quiz .social--icons { margin-top: 1rem; }
 
-.catalog-entry {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-.catalog-entry p { max-width: 55ch; color: var(--sub); }
 .ready-solutions h1 { margin-bottom: 2rem; }
 
 @media (max-width: 700px) {
@@ -164,5 +154,34 @@
     inset-inline: 1rem;
     width: min(18rem, calc(100% - 2rem));
     margin-inline: auto;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .icon-seen > svg {
+    animation: service-icon-enter 460ms cubic-bezier(.2, .75, .35, 1) both;
+  }
+  .service-grid article:focus-within .service-mark > svg,
+  [data-solution][aria-selected="true"]:focus-visible > span > svg,
+  [data-company-panel] summary:focus-visible > span > svg,
+  .social-icon:focus-visible > svg {
+    animation: service-icon-react 430ms ease-out both;
+  }
+  @media (hover: hover) {
+    .service-grid article:hover .service-mark > svg,
+    [data-solution]:hover > span > svg,
+    [data-company-panel] summary:hover > span > svg,
+    .social-icon:hover > svg {
+      animation: service-icon-react 430ms ease-out both;
+    }
+  }
+  @keyframes service-icon-enter {
+    from { opacity: .45; transform: translateY(3px) scale(.78); }
+    62% { transform: translateY(-2px) scale(1.09); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes service-icon-react {
+    45% { transform: translateY(-3px) rotate(-8deg) scale(1.12); }
+    to { transform: none; }
   }
 }

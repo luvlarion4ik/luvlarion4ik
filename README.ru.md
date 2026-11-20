@@ -8,9 +8,9 @@
 
 ## Стоимость разработки
 
-- [Сайт для заявок](https://luvlarion4ik.github.io/luvlarion4ik/ru/#small-business) — от 25 000 ₽
-- [Telegram-бот или MAX-бот](https://luvlarion4ik.github.io/luvlarion4ik/ru/#small-business) — от 20 000 ₽
-- [Мини-приложение с каталогом](https://luvlarion4ik.github.io/luvlarion4ik/ru/#small-business) — от 55 000 ₽
+- [Сайт для заявок](https://luvlarion4ik.github.io/luvlarion4ik/ru/#small-business) — от 25 000 ₽
+- [Telegram-бот или MAX-бот](https://luvlarion4ik.github.io/luvlarion4ik/ru/#small-business) — от 20 000 ₽
+- [Мини-приложение с каталогом](https://luvlarion4ik.github.io/luvlarion4ik/ru/#small-business) — от 55 000 ₽
 
 Для компаний любого размера подбираем условия и возможную скидку индивидуально. Итоговую стоимость сообщим после созвона.
 

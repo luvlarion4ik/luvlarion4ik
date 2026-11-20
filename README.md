@@ -8,9 +8,9 @@ I help businesses take enquiries and cut manual work. I build catalogue websites
 
 ## Project pricing
 
-- [Enquiry website](https://luvlarion4ik.github.io/luvlarion4ik/#small-business) — from RUB 25,000
-- [Telegram or MAX bot](https://luvlarion4ik.github.io/luvlarion4ik/#small-business) — from RUB 20,000
-- [Catalogue mini app](https://luvlarion4ik.github.io/luvlarion4ik/#small-business) — from RUB 55,000
+- [Enquiry website](https://luvlarion4ik.github.io/luvlarion4ik/#small-business) — from ≈ $305
+- [Telegram or MAX bot](https://luvlarion4ik.github.io/luvlarion4ik/#small-business) — from ≈ $244
+- [Catalogue mini app](https://luvlarion4ik.github.io/luvlarion4ik/#small-business) — from ≈ $671
 
 For companies of any size, we tailor the terms and discuss any applicable discount. We send the final quote after our call.
 
