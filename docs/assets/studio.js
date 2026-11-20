@@ -72,7 +72,7 @@ if (/^[1-9]\d+$/.test(counter)) {
 }
 document.querySelector('.select-theme')?.addEventListener('click',()=>{
   dialog.close();
-  document.querySelector('#theme').focus();
+  document.querySelector('#theme').click();
 });
 if(!reduced.matches){
   const observer=new IntersectionObserver(entries=>{

@@ -84,22 +84,59 @@ export function serviceCards(lang) {
 }
 
 export function renderQuiz(lang, telegramURL) {
-  const ru = lang === 'ru';
-  const t = (r, e) => ru ? r : e;
-  const select = (name, label, options) => `<label><span>${label}</span><select required name="${name}"><option disabled selected value="">${t('Выберите вариант', 'Choose an option')}</option>${options}</select></label>`;
-  const options = labels => labels.map((label, index) => `<option value="${index}">${label}</option>`).join('');
-  const types = services.map(({id, rub, days, [lang]: [title]}) => `<option value="${id}" data-price="${rub || 0}" data-days="${days?.join(',') || ''}">${title}</option>`).join('');
-  const budgets = [300000, 600000, 1500000].map(n => money(n, lang));
-  const budgetLabels = [t('Открыт к оценке', 'Open to an estimate'), t('До ', 'Under ') + budgets[0], budgets[0] + ' – ' + budgets[1], budgets[1] + ' – ' + budgets[2], t('Больше ', 'Above ') + budgets[2]];
-  const safeTelegram = telegramURL.replaceAll('&', '&amp;').replaceAll('"', '&quot;');
-  return `<form class="estimate-form ym-hide-content" data-estimate data-lang="${lang}" data-usd-rate="${usdRate}" data-telegram="${safeTelegram}" hidden>
-    <div class="estimate-fields">
-      ${select('service', t('Что нужно разработать?', 'What do you need?'), types)}
-      ${select('scope', t('Какой объём работ?', 'How large is the scope?'), options([t('Один сценарий', 'One workflow'), t('Несколько сценариев и интеграций', 'Multiple workflows and integrations'), t('Несколько подразделений и систем', 'Multiple teams and systems')]))}
-      ${select('timeline', t('Когда нужен запуск?', 'When do you want to launch?'), options([t('Гибкий срок', 'Flexible'), t('В течение месяца', 'Within a month'), t('В течение квартала', 'Within a quarter')]))}
-      ${select('budget', t('Какой бюджет рассматриваете?', 'What is your budget?'), options(budgetLabels))}
+  const t = (ru, en) => lang === 'ru' ? ru : en;
+  const types = [
+    ['web', 'Сайт', 'Website'], ['automation', 'Бот', 'Bot'],
+    ['mini', 'Мини-приложение', 'Mini app'], ['platform', 'Веб-сервис', 'Web application'],
+    ['mobile', 'Мобильное приложение', 'Mobile app'], ['agents', 'ИИ-ассистент', 'AI assistant'],
+    ['private-ai', 'ИИ на своих серверах', 'On-premise AI'], ['design', 'Дизайн и брендинг', 'Design and identity'],
+    ['support', 'Сопровождение', 'Support'], ['custom', 'Хочу обсудить задачу', 'Help me choose']
+  ];
+  const questions = [
+    ['client', t('Для кого проект?', 'Who is the project for?'), [
+      ['individual', 'Для себя', 'Myself'], ['independent', 'Самозанятый или ИП', 'An independent business'],
+      ['small', 'Компания до 100 человек', 'A company with fewer than 100 staff'],
+      ['company', 'Компания от 100 человек', 'A company with 100 or more staff'], ['public', 'Госсектор', 'A public organisation']]],
+    ['service', t('Что нужно разработать?', 'What do you need?'), types],
+    ['scope', t('Какой объём работы?', 'How much work is involved?'), [
+      ['one', 'Один сценарий', 'One workflow'], ['several', 'Несколько сценариев', 'Several workflows'],
+      ['departments', 'Несколько отделов', 'Multiple departments']]],
+    ['integrations', t('С чем нужно связать проект?', 'What needs to connect?'), [
+      ['none', 'Интеграции не нужны', 'No integrations'], ['single', 'Оплата или CRM', 'Payments or a CRM'],
+      ['systems', '1С или несколько систем', '1C or several systems']]],
+    ['documents', t('Какие документы понадобятся?', 'Which requirements apply?'), [
+      ['standard', 'Договор и акт', 'Contract and acceptance record'],
+      ['spec', 'Техническое задание и NDA', 'Technical specification and NDA'],
+      ['compliance', 'ЭДО, безопасность, персональные данные', 'E-signing, security and personal data requirements']]],
+    ['support', t('Что нужно после запуска?', 'What do you need after launch?'), [
+      ['none', 'Достаточно исправления дефектов', 'Fixes to the delivered work'],
+      ['request', 'Доработки по запросу', 'Changes on request'], ['sla', 'Гарантированное время реакции', 'Guaranteed response time']]],
+    ['timeline', t('Когда нужен запуск?', 'When do you want to launch?'), [
+      ['flexible', 'Срок гибкий', 'Flexible'], ['month', 'В течение месяца', 'Within a month'],
+      ['quarter', 'В течение квартала', 'Within a quarter']]]
+  ];
+  const steps = questions.map(([name, title, options], index) => {
+    const cards = options.map(([value, ru, en]) => {
+      const service = name === 'service' && services.find(item => item.id === value);
+      const data = service?.rub ? `data-price="${service.rub}" data-days="${service.days?.join(',') || ''}"` : '';
+      return `<label class="quiz-option"><input required type="radio" name="${name}" value="${value}" ${data}><span>${t(ru, en)}</span></label>`;
+    }).join('');
+    return `<fieldset data-step ${index ? 'hidden disabled' : ''}><legend tabindex="-1" aria-describedby="quiz-progress">${title}</legend><div class="quiz-options">${cards}</div></fieldset>`;
+  }).join('');
+  const tg = telegramURL.replaceAll('&', '&amp;').replaceAll('"', '&quot;');
+  return `<form class="estimate-form ym-hide-content" data-estimate data-lang="${lang}" data-usd-rate="${usdRate}" data-telegram="${tg}" hidden>
+    <div data-questions>
+      <p class="quiz-count" id="quiz-progress"></p>
+      <progress data-progress aria-labelledby="quiz-progress" max="${questions.length}" value="1"></progress>
+      ${steps}
+      <div class="quiz-actions"><button class="btn" type="button" data-back hidden>${t('Назад', 'Back')}</button><button class="btn primary" type="submit" data-next>${t('Дальше', 'Continue')}</button></div>
     </div>
-    <button class="btn primary" type="submit">${t('Рассчитать проект', 'Calculate estimate')}</button>
-    <div class="estimate-result" data-result hidden><p tabindex="-1" data-summary></p><p data-guidance></p><a class="btn primary" href="${safeTelegram}" data-brief>${t('Обсудить расчёт в Telegram', 'Discuss the estimate on Telegram')}</a> <button class="btn" type="button" data-copy>${t('Скопировать бриф', 'Copy brief')}</button><p role="status" data-copy-status></p></div>
-  </form><noscript><a href="${safeTelegram}">${t('Запросить оценку в Telegram', 'Request an estimate on Telegram')}</a></noscript>`;
+    <div class="estimate-result" data-result hidden>
+      <h3 tabindex="-1" data-summary></h3><p data-track></p><dl class="quiz-costs" data-costs></dl>
+      <p class="quiz-guidance" data-guidance></p><div class="quiz-actions"><a class="btn primary" href="${tg}" data-brief></a>
+      <button class="btn" type="button" data-copy>${t('Скопировать бриф', 'Copy brief')}</button>
+      <button class="quiz-edit" type="button" data-edit>${t('Изменить ответы', 'Edit answers')}</button></div>
+      <p role="status" data-copy-status></p>
+    </div>
+  </form><noscript><a href="${tg}">${t('Запросить оценку в Telegram', 'Request an estimate on Telegram')}</a></noscript>`;
 }

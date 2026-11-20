@@ -1,8 +1,8 @@
-# DevLarion
+# Devlarion
 
 Independent software bureau · Ilia Larionov
 
-We build multi-agent systems, deploy models on your infrastructure and develop software around the way your company works.
+I help businesses take enquiries and cut manual work. I build catalogue websites, booking bots and tools that connect the systems your team uses.
 
 [View our work](https://luvlarion4ik.github.io/luvlarion4ik/#work) · [Estimate a project](https://luvlarion4ik.github.io/luvlarion4ik/#quiz) · [Discuss a project](https://t.me/LuvLarion4ik) · [Threads](https://www.threads.com/@luvlarion4ik) · [Русский](README.ru.md)
 
