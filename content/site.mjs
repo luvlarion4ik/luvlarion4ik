@@ -29,35 +29,36 @@ export function formatStartingPrice(rubles, lang) {
   return ru ? price : '≈ ' + price;
 }
 
-export function regionControl(lang = 'ru') {
+export function regionControl(lang, asset) {
+  const ru = lang === 'ru';
+  const t = (rus, eng) => ru ? rus : eng;
   const { date, BYN, KZT, USD, EUR } = site.exchange;
-  if (lang === 'en') {
-    return `<div class="region-control" data-region-control data-rate-date="${esc(date)}" data-usd-rate="${1 / USD}" data-eur-rate="${1 / EUR}" hidden>
-      <details><summary aria-label="Currency"><span data-region-label>USD · $</span></summary>
-        <div class="region-panel">
-          <fieldset>
-            <legend>Currency</legend>
-            <label><input type="radio" name="region" value="usd" checked> US dollar · USD</label>
-            <label><input type="radio" name="region" value="eur"> Euro · EUR</label>
-          </fieldset>
-          <p>Converted prices are approximate. We agree on the billing currency in the contract.</p>
-        </div>
-      </details>
-    </div>`;
-  }
-  return `<div class="region-control" data-region-control data-rate-date="${esc(date)}" data-byn-rate="${1 / BYN}" data-kzt-rate="${100 / KZT}" data-usd-rate="${1 / USD}" data-eur-rate="${1 / EUR}" hidden>
-    <details><summary aria-label="Регион и валюта"><span data-region-label>RU · ₽</span></summary>
+  const quick = [
+    ['RUB', t('Российский рубль', 'Russian ruble')],
+    ['USD', t('Доллар США', 'US dollar')],
+    ['EUR', t('Евро', 'Euro')],
+    ['BYN', t('Белорусский рубль', 'Belarusian ruble')],
+    ['KZT', t('Казахстанский тенге', 'Kazakhstani tenge')],
+  ];
+  const initial = t('RUB', 'USD');
+  return `<div class="region-control" data-region-control data-rates-url="${asset}exchange-rates.json"
+    data-rate-date="${esc(date)}" data-byn-rate="${1 / BYN}" data-kzt-rate="${100 / KZT}"
+    data-usd-rate="${1 / USD}" data-eur-rate="${1 / EUR}" hidden>
+    <details>
+      <summary aria-label="${t('Выбрать валюту', 'Choose a currency')}"><span data-region-label>${initial}</span></summary>
       <div class="region-panel">
-        <fieldset>
-          <legend>Регион и валюта</legend>
-          <label><input type="radio" name="region" value="ru" checked> Россия · ₽</label>
-          <label><input type="radio" name="region" value="by"> Беларусь · BYN</label>
-          <label><input type="radio" name="region" value="kz"> Казахстан · KZT</label>
-          <label><input type="radio" name="region" value="usd"> Доллар США · USD</label>
-          <label><input type="radio" name="region" value="eur"> Евро · EUR</label>
-          <label><input type="radio" name="region" value="other"> Другая страна</label>
+        <fieldset class="currency-quick">
+          <legend>${t('Валюта цен', 'Display currency')}</legend>
+          ${quick.map(([code, name]) => `<label title="${name}"><input type="radio" name="region" value="${code}" ${initial === code ? 'checked' : ''}><span>${code}</span></label>`).join('')}
         </fieldset>
-        <p>Расчёт ведётся в рублях. Валюту счёта и способ оплаты согласуем в договоре.</p>
+        <div class="currency-list" data-currency-picker hidden>
+          <label for="currency-search">${t('Все валюты', 'All currencies')}</label>
+          <input type="search" id="currency-search" data-currency-search placeholder="${t('Код или название', 'Code or name')}" autocomplete="off">
+          <select data-currency-list aria-label="${t('Доступные валюты', 'Available currencies')}" size="5"></select>
+          <p data-currency-empty role="status" hidden>${t('Валюты не найдены.', 'No matching currencies.')}</p>
+        </div>
+        <p data-currency-status role="status"></p>
+        <p>${t('Валюту счёта согласуем в договоре.', 'We agree on the billing currency in the contract.')}</p>
       </div>
     </details>
   </div>`;

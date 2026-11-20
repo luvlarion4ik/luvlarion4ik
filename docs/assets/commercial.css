@@ -185,3 +185,31 @@
     to { transform: none; }
   }
 }
+
+.region-panel {
+  max-height: calc(100dvh - 5.5rem);
+  overflow-y: auto;
+}
+.currency-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .2rem .55rem;
+  margin-bottom: .85rem;
+}
+.currency-quick label { gap: .3rem; }
+.currency-list > label { min-height: 0; font-weight: 650; margin-bottom: .35rem; }
+.currency-list input,
+.currency-list select {
+  display: block;
+  width: 100%;
+  padding: .5rem .65rem;
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: .95rem;
+  border-radius: .2rem;
+}
+.currency-list input { margin-bottom: .45rem; }
+.region-panel [data-currency-status]:empty { display: none; }
+.region-panel [data-currency-status] { margin-top: .65rem; }

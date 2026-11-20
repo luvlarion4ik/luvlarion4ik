@@ -1,0 +1,45 @@
+.wordmark {
+  --logo-height: 33px;
+  --logo-color: #964c32;
+  --wordmark-static: url("./brand/logo-horizontal-copper.svg");
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  line-height: 0;
+}
+
+header .wordmark {
+  --logo-color: #e8ac8c;
+  --wordmark-static: url("./brand/logo-horizontal-copper-light.svg");
+}
+
+:root[data-theme="bordeaux"] footer .wordmark {
+  --logo-color: #84364e;
+  --wordmark-static: url("./brand/logo-horizontal-bordeaux.svg");
+}
+
+:root[data-theme="midnight"] .wordmark,
+:root[data-theme="sage"] header .wordmark {
+  --logo-color: #faf4ea;
+  --wordmark-static: url("./brand/logo-horizontal-cream.svg");
+}
+
+.wordmark devlarion-logo:not(:defined),
+.wordmark devlarion-logo:defined + .wordmark-fallback {
+  display: none;
+}
+
+.wordmark img.wordmark-fallback {
+  content: var(--wordmark-static);
+  width: auto;
+  height: var(--logo-height);
+  aspect-ratio: 235.3 / 52;
+}
+
+@media (max-width: 1100px) {
+  header .wordmark { --logo-height: 28px; }
+}
+
+@media (max-width: 480px) {
+  header .wordmark { --logo-height: 25px; }
+}
