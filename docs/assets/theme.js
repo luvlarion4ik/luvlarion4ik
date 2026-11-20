@@ -1,40 +1,27 @@
 (() => {
-  const storageKey = "devlarion-theme";
-  const themes = ["copper", "midnight", "sage"];
-  let selected = "copper";
-  try {
-    const saved = localStorage.getItem(storageKey);
-    if (themes.includes(saved)) selected = saved;
-  } catch {
-    // Private browsing can disable storage. The switch still works on this page.
+  const system = matchMedia('(prefers-color-scheme: dark)');
+  const key = 'devlarion-theme';
+  let choice = 'auto';
+  try {choice = localStorage.getItem(key) || choice;} catch {}
+  function apply() {
+    document.documentElement.dataset.theme = choice === 'auto' ? (system.matches ? 'midnight' : 'copper') : choice;
   }
-
-  const root = document.documentElement;
-  root.dataset.theme = selected;
-
-  addEventListener("DOMContentLoaded", () => {
-    const group = document.querySelector("[data-theme-control]");
-    const choices = [...group.querySelectorAll("[data-theme-choice]")];
-    const update = () => {
-      root.dataset.theme = selected;
-      for (const choice of choices) {
-        choice.setAttribute("aria-pressed", String(choice.dataset.themeChoice === selected));
-      }
+  apply();
+  system.addEventListener('change', apply);
+  addEventListener('DOMContentLoaded', () => {
+    const select = document.querySelector('#theme');
+    select.value = choice === 'bordeaux' ? 'auto' : choice;
+    select.onchange = () => {
+      choice = select.value;
+      try {localStorage.setItem(key, choice);} catch {}
+      if (document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.startViewTransition(apply);
+      else apply();
     };
-
-    group.addEventListener("click", (event) => {
-      const choice = event.target.closest("[data-theme-choice]");
-      if (!choice) return;
-      selected = choice.dataset.themeChoice;
-      try {
-        localStorage.setItem(storageKey, selected);
-      } catch {
-        // Selection stays available until the user navigates away.
-      }
-      update();
+    let clicks = 0;
+    document.querySelector('footer .wordmark').addEventListener('click', e => {
+      if (!e.detail || !location.href.startsWith(e.currentTarget.href)) return;
+      if (++clicks < 5 && !location.hash && location.href === e.currentTarget.href) e.preventDefault();
+      if (clicks === 5) {e.preventDefault(); choice = 'bordeaux'; apply(); clicks = 0;}
     });
-
-    update();
-    group.hidden = false;
   });
 })();

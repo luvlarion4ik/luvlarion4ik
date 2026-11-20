@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://luvlarion4ik.github.io/luvlarion4ik/sitemap.xml

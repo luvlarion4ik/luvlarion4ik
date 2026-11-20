@@ -1,224 +1,57 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { copy, identity, work } from "../content/profile.mjs";
-
-const check = process.argv.includes("--check");
-const projectRoot = new URL("../", import.meta.url);
-const sendIcon = (await readFile(new URL("docs/assets/contact-send.svg", projectRoot), "utf8")).trim();
-const sendIconSource = "https://21st.dev/@avijit07x/components/hu-send";
-const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) =>
-  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]
-);
-const external = (label, href, className = "text-link") =>
-  '<a class="' + className + '" href="' + escapeHtml(href) + '">' + escapeHtml(label) + ' <span aria-hidden="true">↗</span></a>';
-const tags = (items) => '<ul class="tags">' + items.map((tag) => "<li>" + escapeHtml(tag) + "</li>").join("") + "</ul>";
-const navIds = ["work", "studio", "milestones"];
-const identityLabel = identity.name + " | " + identity.nameRu + " ‣ " + identity.brand;
-const profileUrl = (lang) => identity.portfolio ? new URL(lang === "ru" ? "ru/" : "./", identity.portfolio).href : identity.github;
-const localeName = (lang) => lang === "en" ? identity.name : identity.nameRu;
-
-function page(lang, text) {
-  const prefix = lang === "en" ? "./" : "../";
-  const alternate = lang === "en" ? "./ru/" : "../";
-  const alternateLang = lang === "en" ? "ru" : "en";
-  const projects = text.projects.map((project) => {
-    const { href, image } = work[project.id];
-    const preview = image
-      ? '<figure class="project-figure"><img class="project-image" src="' + prefix + 'assets/' + image.file
-        + '" width="' + image.width + '" height="' + image.height + '" alt="' + escapeHtml(project.imageAlt || "") + '" loading="lazy">'
-        + (project.imageCaption ? '<figcaption>' + escapeHtml(project.imageCaption) + '</figcaption>' : "") + '</figure>'
-      : "";
-    const link = href ? external(text.projectLink, href) : "";
-    return '<article class="project" id="' + project.id + '"><header class="project-header"><p class="project-type">'
-      + escapeHtml(project.type) + '</p><h3>' + escapeHtml(project.title) + '</h3></header>' + preview
-      + '<div class="project-content"><p class="project-lead">' + escapeHtml(project.lead) + '</p><p>'
-      + escapeHtml(project.detail) + '</p>' + tags(project.tags) + link + '</div></article>';
-  }).join("\n");
-  const current = text.current.map(([id, name, caption]) =>
-    '<li><a href="#' + id + '"><strong>' + escapeHtml(name) + '</strong> <span aria-hidden="true">↓</span>'
-      + '<span class="current-caption">' + escapeHtml(caption) + '</span></a></li>'
-  ).join("\n");
-  const lab = text.lab.map((project) => {
-    const link = project.link ? external(...project.link) : "";
-    const story = project.story
-      ? '<details class="case-detail"><summary aria-label="' + escapeHtml(text.caseLabel + " · " + project.name) + '">'
-        + escapeHtml(text.caseLabel) + '</summary><div class="case-body">'
-        + project.story.map(([heading, detail]) =>
-          '<div><h4>' + escapeHtml(heading) + '</h4><p>' + escapeHtml(detail) + '</p></div>'
-        ).join("") + '</div></details>'
-      : "";
-    return '<li id="' + project.id + '"><h3>' + escapeHtml(project.name) + '</h3><p class="project-status">'
-      + escapeHtml(project.status) + '</p><p>' + escapeHtml(project.summary) + '</p>' + story + link + '</li>';
-  }).join("\n");
-  const milestones = text.milestones.map(([name, detail, href]) =>
-    '<li><h3>' + (href ? external(name, href) : escapeHtml(name)) + '</h3><p>' + escapeHtml(detail) + '</p></li>'
-  ).join("\n");
-  const challenges = text.challenges.map(([name, detail]) =>
-    '<li><h3>' + escapeHtml(name) + '</h3><p>' + escapeHtml(detail) + '</p></li>'
-  ).join("\n");
-  const sectionNav = text.nav.map((label, index) => '<a href="#' + navIds[index] + '">' + escapeHtml(label) + '</a>').join("");
-  const contact = '<a class="button button-contact" href="' + escapeHtml(identity.telegram) + '" target="_blank" rel="noopener noreferrer">'
-    + escapeHtml(text.contact) + sendIcon + '</a>';
-  const themeChoices = Object.entries(text.theme).filter(([key]) => key !== "label").map(([key, label]) =>
-    '<button type="button" data-theme-choice="' + key + '" aria-pressed="' + String(key === "copper") + '">' + escapeHtml(label) + '</button>'
-  ).join("");
-  const shareUrl = profileUrl(lang);
-  const previewImage = identity.portfolio ? new URL("assets/orient-logic.jpg", identity.portfolio).href : "";
-  return `<!doctype html>
-<html lang="${lang}">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${escapeHtml(text.title)}</title>
-  <meta name="description" content="${escapeHtml(text.description)}">
-  <link rel="canonical" href="${escapeHtml(shareUrl)}">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="${escapeHtml(text.title)}">
-  <meta property="og:description" content="${escapeHtml(text.description)}">
-  <meta property="og:url" content="${escapeHtml(shareUrl)}">
-${previewImage ? '  <meta property="og:image" content="' + escapeHtml(previewImage) + '">' : ""}
-  <link rel="alternate" hreflang="${alternateLang}" href="${alternate}">
-  <script src="${prefix}assets/theme.js"></script>
-  <script src="${prefix}assets/share.js" defer></script>
-  <link rel="stylesheet" href="${prefix}assets/portfolio.css">
-</head>
-<body>
-  <a class="skip" href="#main">${escapeHtml(text.skip)}</a>
-  <header class="site-header wrap">
-    <a class="wordmark" href="${prefix}" aria-label="${escapeHtml(identity.brand)}">${escapeHtml(identity.brand)}</a>
-    <nav aria-label="${lang === "en" ? "Portfolio" : "Портфолио"}">${sectionNav}</nav>
-    <div class="header-actions">
-      <div class="themes" role="group" aria-label="${escapeHtml(text.theme.label)}" data-theme-control hidden>
-        ${themeChoices}
-      </div>
-      <a class="language" href="${alternate}" lang="${alternateLang}" hreflang="${alternateLang}">${text.language} <span aria-hidden="true">↗</span></a>
-    </div>
-  </header>
-  <main id="main">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="wrap hero-inner">
-        <div class="hero-copy">
-          <h1 id="hero-title" aria-label="${escapeHtml(identityLabel)}" class="identity-banner">
-            <span class="identity-name" lang="en">${escapeHtml(identity.name)}</span>
-            <span class="identity-line"><span aria-hidden="true">|</span> <span lang="ru">${escapeHtml(identity.nameRu)}</span> <span aria-hidden="true">‣</span> <span class="identity-brand">${escapeHtml(identity.brand)}</span></span>
-          </h1>
-          <p class="hero-role">${escapeHtml(text.role)}</p>
-          <p class="hero-intro">${escapeHtml(text.intro)}</p>
-          <div class="hero-actions">${contact}<a class="text-link" href="#work">${escapeHtml(text.nav[0])} <span aria-hidden="true">↓</span></a></div>
-        </div>
-        <aside class="current-work" aria-labelledby="current-title">
-          <h2 id="current-title">${escapeHtml(text.currentTitle)}</h2>
-          <ul>${current}</ul>
-        </aside>
-      </div>
-    </section>
-    <section class="wrap section" id="work">
-      <div class="section-heading"><h2>${escapeHtml(text.nav[0])}</h2></div>
-      <div class="project-grid">${projects}</div>
-    </section>
-    <section class="studio section" id="studio">
-      <div class="wrap">
-        <div class="studio-grid">
-          <div><h2>${escapeHtml(text.studioTitle)}</h2><p class="studio-copy">${escapeHtml(text.studio)}</p></div>
-          <div><h3 class="stack-title">${escapeHtml(text.stackTitle)}</h3>${tags(identity.stack)}</div>
-        </div>
-        <section class="product-section" aria-labelledby="products-title">
-          <h2 id="products-title">${escapeHtml(text.labTitle)}</h2>
-          <ul class="lab-list">${lab}</ul>
-        </section>
-      </div>
-    </section>
-    <section class="wrap section" id="milestones">
-      <div class="section-heading"><h2>${escapeHtml(text.nav[2])}</h2></div>
-      <ul class="milestones">${milestones}</ul>
-      <h3 class="challenge-title">${escapeHtml(text.challengeTitle)}</h3>
-      <ul class="milestones challenges">${challenges}</ul>
-    </section>
-    <section class="wrap section" id="contact">
-      <div class="contact-panel"><div><h2>${escapeHtml(text.contactTitle)}</h2><p>${escapeHtml(text.contactCopy)}</p></div><div>${contact}</div></div>
-    </section>
-  </main>
-  <footer class="wrap site-footer">
-    <span>${escapeHtml(identity.brand)} · ${escapeHtml(localeName(lang))}</span>
-    ${external(text.profile, identity.github)}
-    <div class="share" data-share data-title="${escapeHtml(identityLabel)}" data-copied="${escapeHtml(text.share.copied)}">
-      <a class="text-link" data-share-link href="${escapeHtml(shareUrl)}">${escapeHtml(text.share.action)}</a>
-      <label data-share-manual hidden>${escapeHtml(text.share.manual)}<input type="url" value="${escapeHtml(shareUrl)}" readonly></label>
-      <span class="share-status" data-share-status role="status"></span>
-    </div>
-    <a class="language" href="${alternate}" lang="${alternateLang}">${text.language}</a>
-    <a class="icon-credit" href="${sendIconSource}">${escapeHtml(text.iconCredit)}</a>
-  </footer>
-</body>
-</html>
-`;
+import { mkdir, readFile, writeFile, readdir } from "node:fs/promises";
+import { identity as id, copy } from "../content/profile.mjs";
+import { cases, products, contacts } from "../content/work.mjs";
+import { serviceCards, renderQuiz } from "../content/pricing.mjs";
+const root=new URL("../",import.meta.url), files={}, icons={};
+for(const f of await readdir(new URL("docs/assets/icons/",root))) icons[f.slice(0,-4)]=await readFile(new URL("docs/assets/icons/"+f,root),"utf8");
+const base=id.portfolio, asset=base+"assets/", brand=asset+"brand/";
+const esc=s=>String(s).replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+const link=(label,url,style="link",goal="")=>`<a class="${style}" href="${esc(url)}" ${goal?'data-goal="'+goal+'"':''}>${esc(label)} ${icons.diagonal}</a>`;
+const routes=["","links/","aurawatch/","privacy/"];
+const url=(l,r="")=>base+(l==="ru"?"ru/":"")+r;
+const pic=(file,alt)=>`<img loading="lazy" src="${asset+file}" alt="${esc(alt)}">`;
+for(const lang of ["ru","en"]){
+ const ru=lang==="ru", other=ru?"en":"ru", t=copy[lang], l=(a,b)=>ru?a:b, home=url(lang), person=id.founder[lang];
+ const tg=link(t.cta,id.telegram,"button","telegram"), beta=link(l("Хочу в закрытую бету","Join the closed beta"),id.telegram+"?text="+encodeURIComponent(l("Хочу участвовать в закрытой бете AuraWatch.","I'd like to join the AuraWatch closed beta.")),"button","beta");
+ const work=cases[lang], lab=products[lang], services=serviceCards(lang);
+ const socials=[["Telegram",id.telegram,"telegram"],["Threads",id.threads,"threads"],[l("Канал","Channel"),id.channel,"channel"],["GitHub",id.github,"github"],["Email","mailto:"+contacts.email,"email"]].filter(x=>x[1]);
+ const social=socials.map(([k,v,g])=>link(k,v,"link",g)).join("");
+ const nav=t.nav.map((a,i)=>`<a href="${home}#${["services","work","bureau","contact"][i]}">${a}</a>`).join("");
+ const logo=`<a class="wordmark" href="${home}"><img src="${brand}mark.svg" alt="">DevLarion</a>`;
+ const themeNames=l(["Авто","Медь","Тёмно-синяя","Шалфей"],["Auto","Copper","Midnight","Sage"]);
+ const themes=`<select aria-label="${l("Цветовая тема","Colour theme")}" id="theme">${["auto","copper","midnight","sage"].map((v,i)=>`<option value="${v}">${themeNames[i]}</option>`).join("")}</select>`;
+ const foot=`<footer class="wrap"><div class="row">${logo}<div class="social">${social}</div></div><div class="row fine"><span>Built by DevLarion</span><a href="${home}privacy/">${l("Конфиденциальность","Privacy")}</a><a href="${asset}licenses/animateicons.txt">${l("Лицензии","Licences")}</a><button data-share>${l("Поделиться","Share")} ↗</button></div></footer><div class="mobilebar">${tg}${link("Threads",id.threads,"link","threads")}</div>`;
+ const section=(key,title,content,cls="")=>`<section id="${key}" class="section wrap ${cls}"><h2>${title}</h2>${content}</section>`;
+ const watch=`<div class="watch" role="img" aria-label="${l("Демонстрация экрана AuraWatch","AuraWatch screen demo")}"><div><small>AuraWatch</small><b data-watch>${l("Какие следующие шаги?","What are the next steps?")}</b><i></i></div></div>`;
+ const watchIntro=l("Ассистент для iPhone и Apple Watch в закрытом бета-тестировании. В режиме «Тихий суфлёр» подсказка появляется на затемнённом экране часов.","An assistant for iPhone and Apple Watch, currently in closed beta. Silent Prompter displays a suggestion on the dimmed watch face.");
+ const caseHTML=work.map(c=>`<article class="case">${c.image?pic(c.image,c.alt):""}<div><small>${esc(c.type)}</small><h3>${esc(c.name)}</h3><dl>${[c.task,c.solution,c.result].map((s,i)=>`<dt>${l(["Задача","Решение","Результат"],["Brief","Build","Outcome"])[i]}</dt><dd>${esc(s)}</dd>`).join("")}</dl><p class="tags">${c.tags.map(esc).join(" · ")}</p>${link(l("Открыть проект","View project"),c.href)}</div></article>`).join("");
+ const homeHTML=`<section class="hero"><div class="wrap hero-grid"><div class="hero-copy"><p class="eyebrow"><i></i>${t.eyebrow}</p><h1>${t.title}</h1><p class="intro">${t.intro}</p><div class="actions">${tg}<a class="ghost" href="#work">${t.cases} ↓</a></div></div><img class="optic" src="${brand}optic.webp" srcset="${brand}optic-small.webp 600w, ${brand}optic.webp 1200w" sizes="(max-width:740px) 100vw, 50vw" width="1200" height="800" alt="" fetchpriority="high"></div></section>
+ <div class="stack"><div class="wrap">Python <i>/</i> FastAPI <i>/</i> SwiftUI <i>/</i> Next.js <i>/</i> Telegram <i>/</i> On-premise AI</div></div>
+ ${section("services",t.services,`<div class="service-grid">${services.map((s,i)=>`<article>${icons[["ai","server","web","layers","mobile","mobile","bot","design","support","spark"][i%10]]}<h3>${esc(s.title)}</h3><p>${esc(s.description)}</p><div class="rate"><strong>${esc(s.price)}</strong><span>${esc(s.term)}</span></div></article>`).join("")}</div><p>${link(t.estimate,"#quiz")}</p>`)}
+ ${section("work",t.work,caseHTML)}
+ ${section("process",t.process,`<ol class="steps">${t.steps.map(([h,p])=>`<li><h3>${h}</h3><p>${p}</p></li>`).join("")}</ol>`)}
+ <section class="product-feature wrap"><div><small>watchOS / iOS</small><h2>AuraWatch</h2><p>${watchIntro}</p><div class="actions">${beta}${link(l("Подробнее","Explore"),home+"aurawatch/")}</div></div>${watch}</section>
+ ${section("products",t.products,`<div class="lab">${lab.filter(p=>p.name!=="AuraWatch").map(p=>`<article><small>${esc(p.status)}</small><h3>${esc(p.name)}</h3><p>${esc(p.summary)}</p>${p.links.map(a=>link(a.label,a.href)).join(" ")}</article>`).join("")}</div>`)}
+ ${section("bureau",t.bureau,`<h3>${person}</h3><small>${t.about}</small><p class="intro">${t.bio}</p><p>${l("ДАНО · грант Центрального университета · «Артек»","DANO · Central University grant · Artek")}</p>`)}
+ ${section("faq",t.faq,t.faqs.map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join(""))}
+ ${section("quiz",t.estimate,renderQuiz(lang,id.telegram))}
+ ${section("contact",t.ask,`<p class="intro">${t.close}</p>${tg}`)}`;
+ const privacy=l("Конфиденциальность","Privacy");
+ const privacyText=l(["На этом сайте","Калькулятор обрабатывает ответы в вашем браузере. Выбранная тема сохраняется локально. Сайт размещён на GitHub Pages. Для доставки страниц хостинг обрабатывает технические сведения о соединении.","Переход в Telegram","По нажатию кнопки вы открываете Telegram. Вы сами решаете, отправить ли сообщение и какие сведения указать.","Аналитика","Счётчик Яндекс Метрики и запись сеансов отключены. По вопросам обработки данных напишите основателю."],["On this site","The estimator processes answers in your browser. Your theme preference is saved locally. GitHub Pages hosts this site and processes technical connection information to serve its pages.","Opening Telegram","Contact buttons open Telegram. You choose whether to send a message and which information to include.","Analytics","Yandex Metrica and session recording are disabled. Contact the founder with questions about data handling."]);
+ const auBody=`<div class="wrap sub"><small>DevLarion / iOS + watchOS</small><h1>AuraWatch</h1><div class="product-feature"><div><p class="intro">${watchIntro}</p>${beta}</div><img class="watch-photo" src="${brand}watch.webp" srcset="${brand}watch-small.webp 540w, ${brand}watch.webp 1050w" sizes="(max-width:700px) 90vw, 42vw" alt="${l("Иллюстрация часов на запястье","Illustration of a watch on a wrist")}"></div><h2>${l("Как работает суфлёр","How Silent Prompter works")}</h2><ol class="steps">${l([["Начать","Пользователь включает сеанс на часах."],["Получить подсказку","Звук передаётся на сервер для обработки и расшифровки. Ответ появляется на запястье."],["Завершить","Три нажатия на Digital Crown останавливают сеанс."]],[["Start","The wearer starts a session on the watch."],["Read the suggestion","Audio is sent to the server for processing and transcription. The response appears on the wrist."],["Finish","Press the Digital Crown three times to stop the session."]]).map(([a,b])=>`<li><h3>${a}</h3><p>${b}</p></li>`).join("")}</ol><h2>${privacy}</h2><p>${l("Материалы сеанса хранятся в базе до удаления пользователем или до истечения 180 дней. Включайте микрофон с согласия участников разговора.","Session data is stored until the user deletes it or 180 days have passed. Obtain participants’ consent before turning on the microphone.")}</p><details><summary>${l("Какие устройства поддерживаются?","Which devices are supported?")}</summary><p>${l("Первый релиз рассчитан на iOS и watchOS. Android и часы других брендов — в планах.","The first release targets iOS and watchOS. Android and other watch brands are planned.")}</p></details>${beta}</div>`;
+ const otherPages={"links/":`<div class="wrap sub links"><small>${t.eyebrow}</small><h1>DevLarion</h1><p class="intro">${t.intro}</p>${tg}${link(t.cases,home+"#work","ghost")}${link(t.estimate,home+"#quiz","ghost")}${link("AuraWatch",home+"aurawatch/","ghost")}${social}</div>`,"aurawatch/":auBody,"privacy/":`<div class="wrap sub"><h1>${privacy}</h1>${[0,2,4].map(i=>`<h3>${privacyText[i]}</h3><p>${privacyText[i+1]}</p>`).join("")}${link("Email","mailto:"+contacts.email)}</div>`};
+ for(const route of [...routes,...(ru?[]:["404.html"])]){
+ const dest=url(lang,route),title=(route==="aurawatch/"?"AuraWatch":route==="privacy/"?privacy:route==="404.html"?"404":route==="links/"?l("Контакты","Links"):t.title.replace("<br>"," "))+" — DevLarion";
+ const alternate=url(other,route==="404.html"?"":route);
+ const schema={"@context":"https://schema.org","@graph":route==="aurawatch/"?[{"@type":"SoftwareApplication",name:"AuraWatch",operatingSystem:"iOS, watchOS",applicationCategory:"BusinessApplication"}]:[{"@type":"ProfessionalService",name:id.brand,url:home,sameAs:[id.telegram,id.github,id.threads],founder:{"@type":"Person",name:person}},...(!route?[{"@type":"FAQPage",mainEntity:t.faqs.map(([q,a])=>({"@type":"Question",name:q,acceptedAnswer:{"@type":"Answer",text:a}}))}]:[])]};
+ files["docs/"+(ru?"ru/":"")+route+(route.endsWith(".html")?"":"index.html")]=`<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><meta name="description" content="${esc(route==="aurawatch/"?watchIntro:t.intro)}"><link rel="canonical" href="${dest}">${["en","ru","x-default"].map(k=>`<link rel="alternate" hreflang="${k}" href="${url(k==="ru"?"ru":"en",route)}">`).join("")}<meta property="og:title" content="${title}"><meta property="og:description" content="${esc(route==="aurawatch/"?watchIntro:t.intro)}"><meta property="og:type" content="website"><meta property="og:url" content="${dest}"><meta property="og:locale" content="${ru?"ru_RU":"en_US"}"><meta property="og:image" content="${brand}og-${lang}.jpg"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="${brand}favicon.svg"><link rel="apple-touch-icon" href="${brand}apple-touch-icon.png"><link rel="manifest" href="${brand}site.webmanifest"><link rel="stylesheet" href="${asset}portfolio.css"><script src="${asset}theme.js"></script><script type="application/ld+json">${JSON.stringify(schema).replaceAll("<","\\u003c")}</script><script defer src="${asset}studio.js"></script>${!route?`<script defer src="${asset}quiz.js"></script>`:""}</head><body data-counter="${id.metrika}"><a class="skip" href="#main">${l("К содержанию","Skip to content")}</a><header><div class="wrap bar">${logo}<nav>${nav}</nav><div class="tools"><a class="header-social" href="${id.threads}" data-goal="threads" aria-label="Threads">@</a>${themes}<a href="${alternate}">${ru?"EN":"RU"}</a>${tg}</div></div></header><main id="main">${route==="404.html"?`<div class="wrap sub notfound"><img src="${brand}optic-small.webp" alt=""><h1>404</h1><p>Страница не найдена / Page not found</p>${link("DevLarion",base,"button")}</div>`:otherPages[route]??homeHTML}</main>${foot}<div id="progress" aria-hidden="true"></div><dialog id="commands" aria-label="${l("Быстрые действия","Quick actions")}"><form method="dialog"><button aria-label="Close">×</button></form><nav>${nav}<a href="${home}#quiz">${t.estimate}</a><a href="${alternate}">${ru?"English":"Русский"}</a><button class="select-theme">${l("Сменить тему","Change theme")}</button>${tg}</nav></dialog></body></html>`;
+ }
+ files[ru?"README.ru.md":"README.md"]=`# DevLarion\n\n${t.eyebrow} · ${person}\n\n${t.intro}\n\n[${t.cases}](${home}#work) · [${t.estimate}](${home}#quiz) · [${t.cta}](${id.telegram}) · [Threads](${id.threads}) · [${ru?"English":"Русский"}](${ru?"README.md":"README.ru.md"})\n\n## ${t.work}\n\n${work.map(c=>`- [${c.name}](${c.href}) — ${c.result}`).join("\n")}\n\n## ${t.products}\n\n- [AuraWatch](${home}aurawatch/) — ${watchIntro}\n${lab.filter(p=>p.name!=="AuraWatch").map(p=>`- **${p.name}** — ${p.summary}`).join("\n")}\n`;
 }
-
-function profile(lang, text) {
-  const other = lang === "en" ? "README.ru.md" : "README.md";
-  const profileLinks = [
-    "[" + text.language + "](" + other + ")",
-    identity.portfolio ? "[" + text.portfolioLabel + "](" + profileUrl(lang) + ")" : "",
-    "[" + text.contact + "](" + identity.telegram + ")"
-  ].filter(Boolean).join(" · ");
-  return [
-    "<!-- Generated by node scripts/build.mjs from content/profile.mjs. -->",
-    "# " + identityLabel,
-    "**" + text.role + "**",
-    text.intro,
-    profileLinks,
-    "## " + text.nav[0],
-    text.projects.map((project) => [
-      "### " + project.title,
-      "**" + project.type + "**",
-      project.lead + " " + project.detail,
-      project.tags.map((tag) => "`" + tag + "`").join(" "),
-      work[project.id].href ? "[" + text.projectLink + "](" + work[project.id].href + ")" : "",
-      project.id === "orient-logic"
-        ? '<img src="docs/assets/' + work[project.id].image.file + '" alt="' + escapeHtml(project.imageAlt) + '" width="680">'
-        : ""
-    ].filter(Boolean).join("\n\n")).join("\n\n"),
-    "## " + text.labTitle,
-    text.lab.map((project) => {
-      const link = project.link ? " [" + project.link[0] + "](" + project.link[1] + ")." : "";
-      const overview = "- **" + project.name + "** · " + project.status + ". " + project.summary + link;
-      const story = project.story
-        ? "\n\n<details>\n<summary>" + escapeHtml(text.caseLabel + " · " + project.name) + "</summary>\n\n"
-          + project.story.map(([heading, detail]) => "**" + heading + "**. " + detail).join("\n\n") + "\n\n</details>"
-        : "";
-      return overview + story;
-    }).join("\n\n"),
-    "## " + text.studioTitle,
-    text.studio + "\n\n" + identity.stack.map((tag) => "`" + tag + "`").join(" "),
-    "## " + text.nav[2],
-    text.milestones.map(([name, detail, href]) =>
-      "- **" + (href ? "[" + name + "](" + href + ")" : name) + "** · " + detail
-    ).join("\n"),
-    "<details>\n<summary>" + text.challengeTitle + "</summary>\n\n"
-      + text.challenges.map(([name, detail]) => "- **" + name + "** · " + detail).join("\n")
-      + "\n\n</details>",
-    "## " + text.contactTitle,
-    text.contactCopy + "\n\n[" + text.contact + "](" + identity.telegram + ")",
-    "[" + text.share.action + "](" + profileUrl(lang) + ")"
-  ].join("\n\n") + "\n";
-}
-
-const output = {
-  "README.md": profile("en", copy.en),
-  "README.ru.md": profile("ru", copy.ru),
-  "docs/index.html": page("en", copy.en),
-  "docs/ru/index.html": page("ru", copy.ru)
-};
-
-for (const [name, text] of Object.entries(output)) {
-  const destination = new URL(name, projectRoot);
-  if (check) {
-    const existing = await readFile(destination, "utf8").catch(() => null);
-    if (existing !== text) {
-      console.error(name + " is out of date. Run node scripts/build.mjs.");
-      process.exitCode = 1;
-    }
-  } else {
-    await mkdir(new URL(".", destination), { recursive: true });
-    await writeFile(destination, text);
-  }
+files["docs/sitemap.xml"]='<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+["en","ru"].flatMap(l=>routes.map(r=>"<url><loc>"+url(l,r)+"</loc></url>")).join("")+"</urlset>";
+files["docs/robots.txt"]="User-agent: *\nAllow: /\nSitemap: "+base+"sitemap.xml\n";
+for(const [path,data] of Object.entries(files)){
+ const f=new URL(path,root);
+ if(process.argv.includes("--check")){if(await readFile(f,"utf8").catch(()=>null)!==data)throw Error("Out of date: "+path);}
+ else {await mkdir(new URL(".",f),{recursive:true});await writeFile(f,data);}
 }
