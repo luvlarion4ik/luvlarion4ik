@@ -1,0 +1,10 @@
+{
+  "name": "devlarion-site",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/build.mjs --check",
+    "admin": "node scripts/admin.mjs",
+    "referrals": "node scripts/referrals.mjs"
+  }
+}

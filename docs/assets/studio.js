@@ -7,18 +7,6 @@ document.addEventListener('keydown', event => {
   }
 });
 dialog.querySelector('nav').addEventListener('click', () => dialog.close());
-document.querySelector('[data-share]').addEventListener('click', async () => {
-  try {
-    if (navigator.share) await navigator.share({title:document.title,url:location.href});
-    else {
-      await navigator.clipboard.writeText(location.href);
-      const toast=document.createElement('div');
-      toast.className='notice'; toast.role='status';
-      toast.textContent=ru?'Ссылка скопирована':'Link copied';
-      document.body.append(toast); setTimeout(()=>toast.remove(),2400);
-    }
-  } catch (e) {if(e.name!=='AbortError') prompt(ru?'Скопируйте ссылку':'Copy link',location.href);}
-});
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const watch=document.querySelector('[data-watch]');
 if(watch){
