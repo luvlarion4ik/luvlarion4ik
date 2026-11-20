@@ -323,6 +323,21 @@ function startingPriceLine(lang, rubles, scope) {
   return `<p class="solution-scope" data-region-price-row>${scope ? scope + ' · ' : ''}${prefix} <span data-region-price="${rubles}">${formatStartingPrice(rubles, lang)}</span></p>`;
 }
 
+function renderIndustrySolutions(lang, icons) {
+  const tiles = ['fintech/', 'edtech/'].map(route => {
+    const { icon, [lang]: { label, description } } = offerPages[route];
+    return `<article>
+      <span class="service-mark" aria-hidden="true">${icons[icon] || ''}</span>
+      <h5><a class="link" href="${route}">${label}<span aria-hidden="true">${icons.diagonal || ''}</span></a></h5>
+      <p>${description}</p>
+    </article>`;
+  }).join('');
+  return `<section class="industry-solutions" aria-labelledby="industry-solutions-title">
+    <h4 id="industry-solutions-title">${pick(lang, 'Отраслевые решения', 'Industry solutions')}</h4>
+    <div class="service-grid industry-grid">${tiles}</div>
+  </section>`;
+}
+
 export function renderCompanySolutions(lang, icons, pricingOverrides = {}) {
   const tablist = companySolutions.map(solution => `<button type="button" id="solution-tab-${solution.id}" data-solution="${solution.id}" role="tab" aria-selected="false" aria-controls="solution-panel-${solution.id}" tabindex="-1">
     <span aria-hidden="true">${icons[solution.icon] || ''}</span>${solution[lang].title}
@@ -354,7 +369,8 @@ export function renderCompanySolutions(lang, icons, pricingOverrides = {}) {
     </details>`;
   }).join('');
 
-  return `<div class="company-solutions" data-company-solutions>
+  return `${renderIndustrySolutions(lang, icons)}
+  <div class="company-solutions" data-company-solutions>
     <div class="solution-tablist" role="tablist" aria-label="${pick(lang, 'Направления для компаний', 'Company solutions')}" aria-orientation="vertical" hidden>${tablist}</div>
     <div class="solution-panels">${panels}</div>
   </div><a class="link ready-catalog-link" href="#ready-solutions">${pick(lang, 'Открыть каталог готовых решений', 'Browse the solutions catalogue')}</a>`;
@@ -387,6 +403,72 @@ export function renderReadySolutions(lang, telegramUrl, statusOverrides = {}, ho
 }
 
 export const offerPages = {
+  'fintech/': {
+    icon: 'server', service: 'custom', tier: 'medium',
+    ru: {
+      label: 'FinTech',
+      title: 'Разработка FinTech-решений для компаний',
+      description: 'Виртуальные карты через API эмитента, платёжные кабинеты и программное обеспечение для биржевых и обменных платформ.',
+      features: [
+        ['Виртуальные карты и платежи', 'Интегрируем API вашего банка или эмитента. Разрабатываем кабинет держателя карты с запросом на выпуск, управлением картами и историей операций. Подключаем платежи через выбранного провайдера.'],
+        ['Балансы и сверка', 'Отображаем балансы и статусы платежей по данным провайдеров, принимаем обновления через вебхуки и готовим сверку операций по выпискам.'],
+        ['ПО для биржевых и обменных платформ', 'Разрабатываем интерфейсы котировок и заявок, подключаем поставщиков ликвидности, операторов исполнения и хранения активов. По требованиям проекта интегрируем проверку клиентов и контроль операций на стороне согласованных операторов.'],
+      ],
+      process: 'Начинаем с требований, распределения ролей и проверки API партнёров. В тестовой среде проверяем основной сценарий, статусы и сверку. По результатам пилота согласуем объём работ и условия запуска.',
+      faq: [
+        ['Кто выпускает карты и проводит операции?', 'Карты выпускает банк или эмитент. Платежи, исполнение заявок и хранение активов выполняют подключённые операторы в рамках своих полномочий. Devlarion разрабатывает интерфейсы и интеграции.'],
+        ['Что нужно для подготовки сметы?', 'Опишите сценарий, рынок запуска и роль партнёров. Если провайдеры уже выбраны, укажите доступные API, тестовые среды и требования к журналу операций.'],
+      ],
+    },
+    en: {
+      label: 'FinTech',
+      title: 'FinTech software development',
+      description: 'Virtual cards through an issuer’s API, payment dashboards and software for trading and exchange platforms.',
+      features: [
+        ['Virtual cards and payments', 'We integrate with your bank’s or issuer’s API and build cardholder portals with issuance requests, card controls and activity history. We connect payments through your chosen provider.'],
+        ['Balances and reconciliation', 'We display balances and payment statuses from provider records, handle updates through webhooks and reconcile transactions against statements.'],
+        ['Trading and exchange software', 'We build interfaces for quotes and orders and connect liquidity, execution and custody providers. Where the project requires it, we integrate identity checks and transaction monitoring with the relevant operators.'],
+      ],
+      process: 'We start with requirements, responsibilities and a review of partner APIs. We test the core workflow, status updates and reconciliation in a sandbox. After the pilot, we agree on scope and launch conditions.',
+      faq: [
+        ['Who issues cards and handles operations?', 'The bank or issuer issues cards. Payment, execution and custody operators perform their respective functions. Devlarion develops the interfaces and integrations.'],
+        ['What do you need to prepare a quote?', 'Describe the workflow, launch market and partner roles. If you have selected providers, share the available APIs, test environments and requirements for transaction records.'],
+      ],
+    },
+  },
+  'edtech/': {
+    icon: 'layers', service: 'custom', tier: 'medium',
+    ru: {
+      label: 'EduTech',
+      title: 'Разработка EduTech-решений для школ и онлайн-курсов',
+      description: 'Системы управления обучением, кабинеты педагогов, учеников и родителей, задания, оценки, отчёты и оплата курсов.',
+      features: [
+        ['Платформа обучения', 'Разрабатываем LMS с курсами, группами и расписанием. Педагоги назначают и проверяют задания, ученики сдают работы и смотрят обратную связь.'],
+        ['Роли, оценки и отчёты', 'Настраиваем доступы педагогов, учеников, родителей и администраторов. Добавляем журнал оценок, отчёты о прогрессе и уведомления.'],
+        ['Оплата и интеграции', 'Подключаем платёжного провайдера заказчика, настраиваем доступ к курсам и связываем платформу с существующими сервисами. Для совместимых учебных инструментов используем LTI 1.3 там, где это подходит проекту.'],
+      ],
+      process: 'Согласуем учебный сценарий, роли, требования к доступам и интеграции. Проводим пилот с одной группой, проверяем задания, обратную связь и отчёты. Перед запуском готовим инструкции и план сопровождения.',
+      faq: [
+        ['Можно подключить существующую LMS?', 'Проверим API и поддержку LTI 1.3. Вместе выберем, какие задания, оценки или данные о группах должны передаваться между системами.'],
+        ['Кто видит оценки и отчёты?', 'Доступ определяется ролью. Например, ученик видит свой прогресс, педагог видит данные своей группы, а родитель получает отчёт по своему ребёнку, если это предусмотрено проектом.'],
+      ],
+    },
+    en: {
+      label: 'EduTech',
+      title: 'EduTech software for schools and online courses',
+      description: 'Learning management systems, portals for teachers, learners and parents, assignments, grades, reports and course payments.',
+      features: [
+        ['Learning management platform', 'We build an LMS with courses, groups and schedules. Teachers assign and mark work, while learners submit it and view feedback.'],
+        ['Roles, grades and reports', 'We set up access for teachers, learners, parents and administrators, with a gradebook, progress reports and notifications.'],
+        ['Payments and integrations', 'We connect your payment provider, set up course access and integrate with existing systems. Where the project calls for it, we connect compatible learning tools through LTI 1.3.'],
+      ],
+      process: 'We agree on the learning workflow, roles, access requirements and integrations. We pilot with one group and check assignments, feedback and reports. We prepare handover instructions and a support plan for launch.',
+      faq: [
+        ['Can you connect to our existing LMS?', 'We review API and LTI 1.3 support, then agree on which assignments, grades or group records should move between systems.'],
+        ['Who can see grades and reports?', 'Access follows each user’s role. A learner sees their own progress, a teacher sees their group, and a parent can receive a report on their child where the project includes that feature.'],
+      ],
+    },
+  },
   'ai-assistant/': {
     service: 'assistant', tier: 'medium', option: 'crm', example: ['Orient Logic', '#orient-logic'],
     ru: {
@@ -454,25 +536,30 @@ export const offerPages = {
 
 export function renderOfferPage(lang, route, home, pricingOverrides = {}) {
   const { service, tier, option, example } = offerPages[route];
-  const { title, description, process, faq } = offerPages[route][lang];
+  const { title, description, features, process, faq } = offerPages[route][lang];
   const price = startingPrice(service, tier, pricingOverrides);
   const estimate = new URL(home);
   estimate.searchParams.set('service', service);
   estimate.searchParams.set('tier', tier);
   if (option) estimate.searchParams.set('options', option);
+  if (features) estimate.searchParams.set('utm_campaign', route.slice(0, -1));
   estimate.hash = 'quiz';
-  const exampleUrl = new URL(example[1], home);
+  const contactLabel = service === 'custom'
+    ? pick(lang, 'Запросить индивидуальную смету', 'Request a tailored quote')
+    : pick(lang, 'Рассчитать проект', 'Estimate a project');
   return `<div class="wrap sub offer-page">
-    <a class="link" href="${home}#services">${pick(lang, 'Все услуги', 'All services')}</a>
+    <a class="link" href="${home}#${features ? 'companies' : 'services'}">${features ? pick(lang, 'Решения для компаний', 'Company solutions') : pick(lang, 'Все услуги', 'All services')}</a>
     <h1>${title}</h1>
     <p class="intro">${description}</p>
     ${startingPriceLine(lang, price)}
-    <p data-region-note hidden></p>
+    ${price == null ? '' : '<p data-region-note hidden></p>'}
     <div class="actions">
-      <a class="button" href="${markup(estimate)}">${pick(lang, 'Рассчитать проект', 'Estimate a project')}</a>
-      <a class="link" href="${markup(exampleUrl)}">${example[0]}</a>
+      <a class="button" href="${markup(estimate)}">${contactLabel}</a>
+      ${example ? `<a class="link" href="${markup(new URL(example[1], home))}">${example[0]}</a>` : ''}
       ${service === 'landing' ? `<a class="link" href="${markup(home)}?service=design&amp;tier=medium#quiz">${pick(lang, 'Рассчитать редизайн', 'Estimate a redesign')}</a>` : ''}
     </div>
+    ${features ? `<h2>${pick(lang, 'Что разрабатываем', 'What we build')}</h2>
+      <dl>${features.map(([name, detail]) => `<dt>${name}</dt><dd>${detail}</dd>`).join('')}</dl>` : ''}
     <h2>${pick(lang, 'Как проходит работа', 'How we work')}</h2>
     <p>${process}</p>
     <h2>${pick(lang, 'Частые вопросы', 'Frequently asked questions')}</h2>
