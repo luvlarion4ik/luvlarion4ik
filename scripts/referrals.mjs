@@ -3,6 +3,7 @@ import { mkdir, open, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import site from '../content/site.json' with { type: 'json' };
+import { siteBase } from '../content/profile.mjs';
 
 const ledgerPath = process.env.DEVLARION_REFERRALS_FILE
   ? resolve(process.env.DEVLARION_REFERRALS_FILE)
@@ -35,7 +36,7 @@ function change(ledger) {
     const referrer = requireId(code, 'Внутренний ID приглашающего');
     let newCode;
     do { newCode = randomBytes(5).toString('hex').toUpperCase(); } while (own(ledger, newCode));
-    const shareUrl = new URL('https://luvlarion4ik.github.io/luvlarion4ik/ru/');
+    const shareUrl = new URL('ru/', siteBase());
     shareUrl.searchParams.set('ref', newCode);
     shareUrl.hash = 'quiz';
     ledger[newCode] = { referrer, issuedAt: now.toISOString(), terms: site.referral };

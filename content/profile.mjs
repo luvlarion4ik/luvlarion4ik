@@ -6,6 +6,15 @@ export const identity = {
   threads: "https://www.threads.com/@luvlarion4ik",
   portfolio: "https://luvlarion4ik.github.io/luvlarion4ik/"
 };
+export function siteBase(value = process.env.DEVLARION_SITE_URL ?? identity.portfolio) {
+  const url = new URL(value);
+  if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password || url.search || url.hash) {
+    throw new Error('DEVLARION_SITE_URL must be an HTTP(S) site URL without credentials, query or fragment.');
+  }
+  if (!url.pathname.endsWith('/')) url.pathname += '/';
+  return url.href;
+}
+
 export const copy = {
  ru: {
   nav:["Услуги","Кейсы","Команда","Контакты"], cta:"Обсудить проект", cases:"Смотреть кейсы", eyebrow:"Студия разработки Devlarion",
