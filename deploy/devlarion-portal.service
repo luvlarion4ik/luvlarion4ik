@@ -1,0 +1,21 @@
+[Unit]
+Description=Devlarion client portal (Telegram login, projects, invoices, messages)
+After=network.target
+
+[Service]
+User=devlarion
+Group=devlarion
+WorkingDirectory=/opt/devlarion/portal
+EnvironmentFile=-/etc/devlarion-portal.env
+Environment=PORTAL_ORIGIN=https://devlarion.ru
+Environment=PORTAL_DATA=/var/lib/devlarion-portal
+ExecStart=/usr/local/bin/node server.mjs
+Restart=on-failure
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/devlarion-portal
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
