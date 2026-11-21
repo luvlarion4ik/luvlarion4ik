@@ -198,3 +198,15 @@ if (segmentCards.length) {
     });
   }
 }
+
+function redirectLegacySegment() {
+  const id = location.hash.slice(1);
+  const route = document.getElementById(id)?.dataset.legacySegment;
+  if (!route) return;
+  const target = new URL(route, location.href);
+  target.search = location.search;
+  location.replace(target);
+}
+
+redirectLegacySegment();
+window.addEventListener('hashchange', redirectLegacySegment);

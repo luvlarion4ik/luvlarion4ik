@@ -3,7 +3,7 @@ import { mkdir, readFile, writeFile, readdir } from "node:fs/promises";
 import { identity as id, copy, homeCopy, siteBase } from "../content/profile.mjs";
 import { cases, products, contacts } from "../content/work.mjs";
 import { starterPackages, renderQuiz, packageStartingPrice } from "../content/pricing.mjs";
-import { offerPages, renderOfferPage, renderOffers, renderCompanySolutions, renderReadySolutions } from "../content/solutions.mjs";
+import { offerPages, renderOfferPage, renderOffers, renderReadySolutions } from "../content/solutions.mjs";
 import { site, esc, formatStartingPrice, regionControl, renderTeam, renderCaseFilter, renderCaseDetails, renderCurators, renderProductDetails, renderReferral, renderLegal } from "../content/site.mjs";
 import { segments } from "../content/segments.mjs";
 import { renderPortalPage } from "../content/portal.mjs";
@@ -27,7 +27,6 @@ const versionedAssets = await Promise.all([
 const caseRoute = project => "work/" + project.id + "/";
 const routes = ["", "links/", "aurawatch/", "privacy/", "licenses/", "solutions/", "cabinet/", ...Object.keys(offerPages), ...cases.ru.map(caseRoute)];
 const url=(l,r="")=>base+(l==="ru"?"ru/":"")+r;
-const serviceIcon = { web: "web", mini: "mini", automation: "bot" };
 const pic=(file,alt,size)=>`<img loading="lazy" width="${size[0]}" height="${size[1]}" src="${asset+file}" alt="${esc(alt)}">`;
 for(const lang of ["ru","en"]){
  const ru=lang==="ru", other=ru?"en":"ru", t=copy[lang], l=(a,b)=>ru?a:b, home=url(lang), person=id.founder[lang];
@@ -57,14 +56,6 @@ for(const lang of ["ru","en"]){
    <label hidden>${l("Ссылка", "Link")}<input readonly data-share-field></label>
    <p role="status" data-share-status></p>
  </dialog>`;
- const featured = work.find(c => c.name === "Orient Logic");
- const casePreview = `<a class="featured-case" href="#orient-logic">
-   <div class="featured-stage">
-     <div class="featured-browser"><span aria-hidden="true">orientlogic.ru</span><img src="${asset+featured.image}" width="1440" height="900" alt="" loading="lazy"></div>
-     <img class="featured-phone" src="${asset+featured.mobile}" width="390" height="844" alt="" loading="lazy">
-   </div>
-   <div class="featured-caption"><div><small>${l("Клиентский проект · Логистика","Client project · Logistics")}</small><strong>Orient Logic</strong><span>${l("Ассистент, заявки, CRM и личные кабинеты","Assistant, enquiries, CRM and customer accounts")}</span></div><span class="featured-arrow" aria-hidden="true">↓</span></div>
- </a>`;
  const nav=t.nav.map((a,i)=>`<a href="${home}#${["services","work","bureau","contact"][i]}">${a}</a>`).join("")+`<a href="${home}cabinet/">${l("Кабинет","Portal")}</a>`;
  const logo = (placement, intro = false) => {
    const fallback = placement === "footer" ? "logo-horizontal-copper.svg" : "logo-horizontal-copper-light.svg";
@@ -133,10 +124,9 @@ for(const lang of ["ru","en"]){
        <div class="exhibit-foot">${link(project.concept ? l("Открыть демо","Open demo") : l("Читать кейс","Read case study"),details)}${shareButton(project.id)}</div>
      </div></article>`;
  }).join("");
- const caseHTML = renderCaseFilter(lang,work) + [
-   [l("Клиентские проекты", "Client projects"), work.filter(project => !project.concept)],
-   [l("Демонстрационные проекты", "Demo projects"), work.filter(project => project.concept)]
- ].map(([title, items]) => `<div data-case-group><h3 class="work-subheading">${title}</h3><div class="work-gallery">${renderCases(items)}</div></div>`).join("");
+ const caseGallery = items => `<div data-case-group class="work-gallery">${renderCases(items)}</div>`;
+ const caseHTML = renderCaseFilter(lang,work) + caseGallery(work.slice(0,3))
+   + `<details data-more-cases><summary>${homeCopy[lang].allCases}</summary>${caseGallery(work.slice(3))}</details>`;
 
  const casePages = Object.fromEntries(work.map(project => {
    const gallery = project.gallery;
@@ -171,26 +161,25 @@ for(const lang of ["ru","en"]){
  }).join("")}</div>`;
  const homeHTML=`<section class="hero segment-hero"><div class="wrap">
    <p class="eyebrow"><i></i>${t.eyebrow}</p><h1>${front.title}</h1><p class="intro">${front.intro}</p>
+   <span id="small-business" data-legacy-segment="self-employed/"></span>
+   <span id="companies" data-legacy-segment="business/"></span>
    ${segmentPicker}
    ${link(front.quote,"#quiz","segment-quote link")}
  </div></section>
- <div class="stack"><div class="wrap stack-rail">${[false,true].map(repeat=>`<div class="stack-track" ${repeat?'aria-hidden="true"':""}>Python <i>/</i> FastAPI <i>/</i> SwiftUI <i>/</i> Next.js <i>/</i> Telegram <i>/</i> On-premise AI <i>/</i></div>`).join("")}</div></div>
- ${renderOffers(lang,icons,site.ready)}
- ${section("services",t.services,`<div id="small-business" class="service-group"><h3>${l("Стартовые пакеты для малого бизнеса","Starter packages for small businesses")}</h3><p>${l("Для самозанятых, ИП и небольших команд. В каждом пакете один сценарий. Если нужны оплата, CRM или дополнительные функции, оценим их отдельно.","For freelancers, sole proprietors and small teams. Each package covers one workflow. We quote payment processing, CRM integrations and extra features separately.")}</p><div class="service-grid">${packages.map(p=>`<article><span class="service-mark">${icons[serviceIcon[p.id]]}</span><h4>${esc(p.title)}</h4><p>${esc(p.description)}</p><div class="rate"><div class="starter-price" data-region-price-row><span class="starter-price-prefix">${l("от", "from")}</span><strong class="starter-price-amount" data-region-price="${p.rub}">${formatStartingPrice(p.rub,lang)}</strong></div></div>${link(l("Обсудить пакет","Discuss this package"),id.telegram+"?text="+encodeURIComponent(l("Хочу обсудить пакет «","I'd like to discuss the “")+p.title+l("».","”.")),"link","telegram")}</article>`).join("")}</div></div>
- <p data-region-note hidden></p>
- <div id="companies" class="service-group"><h3>${l("Решения для компаний","Solutions for companies")}</h3>
-   <p>${l("Выберите направление, чтобы посмотреть состав работ, варианты внедрения и ориентир по бюджету.","Choose a service to see the scope, deployment options and starting price.")}</p>
-   ${renderCompanySolutions(lang,icons,site.pricing)}</div>
- <aside class="service-support"><div><strong>${l("Два месяца поддержки","Two months of support")}</strong><p>${l("Исправления в согласованном объёме входят в каждый проект.","Every project includes fixes within the agreed scope.")}</p></div>${link(t.estimate,"#quiz")}</aside>`)}
- ${section("work",t.work,casePreview+caseHTML)}
- ${section("process",t.process,`<ol class="steps">${t.steps.map(([h,p])=>`<li><h3>${h}</h3><p>${p}</p></li>`).join("")}</ol>`)}
- <section class="product-feature wrap"><div><small>watchOS / iOS</small><h2>AuraWatch</h2><p>${watchIntro}</p><div class="actions">${beta}${link(l("Подробнее","Explore"),home+"aurawatch/")}</div></div><div class="product-visual">${pic("brand/watch.webp","Apple Watch",[1050,700])}</div></section>
- ${section("products",t.products,`<div class="lab product-list">${lab.map(p=>`<article class="${p.preview?"product-card":"product-lead"}">${productPreviews[p.preview] ?? ""}<div><small>${esc(p.status)}</small><h3>${esc(p.name)}</h3><p>${esc(p.summary)}</p>${renderProductDetails(lang,p.details)}${p.links.length?`<div class="product-links">${p.links.map(a=>link(a.label,a.href)).join("")}</div>`:""}</div></article>`).join("")}</div>`)}
- ${section("about",l("О студии","About the studio"),`<p class="intro">${l("Devlarion разрабатывает сайты, ботов, мобильные приложения и ИИ-сервисы для бизнеса. Ведём проект от аналитики и дизайна до запуска и поддержки. Работаем по договору с ИП. Состав, смету и этапы согласуем до начала работ.","Devlarion builds websites, bots, mobile apps and AI services for businesses. We cover discovery, design, delivery and support, with the scope, budget and milestones agreed before work begins.")}</p>`)}
- ${section("bureau",t.bureau,renderTeam(lang,{bio:t.bio,work,home,asset,link}))}
- ${section("faq",t.faq,t.faqs.map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join(""))}
- ${section("quiz",t.estimate,renderQuiz(lang,id.telegram,site.pricing,site.portal)+renderReferral(lang,id.telegram)+social)}
- ${section("contact",t.ask,`<p class="intro">${t.close}</p><div class="actions">${tg}</div>${social}`)}`;
+ ${section("why",front.why,`<div class="home-facts">${front.whyFacts.map(([title,body])=>`<article><h3>${esc(title)}</h3><p>${esc(body)}</p></article>`).join("")}</div>${link(front.whyLink,home+"why-website/")}`,"home-compact")}
+ <div id="services">${renderOffers(lang,icons,site.ready)}</div>
+ ${section("work",t.work,caseHTML)}
+ ${section("growth",front.growth,`<div class="home-growth">${["seo/","geo/","support/"].map((route,index)=>{
+   const [title,body]=front.growthLinks[index];
+   return `<a href="${home}${route}"><strong>${esc(title)} <span aria-hidden="true">→</span></strong><span>${esc(body)}</span></a>`;
+ }).join("")}</div>`,"home-compact")}
+ ${section("process",t.process,`<ol class="home-process">${t.steps.map(([h,p])=>`<li><details name="process-step"><summary>${esc(h)}</summary><p>${esc(p)}</p></details></li>`).join("")}</ol>`,"home-compact")}
+ <section id="products" class="section wrap home-compact">
+   <div class="product-feature"><div><small>watchOS / iOS</small><h2>AuraWatch</h2><p>${watchIntro}</p><div class="actions">${beta}${link(l("Подробнее","Explore"),home+"aurawatch/")}</div></div><div class="product-visual">${pic("brand/watch.webp","Apple Watch",[1050,700])}</div></div>
+   <details class="more-products"><summary>${front.moreProducts}</summary><div class="lab product-list">${lab.filter(p=>p.name!=="AuraWatch").map(p=>`<article class="product-card">${productPreviews[p.preview] ?? ""}<div><small>${esc(p.status)}</small><h3>${esc(p.name)}</h3><p>${esc(p.summary)}</p>${renderProductDetails(lang,p.details)}${p.links.length?`<div class="product-links">${p.links.map(a=>link(a.label,a.href)).join("")}</div>`:""}</div></article>`).join("")}</div></details>
+ </section>
+ ${section("bureau",t.bureau,`<p id="about" class="studio-intro">${front.studio}</p>`+renderTeam(lang,{bio:t.bio,work,home,asset,link})+`<div id="faq" class="home-faq"><h3>${t.faq}</h3>${t.faqs.map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join("")}</div>`,"home-compact")}
+ ${section("quiz",t.estimate,renderQuiz(lang,id.telegram,site.pricing,site.portal)+renderReferral(lang,id.telegram)+`<div id="contact" class="home-contact"><h3>${t.ask}</h3><p>${t.close}</p><div class="actions">${tg}${social}</div></div>`,"home-compact")}`;
  const privacy=l("Конфиденциальность","Privacy");
  const hosting = base === id.portfolio
    ? l("Сайт размещён на GitHub Pages.", "GitHub Pages hosts this site.")
