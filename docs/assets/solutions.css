@@ -410,3 +410,21 @@
 @media (max-width:700px) {
   .audience-benefits:has(> :nth-child(4)) {grid-template-columns:1fr}
 }
+
+.payback-form {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem 2rem;padding:clamp(1rem,2vw,1.65rem);background:var(--surface);border:1px solid var(--rule)}
+.payback-fields {display:grid;grid-template-columns:1fr;gap:.35rem}
+.payback-fields label {display:block;font-weight:600}
+.payback-fields label > span {color:var(--sub)}
+.payback-fields input {width:100%;min-height:2.25rem;margin:0 0 .45rem;accent-color:var(--accent)}
+.payback-fields input[type=number] {font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--rule);padding:.35rem .55rem}
+.payback-form fieldset {align-self:start;border:1px solid var(--rule);margin:0;padding:.55rem .85rem}
+.payback-form legend {font-weight:600}
+.payback-form fieldset label {display:flex;align-items:baseline;gap:.45rem;padding:.32rem 0}
+.payback-form fieldset input {accent-color:var(--accent)}
+.payback-result,.payback-note {grid-column:1/-1}
+.payback-result {border-top:1px solid var(--rule);padding-top:.8rem;font-weight:700}
+.payback-result p + p {margin-top:.3rem}
+.payback-note {margin:0;color:var(--sub);font-size:.9rem}
+@media (max-width:700px) {
+  .payback-form {grid-template-columns:1fr}
+}

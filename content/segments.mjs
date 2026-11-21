@@ -7,6 +7,7 @@ export const segments = [
     icon: 'web',
     starting: ['automation', 'small'],
     estimateServices: ['landing', 'automation'],
+    paybackPackages: ['landing', 'automation', 'mini'],
     related: ['why-website/', 'seo/'],
     ru: {
       label: 'Самозанятым и ИП',
@@ -60,6 +61,7 @@ export const segments = [
     icon: 'layers',
     starting: ['web', 'small'],
     estimateServices: ['web', 'automation'],
+    paybackPackages: ['web', 'bot-crm', 'mini'],
     related: ['seo/', 'support/'],
     ru: {
       label: 'Малому и среднему бизнесу',
@@ -77,6 +79,7 @@ export const segments = [
         { id: 'bot-crm', title: 'Бот + CRM', price: 'bot-crm', term: '2–3 недели', items: ['Бот для заявок', 'Передача в amoCRM или Битрикс24', 'Уведомления менеджерам'] },
         { id: 'assistant', title: 'ИИ-ассистент для заявок', price: ['assistant', 'small'], term: '2–4 недели', items: ['Ответы по базе знаний', 'Квалификация заявки', 'Передача в CRM'] },
         { id: 'growth', title: 'Комбо «Рост»', price: 'growth', term: 'По смете', items: ['Сайт', 'ИИ-ассистент', 'CRM', 'Личный кабинет клиента', 'Скидка за объём'] },
+        { id: 'mini', title: 'Мини-приложение с каталогом', price: ['mini', 'small'], term: '2–3 недели', items: ['Каталог до 10 позиций', 'Карточки с фото и ценой', 'Заявка продавцу в один клик'] },
       ],
       faq: [
         ['Работаете с юрлицами и НДС?', 'Работаем по договору с ИП, закрывающие документы предоставляем. Детали оплаты согласуем до старта.'],
@@ -101,6 +104,7 @@ export const segments = [
         { id: 'bot-crm', title: 'Bot + CRM', price: 'bot-crm', term: '2–3 weeks', items: ['Enquiry bot', 'Transfer to amoCRM or Bitrix24', 'Notifications for your team'] },
         { id: 'assistant', title: 'AI assistant for enquiries', price: ['assistant', 'small'], term: '2–4 weeks', items: ['Answers from your knowledge base', 'Enquiry qualification', 'CRM handover'] },
         { id: 'growth', title: 'Growth bundle', price: 'growth', term: 'Agreed in the quote', items: ['Website', 'AI assistant', 'CRM', 'Client portal', 'Volume discount'] },
+        { id: 'mini', title: 'Catalogue mini app', price: ['mini', 'small'], term: '2–3 weeks', items: ['Catalogue of up to ten items', 'Product photos and prices', 'One-click enquiry to the seller'] },
       ],
       faq: [
         ['Do you work with companies, and how do you handle VAT?', 'We contract as a sole trader and provide the completion documents. Payment details are agreed before work begins.'],
@@ -497,6 +501,32 @@ function renderContact(lang, page, ctx) {
     `<a class="button" href="${telegramLink(lang, ctx, page[lang].label)}">${pick(lang, 'Написать в Telegram', 'Message us on Telegram')}</a>`, 'audience-contact');
 }
 
+function renderPayback(lang, page, ctx) {
+  const { packages } = page[lang];
+  const options = page.paybackPackages.map(id => packages.find(pack => pack.id === id))
+    .filter(pack => packageStartingPrice(pack.price, ctx.pricing) !== null);
+  if (!options.length) return '';
+  return `<section id="payback" class="section wrap audience-section" data-payback hidden>
+    <h2>${pick(lang, 'Сколько стоит не иметь сайта?', 'What does it cost to go without a website?')}</h2>
+    <form class="payback-form">
+      <div class="payback-fields">
+        <label for="payback-check">${pick(lang, 'Средний чек', 'Average order value')} (<span data-payback-currency>RUB</span>)</label>
+        <input id="payback-check" type="number" inputmode="decimal" min="0" step="any" value="5000">
+        <label for="payback-leads">${pick(lang, 'Новых заявок в месяц', 'New enquiries per month')} <span data-payback-leads>10</span></label>
+        <input id="payback-leads" type="range" min="1" max="100" value="10">
+        <label for="payback-rate">${pick(lang, 'Доля заявок, которые приводят к покупке', 'Share of enquiries that turn into sales')} <span data-payback-rate>30%</span></label>
+        <input id="payback-rate" type="range" min="5" max="80" value="30">
+      </div>
+      <fieldset>
+        <legend>${pick(lang, 'Пакет', 'Package')}</legend>
+        ${options.map((pack, index) => `<label><input type="radio" name="payback-package" value="${esc(pack.id)}" ${index === 0 ? 'checked' : ''}> ${esc(pack.title)}</label>`).join('')}
+      </fieldset>
+      <div class="payback-result" aria-live="polite" aria-atomic="true"><p data-payback-revenue></p><p data-payback-months></p></div>
+      <p class="payback-note">${pick(lang, 'Это пример расчёта, а не прогноз. Реальный результат зависит от вашей ниши и рекламы.', 'This is an example calculation. Actual results depend on your industry and advertising.')}</p>
+    </form>
+  </section>`;
+}
+
 export function renderSegmentPage(lang, route, ctx) {
   const page = segments.find(item => item.route === route);
   const { directions, benefits } = page[lang];
@@ -507,6 +537,7 @@ export function renderSegmentPage(lang, route, ctx) {
     ${section(pick(lang, 'Узнаёте себя?', 'Sound familiar?'), renderBenefits(benefits, ctx.icons))}
     ${renderPackages(lang, page, ctx)}
     <aside class="wrap audience-note"><p>${payment}</p></aside>
+    ${page.paybackPackages ? renderPayback(lang, page, ctx) : ''}
     ${directions ? section(pick(lang, 'Направления', 'Capabilities'), `<div class="actions">${directions.map(([label, path, service]) => service
       ? estimateLink(lang, ctx.home, [service], 'medium', label)
       : `<a class="btn" href="${ctx.home}${path}">${esc(label)} <span aria-hidden="true">→</span></a>`).join('')}</div>`) : ''}
