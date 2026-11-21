@@ -5,7 +5,7 @@ import { cases, products, contacts } from "../content/work.mjs";
 import { starterPackages, renderQuiz, packageStartingPrice } from "../content/pricing.mjs";
 import { offerPages, renderOfferPage, renderOffers, renderReadySolutions } from "../content/solutions.mjs";
 import { site, esc, formatStartingPrice, regionControl, renderTeam, renderCaseFilter, renderCaseDetails, renderCurators, renderProductDetails, renderReferral, renderLegal } from "../content/site.mjs";
-import { segments } from "../content/segments.mjs";
+import { segments, renderSegmentPage } from "../content/segments.mjs";
 import { renderPortalPage } from "../content/portal.mjs";
 import { validateSite } from "./validate-site.mjs";
 
@@ -25,7 +25,7 @@ const versionedAssets = await Promise.all([
   return [name, createHash("sha256").update(bytes).digest("hex").slice(0, 10)];
 }));
 const caseRoute = project => "work/" + project.id + "/";
-const routes = ["", "links/", "aurawatch/", "privacy/", "licenses/", "solutions/", "cabinet/", ...Object.keys(offerPages), ...cases.ru.map(caseRoute)];
+const routes = ["", "links/", "aurawatch/", "privacy/", "licenses/", "solutions/", "cabinet/", ...Object.keys(offerPages), ...segments.map(page=>page.route), ...cases.ru.map(caseRoute)];
 const url=(l,r="")=>base+(l==="ru"?"ru/":"")+r;
 const pic=(file,alt,size)=>`<img loading="lazy" width="${size[0]}" height="${size[1]}" src="${asset+file}" alt="${esc(alt)}">`;
 for(const lang of ["ru","en"]){
@@ -196,10 +196,12 @@ for(const lang of ["ru","en"]){
      <li>${link("Simple Icons · CC0",asset+"licenses/simple-icons.txt")}</li>
    </ul><p>${l("Названия и знаки сторонних сервисов принадлежат их владельцам.","Third-party names and marks belong to their owners.")}</p>
  </div>`;
- const otherPages={"cabinet/":renderPortalPage(lang,{home,tg:id.telegram,icons,portal:site.portal,referral:site.referral}),"licenses/":licencePage,"solutions/":renderReadySolutions(lang,id.telegram,site.ready,home),...casePages,...Object.fromEntries(Object.keys(offerPages).map(route=>[route,renderOfferPage(lang,route,home,site.pricing)])),"links/":`<div class="wrap sub links"><small>${t.eyebrow}</small><h1>Devlarion</h1><p class="intro">${t.intro}</p>${tg}${link(t.cases,home+"#work","ghost")}${link(t.estimate,home+"#quiz","ghost")}${link("AuraWatch",home+"aurawatch/","ghost")}${channelSlot}${socials.filter(([, ,goal])=>goal!=="telegram").map(([label,href,goal])=>link(label,href,"link",goal)).join("")}</div>`,"aurawatch/":auBody,"privacy/":`<div class="wrap sub"><h1>${privacy}</h1>${[0,2,4].map(i=>`<h3>${privacyText[i]}</h3><p ${i===4?"data-analytics-policy":""}>${privacyText[i+1]}</p>`).join("")}<div data-operator></div>${link("Email","mailto:"+contacts.email)}</div>`};
+ const audienceContext={home,tg:id.telegram,icons,pricing:site.pricing,work};
+ const otherPages={"cabinet/":renderPortalPage(lang,{home,tg:id.telegram,icons,portal:site.portal,referral:site.referral}),"licenses/":licencePage,"solutions/":renderReadySolutions(lang,id.telegram,site.ready,home),...casePages,...Object.fromEntries(segments.map(page=>[page.route,renderSegmentPage(lang,page.route,audienceContext)])),...Object.fromEntries(Object.keys(offerPages).map(route=>[route,renderOfferPage(lang,route,home,site.pricing)])),"links/":`<div class="wrap sub links"><small>${t.eyebrow}</small><h1>Devlarion</h1><p class="intro">${t.intro}</p>${tg}${link(t.cases,home+"#work","ghost")}${link(t.estimate,home+"#quiz","ghost")}${link("AuraWatch",home+"aurawatch/","ghost")}${channelSlot}${socials.filter(([, ,goal])=>goal!=="telegram").map(([label,href,goal])=>link(label,href,"link",goal)).join("")}</div>`,"aurawatch/":auBody,"privacy/":`<div class="wrap sub"><h1>${privacy}</h1>${[0,2,4].map(i=>`<h3>${privacyText[i]}</h3><p ${i===4?"data-analytics-policy":""}>${privacyText[i+1]}</p>`).join("")}<div data-operator></div>${link("Email","mailto:"+contacts.email)}</div>`};
  for(const route of [...routes,"404.html"]){
  const caseProject = work.find(project => caseRoute(project) === route);
- const offer = offerPages[route]?.[lang];
+ const audience = segments.find(page=>page.route===route);
+ const offer = offerPages[route]?.[lang] ?? audience?.[lang];
  const dest=url(lang,route),title=(caseProject?.name ?? offer?.title ?? (route==="licenses/"?l("Лицензии","Licences"):route==="solutions/"?l("Готовые решения","Ready-made solutions"):route==="cabinet/"?l("Личный кабинет","Client portal"):route==="aurawatch/"?"AuraWatch":route==="privacy/"?privacy:route==="404.html"?"404":route==="links/"?l("Контакты","Links"):!route?front.title:t.title.replace("<br>"," ")))+" — Devlarion";
  const alternate=url(other,route);
  const schema={"@context":"https://schema.org","@graph":route==="aurawatch/"?[{"@type":"SoftwareApplication",name:"AuraWatch",operatingSystem:"iOS, watchOS",applicationCategory:"BusinessApplication"}]:[{"@type":"ProfessionalService",name:id.brand,url:home,logo:brand+"icon-512.png",sameAs:[id.telegram,id.github,id.threads],founder:{"@type":"Person",name:person}},...(!route?[{"@type":"FAQPage",mainEntity:t.faqs.map(([q,a])=>({"@type":"Question",name:q,acceptedAnswer:{"@type":"Answer",text:a}}))}]:[])]};

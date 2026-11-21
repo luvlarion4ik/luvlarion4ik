@@ -1,3 +1,6 @@
+import { esc, formatStartingPrice } from './site.mjs';
+import { crmStartingPrice, packageStartingPrice } from './pricing.mjs';
+
 export const segments = [
   {
     route: 'self-employed/',
@@ -383,3 +386,133 @@ export const topics = [
     },
   },
 ];
+
+const pick = (lang, ru, en) => lang === 'ru' ? ru : en;
+
+function section(title, body, extraClass = '') {
+  return `<section class="section wrap audience-section ${extraClass}"><h2>${esc(title)}</h2>${body}</section>`;
+}
+
+function priceMarkup(lang, rubles, suffix = '') {
+  return `${pick(lang, 'от', 'from')} <span data-region-price="${rubles}">${formatStartingPrice(rubles, lang)}</span>${suffix}`;
+}
+
+function estimateLink(lang, home, services, tier, label) {
+  const params = new URLSearchParams({ service: services.join(' '), tier });
+  return `<a class="button" href="${esc(home + '?' + params + '#quiz')}" data-estimate-services="${esc(services.join(' '))}" data-estimate-tier="${tier}">${esc(label ?? pick(lang, 'Рассчитать стоимость', 'Estimate the cost'))}</a>`;
+}
+
+function telegramLink(lang, ctx, audience, pack) {
+  const text = pick(lang, 'Здравствуйте! Хочу обсудить проект', 'Hello! I’d like to discuss a project');
+  const url = new URL(ctx.tg);
+  url.searchParams.set('text', `${text}. ${audience}${pack ? ' · ' + pack : ''}.`);
+  return esc(url.href);
+}
+
+function hero(lang, page, ctx, isSegment) {
+  const { label, title, description } = page[lang];
+  return `<section class="audience-hero"><div class="wrap">
+    <p class="eyebrow"><i></i>${isSegment ? pick(lang, 'Для кого', 'Who we work with') : pick(lang, 'Рост после запуска', 'Growth after launch')}</p>
+    <h1>${esc(title)}</h1>
+    <p class="intro">${esc(description)}</p>
+    <div class="actions">
+      ${estimateLink(lang, ctx.home, page.estimateServices, page.estimateTier ?? 'small')}
+      <a class="ghost" href="${telegramLink(lang, ctx, label)}">${pick(lang, 'Написать в Telegram', 'Message us on Telegram')}</a>
+    </div>
+  </div></section>`;
+}
+
+function renderBenefits(benefits, icons) {
+  return `<div class="service-grid audience-benefits">${benefits.map(([title, description], index) =>
+    `<article><span class="service-mark" aria-hidden="true">${icons[['spark', 'layers', 'arrow', 'web'][index]]}</span><h3>${esc(title)}</h3><p>${esc(description)}</p></article>`
+  ).join('')}</div>`;
+}
+
+function renderPackages(lang, page, ctx) {
+  const { label, packages } = page[lang];
+  const suffix = page.route === 'support/' ? pick(lang, ' / мес.', ' / month') : '';
+  const title = page.route === 'enterprise/' ? pick(lang, 'Как начинаем работу', 'How we work')
+    : page.route === 'support/' ? pick(lang, 'Тарифы', 'Support plans') : pick(lang, 'Пакеты', 'Packages');
+  return section(title, `<div class="service-grid audience-packages">${packages.map(pack => {
+    const rubles = packageStartingPrice(pack.price, ctx.pricing);
+    const price = rubles === null
+      ? `<p class="audience-price">${esc(pack.priceLabel ?? pick(lang, 'По смете', 'On request'))}</p>`
+      : `<p class="audience-price" data-region-price-row>${priceMarkup(lang, rubles, suffix)}</p>`;
+    const action = pack.services
+      ? estimateLink(lang, ctx.home, pack.services, pack.price?.[1] === 'medium' ? 'medium' : 'small', pick(lang, 'Рассчитать комбо', 'Estimate the bundle'))
+      : `<a class="btn" href="${telegramLink(lang, ctx, label, pack.title)}">${page.route === 'enterprise/'
+        ? pick(lang, 'Обсудить этап', 'Discuss this stage') : pick(lang, 'Обсудить пакет', 'Discuss this package')}</a>`;
+    return `<article id="package-${esc(pack.id)}">
+      <h3>${esc(pack.title)}</h3>${price}
+      <ul class="package-includes">${pack.items.map(item => `<li><span aria-hidden="true">✓</span>${esc(item)}</li>`).join('')}</ul>
+      ${pack.term ? `<p class="package-term">${esc(pack.term)}</p>` : ''}
+      <div class="package-action">${action}</div>
+    </article>`;
+  }).join('')}</div><p data-region-note hidden></p>`);
+}
+
+export function pageFAQ(lang, page, ctx, html = false) {
+  const landing = packageStartingPrice(['landing', 'small'], ctx.pricing);
+  const money = rubles => rubles === null ? pick(lang, 'по смете', 'on request')
+    : html ? priceMarkup(lang, rubles) : `${pick(lang, 'от', 'from')} ${formatStartingPrice(rubles, lang)}`;
+  const link = (href, label) => html ? `<a href="${esc(ctx.home + href)}">${label}</a>` : label;
+  const replacements = {
+    landing: () => money(landing),
+    crm: () => money(crmStartingPrice),
+    support: () => link('support/', pick(lang, 'подписку на сопровождение', 'support plan')),
+    payback: () => link('self-employed/#payback', pick(lang, 'калькуляторе окупаемости', 'payback calculator')),
+  };
+  return page[lang].faq.map(([question, answer]) => [
+    question,
+    (html ? esc(answer) : answer).replace(/\{(landing|crm|support|payback)\}/g, (_, key) => replacements[key]()),
+  ]);
+}
+
+function renderFAQ(lang, page, ctx) {
+  const title = page[lang].detailsTitle ?? pick(lang, 'Частые вопросы', 'Common questions');
+  return section(title, pageFAQ(lang, page, ctx, true).map(([question, answer]) =>
+    `<details><summary>${esc(question)}</summary><p>${answer}</p></details>`).join(''));
+}
+
+function renderRelated(lang, page, ctx) {
+  const related = [...segments.filter(segment => segment !== page).slice(0, 2),
+    ...page.related.map(route => topics.find(topic => topic.route === route))];
+  return section(pick(lang, 'Смотрите также', 'See also'), `<div class="audience-related">${related.map(item => {
+    const { label, card, description } = item[lang];
+    return `<a href="${ctx.home}${item.route}"><span class="service-mark" aria-hidden="true">${ctx.icons[item.icon]}</span><strong>${esc(label)} <span aria-hidden="true">→</span></strong><span>${esc(card ?? description)}</span></a>`;
+  }).join('')}</div>`);
+}
+
+function renderCases(lang, route, ctx) {
+  const relevant = ctx.work.filter(project => project.segments.includes(route.slice(0, -1))).slice(0, 2);
+  return section(pick(lang, 'Кейсы', 'Case studies'), `<div class="service-grid audience-cases">${relevant.map(project =>
+    `<article><small>${esc(project.type)}${project.concept ? ' · ' + pick(lang, 'Демо-данные', 'Demo data') : ''}</small>
+      <h3><a href="${ctx.home}work/${project.id}/">${esc(project.name)} <span aria-hidden="true">→</span></a></h3><p>${esc(project.result)}</p>
+    </article>`
+  ).join('')}</div>`);
+}
+
+function renderContact(lang, page, ctx) {
+  return section(pick(lang, 'Опишите задачу — Илья ответит в течение дня', 'Tell us what you need and Ilia will reply within a day'),
+    `<a class="button" href="${telegramLink(lang, ctx, page[lang].label)}">${pick(lang, 'Написать в Telegram', 'Message us on Telegram')}</a>`, 'audience-contact');
+}
+
+export function renderSegmentPage(lang, route, ctx) {
+  const page = segments.find(item => item.route === route);
+  const { directions, benefits } = page[lang];
+  const payment = pick(lang, 'Оплата частями: 50% при старте и 50% после сдачи. Для проектов от 100 000 ₽ — по этапам.',
+    'Pay in instalments: 50% at the start and 50% on handover. Projects from RUB 100,000 are billed in stages.');
+  return `<article class="audience-page">
+    ${hero(lang, page, ctx, true)}
+    ${section(pick(lang, 'Узнаёте себя?', 'Sound familiar?'), renderBenefits(benefits, ctx.icons))}
+    ${renderPackages(lang, page, ctx)}
+    <aside class="wrap audience-note"><p>${payment}</p></aside>
+    ${directions ? section(pick(lang, 'Направления', 'Capabilities'), `<div class="actions">${directions.map(([label, path, service]) => service
+      ? estimateLink(lang, ctx.home, [service], 'medium', label)
+      : `<a class="btn" href="${ctx.home}${path}">${esc(label)} <span aria-hidden="true">→</span></a>`).join('')}</div>`) : ''}
+    ${renderCases(lang, route, ctx)}
+    ${renderFAQ(lang, page, ctx)}
+    ${renderRelated(lang, page, ctx)}
+    ${renderContact(lang, page, ctx)}
+  </article>`;
+}
