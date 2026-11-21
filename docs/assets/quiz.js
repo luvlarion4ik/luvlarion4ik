@@ -187,6 +187,16 @@
     if (optionChoices.length) share.searchParams.set('options', optionChoices.map(input => input.value).join(' '));
     if (region.code) share.searchParams.set('currency', requestOnly ? 'other' : active.currency);
     share.searchParams.set('calculated', '1');
+    const portalLink = form.querySelector('[data-portal]');
+    if (portalLink && form.dataset.portalUrl) {
+      // Кабинет заново проверяет выбор и считает цену на сервере; здесь передаём только ответы.
+      const start = new URL('start', form.dataset.portalUrl.replace(/\/?$/, '/'));
+      for (const [key, value] of share.searchParams) if (key !== 'calculated') start.searchParams.set(key, value);
+      if (code) start.searchParams.set('ref', code);
+      start.searchParams.set('lang', ru ? 'ru' : 'en');
+      portalLink.href = start.href;
+      portalLink.hidden = false;
+    }
     const shareButton = form.querySelector('[data-share]');
     shareButton.dataset.shareUrl = share.href;
     questions.hidden = true;

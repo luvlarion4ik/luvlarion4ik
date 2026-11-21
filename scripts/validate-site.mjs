@@ -136,7 +136,7 @@ function validateAchievements(value) {
 }
 
 export async function validateSite(value) {
-  const keys = ['exchange', 'legal', 'pricing', 'ready', 'caseOverrides', 'founderPhoto', 'team', 'achievements', 'referral'];
+  const keys = ['exchange', 'legal', 'pricing', 'ready', 'caseOverrides', 'founderPhoto', 'team', 'achievements', 'referral', 'portal'];
   record(value, 'site.json', keys, keys);
   const { exchange, legal, referral } = value;
   const currencies = { BYN: 1, KZT: 100, USD: 1, EUR: 1 };
@@ -166,6 +166,13 @@ export async function validateSite(value) {
   validateCases(value.caseOverrides, people);
   validateAchievements(value.achievements);
 
+  if (value.portal !== undefined) {
+    record(value.portal, 'portal', ['status', 'url'], ['status', 'url']);
+    check(['soon', 'open'].includes(value.portal.status), 'portal.status', 'допустимы значения soon или open');
+    string(value.portal.url, 'portal.url', value.portal.status === 'soon');
+    check(value.portal.url === '' || /^https:\/\/[^\s]+$/.test(value.portal.url), 'portal.url', 'нужен адрес https://');
+    check(value.portal.status !== 'open' || value.portal.url !== '', 'portal.url', 'для статуса open укажите адрес кабинета');
+  }
   record(referral, 'referral', ['percent', 'days', 'cap'], ['percent', 'days', 'cap']);
   positive(referral.percent, 'referral.percent', true);
   positive(referral.days, 'referral.days', true);
