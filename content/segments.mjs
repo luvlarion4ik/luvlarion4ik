@@ -516,3 +516,22 @@ export function renderSegmentPage(lang, route, ctx) {
     ${renderContact(lang, page, ctx)}
   </article>`;
 }
+
+export function renderTopicPage(lang, route, ctx) {
+  const page = topics.find(item => item.route === route);
+  const { benefits, steps, notice } = page[lang];
+  const why = route === 'why-website/';
+  const benefitHeading = route === 'geo/' ? pick(lang, 'Как это работает', 'How it works')
+    : pick(lang, 'Что это даёт', 'What it gives you');
+  return `<article class="audience-page">
+    ${hero(lang, page, ctx, false)}
+    ${section(benefitHeading, renderBenefits(benefits, ctx.icons))}
+    ${section(pick(lang, 'Что мы делаем', 'What we do'), `<ol class="audience-steps">${steps.map(step => `<li>${esc(step)}</li>`).join('')}</ol>`)}
+    ${renderPackages(lang, page, ctx)}
+    ${notice ? `<aside class="wrap audience-note"><p>${esc(notice)}</p></aside>` : ''}
+    ${renderFAQ(lang, page, ctx)}
+    ${renderRelated(lang, page, ctx)}
+    ${why ? section(pick(lang, 'Что подходит вашему бизнесу?', 'What fits your business?'), ctx.segmentPicker)
+      : renderContact(lang, page, ctx)}
+  </article>`;
+}

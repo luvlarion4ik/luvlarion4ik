@@ -210,3 +210,19 @@ function redirectLegacySegment() {
 
 redirectLegacySegment();
 window.addEventListener('hashchange', redirectLegacySegment);
+
+const servicesMenu = document.querySelector('.bar .services-nav');
+if (servicesMenu) {
+  document.addEventListener('pointerdown', event => {
+    if (!servicesMenu.contains(event.target)) servicesMenu.open = false;
+  });
+  servicesMenu.addEventListener('focusout', event => {
+    if (event.relatedTarget && !servicesMenu.contains(event.relatedTarget)) servicesMenu.open = false;
+  });
+  servicesMenu.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && servicesMenu.open) {
+      servicesMenu.open = false;
+      servicesMenu.querySelector('summary').focus();
+    }
+  });
+}
