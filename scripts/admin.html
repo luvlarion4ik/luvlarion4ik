@@ -232,7 +232,7 @@
   }
 
   async function api(options) {
-    const response = await fetch('/api/config', options);
+    const response = await fetch('api/config', options);
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error || 'Не удалось обновить настройки.');
     return payload;
