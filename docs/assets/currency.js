@@ -48,6 +48,10 @@
   try { territory = new Intl.Locale(navigator.language).maximize().region; } catch {}
 
   function defaultCurrency() {
+    if (ru) {
+      const local = countries[territory];
+      return local === 'BYN' || local === 'KZT' ? local : fallback;
+    }
     if (european.has(territory)) return 'EUR';
     const regional = countries[territory];
     return regional !== 'RUB' && rates.has(regional) ? regional : fallback;

@@ -156,7 +156,7 @@ export function serviceCards(lang) {
   return services.map(({ id, [lang]: [title, description] }) => ({ id, title, description }));
 }
 
-export function renderQuiz(lang, telegramURL, overrides = {}) {
+export function renderQuiz(lang, telegramURL, overrides = {}, portal = {}) {
   const t = (ru, en) => lang === 'ru' ? ru : en;
   const tierCards = projects.map(([id, ru, en], index) => {
     const [label, scope] = t(ru, en);
@@ -181,7 +181,7 @@ export function renderQuiz(lang, telegramURL, overrides = {}) {
   }).join('');
   const tg = telegramURL.replaceAll('&', '&amp;').replaceAll('"', '&quot;');
 
-  return `<form class="estimate-form ym-hide-content" data-estimate data-lang="${lang}" data-telegram="${tg}" hidden>
+  return `<form class="estimate-form ym-hide-content" data-estimate data-lang="${lang}" data-telegram="${tg}" ${portal.status === 'open' && portal.url ? `data-portal-url="${portal.url}"` : ''} hidden>
     <div data-questions>
       <p class="quiz-count" id="quiz-progress"></p>
       <progress data-progress aria-labelledby="quiz-progress" max="3" value="1"></progress>
@@ -207,6 +207,7 @@ export function renderQuiz(lang, telegramURL, overrides = {}) {
       <dl class="quiz-breakdown" data-breakdown></dl>
       <p class="quiz-guidance" data-guidance></p>
       <div class="quiz-actions"><a class="btn primary" href="${tg}" data-brief>${t('Отправить расчёт в Telegram', 'Send estimate on Telegram')}</a>
+        <a class="btn" href="${portal.url || '#'}" data-portal hidden>${t('Продолжить в кабинете', 'Continue in the portal')}</a>
         <button class="btn" type="button" data-copy>${t('Скопировать расчёт', 'Copy estimate')}</button>
         <button class="btn" type="button" data-share>${t('Поделиться', 'Share')}</button>
         <button class="quiz-edit" type="button" data-edit>${t('Изменить ответы', 'Edit answers')}</button>

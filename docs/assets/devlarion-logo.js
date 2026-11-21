@@ -1,6 +1,7 @@
 /*! devlarion-logo — веб-компонент логотипа Devlarion (знак, слово, знак+слово) с hover-анимацией.
  * Подключение:  <script src="/assets/devlarion-logo.js" defer></script>
- * Использование: <devlarion-logo variant="full|mark|word" height="40" intro></devlarion-logo>
+ * Использование: <devlarion-logo variant="full|mark|word" height="40" intro|view></devlarion-logo>
+ * intro — проиграть появление сразу, view — когда логотип появится на экране.
  * Цвет: из CSS `color` или --logo-color. Размер можно переопределить через --logo-height.
  * При наведении, клавиатурном фокусе и касании ссылки проигрывается анимация логотипа.
  * Движение отключается при prefers-reduced-motion.
@@ -37,6 +38,16 @@ svg{height:100%;width:auto;display:block;overflow:visible}
 
     connectedCallback() {
       this.render();
+      // Атрибут view: проиграть появление, когда логотип попадает в экран.
+      if (this.hasAttribute("view") && !this.seen && "IntersectionObserver" in window) {
+        this.viewer = new IntersectionObserver(([entry]) => {
+          if (!entry.isIntersecting) return;
+          this.seen = true;
+          this.viewer.disconnect();
+          this.shadowRoot.querySelector("svg")?.classList.add("intro");
+        }, { threshold: 0.4 });
+        this.viewer.observe(this);
+      }
       const trigger = this.closest("a, button") || this;
       this.events = new AbortController();
       const options = { signal: this.events.signal };
@@ -53,6 +64,7 @@ svg{height:100%;width:auto;display:block;overflow:visible}
 
     disconnectedCallback() {
       this.events?.abort();
+      this.viewer?.disconnect();
       clearTimeout(this.motionTimer);
       this.removeAttribute("data-logo-motion");
     }
@@ -100,7 +112,7 @@ svg{height:100%;width:auto;display:block;overflow:visible}
         body += `<g mask="url(#${id}w)"><g class="wslide">${gl}</g></g>`;
       }
       const root = this.shadowRoot || this.attachShadow({ mode: "open" });
-      root.innerHTML = `<style>${CSS}</style><svg viewBox="${vb}" class="${this.hasAttribute("intro") ? "intro" : ""}" aria-hidden="true" focusable="false"><defs>${defs}</defs>${body}</svg>`;
+      root.innerHTML = `<style>${CSS}</style><svg viewBox="${vb}" class="${this.hasAttribute("intro") || this.seen ? "intro" : ""}" aria-hidden="true" focusable="false"><defs>${defs}</defs>${body}</svg>`;
     }
   }
   if (!customElements.get("devlarion-logo")) customElements.define("devlarion-logo", DevlarionLogo);
