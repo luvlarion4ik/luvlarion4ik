@@ -177,3 +177,24 @@ if (companySolutions) {
   companySolutions.dataset.enhanced = 'true';
   moveToDeepLink();
 }
+
+const segmentCards = [...document.querySelectorAll('[data-segment]')];
+
+if (segmentCards.length) {
+  const key = 'devlarion-segment';
+  function showLastSegment() {
+    let last;
+    try { last = localStorage.getItem(key); } catch {}
+    for (const card of segmentCards) {
+      card.querySelector('.segment-visited').hidden = card.dataset.segment !== last;
+    }
+  }
+  showLastSegment();
+  window.addEventListener('pageshow', showLastSegment);
+  for (const card of segmentCards) {
+    card.addEventListener('click', () => {
+      try { localStorage.setItem(key, card.dataset.segment); } catch {}
+      showLastSegment();
+    });
+  }
+}

@@ -33,3 +33,22 @@ export const copy = {
   faqs:[["How do I price a small project?","The services section lists starting prices and what each package covers. For integrations or multiple workflows, we’ll discuss scope and any applicable discount on a call, then send a final quote."],["Can we arrange a meeting?","We can start with a video call. For an in-person meeting, send your city and the topics you’d like to cover so we can agree on the format in advance."],["Can you deploy on our infrastructure?","Yes. We review your compute capacity, data requirements and access restrictions before selecting the deployment architecture."],["Can we work under NDA?","We agree on confidentiality terms before you share restricted materials."],["How do revisions and source ownership work?","The agreement sets out the revision scope, source delivery and rights before development begins."],["What happens after two months?","Further work is quoted separately. A support subscription is available for ongoing needs."]]
  }
 };
+
+export const homeCopy = {
+  ru: {
+    title: 'Сайты, боты и ИИ-сервисы, которые приносят заявки',
+    intro: 'Помогаю бизнесу принимать заявки и сокращать ручную работу. Выберите, кто вы, — покажем подходящие решения и цены.',
+    audience: 'Для кого',
+    segmentAction: 'Смотреть решения',
+    visited: 'Вы смотрели',
+    quote: 'Не знаете, что выбрать? Рассчитайте проект за 1 минуту',
+  },
+  en: {
+    title: 'Websites, bots and AI services that bring in enquiries',
+    intro: 'I help businesses take enquiries and cut manual work. Choose the option that fits your business to see solutions and prices.',
+    audience: 'Who we work with',
+    segmentAction: 'Explore solutions',
+    visited: 'You viewed this',
+    quote: 'Unsure where to start? Estimate your project in one minute',
+  },
+};
