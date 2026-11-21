@@ -8,6 +8,7 @@ export const contacts = {
 
 const orient = {
   id: 'orient-logic',
+  segments: ['business', 'enterprise'],
   name: 'Orient Logic',
   image: 'work/orient.webp',
   mobile: 'work/orient-mobile.webp',
@@ -24,6 +25,7 @@ const orient = {
 
 const kitchens = {
   id: 'kitchens',
+  segments: ['self-employed', 'business'],
   name: 'Kitchen Showroom',
   image: 'work/kitchens.webp',
   mobile: 'work/kitchens-mobile.webp',
@@ -43,6 +45,7 @@ const kitchens = {
 
 const modular = {
   id: 'modular-houses',
+  segments: ['self-employed'],
   name: 'Modular House',
   image: 'work/modular-houses.webp',
   mobile: 'work/modular-houses-mobile.webp',
@@ -60,6 +63,7 @@ const modular = {
 
 const printed = {
   id: '3d-dom',
+  segments: ['enterprise'],
   image: 'work/3d-dom.webp',
   mobile: 'work/3d-dom-mobile.webp',
   concept: true,
