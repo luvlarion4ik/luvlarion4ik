@@ -76,3 +76,8 @@ export const homeCopy = {
     quote: 'Unsure where to start? Estimate your project in one minute',
   },
 };
+
+export const styleCopy = {
+  ru: { label: 'Версия сайта', classic: 'Классическая', motion: 'С анимацией', prompt: 'Хотите посмотреть версию с анимацией?', link: 'Версия с анимацией', dismiss: 'Закрыть предложение' },
+  en: { label: 'Site version', classic: 'Classic', motion: 'Animated', prompt: 'Would you like to see the animated version?', link: 'Animated version', dismiss: 'Dismiss the suggestion' },
+};

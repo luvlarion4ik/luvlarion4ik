@@ -19,7 +19,7 @@
     const picker = document.querySelector('.theme-picker');
     if (!picker) return;
     const button = picker.querySelector('button');
-    const options = picker.querySelector('fieldset');
+    const options = picker.querySelector('#theme-choices');
     picker.querySelector('input[value="' + choice + '"]').checked = true;
     picker.hidden = false;
 
@@ -31,6 +31,7 @@
 
     button.addEventListener('click', event => toggle(options.hidden, event.detail === 0));
     options.addEventListener('change', event => {
+      if (event.target.name !== 'theme-choice') return;
       choice = event.target.value;
       try { localStorage.setItem(key, choice); } catch {}
       apply();

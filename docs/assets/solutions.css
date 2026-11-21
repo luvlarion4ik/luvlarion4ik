@@ -428,3 +428,18 @@
 @media (max-width:700px) {
   .payback-form {grid-template-columns:1fr}
 }
+
+#theme-choices fieldset {border:0;margin:0;padding:0;min-width:0}
+#theme-choices .version-choices {margin-top:.55rem;padding:.45rem;border-top:1px solid var(--rule)}
+#theme-choices .version-choices legend {position:static;clip-path:none;width:auto;height:auto;font-size:.8rem;color:var(--sub);font-weight:600}
+.version-choices .btn {display:flex;width:100%;justify-content:flex-start;text-align:left;padding:.35rem .55rem;margin-top:.3rem;white-space:nowrap}
+.version-prompt {position:fixed;z-index:4;bottom:1rem;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100% - 1.5rem);display:flex;align-items:center;gap:.65rem;padding:.65rem .75rem;background:var(--paper);color:var(--ink);border:1px solid var(--rule);border-radius:.35rem;box-shadow:0 .35rem 1rem color-mix(in srgb,var(--night) 20%,transparent)}
+.version-prompt p {font-weight:650}
+.version-prompt-actions {display:flex;gap:.35rem;flex-wrap:wrap}
+.version-prompt .btn {padding:.35rem .65rem;min-height:2.5rem;gap:.3rem}
+.version-dismiss {width:2.5rem;height:2.5rem;font-size:1.4rem;flex:none}
+@media (max-width:700px) {
+  .version-prompt {display:grid;grid-template-columns:minmax(0,1fr) auto;bottom:calc(4.5rem + env(safe-area-inset-bottom));padding:.65rem}
+  .version-prompt-actions {grid-column:1/-1;grid-row:2}
+  .version-dismiss {grid-row:1;grid-column:2}
+}
