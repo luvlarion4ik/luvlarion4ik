@@ -5,7 +5,7 @@ import { cases, products, contacts } from "../content/work.mjs";
 import { starterPackages, renderQuiz, packageStartingPrice } from "../content/pricing.mjs";
 import { offerPages, renderOfferPage, renderOffers, renderReadySolutions } from "../content/solutions.mjs";
 import { site, esc, formatStartingPrice, regionControl, renderTeam, renderCaseFilter, renderCaseDetails, renderCurators, renderProductDetails, renderReferral, renderLegal } from "../content/site.mjs";
-import { segments, topics, renderSegmentPage, renderTopicPage } from "../content/segments.mjs";
+import { segments, topics, pageFAQ, renderSegmentPage, renderTopicPage } from "../content/segments.mjs";
 import { renderPortalPage } from "../content/portal.mjs";
 import { validateSite } from "./validate-site.mjs";
 
@@ -219,7 +219,7 @@ for(const lang of ["ru","en"]){
      <li>${link("Simple Icons · CC0",asset+"licenses/simple-icons.txt")}</li>
    </ul><p>${l("Названия и знаки сторонних сервисов принадлежат их владельцам.","Third-party names and marks belong to their owners.")}</p>
  </div>`;
- const audienceContext={home,tg:id.telegram,icons,pricing:site.pricing,work,segmentPicker};
+ const audienceContext={home,tg:id.telegram,icons,pricing:site.pricing,work,segmentPicker,llmsUrl:base+"llms.txt"};
  const otherPages={"cabinet/":renderPortalPage(lang,{home,tg:id.telegram,icons,portal:site.portal,referral:site.referral}),"licenses/":licencePage,"solutions/":renderReadySolutions(lang,id.telegram,site.ready,home),...casePages,...Object.fromEntries(segments.map(page=>[page.route,renderSegmentPage(lang,page.route,audienceContext)])),...Object.fromEntries(topics.map(page=>[page.route,renderTopicPage(lang,page.route,audienceContext)])),...Object.fromEntries(Object.keys(offerPages).map(route=>[route,renderOfferPage(lang,route,home,site.pricing)])),"links/":`<div class="wrap sub links"><small>${t.eyebrow}</small><h1>Devlarion</h1><p class="intro">${t.intro}</p>${tg}${link(t.cases,home+"#work","ghost")}${link(t.estimate,home+"#quiz","ghost")}${link("AuraWatch",home+"aurawatch/","ghost")}${channelSlot}${socials.filter(([, ,goal])=>goal!=="telegram").map(([label,href,goal])=>link(label,href,"link",goal)).join("")}</div>`,"aurawatch/":auBody,"privacy/":`<div class="wrap sub"><h1>${privacy}</h1>${[0,2,4].map(i=>`<h3>${privacyText[i]}</h3><p ${i===4?"data-analytics-policy":""}>${privacyText[i+1]}</p>`).join("")}<div data-operator></div>${link("Email","mailto:"+contacts.email)}</div>`};
  for(const route of [...routes,"404.html"]){
  const caseProject = work.find(project => caseRoute(project) === route);
@@ -227,13 +227,82 @@ for(const lang of ["ru","en"]){
  const offer = offerPages[route]?.[lang] ?? audience?.[lang];
  const dest=url(lang,route),title=(caseProject?.name ?? offer?.title ?? (route==="licenses/"?l("Лицензии","Licences"):route==="solutions/"?l("Готовые решения","Ready-made solutions"):route==="cabinet/"?l("Личный кабинет","Client portal"):route==="aurawatch/"?"AuraWatch":route==="privacy/"?privacy:route==="404.html"?"404":route==="links/"?l("Контакты","Links"):!route?front.title:t.title.replace("<br>"," ")))+" — Devlarion";
  const alternate=url(other,route);
- const schema={"@context":"https://schema.org","@graph":route==="aurawatch/"?[{"@type":"SoftwareApplication",name:"AuraWatch",operatingSystem:"iOS, watchOS",applicationCategory:"BusinessApplication"}]:[{"@type":"ProfessionalService",name:id.brand,url:home,logo:brand+"icon-512.png",sameAs:[id.telegram,id.github,id.threads],founder:{"@type":"Person",name:person}},...(!route?[{"@type":"FAQPage",mainEntity:t.faqs.map(([q,a])=>({"@type":"Question",name:q,acceptedAnswer:{"@type":"Answer",text:a}}))}]:[])]};
+ const audienceSchema = audience ? (() => {
+   const price = packageStartingPrice(audience.starting, site.pricing);
+   return [
+     {
+       "@type":"Service",
+       name:audience[lang].title,
+       description:audience[lang].description,
+       url:dest,
+       provider:{"@type":"Organization",name:id.brand,url:home},
+       ...(price === null ? {} : {offers:{"@type":"Offer",price,priceCurrency:"RUB",url:dest}}),
+     },
+     {
+       "@type":"FAQPage",
+       mainEntity:pageFAQ(lang,audience,audienceContext).map(([question,answer])=>({
+         "@type":"Question", name:question, acceptedAnswer:{"@type":"Answer",text:answer},
+       })),
+     },
+     {
+       "@type":"BreadcrumbList",
+       itemListElement:[
+         {"@type":"ListItem",position:1,name:l("Главная","Home"),item:home},
+         {"@type":"ListItem",position:2,name:audience[lang].label,item:dest},
+       ],
+     },
+   ];
+ })() : [];
+ const schema={"@context":"https://schema.org","@graph":route==="aurawatch/"?[{"@type":"SoftwareApplication",name:"AuraWatch",operatingSystem:"iOS, watchOS",applicationCategory:"BusinessApplication"}]:[{"@type":"ProfessionalService",name:id.brand,url:home,logo:brand+"icon-512.png",sameAs:[id.telegram,id.github,id.threads],founder:{"@type":"Person",name:person}},...audienceSchema,...(!route?[{"@type":"FAQPage",mainEntity:t.faqs.map(([q,a])=>({"@type":"Question",name:q,acceptedAnswer:{"@type":"Answer",text:a}}))}]:[])]};
  files["docs/"+(ru?"ru/":"")+route+(route.endsWith(".html")?"":"index.html")]=`<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><meta name="description" content="${esc(caseProject?.result ?? offer?.description ?? (route==="cabinet/"?portalIntro:route==="aurawatch/"?watchIntro:!route?front.intro:t.intro))}"><link rel="canonical" href="${dest}">${["en","ru","x-default"].map(k=>`<link rel="alternate" hreflang="${k}" href="${url(k==="ru"?"ru":"en",route)}">`).join("")}<meta property="og:title" content="${title}"><meta property="og:description" content="${esc(caseProject?.result ?? offer?.description ?? (route==="cabinet/"?portalIntro:route==="aurawatch/"?watchIntro:!route?front.intro:t.intro))}"><meta property="og:type" content="website"><meta property="og:url" content="${dest}"><meta property="og:locale" content="${ru?"ru_RU":"en_US"}"><meta property="og:image" content="${brand}og-${lang}.png"><meta property="og:image:type" content="image/png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="${esc(t.title)} — Devlarion"><meta name="twitter:card" content="summary_large_image"><link rel="icon" type="image/svg+xml" href="${brand}favicon.svg"><link rel="icon" type="image/png" sizes="32x32" href="${brand}favicon-32.png"><link rel="icon" type="image/png" sizes="48x48" href="${brand}favicon-48.png"><link rel="apple-touch-icon" href="${brand}apple-touch-icon.png"><link rel="manifest" href="${brand}site.webmanifest"><link rel="stylesheet" href="${brand}fonts.css"><link rel="stylesheet" href="${asset}portfolio.css"><link rel="stylesheet" href="${asset}commercial.css"><link rel="stylesheet" href="${asset}solutions.css"><script src="${asset}theme.js"></script><script type="application/ld+json">${JSON.stringify(schema).replaceAll("<","\\u003c")}</script><script defer src="${asset}settings.js"></script><script defer src="${asset}site-version.js"></script><script defer src="${asset}studio.js"></script><script defer src="${asset}devlarion-logo.js"></script><script defer src="${asset}currency.js"></script><script defer src="${asset}commercial.js"></script><script defer src="${asset}solutions.js"></script>${audience?.paybackPackages?`<script defer src="${asset}payback.js"></script>`:""}${caseProject||route==="why-website/"?`<link rel="stylesheet" href="${asset}home.css">`:""}${caseProject?`<link rel="stylesheet" href="${asset}cases.css">`:""}${!route?`<link rel="stylesheet" href="${asset}quiz.css"><link rel="stylesheet" href="${asset}home.css"><link rel="stylesheet" href="${asset}cases.css"><script defer src="${asset}quiz.js"></script>`:""}${route==="cabinet/"?`<link rel="stylesheet" href="${asset}portal.css"><script defer src="${asset}portal.js"></script>`:""}<link rel="stylesheet" href="${asset}brand-logo.css"><link rel="stylesheet" href="${asset}motion.css"><script defer src="${asset}motion.js"></script></head><body ${!route?'class="hero-page"':""} data-privacy-url="${home}privacy/" data-motion-url="${motionSite}" ${!route?'data-version-home':""}><a class="skip" href="#main">${l("К содержанию","Skip to content")}</a><header><div class="wrap bar">${logo("header",!route)}<nav>${servicesMenu()}${navRest}</nav><div class="tools"><button class="menu" data-menu aria-label="${l("Меню","Menu")}">☰</button><a class="header-social" href="${id.threads}" data-goal="threads" aria-label="Threads">${icons.threads}</a>${channelSlot}${regionControl(lang,asset)}${themes}${shareButton("","header-share",true)}<a href="${alternate}">${ru?"EN":"RU"}</a>${tg}</div></div></header><main id="main">${route==="404.html"?`<div class="wrap sub notfound"><devlarion-logo variant="mark" height="72" view aria-hidden="true"></devlarion-logo><h1>404</h1><p>${l("Страница не найдена.","Page not found.")}</p>${link(l("На главную","Back to homepage"),home,"button")}</div>`:otherPages[route]??homeHTML}</main>${foot}${mobileBar(route)}<div id="progress" aria-hidden="true"></div><dialog id="commands" aria-label="${l("Быстрые действия","Quick actions")}"><form method="dialog"><button aria-label="${l("Закрыть","Close")}">×</button></form><nav>${servicesMenu()}${navRest}<a href="${home}#quiz">${t.estimate}</a><a href="${motionSite}" data-site-version="motion">${styles.link}</a><a href="${alternate}">${ru?"English":"Русский"}</a><button type="button" class="select-theme">${l("Сменить тему","Change theme")}</button>${shareButton()}${tg}</nav></dialog>${shareDialog}${!route?stylePrompt:""}</body></html>`;
  }
- files[ru?"README.ru.md":"README.md"]=`# Devlarion\n\n${t.eyebrow} · ${person}\n\n${t.intro}\n\n[${t.cases}](${home}#work) · [${t.estimate}](${home}#quiz) · [${t.cta}](${id.telegram}) · [Threads](${id.threads}) · [${ru?"English":"Русский"}](${ru?"README.md":"README.ru.md"})\n\n## ${l("Стоимость разработки","Project pricing")}\n\n${packages.map(p=>`- [${p.title}](${home}#small-business) — ${l("от", "from")} ${formatStartingPrice(p.rub,lang)}`).join("\n")}\n\n${l("Для компаний любого размера подбираем условия и возможную скидку индивидуально. Итоговую стоимость сообщим после созвона.","For companies of any size, we tailor the terms and discuss any applicable discount. We send the final quote after our call.")}\n\n## ${t.work}\n\n${work.map(c=>`- [${c.name}](${c.href}) — ${c.result}`).join("\n")}\n\n## ${t.products}\n\n- [AuraWatch](${home}aurawatch/) — ${watchIntro}\n${lab.filter(p=>p.name!=="AuraWatch").map(p=>`- **${p.name}** — ${p.summary}`).join("\n")}\n\n${l("Редактирование сайта и учёт рефералов описаны в [инструкции](scripts/README.md).","See the [site maintenance guide](scripts/README.md) for the editor and referral ledger.")}\n`;
+ files[ru?"README.ru.md":"README.md"]=`# Devlarion\n\n${t.eyebrow} · ${person}\n\n${t.intro}\n\n[${t.cases}](${home}#work) · [${t.estimate}](${home}#quiz) · [${t.cta}](${id.telegram}) · [Threads](${id.threads}) · [${ru?"English":"Русский"}](${ru?"README.md":"README.ru.md"})\n\n## ${homeCopy[lang].audience}\n\n${segments.map(page=>`- [${page[lang].label}](${home}${page.route})`).join("\n")}\n\n## ${l("Рост","Growth")}\n\n${topics.map(page=>`- [${page[lang].label}](${home}${page.route})`).join("\n")}\n\n## ${l("Стоимость разработки","Project pricing")}\n\n${packages.map(p=>`- [${p.title}](${home}#small-business) — ${l("от", "from")} ${formatStartingPrice(p.rub,lang)}`).join("\n")}\n\n${l("Для компаний любого размера подбираем условия и возможную скидку индивидуально. Итоговую стоимость сообщим после созвона.","For companies of any size, we tailor the terms and discuss any applicable discount. We send the final quote after our call.")}\n\n## ${t.work}\n\n${work.map(c=>`- [${c.name}](${c.href}) — ${c.result}`).join("\n")}\n\n## ${t.products}\n\n- [AuraWatch](${home}aurawatch/) — ${watchIntro}\n${lab.filter(p=>p.name!=="AuraWatch").map(p=>`- **${p.name}** — ${p.summary}`).join("\n")}\n\n${l("Редактирование сайта и учёт рефералов описаны в [инструкции](scripts/README.md).","See the [site maintenance guide](scripts/README.md) for the editor and referral ledger.")}\n`;
 }
 files["docs/sitemap.xml"]='<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+["en","ru"].flatMap(l=>routes.map(r=>"<url><loc>"+url(l,r)+"</loc></url>")).join("")+"</urlset>";
-files["docs/robots.txt"]="User-agent: *\nAllow: /\nSitemap: "+base+"sitemap.xml\n";
+const robotsAgents = ["*", "GPTBot", "OAI-SearchBot", "PerplexityBot", "YandexBot", "Google-Extended"];
+files["docs/robots.txt"] = robotsAgents.map(agent => `User-agent: ${agent}\nAllow: /\n`).join("\n") + `\nSitemap: ${base}sitemap.xml\n`;
+const llmsServices = [
+  ["Сайт для заявок", "Enquiry website", "website/", ["landing","small"]],
+  ["Сайт компании с админкой", "Company website with CMS", "business/", ["web","small"]],
+  ["Интернет-магазин", "Online shop", "business/", ["shop","small"]],
+  ["Telegram- или MAX-бот", "Telegram or MAX bot", "telegram-bot/", ["automation","small"]],
+  ["Мини-приложение с каталогом", "Catalogue mini app", "telegram-bot/", ["mini","small"]],
+  ["ИИ-ассистент", "AI assistant", "ai-assistant/", ["assistant","small"]],
+  ["Пилот мультиагентной системы", "Multi-agent pilot", "enterprise/", ["agents","medium"]],
+  ["SEO-оптимизация", "SEO", "seo/", ["seo","small"]],
+  ["GEO-аудит", "GEO audit", "geo/", ["geo","small"]],
+  ["Сопровождение", "Support", "support/", ["support","small"]],
+];
+const llmsPrices = llmsServices.map(([ru,en,route,reference]) => {
+  const price = packageStartingPrice(reference, site.pricing);
+  const quote = price === null ? "по смете / on request" : "от " + formatStartingPrice(price, "ru") + (route==="support/"?" / мес.":"");
+  return `- [${ru} / ${en}](${url("ru",route)}): ${quote}`;
+}).join("\n");
+const llmsPages = pages => pages.map(page => `- [${page.ru.label}](${url("ru",page.route)}) · [${page.en.label}](${url("en",page.route)})`).join("\n");
+files["docs/llms.txt"] = `# Devlarion
+
+> Студия разработки Ильи Ларионова. Сайты, боты, мини-приложения, ИИ и интеграции, SEO, GEO и сопровождение.
+> Ilia Larionov’s development studio builds websites, bots, mini apps, AI tools and integrations and offers SEO, GEO and ongoing support.
+
+## Услуги и стартовые цены / Services and starting prices
+
+${llmsPrices}
+
+## Для кого / Who we work with
+
+${llmsPages(segments)}
+
+## Рост / Growth
+
+${llmsPages(topics)}
+
+## Контакты / Contact
+
+- [Telegram](${id.telegram})
+- [Threads](${id.threads})
+- [Сайт](${url("ru")}) · [Website](${url("en")})
+`;
+
 for(const [path,raw] of Object.entries(files)){
  const data = path.endsWith(".html")
    ? versionedAssets.reduce((html, [name, version]) => html.replaceAll(

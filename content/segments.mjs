@@ -559,6 +559,9 @@ export function renderTopicPage(lang, route, ctx) {
     ${section(benefitHeading, renderBenefits(benefits, ctx.icons))}
     ${section(pick(lang, 'Что мы делаем', 'What we do'), `<ol class="audience-steps">${steps.map(step => `<li>${esc(step)}</li>`).join('')}</ol>`)}
     ${renderPackages(lang, page, ctx)}
+    ${route === 'geo/' ? section(pick(lang, 'Как это сделано на Devlarion', 'How Devlarion applies GEO'),
+      `<p>${pick(lang, 'На этом сайте состав услуг, цены и частые вопросы доступны в разметке страниц.', 'This site includes service details, prices and common questions in its structured data.')}</p>
+      <a class="link" href="${esc(ctx.llmsUrl)}">llms.txt <span aria-hidden="true">→</span></a>`) : ''}
     ${notice ? `<aside class="wrap audience-note"><p>${esc(notice)}</p></aside>` : ''}
     ${renderFAQ(lang, page, ctx)}
     ${renderRelated(lang, page, ctx)}

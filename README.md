@@ -6,6 +6,19 @@ I help businesses take enquiries and cut manual work. I build catalogue websites
 
 [View our work](https://luvlarion4ik.github.io/luvlarion4ik/#work) · [Estimate a project](https://luvlarion4ik.github.io/luvlarion4ik/#quiz) · [Discuss a project](https://t.me/LuvLarion4ik) · [Threads](https://www.threads.com/@luvlarion4ik) · [Русский](README.ru.md)
 
+## Who we work with
+
+- [Self-employed and sole traders](https://luvlarion4ik.github.io/luvlarion4ik/self-employed/)
+- [Small and medium businesses](https://luvlarion4ik.github.io/luvlarion4ik/business/)
+- [Enterprise](https://luvlarion4ik.github.io/luvlarion4ik/enterprise/)
+
+## Growth
+
+- [Why businesses need a website](https://luvlarion4ik.github.io/luvlarion4ik/why-website/)
+- [SEO](https://luvlarion4ik.github.io/luvlarion4ik/seo/)
+- [GEO (AI search)](https://luvlarion4ik.github.io/luvlarion4ik/geo/)
+- [Support](https://luvlarion4ik.github.io/luvlarion4ik/support/)
+
 ## Project pricing
 
 - [Enquiry website](https://luvlarion4ik.github.io/luvlarion4ik/#small-business) — from ≈ $305
