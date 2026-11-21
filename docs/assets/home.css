@@ -92,13 +92,14 @@
 
 .segment-hero {padding:clamp(1.6rem,4vw,3.5rem) 0}
 .segment-hero .eyebrow {margin-bottom:.85rem}
-.segment-hero h1 {max-width:23ch;font-size:clamp(2.35rem,5.3vw,5rem);line-height:1.04;text-wrap:pretty}
+.segment-hero h1 {max-width:28ch;font-size:clamp(2.35rem,5.3vw,5rem);line-height:1.04;text-wrap:pretty}
 .segment-hero .intro {margin:.85rem 0 1.35rem;max-width:65ch;color:var(--light)}
 .segment-picker {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem}
 .segment-card {display:grid;align-content:start;gap:.55rem;padding:clamp(.75rem,1.45vw,1.2rem);border:1px solid var(--rule);border-radius:.35rem;background:var(--paper);color:var(--ink)}
 .segment-card:hover {border-color:var(--accent);text-decoration:none}
 .segment-card:focus-visible {outline:2px solid var(--paper);outline-offset:3px;box-shadow:inset 0 0 0 2px var(--accent)}
-.segment-card .service-mark {color:var(--accent)}
+.segment-card .service-mark {width:2.5rem;height:2.5rem;margin:0;border-radius:.5rem;color:var(--accent)}
+.segment-card .service-mark svg {width:1.55rem;height:1.55rem}
 .segment-label {display:block;font-size:clamp(1rem,1.5vw,1.3rem);line-height:1.2}
 .segment-card p {margin:.25rem 0 .4rem;color:var(--sub);line-height:1.35}
 .segment-price {display:block;font-weight:700}
@@ -111,6 +112,8 @@
   .segment-hero .intro {margin:.65rem 0 .9rem;font-size:.96rem;line-height:1.4}
   .segment-picker {grid-template-columns:1fr;gap:.45rem}
   .segment-card {grid-template-columns:1.65rem minmax(0,1fr);gap:.6rem;padding:.62rem .75rem}
+  .segment-card .service-mark {width:1.65rem;height:1.65rem}
+  .segment-card .service-mark svg {width:1.2rem;height:1.2rem}
   .segment-card p {font-size:.88rem}
   .segment-price {display:inline;margin-right:.5rem}
   .segment-action {display:inline;font-size:.82rem}

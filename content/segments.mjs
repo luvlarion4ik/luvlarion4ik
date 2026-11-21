@@ -488,7 +488,7 @@ function renderRelated(lang, page, ctx) {
 }
 
 function renderCases(lang, route, ctx) {
-  const relevant = ctx.work.filter(project => project.segments.includes(route.slice(0, -1))).slice(0, 2);
+  const relevant = ctx.work.filter(project => project.segments?.includes(route.slice(0, -1))).slice(0, 2);
   return section(pick(lang, 'Кейсы', 'Case studies'), `<div class="service-grid audience-cases">${relevant.map(project =>
     `<article><small>${esc(project.type)}${project.concept ? ' · ' + pick(lang, 'Демо-данные', 'Demo data') : ''}</small>
       <h3><a href="${ctx.home}work/${project.id}/">${esc(project.name)} <span aria-hidden="true">→</span></a></h3><p>${esc(project.result)}</p>

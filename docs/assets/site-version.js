@@ -1,5 +1,6 @@
 (() => {
   const key = 'devlarion-style';
+  const promptKey = 'devlarion-style-prompt';
   const { body } = document;
   const onHome = body.hasAttribute('data-version-home');
   const motionUrl = body.dataset.motionUrl;
@@ -7,8 +8,12 @@
   const params = new URLSearchParams(location.search);
   let choice;
   let timer;
+  let seenPrompt = false;
 
-  try { choice = localStorage.getItem(key); } catch {}
+  try {
+    choice = localStorage.getItem(key);
+    seenPrompt = localStorage.getItem(promptKey) === 'shown';
+  } catch {}
   if (!['classic', 'motion', 'dismissed'].includes(choice)) choice = null;
 
   function endPrompt() {
@@ -41,7 +46,9 @@
   });
 
   function showPrompt() {
-    if (choice || !prompt) return;
+    if (choice || seenPrompt || !prompt) return;
+    seenPrompt = true;
+    try { localStorage.setItem(promptKey, 'shown'); } catch {}
     clearTimeout(timer);
     window.removeEventListener('scroll', onScroll);
     prompt.hidden = false;
@@ -52,7 +59,7 @@
     if (distance > 0 && window.scrollY / distance >= 0.3) showPrompt();
   }
 
-  if (onHome && !choice) {
+  if (onHome && !choice && !seenPrompt) {
     timer = setTimeout(showPrompt, 4000);
     window.addEventListener('scroll', onScroll, { passive: true });
   }
