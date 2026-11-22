@@ -7,7 +7,7 @@
   const root = document.documentElement;
 
   // 1. Первый экран: большой контурный знак D с вырезом L и вращающиеся орбиты.
-  const hero = document.querySelector(".hero");
+  const hero = document.querySelector(".hero, .audience-hero");
   if (hero && !hero.querySelector(".dl-orbit")) {
     const ring = (r, cls = "") => `<circle class="ring ${cls}" cx="500" cy="500" r="${r}"/>`;
     const sat = (r, angle, size) => {
@@ -46,9 +46,12 @@
   if ("IntersectionObserver" in window) {
     const targets = [
       ".section > h2", ".section > p", ".service-group > h3", ".product-feature > *",
-      ".product-card", ".offer-panel", ".solution-content", ".exhibit", ".work-gallery > *",
+      ".product-card", ".offer-panel", ".solution-content", ".exhibit",
+      ".home-facts > *", ".home-growth > a", ".home-process > li",
+      ".audience-section .service-grid > article", ".audience-related > a",
+      ".sub > h2", ".case-gallery-frame", ".ready-solutions-grid > article",
       ".notfound > *", ".pt-section > h2", ".pt-steps > *", ".pt-roles > *",
-    ];
+    ].join(",");
     const seen = new IntersectionObserver(entries => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
@@ -56,22 +59,27 @@
         seen.unobserve(entry.target);
       }
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
-    const fold = innerHeight;
-    for (const el of document.querySelectorAll(targets.join(","))) {
-      if (el.closest(".hero, .pt-hero, .pt-app, [data-reveal]")) continue;
-      // То, что уже видно при загрузке, не прячем: так нет мигания первого экрана.
-      if (el.getBoundingClientRect().top < fold * 0.9) continue;
-      const siblings = [...el.parentElement.children].filter(child => child.matches(targets.join(",")));
-      el.style.setProperty("--dl-i", Math.min(siblings.indexOf(el), 5));
-      el.setAttribute("data-reveal", "");
-      seen.observe(el);
+    function observe(container) {
+      for (const el of container.querySelectorAll(targets)) {
+        if (el.closest(".hero, .audience-hero, .pt-hero, .pt-app, [data-reveal]")) continue;
+        // То, что уже видно, не прячем: так нет мигания первого экрана.
+        if (el.getBoundingClientRect().top < innerHeight * 0.9) continue;
+        const siblings = [...el.parentElement.children].filter(child => child.matches(targets));
+        el.style.setProperty("--dl-i", Math.min(siblings.indexOf(el), 5));
+        el.setAttribute("data-reveal", "");
+        seen.observe(el);
+      }
     }
+    observe(document);
+    document.addEventListener("toggle", event => {
+      if (event.target instanceof HTMLDetailsElement && event.target.open) observe(event.target);
+    }, true);
     root.classList.add("dl-motion");
   }
 
   // 4. Блик за курсором на карточках.
   if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
-    const cards = document.querySelectorAll(".service-grid article, .product-card, .case, .offer-panel, .pt-direction");
+    const cards = document.querySelectorAll(".service-grid article, .product-card, .case, .offer-panel, .pt-direction, .segment-card, .home-growth > a, .audience-related > a");
     for (const card of cards) {
       card.setAttribute("data-glow", "");
       card.addEventListener("pointermove", event => {

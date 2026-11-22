@@ -438,8 +438,9 @@
 .version-prompt-actions {display:flex;gap:.35rem;flex-wrap:wrap}
 .version-prompt .btn {padding:.35rem .65rem;min-height:2.5rem;gap:.3rem}
 .version-dismiss {width:2.5rem;height:2.5rem;font-size:1.4rem;flex:none}
-@media (max-width:700px) {
-  .version-prompt {display:grid;grid-template-columns:minmax(0,1fr) auto;bottom:calc(4.5rem + env(safe-area-inset-bottom));padding:.65rem}
+/* На телефоне предложение остаётся под первым экраном и не перекрывает выбор сегмента. */
+@media (max-width:719px) {
+  .version-prompt {position:static;transform:none;width:90%;max-width:none;margin:1rem auto 0;display:grid;grid-template-columns:minmax(0,1fr) auto;padding:.65rem}
   .version-prompt-actions {grid-column:1/-1;grid-row:2}
   .version-dismiss {grid-row:1;grid-column:2}
 }
