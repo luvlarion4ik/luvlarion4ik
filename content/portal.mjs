@@ -1,4 +1,36 @@
+import { readFileSync } from 'node:fs';
+import { runInNewContext } from 'node:vm';
 import { esc } from './site.mjs';
+import { growthMapText } from './growth-map.mjs';
+
+const mapScope = { window: {} };
+runInNewContext(readFileSync(new URL('../docs/assets/growth-map/gm-catalog.js', import.meta.url), 'utf8'), mapScope);
+const mapCatalog = mapScope.window.DevlarionGM.catalog;
+
+function renderSavedMaps(lang, home) {
+  const t = key => esc(growthMapText(lang, key));
+  const labels = Object.fromEntries([
+    'cab.open', 'cab.delete', 'cab.delete.ask', 'cab.saved', 'intro.eyebrow',
+    'act.import.bad', 'act.storage.off', 'act.newer', 'v.now', 'v.base', 'v.boost', 'v.auto',
+  ].map(key => [key, growthMapText(lang, key)]));
+  const categories = Object.fromEntries(mapCatalog.categories.map(category => [category.id, category.title[lang]]));
+  const stages = mapCatalog.stages.filter(stage => !stage.floating).map(stage => [stage.id, stage.color]);
+  const config = JSON.stringify({ labels, categories, stages }).replaceAll('<', '\\u003c');
+  return `<section class="pt-card pt-maps ym-hide-content" data-pt-maps data-map-url="${home}growth-map/" aria-labelledby="pt-maps-title">
+    <h3 id="pt-maps-title">${t('cab.title')}</h3>
+    <div class="pt-maps-empty" data-pt-maps-empty>
+      <p>${t('cab.empty')}</p>
+      <a class="pt-btn pt-btn--primary" href="${home}growth-map/">${t('cab.build')}</a>
+    </div>
+    <ul class="pt-maps-list" data-pt-maps-list hidden></ul>
+    <div class="pt-actions">
+      <button type="button" class="pt-btn" data-pt-maps-import-button>${t('act.import')}</button>
+      <input type="file" accept="application/json,.json" data-pt-maps-import hidden>
+    </div>
+    <p class="pt-hint pt-hint--error" role="status" data-pt-maps-error hidden></p>
+    <script type="application/json" data-pt-maps-config>${config}</script>
+  </section>`;
+}
 
 // Страница «Личный кабинет». Кабинет — отдельное приложение, поэтому до его запуска страница
 // честно называется предпросмотром, а вход включается одной строкой в content/site.json:
@@ -112,6 +144,7 @@ export function renderPortalPage(lang, { home, tg, icons, portal, referral }) {
       <div class="pt-main">
 
         <section class="pt-panel" role="tabpanel" id="pt-panel-project" aria-labelledby="pt-tab-project">
+          ${renderSavedMaps(lang, home)}
           <div data-only="new">
             <header><h3>${l('Ваш проект', 'Your project')}</h3><p>${l('Проекта пока нет. Опишите задачу, менеджер уточнит детали и подготовит предложение. Когда мы всё согласуем вместе, проект появится здесь.', 'There is no project yet. Describe your task and a manager will clarify the details and prepare a proposal. Once we agree everything together, your project appears here.')}</p></header>
             <form class="pt-request" data-pt-request novalidate>
