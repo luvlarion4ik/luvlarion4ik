@@ -324,6 +324,15 @@ ${llmsPages(topics)}
 - [Сайт](${url("ru")}) · [Website](${url("en")})
 `;
 
+if (base === "https://devlarion.ru/") {
+  files["docs/yandex_f3f4cfac969a4d65.html"] = `<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>Verification: f3f4cfac969a4d65</body>
+</html>
+`;
+}
 for(const [path,raw] of Object.entries(files)){
  const data = path.endsWith(".html")
    ? versionedAssets.reduce((html, [name, version]) => html.replaceAll(
