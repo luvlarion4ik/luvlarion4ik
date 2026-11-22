@@ -631,7 +631,7 @@ function serviceTree(lang, ctx) {
     <label class="shop-search svc-search"><span class="sr-only">${pick(lang, 'Поиск по услугам', 'Search services')}</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input type="search" data-svc-search placeholder="${pick(lang, 'Например: бот, SEO, клиника, DGX…', 'For example: bot, SEO, clinic, DGX…')}"></label>
 
     <div class="svc-root"><span class="svc-root-dot" aria-hidden="true"></span><strong>Devlarion</strong></div>
-    <ul class="svc-tree">${TREE.map(([id, name, sub, leaves], n) => `<li class="svc-branch" style="--b:${n}"><details${n < 2 ? ' open' : ''}><summary><span class="svc-num">${String(n + 1).padStart(2, '0')}</span><span class="svc-name">${esc(name[i])}</span><small>${esc(sub[i])}</small><em>${leaves.length}</em></summary>
+    <ul class="svc-tree">${TREE.map(([id, name, sub, leaves], n) => `<li class="svc-branch" style="--b:${n}"><details><summary><span class="svc-num">${String(n + 1).padStart(2, '0')}</span><span class="svc-name">${esc(name[i])}</span><small>${esc(sub[i])}</small><em>${leaves.length}</em></summary>
       <ul class="svc-leaves">${leaves.map(([route, t, d], k) => `<li style="--k:${k}"><a href="${ctx.home}${route}"><strong>${esc(t[i])}</strong><span>${esc(d[i])}</span>${META[route] ? `<em class="svc-meta">${esc(META[route][i])}</em>` : ''}</a></li>`).join('')}</ul></details></li>`).join('')}</ul>
     <p class="shop-none" data-svc-none hidden>${pick(lang, 'Ничего не нашлось. Напишите нам — подскажем.', 'Nothing found. Write to us and we will help.')}</p>
   </section>`;
