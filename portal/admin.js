@@ -50,7 +50,16 @@
     const project = projects.find(p => p.id === projectId);
     const addClient = () => h('button', { class: 'ac-btn ac-btn--ghost ad-small', type: 'button', onclick: () => chooseClient('new'), text: 'Добавить клиента' });
     const metrics = [['Клиенты', db.clients.length], ['Проекты', db.projects.length], ['Непрочитанные', db.projects.reduce((sum, item) => sum + unread(item), 0)]];
-    summary.replaceChildren(...metrics.map(([label, value]) => h('div', {}, h('dt', { text: label }), h('dd', { text: value }))));
+    summary.replaceChildren(...metrics.map(([label, value]) => {
+      const dd = h('dd', { text: String(value) });
+      const to = Number(value);
+      if (Number.isFinite(to) && to > 0 && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const t0 = performance.now();
+        const tick = now => { const k = Math.min(1, (now - t0) / 800); dd.textContent = Math.round(to * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(tick); };
+        requestAnimationFrame(tick);
+      }
+      return h('div', {}, h('dt', { text: label }), dd);
+    }));
 
     const clients = h('section', { class: 'ac-card ad-client-list' },
       h('h2', { text: 'Клиенты' }),

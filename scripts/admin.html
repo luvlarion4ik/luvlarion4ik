@@ -3,297 +3,365 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Настройки сайта Devlarion</title>
+<meta name="robots" content="noindex">
+<title>Студия Devlarion — управление сайтом</title>
 <style nonce="%%NONCE%%">
   :root {
-    --paper: #f5f1e9;
-    --ink: #231e19;
-    --sub: #635b52;
-    --rule: #c9c2b7;
-    --surface: #eee8dd;
-    --accent: #964c32;
-    --night: #211d1b;
-    --light: #faf4ea;
-    color-scheme: light;
-    font: 16px/1.55 system-ui, sans-serif;
-    background: var(--paper);
+    --paper: #14181d;
+    --ink: #f3ede2;
+    --sub: #aeb4ba;
+    --rule: #323b45;
+    --surface: #1b2128;
+    --raise: #222a33;
+    --accent: #e8ac8c;
+    --accent-ink: #1a1410;
+    --ok: #7fc495;
+    --bad: #ef8a80;
+    --night: #0f1216;
+    color-scheme: dark;
+    font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--night);
     color: var(--ink);
+  }
+  :root[data-theme=light] {
+    --paper: #f5f1e9; --ink: #231e19; --sub: #635b52; --rule: #c9c2b7; --surface: #eee8dd; --raise: #e6dfd2;
+    --accent: #964c32; --accent-ink: #faf4ea; --ok: #3d704b; --bad: #a23a32; --night: #ece6da;
+    color-scheme: light;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; }
-  .wrap { width: min(72rem, 92%); margin-inline: auto; }
-  .masthead {
-    padding-block: clamp(1.7rem, 4vw, 3.3rem);
-    background: var(--night);
-    color: var(--light);
-    border-block-end: 1px solid var(--accent);
-  }
-  .masthead-brand {
-    display: flex;
-    align-items: center;
-    gap: .7rem;
-    margin: 0 0 .8rem;
-    font: .83rem/1.3 ui-monospace, monospace;
-  }
-  .masthead-brand::before {
-    content: "";
-    width: 1.8rem;
-    height: 1px;
-    background: color-mix(in srgb, var(--accent) 55%, var(--light));
-  }
-  .masthead .intro { max-width: 70ch; margin: .8rem 0 0; }
-  main { padding-block: clamp(1.25rem, 3vw, 2.5rem) 4rem; }
-  h1, h2, .panel > summary {
-    margin: 0;
-    font-family: Georgia, serif;
-    font-weight: 400;
-    line-height: 1.12;
-    letter-spacing: -.04em;
-  }
-  h1 { font-size: clamp(2.7rem, 6vw, 4.8rem); }
-  h2, .panel > summary { font-size: clamp(1.6rem, 2.6vw, 2.1rem); }
-  p { margin: .5rem 0 1rem; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+  body { margin: 0; min-height: 100vh; background: var(--night); position: relative; overflow-x: hidden; }
+  .aurora { position: fixed; inset: -20% -10% auto; height: 70vh; z-index: 0; pointer-events: none; opacity: .55;
+    background: radial-gradient(40% 55% at 18% 30%, color-mix(in srgb, var(--accent) 38%, transparent), transparent 70%),
+                radial-gradient(35% 50% at 78% 20%, color-mix(in srgb, var(--ok) 20%, transparent), transparent 70%); filter: blur(30px); }
+  .shell { position: relative; z-index: 1; display: grid; grid-template-columns: 16.5rem minmax(0, 1fr); min-height: 100vh; }
+  .side { position: sticky; top: 0; align-self: start; height: 100vh; display: flex; flex-direction: column; gap: 1.25rem; padding: 1.4rem 1rem 1.2rem;
+    border-inline-end: 1px solid var(--rule); background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(10px); }
+  .brand { display: flex; align-items: center; gap: .65rem; padding: .2rem .5rem; font: 400 1.35rem/1 Georgia, serif; letter-spacing: -.03em; }
+  .brand i { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: .55rem; background: var(--accent); color: var(--accent-ink); font: 700 1.05rem/1 Georgia, serif; font-style: normal; }
+  .brand small { display: block; margin-top: .2rem; font: .68rem/1 system-ui; letter-spacing: .14em; text-transform: uppercase; color: var(--sub); }
+  .nav { position: relative; display: grid; gap: .15rem; }
+  .nav-mark { position: absolute; inset-inline: 0; top: 0; height: 2.6rem; border-radius: .6rem; background: var(--raise); border: 1px solid var(--rule);
+    transform: translateY(var(--y, 0)); transition: transform .35s cubic-bezier(.3,.9,.3,1), height .2s; z-index: 0; }
+  .nav a { position: relative; z-index: 1; display: flex; align-items: center; gap: .65rem; height: 2.6rem; padding-inline: .8rem; border-radius: .6rem;
+    color: var(--sub); text-decoration: none; font-size: .93rem; font-weight: 600; transition: color .2s; }
+  .nav a svg { flex: none; width: 1.1rem; height: 1.1rem; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .nav a:hover, .nav a[aria-current=true] { color: var(--ink); }
+  .nav a[aria-current=true] svg { color: var(--accent); }
+  .side-links { display: grid; gap: .35rem; margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--rule); }
+  .side-links a { display: flex; justify-content: space-between; align-items: center; padding: .6rem .8rem; border-radius: .6rem; border: 1px solid var(--rule); color: var(--ink);
+    text-decoration: none; font-size: .88rem; font-weight: 600; transition: border-color .2s, transform .2s, background .2s; }
+  .side-links a:hover { border-color: var(--accent); background: var(--surface); transform: translateX(2px); }
+  .theme-toggle { margin-top: .2rem; }
+  .main { min-width: 0; padding: 0 clamp(1rem, 3vw, 2.5rem) 6rem; }
+  .topbar { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .9rem 0;
+    background: color-mix(in srgb, var(--night) 82%, transparent); backdrop-filter: blur(12px); border-block-end: 1px solid var(--rule); margin-inline: calc(-1 * clamp(1rem, 3vw, 2.5rem)); padding-inline: clamp(1rem, 3vw, 2.5rem); }
+  .topbar h1 { margin: 0; font: 400 1.35rem/1.2 Georgia, serif; letter-spacing: -.02em; }
+  .titlerow { display: flex; align-items: center; gap: .7rem; }
+  .top-actions { display: flex; align-items: center; gap: .75rem; }
+  .dirty { display: inline-flex; align-items: center; gap: .5rem; font-size: .85rem; color: var(--sub); }
+  .dirty i { width: .55rem; height: .55rem; border-radius: 50%; background: var(--rule); transition: background .2s; }
+  .dirty[data-dirty] { color: var(--accent); }
+  .dirty[data-dirty] i { background: var(--accent); animation: ping 1.6s ease-out infinite; }
+  .hero { padding-block: clamp(1.6rem, 4vw, 3rem) 1.2rem; }
+  .eyebrow { display: flex; align-items: center; gap: .7rem; margin: 0 0 .7rem; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+  .eyebrow::before { content: ""; width: 1.8rem; height: 1px; background: var(--accent); }
+  .hero h2 { margin: 0; font: 400 clamp(2rem, 4.6vw, 3.4rem)/1.08 Georgia, serif; letter-spacing: -.04em; max-width: 18ch; }
+  .hero p { max-width: 62ch; color: var(--sub); }
+  .tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .9rem; margin: 1.4rem 0 .5rem; }
+  .tile { padding: 1.1rem 1.2rem; border: 1px solid var(--rule); border-radius: .9rem; background: var(--surface); transition: border-color .25s, transform .25s; }
+  .tile:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .tile small { display: block; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--sub); }
+  .tile strong { display: block; margin-top: .35rem; font: 400 2.3rem/1 Georgia, serif; color: var(--ink); }
+  .tile span { display: block; margin-top: .35rem; font-size: .83rem; color: var(--sub); }
+  .panel { margin: 1rem 0 0; padding: clamp(1.1rem, 2.5vw, 1.7rem); border: 1px solid var(--rule); border-radius: 1rem; background: var(--surface); scroll-margin-top: 5.5rem; }
+  .panel > h3 { margin: 0; font: 400 1.7rem/1.15 Georgia, serif; letter-spacing: -.03em; }
+  .panel > h3 + p { margin: .3rem 0 1.1rem; }
   .muted { color: var(--sub); }
-  form:not([hidden]) {
-    display: grid;
-    grid-template-columns: 10rem minmax(0, 1fr);
-    gap: clamp(1rem, 3vw, 2.75rem);
-    align-items: start;
-  }
-  .section-nav { position: sticky; top: 1.25rem; }
-  .section-nav ul { list-style: none; margin: 0; padding: 0; }
-  .section-nav a {
-    display: flex;
-    align-items: center;
-    min-height: 44px;
-    padding: .45rem .75rem;
-    border-inline-start: 1px solid var(--rule);
-    color: var(--sub);
-    font-size: .94rem;
-    font-weight: 600;
-    text-decoration: none;
-  }
-  .section-nav a:hover { border-color: var(--accent); background: var(--surface); color: var(--accent); }
-  .panel {
-    margin: 0 0 1rem;
-    padding: clamp(1rem, 2.5vw, 1.6rem);
-    scroll-margin-top: 1rem;
-    border: 1px solid var(--rule);
-    border-radius: 4px;
-    background: color-mix(in srgb, var(--paper) 70%, var(--light));
-  }
-  .panel:target { border-color: var(--accent); }
-  .panel > :last-child { margin-bottom: 0; }
-  .panel h2 + .columns { margin-top: 1rem; }
-  .columns, #ready {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
-    gap: .8rem 1rem;
-  }
+  p { margin: .5rem 0 1rem; }
+  .reveal { opacity: 0; transform: translateY(14px); transition: opacity .55s ease-out, transform .55s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+  .columns, #ready { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: .9rem 1rem; }
   label { display: grid; gap: .3rem; min-width: 0; }
-  label > span { font-weight: 600; }
+  label > span { font-size: .86rem; font-weight: 600; color: var(--sub); }
   input, textarea, select, button { font: inherit; color: inherit; }
-  input, textarea, select {
-    width: 100%;
-    min-width: 0;
-    min-height: 44px;
-    padding: .5rem .65rem;
-    border: 1px solid color-mix(in srgb, var(--sub) 70%, var(--paper));
-    border-radius: 3px;
-    background: var(--paper);
-  }
-  input::placeholder { color: var(--sub); opacity: 1; }
-  :is(a, button, input, select, summary, textarea, .table-scroll):focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
-  }
-  textarea { font: .9rem/1.45 ui-monospace, monospace; resize: vertical; min-height: 7rem; }
-  .table-scroll { overflow-x: auto; max-width: 100%; }
+  input:not([type=checkbox]), textarea, select { width: 100%; min-width: 0; min-height: 44px; padding: .55rem .75rem; border: 1px solid var(--rule); border-radius: .6rem; background: var(--paper);
+    transition: border-color .2s, box-shadow .2s; }
+  input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+  input::placeholder, textarea::placeholder { color: var(--sub); opacity: .8; }
+  textarea { font: .9rem/1.5 ui-monospace, monospace; resize: vertical; min-height: 6.5rem; }
+  textarea.prose { font: .95rem/1.5 system-ui, sans-serif; min-height: 5.5rem; }
+  :is(a, button, summary, .table-scroll):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: .4rem; }
+  .switch { display: flex; align-items: center; gap: .8rem; width: fit-content; cursor: pointer; }
+  .switch input { position: absolute; opacity: 0; }
+  .switch .track { position: relative; width: 3rem; height: 1.7rem; border-radius: 99px; background: var(--rule); transition: background .25s; }
+  .switch .track::after { content: ""; position: absolute; top: .2rem; left: .2rem; width: 1.3rem; height: 1.3rem; border-radius: 50%; background: var(--ink); transition: transform .3s cubic-bezier(.3,1.4,.5,1); }
+  .switch input:checked + .track { background: var(--accent); }
+  .switch input:checked + .track::after { transform: translateX(1.3rem); background: var(--accent-ink); }
+  .switch input:focus-visible + .track { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .switch b { font-weight: 600; }
+  .lang-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1rem; }
+  .lang-grid fieldset { margin: 0; padding: 1rem; border: 1px dashed var(--rule); border-radius: .8rem; display: grid; gap: .8rem; }
+  .lang-grid legend { padding-inline: .4rem; font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); font-weight: 700; }
+  .table-scroll { overflow-x: auto; max-width: 100%; border: 1px solid var(--rule); border-radius: .8rem; }
   .table-hint { display: none; }
   table { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 36rem; }
-  th, td { text-align: start; border-block-end: 1px solid var(--rule); padding: .5rem .55rem; }
-  th { font-size: .89rem; font-weight: 650; }
-  thead th { background: var(--surface); }
+  th, td { text-align: start; border-block-end: 1px solid var(--rule); padding: .5rem .6rem; }
+  tbody tr:last-child > * { border-block-end: 0; }
+  th { font-size: .88rem; font-weight: 650; }
+  thead th { background: var(--raise); color: var(--sub); font-size: .76rem; letter-spacing: .08em; text-transform: uppercase; }
   th[scope=row] { width: 31%; }
-  th[scope=col]:not(:first-child) { width: 23%; }
-  tr:focus-within td { background: var(--surface); }
-  details > summary { cursor: pointer; min-height: 44px; align-content: center; }
-  details > summary::marker { color: var(--accent); }
-  details[open] > summary { margin-bottom: .75rem; }
-  details label + label { margin-top: .7rem; }
-  .panel details { border-block-start: 1px solid var(--rule); margin-top: 1rem; font-weight: 600; }
-  code, pre { font: .85rem/1.45 ui-monospace, monospace; }
-  pre { margin: .4rem 0; padding: .65rem .75rem; white-space: pre-wrap; overflow-wrap: anywhere; background: var(--surface); }
-  button {
-    min-height: 44px;
-    padding: .65rem 1.15rem;
-    border: 1px solid var(--ink);
-    border-radius: 3px;
-    background: var(--ink);
-    color: var(--paper);
-    font-weight: 650;
-    cursor: pointer;
-  }
-  button:hover:not(:disabled) { background: var(--accent); border-color: var(--accent); }
-  button:disabled { opacity: .6; cursor: wait; }
-  #status:not(:empty) {
-    margin: .75rem 0 0;
-    padding: .65rem .85rem;
-    border-inline-start: 3px solid var(--sub);
-    background: var(--surface);
-  }
-  #status[data-error] { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--paper)); }
-  .skip {
-    position: absolute;
-    top: .5rem;
-    inset-inline-start: .5rem;
-    z-index: 2;
-    padding: .65rem .85rem;
-    transform: translateY(calc(-100% - 1rem));
-    background: var(--paper);
-    color: var(--ink);
-  }
+  tbody tr { transition: background .15s; }
+  tbody tr:hover, tr:focus-within td, tr:focus-within th { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+  details.fold { border: 1px solid var(--rule); border-radius: .8rem; background: var(--paper); transition: border-color .2s; }
+  details.fold + details.fold { margin-top: .6rem; }
+  details.fold[open] { border-color: color-mix(in srgb, var(--accent) 60%, var(--rule)); }
+  details.fold > summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 48px; padding: .6rem 1rem; cursor: pointer; font-weight: 650; list-style: none; }
+  details.fold > summary::-webkit-details-marker { display: none; }
+  details.fold > summary::after { content: "+"; font-size: 1.4rem; line-height: 1; color: var(--accent); transition: transform .25s; }
+  details.fold[open] > summary::after { transform: rotate(45deg); }
+  details.fold > .fold-body { padding: 0 1rem 1rem; animation: unfold .3s ease-out; }
+  .badge { font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: .15rem .5rem; border-radius: 99px; background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent); }
+  code, pre { font: .84rem/1.45 ui-monospace, monospace; }
+  pre { margin: .4rem 0; padding: .7rem .85rem; white-space: pre-wrap; overflow-wrap: anywhere; background: var(--paper); border-radius: .6rem; border: 1px solid var(--rule); }
+  button { min-height: 44px; padding: .6rem 1.2rem; border: 1px solid var(--rule); border-radius: .65rem; background: var(--raise); color: var(--ink); font-weight: 650; cursor: pointer;
+    transition: transform .15s, background .2s, border-color .2s, box-shadow .2s; }
+  button:hover:not(:disabled) { border-color: var(--accent); transform: translateY(-1px); }
+  button:active:not(:disabled) { transform: translateY(1px) scale(.99); }
+  button.primary { position: relative; overflow: hidden; background: var(--accent); color: var(--accent-ink); border-color: var(--accent); box-shadow: 0 6px 22px -8px var(--accent); }
+  button.primary:hover:not(:disabled) { box-shadow: 0 10px 28px -8px var(--accent); }
+  button.primary[data-busy]::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(255,255,255,.45), transparent 70%); animation: sweep 1s linear infinite; }
+  button:disabled { opacity: .65; cursor: wait; }
+  .publish { display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; }
+  .toast { position: fixed; right: 1.2rem; bottom: 1.2rem; z-index: 20; display: flex; align-items: center; gap: .75rem; max-width: min(26rem, calc(100vw - 2.4rem)); padding: .85rem 1.1rem; border-radius: .9rem;
+    border: 1px solid var(--rule); background: var(--raise); box-shadow: 0 18px 50px -18px #000; transform: translateY(20px); opacity: 0; pointer-events: none; transition: transform .35s cubic-bezier(.2,.9,.3,1.2), opacity .25s; }
+  .toast[data-show] { transform: none; opacity: 1; pointer-events: auto; }
+  .toast[data-error] { border-color: var(--bad); }
+  .toast .ico { flex: none; width: 1.6rem; height: 1.6rem; border-radius: 50%; display: grid; place-items: center; background: var(--ok); color: #0b1a10; }
+  .toast[data-error] .ico { background: var(--bad); color: #2a0b08; }
+  .toast .ico svg { width: .95rem; height: .95rem; stroke: currentColor; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 24; stroke-dashoffset: 24; }
+  .toast[data-show] .ico svg { animation: draw .5s .15s ease-out forwards; }
+  #status:not(:empty) { margin: 1rem 0 0; padding: .7rem .95rem; border-inline-start: 3px solid var(--sub); background: var(--surface); border-radius: .5rem; }
+  #status[data-error] { border-color: var(--bad); }
+  .skip { position: absolute; top: .5rem; left: .5rem; z-index: 30; padding: .65rem .85rem; transform: translateY(-200%); background: var(--paper); color: var(--ink); border-radius: .5rem; }
   .skip:focus { transform: none; }
-  @media (min-width: 67rem) {
-    #exchange .columns { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .menu-btn { display: none; }
+  @keyframes ping { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 60%, transparent); } 100% { box-shadow: 0 0 0 .6rem transparent; } }
+  @keyframes sweep { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @keyframes unfold { from { opacity: 0; transform: translateY(-6px); } }
+  @keyframes drift { 0%, 100% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(3%, 4%, 0); } }
+  @media (min-width: 67rem) { #exchange .columns { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+  @media (max-width: 62rem) {
+    .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
-  @media (max-width: 53rem) {
-    form:not([hidden]) { grid-template-columns: minmax(0, 1fr); }
-    .section-nav { position: static; }
-    .section-nav ul { display: flex; flex-wrap: wrap; gap: .35rem; }
-    .section-nav a { border: 1px solid var(--rule); border-radius: 3px; }
-  }
-  @media (max-width: 41rem) {
+  @media (max-width: 52rem) {
+    .shell { grid-template-columns: minmax(0, 1fr); }
+    .side { position: fixed; inset: 0 25% 0 0; z-index: 25; width: min(18rem, 85vw); height: 100vh; transform: translateX(-102%); transition: transform .3s cubic-bezier(.3,.9,.3,1); background: var(--paper); }
+    .side[data-open] { transform: none; box-shadow: 30px 0 80px -30px #000; }
+    .menu-btn { display: inline-grid; place-items: center; min-height: 44px; min-width: 44px; padding: 0; }
+    .lang-grid { grid-template-columns: minmax(0, 1fr); }
     .table-hint { display: block; font-size: .86rem; }
-    table { table-layout: fixed; }
-    th[scope=col]:not(:first-child) { width: auto; }
-    th[scope=row], thead th:first-child {
-      position: sticky;
-      inset-inline-start: 0;
-      min-width: 7.2rem;
-      max-width: 7.2rem;
-      width: 7.2rem;
-      overflow-wrap: anywhere;
-      border-inline-end: 1px solid var(--rule);
-      background: var(--surface);
-    }
-    button[type=submit] { width: 100%; }
+    .top-actions .dirty span { display: none; }
   }
-  @media (prefers-reduced-motion: no-preference) {
-    .masthead .wrap { animation: settle .32s ease-out; }
-    .section-nav a, button { transition: background-color .18s ease-out, border-color .18s ease-out, color .18s ease-out; }
-    @keyframes settle { from { transform: translateY(5px); opacity: .8; } to { transform: none; opacity: 1; } }
+  @media (max-width: 34rem) { .tiles { grid-template-columns: minmax(0, 1fr); } .topbar h1 { font-size: 1.1rem; } }
+  @media (prefers-reduced-motion: no-preference) { .aurora { animation: drift 18s ease-in-out infinite; } }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
   }
 </style>
 </head>
 <body>
 <a class="skip" href="#settings">К настройкам</a>
-<header class="masthead">
-  <div class="wrap">
-    <p class="masthead-brand">Devlarion</p>
-    <h1>Настройки сайта</h1>
-    <p class="intro">Изменения сохраняются в <code>content/site.json</code> и пересобирают страницы в <code>docs/</code>.</p>
-  </div>
-</header>
-<main id="settings" class="wrap" tabindex="-1">
-  <form hidden>
-    <nav class="section-nav" aria-label="Разделы настроек">
-      <ul>
-        <li><a href="#legal">Реквизиты</a></li>
-        <li><a href="#exchange">Курсы валют</a></li>
-        <li><a href="#rates">Цены</a></li>
-        <li><a href="#solutions">Готовые решения</a></li>
-        <li><a href="#referral">Рефералы</a></li>
-        <li><a href="#advanced">Команда и кейсы</a></li>
-      </ul>
+<div class="aurora" aria-hidden="true"></div>
+<div class="shell">
+  <aside class="side" id="side" aria-label="Навигация студии">
+    <div class="brand"><i>D</i><div>Devlarion<small>Студия</small></div></div>
+    <nav class="nav" aria-label="Разделы настроек">
+      <span class="nav-mark" aria-hidden="true"></span>
+      <a href="#overview" aria-current="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Обзор</a>
+      <a href="#offer"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.5 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/></svg>Предложение</a>
+      <a href="#pages"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>Тексты страниц</a>
+      <a href="#rates"><svg viewBox="0 0 24 24"><path d="M4 19V9m6 10V5m6 14v-7m4 7H3"/></svg>Цены</a>
+      <a href="#solutions"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg>Готовые решения</a>
+      <a href="#referral"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 19c.5-3 2.7-5 5.5-5s5 2 5.5 5M15 14.5c2.5 0 4.3 1.6 4.8 4"/></svg>Рефералы</a>
+      <a href="#exchange"><svg viewBox="0 0 24 24"><path d="M7 7h12l-3-3m3 3l-3 3M17 17H5l3-3m-3 3l3 3"/></svg>Курсы валют</a>
+      <a href="#legal"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 10h8M8 14h5"/></svg>Реквизиты</a>
+      <a href="#advanced"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c.5-3.5 3-5.5 6-5.5s5.500 2 6 5.5M17 8h4M19 6v4"/></svg>Команда и кейсы</a>
+      <a href="#publish"><svg viewBox="0 0 24 24"><path d="M12 16V4m0 0l-4 4m4-4l4 4M5 20h14"/></svg>Публикация</a>
     </nav>
-    <div>
-    <section id="legal" class="panel" aria-labelledby="legal-title">
-      <h2 id="legal-title">Реквизиты и портрет</h2>
-      <p class="muted">Реквизиты выводятся в подвале сайта. Фото загрузите в <code>docs/assets/</code> и укажите путь к файлу.</p>
-      <div class="columns">
-        <label><span>Имя по реквизитам</span><input name="legalName"></label>
-        <label><span>ИНН</span><input name="inn" inputmode="numeric" pattern="[0-9]{12}" maxlength="12"></label>
-        <label><span>ОГРНИП</span><input name="ogrnip" inputmode="numeric" pattern="[0-9]{15}" maxlength="15"></label>
-        <label><span>Фото основателя</span><input name="founderPhoto" placeholder="team/ilya.webp"></label>
-      </div>
-    </section>
-    <section id="exchange" class="panel" aria-labelledby="exchange-title">
-      <h2 id="exchange-title">Резервные курсы валют</h2>
-      <p class="muted">Укажите курс в рублях за указанное количество единиц и дату курса.</p>
-      <div class="columns">
-        <label><span>Дата</span><input name="date" type="date" required></label>
-        <label><span>За 1 BYN</span><input name="BYN" type="number" min="0.000001" step="any" required></label>
-        <label><span>За 100 KZT</span><input name="KZT" type="number" min="0.000001" step="any" required></label>
-        <label><span>За 1 USD</span><input name="USD" type="number" min="0.000001" step="any" required></label>
-        <label><span>За 1 EUR</span><input name="EUR" type="number" min="0.000001" step="any" required></label>
-      </div>
-    </section>
-    <section id="rates" class="panel" aria-labelledby="rates-title">
-      <h2 id="rates-title">Цены калькулятора</h2>
-      <p class="muted">Суммы в целых рублях. Для малого проекта введите стартовую цену, для среднего и крупного — диапазон, например 60000–120000. Пустое поле использует указанное в нём значение по умолчанию. Введите «индивидуально», если цена требует сметы.</p>
-      <p class="table-hint muted">Прокрутите таблицу вправо, чтобы увидеть цены для каждого масштаба.</p>
-      <div class="table-scroll" tabindex="0" role="region" aria-label="Таблица цен по услугам и масштабу проекта">
-        <table><thead><tr><th scope="col">Услуга</th><th scope="col">Малый</th><th scope="col">Средний</th><th scope="col">Крупный</th></tr></thead><tbody id="pricing"></tbody></table>
-      </div>
-    </section>
-    <section id="solutions" class="panel" aria-labelledby="ready-title">
-      <h2 id="ready-title">Статусы готовых решений</h2>
-      <p class="muted">Выберите статус, который нужно показать в каталоге.</p>
-      <div id="ready"></div>
-    </section>
-    <section id="referral" class="panel" aria-labelledby="referral-title">
-      <h2 id="referral-title">Реферальная программа</h2>
-      <div class="columns">
-        <label><span>Скидка каждой стороне, %</span><input name="percent" type="number" min="1" max="100" step="1" required></label>
-        <label><span>Срок действия, дней</span><input name="days" type="number" min="1" step="1" required></label>
-        <label><span>Лимит всех скидок, %</span><input name="cap" type="number" min="8" max="100" step="1" required></label>
-      </div>
-    </section>
-    <details id="advanced" class="panel">
-      <summary>Команда, достижения и кейсы</summary>
-      <p class="muted">Эти поля редактируются в JSON. Добавляйте участников после согласия на публикацию. Изменения применяются к указанному языку.</p>
-      <label><span>Участники команды</span><textarea name="team" spellcheck="false"></textarea></label>
-      <label><span>Достижения</span><textarea name="achievements" spellcheck="false"></textarea></label>
-      <label><span>Уточнения по кейсам</span><textarea name="caseOverrides" spellcheck="false"></textarea></label>
-      <p class="muted" id="project-ids"></p>
-      <details><summary>Примеры формата</summary>
-        <p>Команда</p>
-        <pre>[{"id":"designer","name":{"ru":"Имя","en":"Name"},"role":{"ru":"Дизайнер","en":"Designer"},"stack":["Figma"],"consent":"2026-11-20"}]</pre>
-        <p>Достижения</p>
-        <pre>[{"ru":{"title":"Название","result":"Результат"},"en":{"title":"Title","result":"Result"},"proof":"https://example.com/confirmation"}]</pre>
-        <p>Кейс</p>
-        <pre>{"orient-logic":{"ru":{"result":"Описание результата","curators":[{"person":"ilya","role":"Разработка"}],"stack":{"front":["Next.js"],"integrations":["Telegram"]}}}}</pre>
-      </details>
-    </details>
-    <button type="submit">Сохранить и пересобрать</button>
+    <div class="side-links">
+      <a href="/account/admin/">Клиенты и проекты <span aria-hidden="true">→</span></a>
+      <a href="/ru/" target="_blank" rel="noopener">Открыть сайт <span aria-hidden="true">↗</span></a>
+      <a href="/account/" target="_blank" rel="noopener">Кабинет клиента <span aria-hidden="true">↗</span></a>
+      <button type="button" class="theme-toggle" id="theme" aria-label="Сменить тему">Светлая / тёмная</button>
     </div>
-  </form>
-  <p id="status" role="status">Загружаем настройки…</p>
-</main>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <div class="titlerow">
+        <button type="button" class="menu-btn" id="menu" aria-label="Меню" aria-controls="side" aria-expanded="false">☰</button>
+        <h1>Управление сайтом</h1>
+      </div>
+      <div class="top-actions">
+        <span class="dirty" id="dirty"><i aria-hidden="true"></i><span>Нет изменений</span></span>
+        <button type="submit" form="editor" class="primary" id="save">Сохранить и пересобрать</button>
+      </div>
+    </header>
+    <main id="settings" tabindex="-1">
+      <p id="status" role="status">Загружаем настройки…</p>
+      <form id="editor" hidden>
+        <section id="overview" class="hero reveal" aria-labelledby="overview-title">
+          <p class="eyebrow">Центр управления</p>
+          <h2 id="overview-title">Всё, что видит клиент, настраивается здесь</h2>
+          <p>Цены, предложение, тексты страниц и статусы решений. Изменения сохраняются в <code>content/site.json</code>, страницы пересобираются автоматически, а прежняя версия при ошибке восстанавливается.</p>
+          <div class="tiles" id="tiles"></div>
+        </section>
+
+        <section id="offer" class="panel reveal" aria-labelledby="offer-title">
+          <h3 id="offer-title">Предложение и ограниченные места</h3>
+          <p class="muted">Плашка «Мы берём ограниченное число проектов в месяц» на главной и всех страницах. Включайте её только пока это правда. Пустое поле — стандартный текст.</p>
+          <label class="switch"><input type="checkbox" name="capEnabled"><span class="track" aria-hidden="true"></span><b>Показывать плашку</b></label>
+          <div class="lang-grid">
+            <fieldset><legend>Русский</legend>
+              <label><span>Заголовок</span><input name="capRuTitle" maxlength="400"></label>
+              <label><span>Текст</span><textarea class="prose" name="capRuText" maxlength="400"></textarea></label>
+            </fieldset>
+            <fieldset><legend>English</legend>
+              <label><span>Title</span><input name="capEnTitle" maxlength="400"></label>
+              <label><span>Text</span><textarea class="prose" name="capEnText" maxlength="400"></textarea></label>
+            </fieldset>
+          </div>
+        </section>
+
+        <section id="pages" class="panel reveal" aria-labelledby="pages-title">
+          <h3 id="pages-title">Финальный призыв на страницах</h3>
+          <p class="muted">Заголовок и текст последнего блока каждой страницы. Остальные тексты задаются в коде. Пустые поля используют стандартный текст.</p>
+          <div id="page-copy"></div>
+        </section>
+
+        <section id="rates" class="panel reveal" aria-labelledby="rates-title">
+          <h3 id="rates-title">Цены калькулятора</h3>
+          <p class="muted">Суммы в целых рублях. Для малого проекта введите стартовую цену, для среднего и крупного — диапазон, например <code>60000–120000</code>. Слово «индивидуально» убирает цену. Пустое поле — значение по умолчанию (оно видно как подсказка).</p>
+          <p class="table-hint muted">Прокрутите таблицу вправо, чтобы увидеть цены для каждого масштаба.</p>
+          <div class="table-scroll" tabindex="0" role="region" aria-label="Таблица цен по услугам и масштабу проекта">
+            <table><thead><tr><th scope="col">Услуга</th><th scope="col">Малый</th><th scope="col">Средний</th><th scope="col">Крупный</th></tr></thead><tbody id="pricing"></tbody></table>
+          </div>
+        </section>
+
+        <section id="solutions" class="panel reveal" aria-labelledby="ready-title">
+          <h3 id="ready-title">Статусы готовых решений</h3>
+          <p class="muted">Выберите статус, который нужно показать в каталоге.</p>
+          <div id="ready"></div>
+        </section>
+
+        <section id="referral" class="panel reveal" aria-labelledby="referral-title">
+          <h3 id="referral-title">Реферальная программа</h3>
+          <p class="muted">Скидка за рекомендацию действует для обеих сторон.</p>
+          <div class="columns">
+            <label><span>Скидка каждой стороне, %</span><input name="percent" type="number" min="1" max="100" step="1" required></label>
+            <label><span>Срок действия, дней</span><input name="days" type="number" min="1" step="1" required></label>
+            <label><span>Лимит всех скидок, %</span><input name="cap" type="number" min="8" max="100" step="1" required></label>
+          </div>
+        </section>
+
+        <section id="exchange" class="panel reveal" aria-labelledby="exchange-title">
+          <h3 id="exchange-title">Резервные курсы валют</h3>
+          <p class="muted">Курс в рублях за указанное количество единиц и дата курса. Используется, когда браузер не может получить актуальный курс.</p>
+          <div class="columns">
+            <label><span>Дата</span><input name="date" type="date" required></label>
+            <label><span>За 1 BYN</span><input name="BYN" type="number" min="0.000001" step="any" required></label>
+            <label><span>За 100 KZT</span><input name="KZT" type="number" min="0.000001" step="any" required></label>
+            <label><span>За 1 USD</span><input name="USD" type="number" min="0.000001" step="any" required></label>
+            <label><span>За 1 EUR</span><input name="EUR" type="number" min="0.000001" step="any" required></label>
+          </div>
+        </section>
+
+        <section id="legal" class="panel reveal" aria-labelledby="legal-title">
+          <h3 id="legal-title">Реквизиты и портрет</h3>
+          <p class="muted">Реквизиты выводятся в подвале сайта. Фото загрузите в <code>docs/assets/</code> и укажите путь к файлу.</p>
+          <div class="columns">
+            <label><span>Имя по реквизитам</span><input name="legalName"></label>
+            <label><span>ИНН</span><input name="inn" inputmode="numeric" pattern="[0-9]{12}" maxlength="12"></label>
+            <label><span>ОГРНИП</span><input name="ogrnip" inputmode="numeric" pattern="[0-9]{15}" maxlength="15"></label>
+            <label><span>Фото основателя</span><input name="founderPhoto" placeholder="team/ilya.webp"></label>
+          </div>
+        </section>
+
+        <details id="advanced" class="panel fold reveal">
+          <summary>Команда, достижения и кейсы <span class="badge">JSON</span></summary>
+          <div class="fold-body">
+            <p class="muted">Эти поля редактируются в JSON. Добавляйте участников после согласия на публикацию.</p>
+            <label><span>Участники команды</span><textarea name="team" spellcheck="false"></textarea></label>
+            <label><span>Достижения</span><textarea name="achievements" spellcheck="false"></textarea></label>
+            <label><span>Уточнения по кейсам</span><textarea name="caseOverrides" spellcheck="false"></textarea></label>
+            <p class="muted" id="project-ids"></p>
+            <details class="fold"><summary>Примеры формата</summary><div class="fold-body">
+              <p>Команда</p>
+              <pre>[{"id":"designer","name":{"ru":"Имя","en":"Name"},"role":{"ru":"Дизайнер","en":"Designer"},"stack":["Figma"],"consent":"2026-11-20"}]</pre>
+              <p>Достижения</p>
+              <pre>[{"ru":{"title":"Название","result":"Результат"},"en":{"title":"Title","result":"Result"},"proof":"https://example.com/confirmation"}]</pre>
+              <p>Кейс</p>
+              <pre>{"orient-logic":{"ru":{"result":"Описание результата","curators":[{"person":"ilya","role":"Разработка"}],"stack":{"front":["Next.js"],"integrations":["Telegram"]}}}}</pre>
+            </div></details>
+          </div>
+        </details>
+
+        <section id="publish" class="panel reveal" aria-labelledby="publish-title">
+          <h3 id="publish-title">Публикация</h3>
+          <p class="muted">Сохранение сразу пересобирает страницы. Если сборка завершится ошибкой, прежние настройки и страницы будут восстановлены автоматически.</p>
+          <div class="publish">
+            <button type="submit" class="primary" id="save2">Сохранить и пересобрать</button>
+            <button type="button" id="reset">Отменить несохранённое</button>
+          </div>
+        </section>
+      </form>
+    </main>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"><span class="ico"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.500"/></svg></span><span id="toast-text"></span></div>
 <script type="module" nonce="%%NONCE%%">
-  const form = document.querySelector('form');
+  const form = document.querySelector('#editor');
   const status = document.querySelector('#status');
   const pricing = document.querySelector('#pricing');
   const ready = document.querySelector('#ready');
-  const button = form.querySelector('button[type=submit]');
+  const pageCopy = document.querySelector('#page-copy');
+  const buttons = [document.querySelector('#save'), document.querySelector('#save2')];
+  const dirtyEl = document.querySelector('#dirty');
+  const toast = document.querySelector('#toast');
   const labels = {
     landing: 'Лендинг', web: 'Корпоративный сайт', shop: 'Интернет-магазин',
     automation: 'Telegram- или MAX-бот', assistant: 'ИИ-ассистент', mini: 'Мини-приложение',
     platform: 'Веб-приложение или CRM', mobile: 'Мобильное приложение', agents: 'Мультиагентная система',
     'private-ai': 'Развёртывание ИИ', 'fine-tuning': 'Дообучение модели', design: 'Редизайн',
-    security: 'Аудит и меры защиты', support: 'Поддержка в месяц', custom: 'Другая задача'
+    security: 'Аудит и меры защиты', support: 'Поддержка в месяц', custom: 'Другая задача', seo: 'SEO-оптимизация', geo: 'GEO — видимость в ИИ'
+  };
+  const pageNames = {
+    'self-employed/': 'Самозанятым и ИП', 'business/': 'Малому и среднему бизнесу', 'enterprise/': 'Крупным компаниям',
+    'why-website/': 'Зачем бизнесу сайт', 'seo/': 'SEO', 'geo/': 'GEO', 'support/': 'Сопровождение'
   };
   const tiers = {small: 'Малый', medium: 'Средний', large: 'Крупный'};
   const statuses = {ready: 'Готово', progress: 'В работе', soon: 'Скоро'};
   const advanced = {team: 'Команда', achievements: 'Достижения', caseOverrides: 'Кейсы'};
-  let revision;
-  let defaults;
-  let savedConfig;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let revision, defaults, savedConfig, snapshot = '', toastTimer;
 
   function announce(message, error = false) {
     status.textContent = message;
     status.toggleAttribute('data-error', error);
+  }
+
+  function notify(message, error = false) {
+    toast.querySelector('#toast-text').textContent = message;
+    toast.toggleAttribute('data-error', error);
+    toast.removeAttribute('data-show');
+    void toast.offsetWidth;
+    toast.setAttribute('data-show', '');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.removeAttribute('data-show'), error ? 6000 : 3200);
   }
 
   function rateLabel(rate) {
@@ -301,7 +369,7 @@
   }
 
   function readRate(input, tier) {
-    const value = input.value.toLowerCase().trim().replaceAll(/[\s\u00A0\u202F]/g, '');
+    const value = input.value.toLowerCase().trim().replaceAll(/[\s  ]/g, '');
     if (value === 'индивидуально') return null;
     if (tier === 'small' && /^[0-9]+$/.test(value)) return Number(value);
     if (tier !== 'small' && /^[0-9]+[–—-][0-9]+$/.test(value)) return value.split(/[–—-]/).map(Number);
@@ -349,6 +417,46 @@
     }
   }
 
+  function setPageCopy(sales) {
+    pageCopy.replaceChildren();
+    for (const [route, langs] of Object.entries(defaults.sales.pages)) {
+      const details = document.createElement('details');
+      details.className = 'fold';
+      const summary = document.createElement('summary');
+      summary.append(pageNames[route] || route);
+      const body = document.createElement('div');
+      body.className = 'fold-body';
+      const grid = document.createElement('div');
+      grid.className = 'lang-grid';
+      let overridden = 0;
+      for (const [lang, title] of [['ru', 'Русский'], ['en', 'English']]) {
+        const fs = document.createElement('fieldset');
+        const lg = document.createElement('legend');
+        lg.textContent = title;
+        fs.append(lg);
+        for (const [key, caption, area] of [['closeTitle', lang === 'ru' ? 'Заголовок' : 'Title', false], ['closeText', lang === 'ru' ? 'Текст' : 'Text', true]]) {
+          const label = document.createElement('label');
+          const span = document.createElement('span');
+          span.textContent = caption;
+          const field = document.createElement(area ? 'textarea' : 'input');
+          if (area) field.className = 'prose';
+          field.dataset.route = route; field.dataset.lang = lang; field.dataset.key = key;
+          field.maxLength = 600;
+          field.placeholder = langs[lang][key];
+          const current = sales?.pages?.[route]?.[lang]?.[key];
+          if (current) { field.value = current; overridden++; }
+          label.append(span, field);
+          fs.append(label);
+        }
+        grid.append(fs);
+      }
+      if (overridden) { const b = document.createElement('span'); b.className = 'badge'; b.textContent = 'изменено'; summary.append(b); }
+      body.append(grid);
+      details.append(summary, body);
+      pageCopy.append(details);
+    }
+  }
+
   function populate(config) {
     const fields = form.elements;
     for (const [name, value] of Object.entries({
@@ -356,8 +464,40 @@
       legalName: config.legal.name, founderPhoto: config.founderPhoto
     })) fields[name].value = value;
     for (const key of Object.keys(advanced)) fields[key].value = JSON.stringify(config[key], null, 2);
+    const cap = config.sales?.capacity || {};
+    fields.capEnabled.checked = cap.enabled !== false;
+    fields.capRuTitle.value = cap.ru?.title || '';
+    fields.capRuText.value = cap.ru?.text || '';
+    fields.capEnTitle.value = cap.en?.title || '';
+    fields.capEnText.value = cap.en?.text || '';
+    fields.capRuTitle.placeholder = defaults.sales.capacity.ru.title;
+    fields.capRuText.placeholder = defaults.sales.capacity.ru.text;
+    fields.capEnTitle.placeholder = defaults.sales.capacity.en.title;
+    fields.capEnText.placeholder = defaults.sales.capacity.en.text;
     setPrices(config.pricing);
     setReady(config.ready);
+    setPageCopy(config.sales);
+  }
+
+  function readSales() {
+    const fields = form.elements;
+    const sales = {};
+    const capacity = {};
+    if (!fields.capEnabled.checked) capacity.enabled = false;
+    for (const [lang, Lang] of [['ru', 'Ru'], ['en', 'En']]) {
+      const title = fields['cap' + Lang + 'Title'].value.trim();
+      const text = fields['cap' + Lang + 'Text'].value.trim();
+      if (title || text) capacity[lang] = {...(title && {title}), ...(text && {text})};
+    }
+    if (Object.keys(capacity).length) sales.capacity = capacity;
+    const pages = {};
+    for (const field of pageCopy.querySelectorAll('[data-route]')) {
+      const value = field.value.trim();
+      if (!value) continue;
+      ((pages[field.dataset.route] ??= {})[field.dataset.lang] ??= {})[field.dataset.key] = value;
+    }
+    if (Object.keys(pages).length) sales.pages = pages;
+    return Object.keys(sales).length ? sales : undefined;
   }
 
   function readForm() {
@@ -373,6 +513,9 @@
       founderPhoto: text('founderPhoto'),
       referral: {percent: number('percent'), days: number('days'), cap: number('cap')}
     };
+    delete config.sales;
+    const sales = readSales();
+    if (sales) config.sales = sales;
     for (const [name, label] of Object.entries(advanced)) {
       try {
         config[name] = JSON.parse(fields[name].value);
@@ -397,6 +540,49 @@
     return config;
   }
 
+  function formState() {
+    return JSON.stringify([...form.elements].filter(el => el.name || el.dataset.route || el.dataset.service || el.dataset.solution).map(el => el.type === 'checkbox' ? el.checked : el.value));
+  }
+
+  function markDirty() {
+    const dirty = formState() !== snapshot;
+    dirtyEl.toggleAttribute('data-dirty', dirty);
+    dirtyEl.querySelector('span').textContent = dirty ? 'Есть несохранённые изменения' : 'Нет изменений';
+  }
+
+  function countUp(el, to) {
+    if (reduce || !to) { el.textContent = to; return; }
+    const start = performance.now();
+    const tick = now => {
+      const k = Math.min(1, (now - start) / 900);
+      el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3)));
+      if (k < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  function renderTiles(config) {
+    const priceChanges = Object.values(config.pricing).reduce((n, tiers) => n + Object.keys(tiers).length, 0);
+    const pageChanges = Object.values(config.sales?.pages || {}).reduce((n, langs) => n + Object.values(langs).reduce((m, f) => m + Object.keys(f).length, 0), 0);
+    const items = [
+      ['Своих цен', priceChanges, 'из ' + Object.keys(defaults.pricing).length * 3 + ' значений калькулятора'],
+      ['Статусов решений', Object.keys(config.ready).length, 'отличаются от стандартных'],
+      ['Текстов страниц', pageChanges, 'заменено в финальных блоках'],
+      ['Реферальная скидка, %', config.referral.percent, 'каждой стороне, срок ' + config.referral.days + ' дн.'],
+    ];
+    const tiles = document.querySelector('#tiles');
+    tiles.replaceChildren(...items.map(([label, value, note]) => {
+      const tile = document.createElement('div');
+      tile.className = 'tile';
+      const small = document.createElement('small'); small.textContent = label;
+      const strong = document.createElement('strong'); strong.textContent = '0';
+      const span = document.createElement('span'); span.textContent = note;
+      tile.append(small, strong, span);
+      countUp(strong, value);
+      return tile;
+    }));
+  }
+
   async function api(options) {
     const response = await fetch('api/config', options);
     const payload = await response.json();
@@ -404,24 +590,74 @@
     return payload;
   }
 
+  function setBusy(busy) {
+    for (const b of buttons) { b.disabled = busy; b.toggleAttribute('data-busy', busy); }
+  }
+
+  // --- боковая навигация: подсветка текущего раздела, скользящая метка, мобильное меню ---
+  const nav = document.querySelector('.nav');
+  const mark = nav.querySelector('.nav-mark');
+  const links = [...nav.querySelectorAll('a')];
+  function moveMark(link) {
+    mark.style.setProperty('--y', link.offsetTop + 'px');
+    for (const a of links) a.toggleAttribute('aria-current', a === link) ;
+    for (const a of links) a.setAttribute('aria-current', String(a === link));
+  }
+  moveMark(links[0]);
+  const side = document.querySelector('#side');
+  const menu = document.querySelector('#menu');
+  menu.addEventListener('click', () => { const open = !side.hasAttribute('data-open'); side.toggleAttribute('data-open', open); menu.setAttribute('aria-expanded', String(open)); });
+  links.forEach(a => a.addEventListener('click', () => { side.removeAttribute('data-open'); menu.setAttribute('aria-expanded', 'false'); }));
+  const sections = links.map(a => document.querySelector(a.getAttribute('href')));
+  const spy = new IntersectionObserver(entries => {
+    for (const entry of entries) if (entry.isIntersecting) moveMark(links[sections.indexOf(entry.target)]);
+  }, {rootMargin: '-30% 0px -60% 0px'});
+  const reveal = new IntersectionObserver(entries => {
+    for (const entry of entries) if (entry.isIntersecting) { entry.target.classList.add('in'); reveal.unobserve(entry.target); }
+  }, {rootMargin: '0px 0px -8% 0px'});
+  function observe() {
+    sections.forEach(s => s && spy.observe(s));
+    document.querySelectorAll('.reveal').forEach(el => reveal.observe(el));
+  }
+
+  const themeBtn = document.querySelector('#theme');
+  themeBtn.addEventListener('click', () => {
+    const light = document.documentElement.dataset.theme !== 'light';
+    document.documentElement.dataset.theme = light ? 'light' : '';
+    if (!light) document.documentElement.removeAttribute('data-theme');
+  });
+
   try {
     const payload = await api();
     ({revision, defaults, config: savedConfig} = payload);
     document.querySelector('#project-ids').textContent = 'Идентификаторы кейсов — '
       + payload.projects.map(({name, id}) => name + ' (' + id + ')').join(', ') + '.';
     populate(savedConfig);
+    renderTiles(savedConfig);
     form.hidden = false;
+    snapshot = formState();
     announce('');
+    observe();
   } catch (error) {
     announce(error.message, true);
   }
 
+  form.addEventListener('input', markDirty);
+  form.addEventListener('change', markDirty);
+  document.querySelector('#reset').addEventListener('click', () => {
+    populate(savedConfig);
+    snapshot = formState();
+    markDirty();
+    notify('Несохранённые изменения отменены');
+  });
+  window.addEventListener('beforeunload', event => { if (dirtyEl.hasAttribute('data-dirty')) { event.preventDefault(); event.returnValue = ''; } });
+
   form.addEventListener('submit', async event => {
     event.preventDefault();
-    if (button.disabled) return;
+    if (buttons[0].disabled) return;
     try {
       const config = readForm();
-      button.disabled = true;
+      setBusy(true);
       announce('Сохраняем настройки и собираем сайт…');
       const payload = await api({
         method: 'POST',
@@ -429,11 +665,17 @@
         body: JSON.stringify({revision, config})
       });
       ({revision, config: savedConfig} = payload);
-      announce('Настройки сохранены. Страницы в docs/ пересобраны.');
+      populate(savedConfig);
+      renderTiles(savedConfig);
+      snapshot = formState();
+      markDirty();
+      announce('');
+      notify('Сохранено. Страницы пересобраны.');
     } catch (error) {
       announce(error.message, true);
+      notify(error.message, true);
     } finally {
-      button.disabled = false;
+      setBusy(false);
     }
   });
 </script>

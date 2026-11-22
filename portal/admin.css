@@ -72,3 +72,16 @@
   .ad-summary div { flex:1 1 0; min-width:min(5.4rem,100%); }
   .ad-side .ad-list { max-height:13rem; }
 }
+
+/* Движение и глубина */
+.ad-summary div { transition:transform .25s, border-color .25s, box-shadow .25s; animation:ad-rise .5s cubic-bezier(.2,.8,.2,1) both; }
+.ad-summary div:nth-child(2) { animation-delay:.06s; } .ad-summary div:nth-child(3) { animation-delay:.12s; } .ad-summary div:nth-child(4) { animation-delay:.18s; } .ad-summary div:nth-child(n+5) { animation-delay:.24s; }
+.ad-summary div:hover { transform:translateY(-3px); border-color:var(--accent); box-shadow:0 12px 28px -16px var(--accent); }
+.ad-client-list,.ad-workspace > .ac-card,.ad-side > .ac-card { animation:ad-rise .5s cubic-bezier(.2,.8,.2,1) both; }
+.ad-workspace > .ac-card:nth-child(2) { animation-delay:.07s; } .ad-workspace > .ac-card:nth-child(3) { animation-delay:.14s; }
+.ad-list button { transition:background-color .14s ease,border-color .14s ease,transform .18s ease; }
+.ad-list button:hover { transform:translateX(3px); }
+.ad-list li { animation:ad-rise .4s ease-out both; }
+.ad-list li:nth-child(2) { animation-delay:.04s; } .ad-list li:nth-child(3) { animation-delay:.08s; } .ad-list li:nth-child(4) { animation-delay:.12s; } .ad-list li:nth-child(n+5) { animation-delay:.16s; }
+@keyframes ad-rise { from { opacity:0; transform:translateY(10px); } }
+@media (prefers-reduced-motion:reduce) { .ad-summary div,.ad-client-list,.ad-workspace > .ac-card,.ad-side > .ac-card,.ad-list li { animation:none; } .ad-summary div:hover,.ad-list button:hover { transform:none; } }

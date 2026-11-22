@@ -8,6 +8,7 @@ import { estimator } from '../content/pricing.mjs';
 import { cases } from '../content/work.mjs';
 import { readySolutions } from '../content/solutions.mjs';
 import { validateSite } from './validate-site.mjs';
+import { sell, shared } from '../content/persuasion.mjs';
 
 const host = '127.0.0.1';
 const port = Number(process.env.DEVLARION_ADMIN_PORT || 4174);
@@ -146,7 +147,9 @@ const server = createServer(async (request, response) => {
       json(response, 200, {
         config,
         revision,
-        defaults: {pricing: estimator, ready: readySolutions.map(({id, status, ru}) => ({id, status, name: ru[0]}))},
+        defaults: {pricing: estimator, ready: readySolutions.map(({id, status, ru}) => ({id, status, name: ru[0]})),
+          sales: {capacity: {ru: {title: shared.ru.capacityTitle, text: shared.ru.capacityText}, en: {title: shared.en.capacityTitle, text: shared.en.capacityText}},
+            pages: Object.fromEntries(Object.entries(sell).map(([route, v]) => [route, {ru: {closeTitle: v.ru.closeTitle, closeText: v.ru.closeText}, en: {closeTitle: v.en.closeTitle, closeText: v.en.closeText}}]))}},
         projects: cases.ru.map(({id, name}) => ({id, name}))
       });
       return;

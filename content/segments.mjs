@@ -569,7 +569,9 @@ function renderShifts(lang, route) {
 }
 
 function renderCapacity(lang, page, ctx) {
-  const t = shared[lang];
+  const o = ctx.sales?.capacity;
+  if (o?.enabled === false) return '';
+  const t = { ...shared[lang], capacityTitle: o?.[lang]?.title || shared[lang].capacityTitle, capacityText: o?.[lang]?.text || shared[lang].capacityText };
   return `<aside class="wrap capacity" aria-label="${esc(t.capacityTitle)}"><div class="capacity-pulse" aria-hidden="true"><i></i></div>
     <div><strong>${esc(t.capacityTitle)}</strong><p>${esc(t.capacityText)}</p></div>
     <a class="button" href="${telegramLink(lang, ctx, page[lang].label, t.capacityCta)}">${esc(t.capacityCta)}</a></aside>`;
@@ -590,8 +592,10 @@ function renderCross(lang, route, ctx) {
 }
 
 function renderClose(lang, page, ctx) {
-  const copy = sell[page.route]?.[lang];
-  if (!copy) return renderContact(lang, page, ctx);
+  const base = sell[page.route]?.[lang];
+  if (!base) return renderContact(lang, page, ctx);
+  const o = ctx.sales?.pages?.[page.route]?.[lang];
+  const copy = { ...base, closeTitle: o?.closeTitle || base.closeTitle, closeText: o?.closeText || base.closeText };
   return `<section class="section wrap audience-section audience-contact audience-close"><h2>${esc(copy.closeTitle)}</h2><p>${esc(copy.closeText)}</p>
     <div class="actions"><a class="button" href="${telegramLink(lang, ctx, page[lang].label)}">${pick(lang, 'Написать в Telegram', 'Message us on Telegram')}</a>
     ${estimateLink(lang, ctx.home, page.estimateServices, page.estimateTier ?? 'small', pick(lang, 'Рассчитать стоимость', 'Estimate the cost')).replace('class="button"', 'class="ghost"')}</div></section>`;
