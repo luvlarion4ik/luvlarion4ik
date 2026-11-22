@@ -622,7 +622,7 @@ const META = {
   'self-employed/': ['от 20 000 ₽ · 5–7 дней', 'from RUB 20,000 · 5–7 days'], 'business/': ['от 55 000 ₽ · 2–6 недель', 'from RUB 55,000 · 2–6 weeks'], 'enterprise/': ['пилот от 220 000 ₽', 'pilot from RUB 220,000'],
   'website/': ['от 25 000 ₽ · от 1 недели', 'from RUB 25,000 · 1+ week'], 'telegram-bot/': ['от 20 000 ₽ · 5–7 дней', 'from RUB 20,000 · 5–7 days'], 'solutions/': ['быстрее и дешевле', 'faster and cheaper'], 'bundle/': ['скидка за объём', 'volume discount'],
   'ai-assistant/': ['от 55 000 ₽ · 2–4 недели', 'from RUB 55,000 · 2–4 weeks'], 'private-ai/': ['от 30 000 ₽', 'from RUB 30,000'], 'documents/': ['от 50 000 ₽ · 1–6 недель', 'from RUB 50,000 · 1–6 weeks'], 'vision/': ['от 150 000 ₽ · 4–10 недель', 'from RUB 150,000 · 4–10 weeks'], 'ml/': ['от 45 000 ₽ · 1–6 недель', 'from RUB 45,000 · 1–6 weeks'], 'scenarios/': ['12 сценариев + наши проекты', '12 scenarios + our projects'],
-  'compute/': ['калькулятор и 3D', 'calculator and 3D'], 'hardware/': ['от 715 000 ₽', 'from RUB 715,000'], 'import/': ['по коммерческому предложению', 'quoted'], 'shop/': ['цены и корзина', 'prices and basket'],
+  'compute/': ['калькулятор и 3D', 'calculator and 3D'], 'hardware/': ['от 87 900 ₽', 'from RUB 87,900'], 'import/': ['по коммерческому предложению', 'quoted'], 'shop/': ['цены и корзина', 'prices and basket'],
   'why-website/': ['от 25 000 ₽', 'from RUB 25,000'], 'seo/': ['от 15 000 ₽ · 3–5 дней', 'from RUB 15,000 · 3–5 days'], 'geo/': ['от 20 000 ₽ · 5–7 дней', 'from RUB 20,000 · 5–7 days'], 'support/': ['от 8 000 ₽/мес.', 'from RUB 8,000/month'], 'outsourcing/': ['от 15 000 ₽/мес.', 'from RUB 15,000/month'],
 };
 function serviceTree(lang, ctx) {

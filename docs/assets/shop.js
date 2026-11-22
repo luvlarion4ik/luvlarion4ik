@@ -18,8 +18,18 @@
   const fmt = rub => new Intl.NumberFormat(locale, { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(rub);
   let filter = 'all';
   let state = {};
+  // Позиции с конфигурациями (Mac mini, Mac Studio) лежат в корзине под ключом «id:конфигурация».
+  const cfgsOf = el => el._cfgs ??= JSON.parse(el.dataset.configs || 'null');
+  const keyOf = el => el.dataset.cfg ? el.dataset.id + ':' + el.dataset.cfg : el.dataset.id;
+  function info(line) {
+    const [id, k] = line.split(':'), el = byId[id];
+    if (!el) return null;
+    if (!k) return el.dataset.configs ? null : { title: el.dataset.title, rub: +el.dataset.rub || 0, unit: el.dataset.unit };
+    const c = cfgsOf(el)?.find(x => x.k === k);
+    return c ? { title: c.title, rub: c.rub, unit: el.dataset.unit } : null;
+  }
   try { state = JSON.parse(localStorage.getItem(key) || '{}'); } catch {}
-  for (const id of Object.keys(state)) if (!byId[id] || !(state[id] > 0)) delete state[id];
+  for (const id of Object.keys(state)) if (!info(id) || !(state[id] > 0)) delete state[id];
 
   const save = () => { try { localStorage.setItem(key, JSON.stringify(state)); } catch {} };
   const qty = () => Object.values(state).reduce((a, b) => a + b, 0);
@@ -30,7 +40,7 @@
     count.textContent = n;
     fab.toggleAttribute('data-has', n > 0);
     for (const el of items) {
-      const q = state[el.dataset.id] || 0;
+      const q = state[keyOf(el)] || 0;
       el.toggleAttribute('data-in-cart', q > 0);
       el.querySelector('[data-qty]').hidden = !q;
       el.querySelector('[data-count]').textContent = q;
@@ -38,13 +48,13 @@
     }
     const ids = Object.keys(state);
     list.replaceChildren(...ids.map(id => {
-      const el = byId[id], q = state[id], rub = +el.dataset.rub || 0;
+      const it = info(id), q = state[id], rub = it.rub;
       const li = document.createElement('li');
-      const name = document.createElement('strong'); name.textContent = el.dataset.title;
+      const name = document.createElement('strong'); name.textContent = it.title;
       const price = document.createElement('small');
-      price.textContent = rub ? t.from + ' ' + fmt(rub * q) + unitText(el.dataset.unit) + (q > 1 ? ' · ' + q + ' × ' + fmt(rub) : '') : t.request;
+      price.textContent = rub ? t.from + ' ' + fmt(rub * q) + unitText(it.unit) + (q > 1 ? ' · ' + q + ' × ' + fmt(rub) : '') : t.request;
       const ctrl = document.createElement('div'); ctrl.className = 'shop-line-qty';
-      const mk = (txt, label, fn) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = txt; b.setAttribute('aria-label', label + ': ' + el.dataset.title); b.addEventListener('click', fn); return b; };
+      const mk = (txt, label, fn) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = txt; b.setAttribute('aria-label', label + ': ' + it.title); b.addEventListener('click', fn); return b; };
       const out = document.createElement('output'); out.textContent = q;
       ctrl.append(mk('−', '−1', () => change(id, -1)), out, mk('+', '+1', () => change(id, 1)), mk('×', t.remove, () => change(id, -q)));
       li.append(name, price, ctrl);
@@ -53,10 +63,10 @@
     if (!ids.length) { const li = document.createElement('li'); li.className = 'shop-empty'; li.textContent = t.empty; list.append(li); }
     const sums = { once: 0, month: 0, hour: 0 };
     let request = false;
-    for (const id of ids) { const el = byId[id], rub = +el.dataset.rub; if (!rub) { request = true; continue; } sums[el.dataset.unit === 'hour' ? 'hour' : el.dataset.unit === 'month' ? 'month' : 'once'] += rub * state[id]; }
+    for (const id of ids) { const it = info(id), rub = it.rub; if (!rub) { request = true; continue; } sums[it.unit === 'hour' ? 'hour' : it.unit === 'month' ? 'month' : 'once'] += rub * state[id]; }
     total.replaceChildren(...[[t.total, sums.once, ''], [t.monthly, sums.month, ' ' + t.month], [t.hourly, sums.hour, ' ' + t.hour]].filter(([, v]) => v).map(([label, v, u]) => { const p = document.createElement('p'); p.innerHTML = '<span></span><b></b>'; p.firstChild.textContent = label; p.lastChild.textContent = fmt(v) + u; return p; }));
     if (request) { const p = document.createElement('p'); p.className = 'shop-total-note'; p.textContent = t.onRequest; total.append(p); }
-    const text = t.greeting + '\n' + ids.map(id => '• ' + byId[id].dataset.title + (state[id] > 1 ? ' × ' + state[id] : '')).join('\n');
+    const text = t.greeting + '\n' + ids.map(id => '• ' + info(id).title + (state[id] > 1 ? ' × ' + state[id] : '')).join('\n');
     send.href = tg + (tg.includes('?') ? '&' : '?') + 'text=' + encodeURIComponent(text);
     send.toggleAttribute('aria-disabled', !ids.length);
   }
@@ -88,6 +98,32 @@
     save(); render();
   }
 
+  function select(el, k) {
+    const c = cfgsOf(el).find(x => x.k === k);
+    if (!c) return;
+    el.dataset.cfg = k; el.dataset.rub = c.rub; el.dataset.title = c.title;
+    for (const b of el.querySelectorAll('[data-chip]')) b.setAttribute('aria-pressed', String(b.dataset.chip === c.chip));
+    for (const b of el.querySelectorAll('[data-pick-cfg]')) {
+      const other = cfgsOf(el).find(x => x.k === b.dataset.pickCfg);
+      b.hidden = other.chip !== c.chip;
+      b.setAttribute('aria-pressed', String(b.dataset.pickCfg === k));
+    }
+    const note = el.querySelector('[data-chip-note]');
+    if (note) note.textContent = JSON.parse(el.dataset.chips)[c.chip];
+    const market = el.querySelector('.shop-market');
+    if (market) market.textContent = c.market;
+    const span = el.querySelector('.shop-foot [data-region-price]');
+    if (span) {
+      span.dataset.regionPrice = c.rub;
+      const r = window.devlarionRegion;
+      span.textContent = r && r.currency && r.rate && r.currency !== 'RUB'
+        ? '≈ ' + new Intl.NumberFormat(t.lang === 'ru' ? 'ru-RU' : 'en-US', { style: 'currency', currency: r.currency, maximumFractionDigits: 0 }).format(c.rub * r.rate)
+        : fmt(c.rub);
+    }
+    render();
+    if (sort.value !== 'default') apply();
+  }
+
   function apply() {
     const q = search.value.trim().toLowerCase();
     let shown = 0;
@@ -115,9 +151,17 @@
 
   shop.addEventListener('click', event => {
     const item = event.target.closest('.shop-item');
-    if (event.target.closest('[data-add]')) change(item.dataset.id, 1, event.target.closest('[data-add]'));
-    else if (event.target.closest('[data-inc]')) change(item.dataset.id, 1);
-    else if (event.target.closest('[data-dec]')) change(item.dataset.id, -1);
+    if (event.target.closest('[data-add]')) change(keyOf(item), 1, event.target.closest('[data-add]'));
+    else if (event.target.closest('[data-inc]')) change(keyOf(item), 1);
+    else if (event.target.closest('[data-dec]')) change(keyOf(item), -1);
+    const chip = event.target.closest('[data-chip]'), pickCfg = event.target.closest('[data-pick-cfg]');
+    if (chip && item) {
+      // Новый чип: оставляем ту же память и SSD, если такая есть, иначе первую конфигурацию чипа.
+      const list = cfgsOf(item), now = list.find(c => c.k === item.dataset.cfg);
+      const same = list.filter(c => c.chip === chip.dataset.chip);
+      const label = c => c.title.slice(c.title.indexOf(' · '));
+      select(item, (same.find(c => label(c) === label(now)) || same[0]).k);
+    } else if (pickCfg && item) select(item, pickCfg.dataset.pickCfg);
     const f = event.target.closest('[data-filter]');
     if (f) {
       filter = f.dataset.filter;
@@ -146,7 +190,7 @@
   const saveBtn = $('[data-shop-save]'), status = $('[data-shop-status]');
   saveBtn.addEventListener('click', async () => {
     if (!qty()) { status.textContent = t.empty; return; }
-    const lines = Object.keys(state).map(id => '• ' + byId[id].dataset.title + (state[id] > 1 ? ' × ' + state[id] : '')).join('\n');
+    const lines = Object.keys(state).map(id => '• ' + info(id).title + (state[id] > 1 ? ' × ' + state[id] : '')).join('\n');
     saveBtn.disabled = true; status.textContent = '';
     try {
       const r = await fetch('/account/api/requests', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic: 'Заказ из магазина', text: 'Состав заказа:\n' + lines }) });

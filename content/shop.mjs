@@ -1,4 +1,4 @@
-// Магазин Devlarion: услуги + железо NVIDIA (покупка под заказ и аренда).
+// Магазин Devlarion: услуги + железо NVIDIA и Apple, хранение и сеть (покупка под заказ и аренда).
 // Цены железа — чуть выше средних по рынку РФ (ноябрь 2026), потому что включают нашу настройку.
 import { esc } from './site.mjs';
 import { packageStartingPrice } from './pricing.mjs';
@@ -58,6 +58,59 @@ export const hardware = [
     more: { ru: [['Для кого', 'Отдел, которому мало одного Spark: большие модели или несколько пользователей.'], ['Какие модели потянет', 'До ~405 млрд параметров в FP4 при распределённом inference.'], ['Связка', 'Два устройства соединяются напрямую через ConnectX-7 (200 Гбит/с).'], ['Что делаем мы', 'Сборка кластера, распределённый inference, балансировка, мониторинг.']], en: [['Who it is for', 'A team that outgrows one Spark: large models or several users.'], ['Models it runs', 'Up to ~405B parameters in FP4 with distributed inference.'], ['Link', 'The two units connect directly over ConnectX-7 (200 Gb/s).'], ['What we do', 'Cluster assembly, distributed inference, load balancing, monitoring.']] },
     ru: ['Кластер из двух DGX Spark', 'Два Spark, связанные 200-гигабитной сетью: модели до ~400 млрд параметров.', ['2× GB10', '256 ГБ памяти суммарно', 'Связка ConnectX-7', 'Настроенный распределённый inference']],
     en: ['Two-unit DGX Spark cluster', 'Two Sparks linked over 200 Gb networking: models up to ~400B parameters.', ['2× GB10', '256 GB memory in total', 'ConnectX-7 link', 'Distributed inference set up']] },
+  // Apple. Линейка на 22.11.2026: Mac mini на M6 и M5 Pro (анонс 25.08.2026, продажи с 22.09.2026),
+  // M4 и M4 Pro сняты с производства 25.08.2026 — в каталог не берём. Отдельного Mac mini на «простом» M5 нет.
+  // configs[].market — минимум и максимум открытых цен за эту конфигурацию у российских продавцов, rub — наша цена.
+  { id: 'mac-mini', mode: 'buy', art: 'spark-dark',
+    sources: { date: '2026-11-22', urls: [
+      'https://re-store.ru/kompyutery-noutbuki/apple/mac-mini/ — M6 16/256 129 990 ₽, 16/512 154 990 ₽, 24/512 179 990 ₽; M5 Pro 24/512 249 990 ₽',
+      'https://www.dns-shop.ru/product/52672b21a61896f9/mini-pk-apple-mac-mini-m5-pro-mhqn4/ — M5 Pro 24/512 245 999 ₽',
+      'https://hi-tech.mail.ru/news/154244-raskryty-rossijskie-ceny-novyh-mac-vplot-do-875-tys-rublej/ — DNS/«СДЭК Шоппинг» на старте: M6 141 999 / 170 999 / 199 999 ₽, M5 Pro 24/512 271 999 ₽',
+      'https://applegod.ru/shop/nastolnyy-kompyuter-apple-mac-mini-m6-12-yader-tsp-12-yader-gp-16-gb-256-gb-ssd-serebristyy-mhqk4/ — M6 16/256 77 890 ₽',
+      'https://store-apple.msk.ru/mac/mac-mini/mac-mini-m6/ — M6 24/512 158 779 ₽',
+      'https://apple-store.net.ru/mac/apple-mac-mini/mac-mini-m5-pro/ — M5 Pro 24/512 158 552 ₽, 48/512 254 507–255 739 ₽, 64 ГБ/1 ТБ 340 413–391 551 ₽',
+      'https://store-apple.msk.ru/mac/mac-mini/mac-mini-m5-pro/ — M5 Pro 48/512 255 616 ₽, 64 ГБ/1 ТБ 340 249 ₽',
+      'https://i-ray.ru/mac_mini — M5 Pro 48/512 254 999 ₽',
+      'https://www.apple.com/newsroom/2026/09/the-new-mac-mini-and-mac-studio-are-available-today/ — справочно: M6 от $899, M5 Pro от $1 699',
+    ] },
+    chips: {
+      M6: { ru: 'M6: 12 ядер CPU, 12 ядер GPU, до 32 ГБ памяти, 170 ГБ/с. Модели до ~14 млрд параметров в 4 бит.', en: 'M6: 12-core CPU, 12-core GPU, up to 32 GB, 170 GB/s. Models up to ~14B parameters in 4-bit.' },
+      'M5 Pro': { ru: 'M5 Pro: до 18 ядер CPU и 20 ядер GPU, до 64 ГБ памяти, 307 ГБ/с, Thunderbolt 5. С 64 ГБ — модели до ~70 млрд в 4 бит.', en: 'M5 Pro: up to 18-core CPU and 20-core GPU, up to 64 GB, 307 GB/s, Thunderbolt 5. With 64 GB: models up to ~70B in 4-bit.' },
+    },
+    configs: [
+      { k: 'm6-16-256', chip: 'M6', ru: '16 ГБ · SSD 256 ГБ', en: '16 GB · 256 GB SSD', rub: 134900, market: [77890, 141999] },
+      { k: 'm6-16-512', chip: 'M6', ru: '16 ГБ · SSD 512 ГБ', en: '16 GB · 512 GB SSD', rub: 164900, market: [154990, 170999] },
+      { k: 'm6-24-512', chip: 'M6', ru: '24 ГБ · SSD 512 ГБ', en: '24 GB · 512 GB SSD', rub: 189900, market: [158779, 199999] },
+      { k: 'm5p-24-512', chip: 'M5 Pro', ru: '24 ГБ · SSD 512 ГБ', en: '24 GB · 512 GB SSD', rub: 244900, market: [158552, 249990] },
+      { k: 'm5p-48-512', chip: 'M5 Pro', ru: '48 ГБ · SSD 512 ГБ', en: '48 GB · 512 GB SSD', rub: 259900, market: [254507, 255739] },
+      { k: 'm5p-64-1t', chip: 'M5 Pro', ru: '64 ГБ · SSD 1 ТБ · 18/20 ядер', en: '64 GB · 1 TB SSD · 18/20 cores', rub: 384900, market: [340249, 391551] },
+    ],
+    more: { ru: [['Для кого', 'Небольшой офис или отдел: ИИ-помощник по документам, расшифровка встреч, поиск по базе знаний — без облака и без серверной.'], ['Какую версию брать', 'M6 — для одного-двух сотрудников и моделей до ~14 млрд параметров. M5 Pro с 48–64 ГБ — для команды и моделей уровня 30–70 млрд в 4 бит.'], ['Связка', 'Несколько Mac mini на M5 Pro объединяются через Thunderbolt 5 в кластер; соберём его с 10-гигабитным коммутатором.'], ['Что делаем мы', 'Поставка, настройка macOS, Ollama/LM Studio/MLX, развёртывание модели и OpenAI-совместимого API, подключение к вашим системам, гарантия на нашу работу.']], en: [['Who it is for', 'A small office or team: a document assistant, meeting transcription, knowledge-base search, with no cloud and no server room.'], ['Which version', 'M6 for one or two people and models up to ~14B. M5 Pro with 48–64 GB for a team and 30–70B models in 4-bit.'], ['Linking', 'Several M5 Pro Mac minis can be clustered over Thunderbolt 5; we set it up with a 10 Gb switch.'], ['What we do', 'Supply, macOS set-up, Ollama/LM Studio/MLX, model and OpenAI-compatible API deployment, integration, warranty on our work.']] },
+    ru: ['Apple Mac mini', 'Компактный и тихий компьютер для локальных ИИ-моделей: помощник по документам и базе знаний прямо в офисе.', ['Чип M6 или M5 Pro', 'Единая память 16–64 ГБ', 'Ethernet 2,5 Гбит/с, Wi‑Fi 7', 'Модель и API настроены']],
+    en: ['Apple Mac mini', 'A compact, quiet computer for local AI models: a document and knowledge-base assistant right in the office.', ['M6 or M5 Pro chip', '16–64 GB unified memory', '2.5 Gb Ethernet, Wi‑Fi 7', 'Model and API set up']] },
+  { id: 'mac-studio', mode: 'buy', art: 'spark-dark',
+    sources: { date: '2026-11-22', urls: [
+      'https://re-store.ru/kompyutery-noutbuki/apple/mac-studio/ — M5 Max 36/512 399 990 ₽, M5 Ultra 96 ГБ/1 ТБ 899 990 ₽',
+      'https://hi-tech.mail.ru/news/154244-raskryty-rossijskie-ceny-novyh-mac-vplot-do-875-tys-rublej/ — DNS/«СДЭК Шоппинг» на старте: M5 Max 36/512 388 999 ₽, M5 Ultra 96 ГБ/1 ТБ 874 999 ₽',
+      'https://apple-store.net.ru/mac/mac-studio/mac-studio-m5-max/ — M5 Max 36/512 261 963 ₽',
+      'https://rifastore.ru/categories/mac-studio-m5-max — M5 Max 128 ГБ/1 ТБ 667 000 ₽',
+      'https://t-bazar.ru/catalog/mac-apple/apple-mac-studio/mac-studio-m5-max-128gb-1tb-18cpu-40gpu/ — 693 600 ₽; https://www.obstore.ru/catalog/mac-studio/ — 700 000 ₽',
+      'https://my-apple-store.ru/macbook/mac-studio-m5-max-2026/ — M5 Max 128 ГБ/1 ТБ 730 000 ₽',
+      'https://my-apple-store.ru/macbook/mac-studio-m5-ultra-2026/ — M5 Ultra 96 ГБ/1 ТБ 853 000 ₽; https://apple-market.ru/mac/mac-studio/ — 879 890 ₽',
+      'https://www.apple.com/newsroom/2026/08/apple-introduces-new-mac-studio-with-m5-max-and-m5-ultra/ — справочно: M5 Max от $2 499, M5 Ultra от $5 499, до 512 ГБ памяти',
+    ] },
+    chips: {
+      'M5 Max': { ru: 'M5 Max: 18 ядер CPU, до 40 ядер GPU, до 128 ГБ памяти, до 614 ГБ/с. Со 128 ГБ — модели до ~120 млрд параметров в 4 бит.', en: 'M5 Max: 18-core CPU, up to 40-core GPU, up to 128 GB, up to 614 GB/s. With 128 GB: models up to ~120B parameters in 4-bit.' },
+      'M5 Ultra': { ru: 'M5 Ultra: до 36 ядер CPU и 80 ядер GPU, 1,2 ТБ/с. Версии с 256–512 ГБ памяти — по запросу.', en: 'M5 Ultra: up to 36-core CPU and 80-core GPU, 1.2 TB/s. 256–512 GB versions on request.' },
+    },
+    configs: [
+      { k: 'max-36-512', chip: 'M5 Max', ru: '36 ГБ · SSD 512 ГБ · 32 ядра GPU', en: '36 GB · 512 GB SSD · 32-core GPU', rub: 389900, market: [261963, 399990] },
+      { k: 'max-128-1t', chip: 'M5 Max', ru: '128 ГБ · SSD 1 ТБ · 40 ядер GPU', en: '128 GB · 1 TB SSD · 40-core GPU', rub: 724900, market: [667000, 730000] },
+      { k: 'ultra-96-1t', chip: 'M5 Ultra', ru: '96 ГБ · SSD 1 ТБ · 30/64 ядра', en: '96 GB · 1 TB SSD · 30/64 cores', rub: 894900, market: [853000, 899990] },
+    ],
+    more: { ru: [['Для кого', 'Отдел, которому мало Mac mini: модели на десятки миллиардов параметров, несколько пользователей, генерация изображений.'], ['Какие модели потянет', 'M5 Max со 128 ГБ — модели до ~120 млрд параметров в 4 бит; M5 Ultra — крупнее и быстрее, особенно на длинном контексте.'], ['Связка', 'Несколько Mac Studio объединяются в кластер через Thunderbolt 5 с RDMA — так делают для самых больших открытых моделей.'], ['Что делаем мы', 'Поставка, настройка, развёртывание модели и API, подключение к RAG и вашим системам, мониторинг, гарантия на нашу работу.']], en: [['Who it is for', 'A team that outgrows a Mac mini: tens-of-billions-parameter models, several users, image generation.'], ['Models it runs', 'M5 Max with 128 GB: models up to ~120B in 4-bit; M5 Ultra: bigger and faster, especially with long context.'], ['Linking', 'Several Mac Studios can be clustered over Thunderbolt 5 with RDMA for the largest open models.'], ['What we do', 'Supply, set-up, model and API deployment, RAG and system integration, monitoring, warranty on our work.']] },
+    ru: ['Apple Mac Studio', 'Настольная станция с большой единой памятью: крупные открытые модели локально, тихо и без серверной.', ['Чип M5 Max или M5 Ultra', 'Единая память 36–128 ГБ и больше', 'Thunderbolt 5, Wi‑Fi 7', 'Модель и API настроены']],
+    en: ['Apple Mac Studio', 'A desktop station with large unified memory: big open models locally, quietly and without a server room.', ['M5 Max or M5 Ultra chip', '36–128 GB unified memory and more', 'Thunderbolt 5, Wi‑Fi 7', 'Model and API set up']] },
   { id: 'rtx-pro-ws', mode: 'buy', art: 'workstation', rub: 3150000, market: [2500000, 3200000],
     more: { ru: [['Для кого', 'Компания, которой нужна быстрая модель для RAG, генерации и дообучения у себя в офисе.'], ['Какие модели потянет', 'До ~70 млрд параметров в 8 бит на одной карте с 96 ГБ; быстрая генерация изображений и видео.'], ['Охлаждение и шум', 'Подбираем корпус и охлаждение под офис, а не под серверную.'], ['Что делаем мы', 'Сборка, тест под нагрузкой, драйверы, vLLM, API, гарантия на сборку и работу.']], en: [['Who it is for', 'A company that needs a fast model for RAG, generation and fine-tuning on site.'], ['Models it runs', 'Up to ~70B parameters in 8-bit on one 96 GB card; fast image and video generation.'], ['Cooling and noise', 'Case and cooling chosen for an office, not a server room.'], ['What we do', 'Build, load test, drivers, vLLM, API, warranty on the build and our work.']] },
     ru: ['Рабочая станция с RTX PRO 6000 Blackwell', 'Самая мощная видеокарта для рабочих станций: 96 ГБ памяти на одной карте.', ['RTX PRO 6000 96 ГБ GDDR7', 'Процессор и ОЗУ под задачу', 'Тихое охлаждение', 'Для RAG, дообучения и генерации']],
@@ -94,6 +147,29 @@ export const hardware = [
   { id: 'amd-mi300x', mode: 'buy', art: 'hgx', rub: null, market: null,
     ru: ['Сервер 8× AMD Instinct MI300X', 'Альтернатива NVIDIA с 192 ГБ памяти на ускоритель — для больших моделей и inference.', ['8× MI300X 192 ГБ', '1,5 ТБ HBM3 суммарно', 'ROCm и vLLM', 'Поставка и цена по запросу']],
     en: ['8× AMD Instinct MI300X server', 'An NVIDIA alternative with 192 GB per accelerator, for large models and inference.', ['8× MI300X 192 GB', '1.5 TB HBM3 in total', 'ROCm and vLLM', 'Supply and price on request']] },
+  // Инфраструктура рядом с ИИ-железом: хранилище и сеть. Цены собраны 22.11.2026.
+  { id: 'nas-ds925', mode: 'buy', art: 'rack4', rub: 87900, market: [79799, 88410],
+    sources: { date: '2026-11-22', urls: [
+      'https://www.dns-shop.ru/product/1d7423547737d9cb/setevoe-hranilise-nas-synology-diskstation-ds925/ — 79 799 ₽',
+      'https://www.kns.ru/product/setevoe-hranilische-synology-ds925plus/ — 86 389 ₽',
+      'https://synology.moscow/product/synology-ds925/ — 88 410 ₽',
+      'https://www.synology.com/en-global/products/DS925+ — характеристики',
+    ] },
+    more: { ru: [['Для кого', 'Компания, которой нужно хранить документы, базу знаний для RAG и резервные копии рядом с локальной моделью.'], ['Что внутри', 'AMD Ryzen V1500B, 4 ГБ ECC (до 32 ГБ), 4 отсека 3,5″/2,5″ и 2 слота M.2 NVMe; до 9 дисков с модулем расширения.'], ['Диски', 'Цена — без дисков. Подберём диски под объём и RAID, посчитаем отдельно в КП.'], ['Что делаем мы', 'Установка, RAID, права доступа, резервное копирование Mac и серверов, подключение к RAG-поиску.']], en: [['Who it is for', 'A company that needs to keep documents, a RAG knowledge base and backups next to its local model.'], ['Inside', 'AMD Ryzen V1500B, 4 GB ECC (up to 32 GB), 4 × 3.5″/2.5″ bays and 2 × M.2 NVMe; up to 9 drives with an expansion unit.'], ['Drives', 'Price excludes drives. We size drives and RAID and quote them separately.'], ['What we do', 'Installation, RAID, access rights, backups of Macs and servers, RAG search integration.']] },
+    ru: ['Сетевое хранилище Synology DS925+', 'Хранилище на 4 диска для документов, базы знаний и резервных копий — данные остаются в офисе.', ['4 отсека + 2× M.2 NVMe', '2× Ethernet 2,5 Гбит/с', 'Гарантия производителя 3 года', 'Без дисков']],
+    en: ['Synology DS925+ network storage', 'A 4-bay storage unit for documents, the knowledge base and backups; the data stays in the office.', ['4 bays + 2× M.2 NVMe', '2× 2.5 Gb Ethernet', '3-year vendor warranty', 'Drives not included']] },
+  { id: 'switch-crs312', mode: 'buy', art: 'rack4', rub: 99900, market: [70101, 107900],
+    sources: { date: '2026-11-22', urls: [
+      'https://www.mikc.ru/katalog/kommutatory/mikrotik-crs312-4c-8xg/ — 70 101–82 472 ₽',
+      'https://www.xcom-shop.ru/mikrotik_crs312-4c8xg-rm_732405.html — 71 991 ₽',
+      'https://shop.nag.ru/catalog/00001.kommutatory/40213.fiksirovannye-kommutatory/34828.crs312-4c8xg-rm — 88 107 ₽',
+      'https://mikrotik.ru/katalog/katalog/hardware/switches/crs312-4c-8xg-rm — 99 850 ₽',
+      'https://wifimag.ru/cat/mikrotik/marshrutizatory/mikrotik_cloud_router_switch_crs312_4c_8xg_rm/ — 107 900 ₽',
+      'https://mikrotik.com/product/crs312_4c_8xg_rm — характеристики',
+    ] },
+    more: { ru: [['Для кого', 'Офис, где ИИ-станции, хранилище и рабочие места должны обмениваться данными быстрее гигабита.'], ['Порты', '8× 10 Гбит/с RJ45 и 4 комбо-порта RJ45/SFP+, два блока питания, монтаж в стойку 19″ (1U).'], ['Что делаем мы', 'Схема сети, VLAN для ИИ-контура, подключение Mac, DGX Spark и хранилища, документация для службы безопасности.']], en: [['Who it is for', 'An office where AI machines, storage and workstations must exchange data faster than gigabit.'], ['Ports', '8× 10 Gb RJ45 and 4 RJ45/SFP+ combo ports, dual power supplies, 19″ rack mount (1U).'], ['What we do', 'Network design, a VLAN for the AI perimeter, connecting Macs, DGX Spark and storage, documents for your security team.']] },
+    ru: ['Коммутатор 10 Гбит/с MikroTik CRS312', 'Быстрая сеть для ИИ-контура: связывает Mac, DGX Spark, хранилище и рабочие места.', ['12 портов 10 Гбит/с', '4 комбо-порта SFP+', 'Два блока питания', 'Стойка 19″, 1U']],
+    en: ['MikroTik CRS312 10 Gb switch', 'Fast networking for the AI perimeter: links Macs, DGX Spark, storage and workstations.', ['12× 10 Gb ports', '4 SFP+ combo ports', 'Dual power supplies', '19″ rack, 1U']] },
   { id: 'rent-h100', mode: 'rent', art: 'cloud', rub: 640, unit: 'hour', market: [340, 650],
     ru: ['Аренда 1× H100 80 ГБ', 'Выделенный GPU в российском ЦОД, модель развёрнута и отвечает по API.', ['H100 80 ГБ', 'Модель и API настроены', 'Изолированная сеть', 'Помесячно со скидкой']],
     en: ['Rent 1× H100 80 GB', 'A dedicated GPU in a Russian data centre with the model deployed and served by API.', ['H100 80 GB', 'Model and API set up', 'Isolated network', 'Monthly discount']] },
@@ -116,6 +192,8 @@ export const hardware = [
     ru: ['Мощности у крупного облака — с нашей настройкой', 'Если удобнее платить провайдеру напрямую, подберём тариф в Selectel, Cloud.ru, Yandex Cloud или другом российском облаке и развернём там модель.', ['Сравнение тарифов под задачу', 'Договор с провайдером — на вас', 'Развёртывание модели и API', 'Сопровождение по желанию']],
     en: ['Capacity from a major cloud, set up by us', 'If you prefer to pay a provider directly, we pick a plan at Selectel, Cloud.ru, Yandex Cloud or another Russian cloud and deploy the model there.', ['Plans compared for your task', 'Your own contract with the provider', 'Model and API deployment', 'Optional support']] },
 ];
+// У позиций с конфигурациями цена «от» — самая дешёвая конфигурация (её показывают каталог и страница hardware/).
+for (const h of hardware) if (h.configs) h.rub = Math.min(...h.configs.map(c => c.rub));
 
 // ---------- SVG-иллюстрации устройств ----------
 const fan = (x, y, r) => `<g transform="translate(${x} ${y})"><circle r="${r}" class="hw-fan-ring"/><g class="hw-fan"><path d="M0 ${-r * .8}c${r * .3} ${r * .2} ${r * .3} ${r * .55} 0 ${r * .7}M${r * .8} 0c${-r * .2} ${r * .3} ${-r * .55} ${r * .3} ${-r * .7} 0M0 ${r * .8}c${-r * .3} ${-r * .2} ${-r * .3} ${-r * .55} 0 ${-r * .7}M${-r * .8} 0c${r * .2} ${-r * .3} ${r * .55} ${-r * .3} ${r * .7} 0"/></g><circle r="${r * .18}" class="hw-hub"/></g>`;
@@ -139,10 +217,18 @@ const GALLERY = {
   'rtx-pro-server': [G('srv4-1'), G('srv4-2')],
   'hgx-h200': [G('hgx-1'), G('hgx-2'), 'frame-2-server.jpg'], 'dgx-b200': [G('rack-1'), G('hgx-2'), 'nvidia-gb200-nvl72.jpg'], 'amd-mi300x': [G('hgx-1'), G('hgx-2')], 'oem-servers': [G('srv4-1'), G('srv4-2'), G('hgx-1')],
   'rent-h100': ['pages/rent-gpu.jpg', G('rack-2')], 'rent-h200': ['pages/rent-gpu.jpg', G('rack-2')], 'rent-8h200': ['pages/rent-server.jpg', G('hgx-2')],
+  'mac-mini': [G('mac-mini-1'), G('mac-mini-2'), G('mac-mini-3'), G('mac-mini-4'), G('mac-mini-5')],
+  'mac-studio': [G('mac-studio-1'), G('mac-studio-2'), G('mac-studio-3'), G('mac-studio-4')],
+  'nas-ds925': [G('ds925-1'), G('ds925-2'), G('ds925-3'), G('ds925-4')],
+  'switch-crs312': [G('crs312-1'), G('mac-mini-4'), G('mac-studio-4')],
   'month-h100': ['pages/rent-gpu.jpg', G('rack-2')], 'month-h200': ['pages/rent-gpu.jpg', G('rack-2')], 'month-8h200': ['pages/rent-server.jpg', G('hgx-2')], 'provider-pick': ['pages/rent-cloud.jpg', G('rack-2')],
 };
-const CREDIT = { 'nvidia-dgx-spark-desk.jpg': 'NVIDIA', 'nvidia-gb200-nvl72.jpg': 'NVIDIA', 'partners/asus-ascent-gx10.jpg': 'ASUS' };
-export const PHOTO = { 'dgx-spark': 'cut-spark.png', 'gb10-oem': 'gallery/gb10-1.jpg', 'spark-cluster': 'pages/cluster-2spark.jpg', 'park-s': 'pages/park-s.jpg', 'park-m': 'pages/park-m.jpg', 'park-l': 'pages/park-l.jpg', 'rtx5090-ws': 'cut-workstation.png', 'rtx-pro-ws': 'cut-workstation.png', 'rtx-pro-server': 'cut-hgx.png', 'hgx-h200': 'cut-hgx.png', 'dgx-b200': 'cut-rack.png', 'oem-servers': 'cut-hgx.png', 'amd-mi300x': 'cut-hgx.png', 'rent-h100': 'pages/rent-gpu.jpg', 'rent-h200': 'pages/rent-gpu.jpg', 'rent-8h200': 'pages/rent-server.jpg', 'month-h100': 'pages/rent-gpu.jpg', 'month-h200': 'pages/rent-gpu.jpg', 'month-8h200': 'pages/rent-server.jpg', 'provider-pick': 'pages/rent-cloud.jpg' };
+// Подписи к официальным фото производителей. Источники — docs/assets/photos/gallery/sources.json.
+const CREDIT = { 'nvidia-dgx-spark-desk.jpg': 'NVIDIA', 'nvidia-gb200-nvl72.jpg': 'NVIDIA', 'partners/asus-ascent-gx10.jpg': 'ASUS',
+  ...Object.fromEntries(['mac-mini-1', 'mac-mini-2', 'mac-mini-3', 'mac-studio-1', 'mac-studio-2', 'mac-studio-3'].map(n => [G(n), 'Apple'])),
+  ...Object.fromEntries(['ds925-1', 'ds925-2', 'ds925-3'].map(n => [G(n), 'Synology'])), [G('crs312-1')]: 'MikroTik',
+  'pages/mac-mini.jpg': 'Apple', 'pages/mac-studio.jpg': 'Apple', 'pages/ds925.jpg': 'Synology', 'pages/crs312.jpg': 'MikroTik' };
+export const PHOTO = { 'dgx-spark': 'cut-spark.png', 'gb10-oem': 'gallery/gb10-1.jpg', 'spark-cluster': 'pages/cluster-2spark.jpg', 'park-s': 'pages/park-s.jpg', 'park-m': 'pages/park-m.jpg', 'park-l': 'pages/park-l.jpg', 'rtx5090-ws': 'cut-workstation.png', 'rtx-pro-ws': 'cut-workstation.png', 'rtx-pro-server': 'cut-hgx.png', 'hgx-h200': 'cut-hgx.png', 'dgx-b200': 'cut-rack.png', 'oem-servers': 'cut-hgx.png', 'amd-mi300x': 'cut-hgx.png', 'rent-h100': 'pages/rent-gpu.jpg', 'rent-h200': 'pages/rent-gpu.jpg', 'rent-8h200': 'pages/rent-server.jpg', 'month-h100': 'pages/rent-gpu.jpg', 'month-h200': 'pages/rent-gpu.jpg', 'month-8h200': 'pages/rent-server.jpg', 'provider-pick': 'pages/rent-cloud.jpg', 'mac-mini': 'pages/mac-mini.jpg', 'mac-studio': 'pages/mac-studio.jpg', 'nas-ds925': 'pages/ds925.jpg', 'switch-crs312': 'pages/crs312.jpg' };
 
 export function deviceArt(kind) {
   const box = inner => `<svg class="hw-art" viewBox="0 0 240 150" aria-hidden="true">${inner}</svg>`;
@@ -165,15 +251,31 @@ export function renderShop(lang, ctx) {
   const i = lang === 'ru' ? 0 : 1;
   const priceOf = p => typeof p === 'number' ? p : p ? packageStartingPrice(p, ctx.pricing) : null;
   const unitLabel = u => u === 'hour' ? pick(lang, ' / час', ' / hour') : u === 'month' ? pick(lang, ' / мес.', ' / month') : '';
-  const card = ({ id, cat, title, text, rub, unit, art, specs, market, kind, more, model, gallery }) => {
+  const num = n => n.toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-GB');
+  const marketText = (m, unit) => `${pick(lang, 'Рынок', 'Market')}: ${num(m[0])}–${num(m[1])} ₽${unitLabel(unit)}`;
+  // Переключатель чипа и конфигурации: цена, рынок и название в корзине меняются в shop.js.
+  const configPicker = (title, configs, chips) => {
+    const names = [...new Set(configs.map(c => c.chip))];
+    return `<div class="shop-config"><p class="shop-config-label">${pick(lang, 'Чип', 'Chip')}</p>
+      <div class="shop-seg" role="group" aria-label="${pick(lang, 'Чип', 'Chip')}">${names.map((n, j) => `<button type="button" data-chip="${esc(n)}" aria-pressed="${j ? 'false' : 'true'}">${esc(n)}</button>`).join('')}</div>
+      <p class="shop-config-label">${pick(lang, 'Память и SSD', 'Memory and SSD')}</p>
+      <div class="shop-seg" role="group" aria-label="${pick(lang, 'Память и SSD', 'Memory and SSD')}">${configs.map((c, j) => `<button type="button" data-pick-cfg="${c.k}" aria-pressed="${j ? 'false' : 'true'}"${c.chip === configs[0].chip ? '' : ' hidden'}>${esc(c[lang])}</button>`).join('')}</div>
+      ${chips ? `<p class="shop-chip-note" data-chip-note>${esc(chips[configs[0].chip][lang])}</p>` : ''}</div>`;
+  };
+  const card = ({ id, cat, title, text, rub, unit, art, specs, market, kind, more, model, gallery, configs, chips }) => {
+    const cfgTitle = c => `${title} ${c.chip} · ${c[lang]}`;
+    if (configs) ({ rub, market } = configs[0]);
+    const cfgData = configs ? esc(JSON.stringify(configs.map(c => ({ k: c.k, chip: c.chip, title: cfgTitle(c), rub: c.rub, market: marketText(c.market, unit) })))) : '';
+    const chipData = chips ? esc(JSON.stringify(Object.fromEntries(Object.entries(chips).map(([n, v]) => [n, v[lang]])))) : '';
     const price = rub == null ? `<p class="audience-price">${pick(lang, 'По запросу', 'On request')}</p>`
       : `<p class="audience-price" data-region-price-row>${priceMarkup(lang, rub, unitLabel(unit))}</p>`;
-    const marketLine = market ? `<p class="shop-market">${pick(lang, 'Рынок', 'Market')}: ${market[0].toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-GB')}–${market[1].toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-GB')} ₽${unitLabel(unit)}</p>` : '';
+    const marketLine = market ? `<p class="shop-market">${marketText(market, unit)}</p>` : '';
     const gal = gallery ? esc(JSON.stringify(gallery.map(f => [ctx.asset + 'photos/' + f, CREDIT[f] || '']))) : '';
-    return `<article class="shop-item${kind === 'hw' ? ' shop-hw' : ''}" data-cat="${cat}" data-id="${id}" data-title="${esc(title)}" data-rub="${rub ?? ''}" data-unit="${unit ?? ''}"${gal ? ` data-gallery="${gal}"` : ''}>
+    return `<article class="shop-item${kind === 'hw' ? ' shop-hw' : ''}" data-cat="${cat}" data-id="${id}" data-title="${esc(configs ? cfgTitle(configs[0]) : title)}" data-rub="${rub ?? ''}" data-unit="${unit ?? ''}"${gal ? ` data-gallery="${gal}"` : ''}${configs ? ` data-cfg="${configs[0].k}" data-configs="${cfgData}"` : ''}${chips ? ` data-chips="${chipData}"` : ''}>
       ${art}
       <div class="shop-body"><h3>${gallery ? `<button type="button" class="shop-open" data-open-product>${esc(title)}</button>` : esc(title)}</h3>${model ? `<button type="button" class="shop-3d" data-open3d="${model}" data-title="${esc(title)}">${pick(lang, 'Покрутить в 3D', 'Rotate in 3D')}</button>` : ''}<p class="shop-text">${esc(text)}</p>
       ${specs ? `<ul class="shop-specs">${specs.map(s => `<li>${esc(s)}</li>`).join('')}</ul>` : ''}
+      ${configs ? configPicker(title, configs, chips) : ''}
       ${more ? `<details class="shop-more"><summary>${pick(lang, 'Подробнее', 'Details')}</summary><dl>${more.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl></details>` : ''}
       <div class="shop-foot">${price}${marketLine}
       <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="${pick(lang, 'Меньше', 'Fewer')}">−</button><output data-count>1</output><button type="button" data-inc aria-label="${pick(lang, 'Больше', 'More')}">+</button></div>
@@ -183,7 +285,7 @@ export function renderShop(lang, ctx) {
     id, cat, title: title[i], text: text[i], rub: priceOf(p), unit, art: iconArt(ctx.icons, icon),
   }))).join('');
   const hwCards = hardware.map(h => card({
-    id: h.id, cat: 'hw-' + h.mode, kind: 'hw', title: h[lang][0], text: h[lang][1], specs: h[lang][2], rub: h.rub, unit: h.unit, market: h.market, more: h.more?.[lang], model: MODEL3D[h.id], gallery: GALLERY[h.id], art: `<div class="shop-art${PHOTO[h.id] ? ' shop-art-photo' : ''}">${PHOTO[h.id] ? `<img src="${ctx.asset}photos/${PHOTO[h.id]}" alt="${esc(h[lang][0])}" width="1200" height="900" loading="lazy"${PHOTO[h.id].endsWith('.png') ? '' : ' class="is-full"'}>${PHOTO[h.id].startsWith('partners/') ? `<span class="shop-credit">${pick(lang, 'Фото: ASUS', 'Photo: ASUS')}</span>` : ''}` : deviceArt(h.art)}${h.mode === 'rent' ? `<span class="shop-tag">${pick(lang, 'Аренда', 'Rental')}</span>` : `<span class="shop-tag">${pick(lang, 'Под заказ', 'To order')}</span>`}</div>`,
+    id: h.id, cat: 'hw-' + h.mode, kind: 'hw', title: h[lang][0], text: h[lang][1], specs: h[lang][2], rub: h.rub, unit: h.unit, market: h.market, configs: h.configs, chips: h.chips, more: h.more?.[lang], model: MODEL3D[h.id], gallery: GALLERY[h.id], art: `<div class="shop-art${PHOTO[h.id] ? ' shop-art-photo' : ''}">${PHOTO[h.id] ? `<img src="${ctx.asset}photos/${PHOTO[h.id]}" alt="${esc(h[lang][0])}" width="1200" height="900" loading="lazy"${PHOTO[h.id].endsWith('.png') ? '' : ' class="is-full"'}>${CREDIT[PHOTO[h.id]] ? `<span class="shop-credit">${pick(lang, 'Фото: ', 'Photo: ')}${CREDIT[PHOTO[h.id]]}</span>` : ''}` : deviceArt(h.art)}${h.mode === 'rent' ? `<span class="shop-tag">${pick(lang, 'Аренда', 'Rental')}</span>` : `<span class="shop-tag">${pick(lang, 'Под заказ', 'To order')}</span>`}</div>`,
   })).join('');
   const chips = [['all', pick(lang, 'Все', 'All')], ...services.map(([id, names]) => [id, names[i]]), ['hw-buy', pick(lang, 'Железо: купить', 'Hardware: buy')], ['hw-rent', pick(lang, 'Железо: аренда', 'Hardware: rent')]];
   const labels = JSON.stringify({
@@ -196,13 +298,13 @@ export function renderShop(lang, ctx) {
   });
   return `<section class="section wrap audience-section shop" data-shop data-tg="${esc(ctx.tg)}" data-labels="${esc(labels)}">
     <div class="shop-toolbar">
-      <label class="shop-search"><span class="sr-only">${pick(lang, 'Поиск по каталогу', 'Search the catalogue')}</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input type="search" data-search placeholder="${pick(lang, 'Найти: бот, H200, RAG…', 'Search: bot, H200, RAG…')}"></label>
+      <label class="shop-search"><span class="sr-only">${pick(lang, 'Поиск по каталогу', 'Search the catalogue')}</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input type="search" data-search placeholder="${pick(lang, 'Найти: бот, H200, Mac mini…', 'Search: bot, H200, Mac mini…')}"></label>
       <label class="shop-sort"><span>${pick(lang, 'Сортировка', 'Sort')}</span><select data-sort><option value="default">${pick(lang, 'По разделам', 'By section')}</option><option value="asc">${pick(lang, 'Сначала дешевле', 'Price: low to high')}</option><option value="desc">${pick(lang, 'Сначала дороже', 'Price: high to low')}</option></select></label>
     </div>
     <div class="shop-filters" role="group" aria-label="${pick(lang, 'Категории', 'Categories')}">${chips.map(([id, name], n) => `<button type="button" aria-pressed="${n ? 'false' : 'true'}" data-filter="${id}">${esc(name)}</button>`).join('')}</div>
     <h2 class="shop-group-title" data-group="services">${pick(lang, 'Цифровые услуги', 'Digital services')}</h2>
     <div class="shop-grid" data-grid="services">${serviceCards}</div>
-    <h2 class="shop-group-title" data-group="hw">${pick(lang, 'Железо для ИИ: NVIDIA', 'AI hardware: NVIDIA')}</h2>
+    <h2 class="shop-group-title" data-group="hw">${pick(lang, 'Железо для ИИ: NVIDIA, Apple, хранение и сеть', 'AI hardware: NVIDIA, Apple, storage and networking')}</h2>
     <div class="shop-grid shop-grid-hw" data-grid="hw">${hwCards}</div>
     <p class="shop-none" data-none hidden></p>
   </section>
