@@ -923,6 +923,11 @@ footer{padding:2rem 0}.fine{margin-top:1.5rem;flex-wrap:wrap}.sub{padding:4rem 0
   .bundle-head {display:none}
   .bundle-row>span:last-child {border-top:0}
 }
+@media (max-width:860px) {
+  .bundle-row>span[data-label]::before {content:attr(data-label);display:block;margin-bottom:.2rem;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--sub)}
+  .bundle-row>span:first-child {font-weight:600;color:var(--ink);background:transparent}
+  .bundle-row>span:last-child::before {color:var(--accent)}
+}
 
 .service-group {scroll-margin-top:1.25rem}
 .service-group + .service-group {margin-top:clamp(2.75rem,5vw,5rem)}

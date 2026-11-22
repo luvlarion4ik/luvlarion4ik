@@ -658,7 +658,7 @@ function renderBundlePage(lang, ctx) {
   const flow = `<ol class="bundle-flow">${c.flow.map(([title, text], index) =>
     `<li style="--i:${index}"><span class="bundle-node">${String(index + 1)}</span><strong>${esc(title)}</strong><span>${esc(text)}</span></li>`).join('')}</ol>`;
   const compare = `<div class="bundle-table" role="table"><div role="row" class="bundle-row bundle-head">${c.compareHead.map(cell => `<span role="columnheader">${esc(cell)}</span>`).join('')}</div>${c.compare.map(row =>
-    `<div role="row" class="bundle-row">${row.map((cell, i) => `<span role="${i ? 'cell' : 'rowheader'}">${esc(cell)}</span>`).join('')}</div>`).join('')}</div>`;
+    `<div role="row" class="bundle-row">${row.map((cell, i) => `<span role="${i ? 'cell' : 'rowheader'}"${i ? ` data-label="${esc(c.compareHead[i])}"` : ''}>${esc(cell)}</span>`).join('')}</div>`).join('')}</div>`;
   const plans = `<div class="service-grid audience-packages bundle-plans">${c.plans.map(([title, text, services, tier]) =>
     `<article><h3>${esc(title)}</h3><p>${esc(text)}</p><div class="package-action">${estimateLink(lang, ctx.home, services.split(' '), tier, pick(lang, 'Рассчитать «' + title + '»', 'Estimate “' + title + '”'))}</div></article>`).join('')}</div><p class="audience-note-line">${esc(c.discountNote)}</p>`;
   return `<article class="audience-page">

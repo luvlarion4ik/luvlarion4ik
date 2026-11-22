@@ -143,7 +143,66 @@
           h('div', {}, h('strong', { text: s.title }), s.note ? h('small', { text: s.note }) : null),
           h('small', { class: 'ac-stage-meta', text: [{ done: 'Готово', active: 'В работе', todo: 'В плане' }[s.state], fmtDate(s.date)].filter(Boolean).join(' · ') }))))
       : empty('Команда добавит этапы после согласования плана.');
-    return [progress, h('div', { class: 'ac-card ac-stack' }, h('h3', { text: 'Этапы' }), steps)];
+    return [dashboard(p, pct, currentStage), attentionCard(p), progress, h('div', { class: 'ac-card ac-stack' }, h('h3', { text: 'Этапы' }), steps), activityCard(p)].filter(Boolean);
+  }
+
+  // ---- Центр управления: ключевые показатели, что требует внимания, лента событий ----
+  const svg = (tag, attrs = {}) => { const el = document.createElementNS('http://www.w3.org/2000/svg', tag); for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v); return el; };
+  const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function countUp(el, to, suffix = '') {
+    if (reduceMotion() || to === 0) { el.textContent = to + suffix; return; }
+    const start = performance.now(), dur = 900;
+    const tick = now => { const k = Math.min(1, (now - start) / dur); el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3))) + suffix; if (k < 1) requestAnimationFrame(tick); };
+    requestAnimationFrame(tick);
+  }
+  function ring(pct) {
+    const r = 34, c = 2 * Math.PI * r;
+    const box = svg('svg', { viewBox: '0 0 84 84', class: 'ac-ring', 'aria-hidden': 'true' });
+    box.append(svg('circle', { cx: 42, cy: 42, r, class: 'ac-ring-track' }), svg('circle', { cx: 42, cy: 42, r, class: 'ac-ring-bar', 'stroke-dasharray': c, 'stroke-dashoffset': c * (1 - pct / 100), style: '--circ:' + c }));
+    return box;
+  }
+  function dueTotals(p) {
+    const totals = new Map();
+    for (const i of p.invoices.filter(x => x.status === 'unpaid' || x.status === 'overdue')) totals.set(i.currency || 'RUB', (totals.get(i.currency || 'RUB') || 0) + i.amount);
+    return [...totals].map(([c, t]) => money(t, c)).join(' · ');
+  }
+  function dashboard(p, pct, stageText) {
+    const num = h('strong', { class: 'ac-kpi-num', text: '0%' });
+    countUp(num, pct, '%');
+    const due = dueTotals(p);
+    const tile = (label, body, tone) => h('div', { class: 'ac-kpi', 'data-tone': tone || null }, h('small', { text: label }), body);
+    return h('div', { class: 'ac-kpis' },
+      tile('Готовность', h('div', { class: 'ac-kpi-ring' }, ring(pct), num)),
+      tile('Сейчас в работе', h('strong', { class: 'ac-kpi-text', text: stageText })),
+      tile('К оплате', h('strong', { class: 'ac-kpi-text', text: due || 'Задолженности нет' }), due ? 'warn' : 'ok'),
+      tile('Сообщения', h('strong', { class: 'ac-kpi-text', text: p.unread ? 'Новых: ' + p.unread : 'Нет новых' }), p.unread ? 'warn' : null));
+  }
+  function attentionCard(p) {
+    const items = [];
+    const toApprove = p.estimates.filter(e => e.status === 'sent');
+    if (toApprove.length) items.push(['money', 'Смета ждёт вашего решения', toApprove.map(e => e.title).join(', '), 'warn']);
+    const due = p.invoices.filter(i => i.status === 'unpaid' || i.status === 'overdue');
+    const late = due.filter(i => i.status === 'overdue');
+    if (due.length) items.push(['money', late.length ? 'Есть просроченные счета' : 'Есть счета к оплате', 'Счетов: ' + due.length + ' · ' + dueTotals(p), late.length ? 'bad' : 'warn']);
+    if (p.unread) items.push(['chat', 'Новые сообщения от команды', 'Непрочитано: ' + p.unread, 'warn']);
+    if (!items.length) return h('section', { class: 'ac-card ac-attention ac-attention--clear' }, h('span', { class: 'ac-attn-dot', 'aria-hidden': 'true' }), h('div', {}, h('h3', { text: 'От вас ничего не требуется' }), h('p', { class: 'ac-note', text: 'Команда работает по плану. Если появится вопрос или счёт, он отобразится здесь.' })));
+    return h('section', { class: 'ac-card ac-stack ac-attention' }, h('h3', { text: 'Требует вашего внимания' }),
+      h('ul', { class: 'ac-attn-list' }, items.map(([key, title, note, tone]) => h('li', { 'data-tone': tone },
+        h('span', { class: 'ac-attn-dot', 'aria-hidden': 'true' }),
+        h('div', {}, h('strong', { text: title }), h('small', { text: note })),
+        h('button', { type: 'button', class: 'ac-btn ac-btn--ghost', onclick: () => openTab(key, p), text: key === 'chat' ? 'Открыть' : 'Перейти' })))));
+  }
+  function activityCard(p) {
+    const ev = [];
+    for (const s of p.stages) if (s.date && s.state === 'done') ev.push([s.date, 'Этап завершён', s.title]);
+    for (const f of p.files) if (f.date) ev.push([f.date, 'Новый материал', f.title]);
+    for (const e of p.estimates) if (e.date) ev.push([e.date, 'Смета', e.title]);
+    for (const i of p.invoices) if (i.date) ev.push([i.date, 'Счёт № ' + i.number, i.title || '']);
+    for (const m of p.messages.slice(-3)) ev.push([m.at, m.from === 'client' ? 'Вы написали' : 'Ответ команды', m.text.length > 90 ? m.text.slice(0, 90) + '…' : m.text]);
+    ev.sort((a, b) => new Date(b[0]) - new Date(a[0]));
+    if (!ev.length) return null;
+    return h('section', { class: 'ac-card ac-stack' }, h('h3', { text: 'Последние события' }),
+      h('ol', { class: 'ac-feed' }, ev.slice(0, 6).map(([at, title, note]) => h('li', {}, h('span', { class: 'ac-feed-dot', 'aria-hidden': 'true' }), h('div', {}, h('strong', { text: title }), note ? h('small', { text: note }) : null), h('time', { datetime: at, text: fmtDate(at) })))));
   }
 
   function moneyPanel(p) {
