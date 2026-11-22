@@ -26,6 +26,8 @@ export const segments = [
         { id: 'automation', title: 'Telegram- или MAX-бот', price: ['automation', 'small'], term: '5–7 дней', items: ['Меню', 'Один сценарий записи или заявки', 'Уведомление вам в чат', 'Инструкция по управлению'] },
         { id: 'mini', title: 'Мини-приложение с каталогом', price: ['mini', 'small'], term: '2–3 недели', items: ['Каталог до 10 позиций', 'Карточки с фото и ценой', 'Заявка продавцу в один клик'] },
         { id: 'seo', title: 'SEO-старт', price: ['seo', 'small'], term: '3–5 дней', items: ['Аудит', 'Яндекс Вебмастер и Search Console', 'Метатеги', 'Карта сайта', 'Карточка в Яндекс Картах'] },
+        { id: 'geo', title: 'GEO-старт', price: ['geo', 'small'], term: '5–7 дней', items: ['Аудит: что ИИ знает о вас', 'Разметка услуг и цен', 'Карточки в справочниках', 'Ответы на частые вопросы на сайте'] },
+        { id: 'care', title: 'Сопровождение', price: ['support', 'small'], term: 'Ежемесячно', items: ['Правки цен и текстов', 'Мониторинг заявок', 'Обновления и резервные копии'] },
       ],
       faq: [
         ['Мне нужен договор, я самозанятый?', 'Да, работаем по договору, чек выдаём. Из реквизитов нужны только ваши ФИО и контакт.'],
@@ -49,6 +51,8 @@ export const segments = [
         { id: 'automation', title: 'Telegram or MAX bot', price: ['automation', 'small'], term: '5–7 days', items: ['Menu', 'One booking or enquiry workflow', 'Chat notification', 'Operating guide'] },
         { id: 'mini', title: 'Catalogue mini app', price: ['mini', 'small'], term: '2–3 weeks', items: ['Catalogue of up to ten items', 'Product photos and prices', 'One-click enquiry to the seller'] },
         { id: 'seo', title: 'SEO starter', price: ['seo', 'small'], term: '3–5 days', items: ['Audit', 'Yandex Webmaster and Search Console', 'Metadata', 'Sitemap', 'Yandex Maps business listing'] },
+        { id: 'geo', title: 'GEO starter', price: ['geo', 'small'], term: '5–7 days', items: ['Audit of what AI knows about you', 'Service and price markup', 'Directory listings', 'Common questions answered on the site'] },
+        { id: 'care', title: 'Ongoing care', price: ['support', 'small'], term: 'Monthly', items: ['Price and copy updates', 'Enquiry monitoring', 'Updates and backups'] },
       ],
       faq: [
         ['Do I need a contract if I am self-employed?', 'Yes. We work under contract and issue a receipt. We only need your full name and contact details.'],
@@ -138,9 +142,16 @@ export const segments = [
         { id: 'pilot', title: 'Пилот', price: ['agents', 'medium'], items: ['Один процесс', 'Работа на ваших данных', 'Метрики успеха согласуем заранее'] },
         { id: 'rollout', title: 'Внедрение', priceLabel: 'По смете после пилота', items: ['Интеграции', 'Роли и доступы', 'Обучение команды'] },
         { id: 'support', title: 'Сопровождение', priceLabel: 'Подписка и SLA', items: ['Объём работ и сроки ответа согласуем при внедрении'] },
+        { id: 'audit', title: 'Аудит данных и 152-ФЗ', price: ['security', 'small'], items: ['Карта потоков персональных данных', 'Где данные уходят за контур', 'План мер защиты и приоритеты'] },
+        { id: 'training', title: 'Обучение команды', priceLabel: 'Входит во внедрение', items: ['Сценарии работы с ИИ', 'Инструкции для сотрудников', 'Правила безопасной работы с данными'] },
       ],
       directions: [
-        ['ИИ на ваших серверах', '#quiz', 'private-ai'],
+        ['Корпоративный ИИ в российском контуре', 'private-ai/'],
+        ['GPU-серверы и DGX', 'hardware/'],
+        ['Клиники', 'industries/clinics/'],
+        ['Юристы', 'industries/legal/'],
+        ['Банки и страхование', 'industries/finance/'],
+        ['Магазин услуг', 'shop/'],
         ['Мультиагентные системы', '#quiz', 'agents'],
         ['FinTech', 'fintech/'],
         ['EdTech', 'edtech/'],
@@ -169,9 +180,16 @@ export const segments = [
         { id: 'pilot', title: 'Pilot', price: ['agents', 'medium'], items: ['One workflow', 'Uses your data', 'Success measures agreed up front'] },
         { id: 'rollout', title: 'Rollout', priceLabel: 'Quoted after the pilot', items: ['Integrations', 'Roles and access', 'Team training'] },
         { id: 'support', title: 'Support', priceLabel: 'Subscription and SLA', items: ['Scope and response times agreed during rollout'] },
+        { id: 'audit', title: 'Data and 152-FZ audit', price: ['security', 'small'], items: ['Map of personal-data flows', 'Where data leaves your perimeter', 'Protection plan and priorities'] },
+        { id: 'training', title: 'Team training', priceLabel: 'Included in rollout', items: ['Working scenarios with AI', 'Staff guides', 'Safe data-handling rules'] },
       ],
       directions: [
-        ['On-premises AI', '#quiz', 'private-ai'],
+        ['Private AI inside Russia', 'private-ai/'],
+        ['GPU servers and DGX', 'hardware/'],
+        ['Clinics', 'industries/clinics/'],
+        ['Law firms', 'industries/legal/'],
+        ['Banking and insurance', 'industries/finance/'],
+        ['Service shop', 'shop/'],
         ['Multi-agent systems', '#quiz', 'agents'],
         ['FinTech', 'fintech/'],
         ['EdTech', 'edtech/'],
@@ -430,7 +448,7 @@ function hero(lang, page, ctx, isSegment) {
   const { label, title, description } = page[lang];
   return `<section class="audience-hero"><div class="wrap audience-hero-grid">
     <div class="audience-hero-copy">
-    <p class="eyebrow"><i></i>${isSegment ? pick(lang, 'Для кого', 'Who we work with') : pick(lang, 'Рост после запуска', 'Growth after launch')}</p>
+    <p class="eyebrow"><i></i>${page[lang].eyebrow ? esc(page[lang].eyebrow) : isSegment ? pick(lang, 'Для кого', 'Who we work with') : pick(lang, 'Рост после запуска', 'Growth after launch')}</p>
     <h1>${esc(title)}</h1>
     <p class="intro">${esc(description)}</p>
     <div class="actions">
@@ -681,3 +699,5 @@ function renderBundlePage(lang, ctx) {
     ${section(pick(lang, 'Что подходит вашему бизнесу?', 'What fits your business?'), ctx.segmentPicker)}
   </article>`;
 }
+
+export const parts = { hero, trustStrip, renderCapacity, renderFAQ, section, priceMarkup, estimateLink, telegramLink, pick };

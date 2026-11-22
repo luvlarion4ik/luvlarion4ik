@@ -112,18 +112,112 @@
 
   // Пасхалка работает всегда; без анимации — только приветствие.
   let typed = "";
+  const konami = ["arrowup", "arrowup", "arrowdown", "arrowdown", "arrowleft", "arrowright", "arrowleft", "arrowright", "b", "a"];
+  let combo = [];
   addEventListener("keydown", event => {
-    if (event.target.closest?.("input, textarea, select, [contenteditable]") || event.metaKey || event.ctrlKey || event.key.length !== 1) return;
-    typed = (typed + event.key.toLowerCase()).slice(-9);
-    if (typed === "devlarion") { typed = ""; celebrate(); }
+    if (event.target.closest?.("input, textarea, select, [contenteditable]") || event.metaKey || event.ctrlKey || event.altKey) return;
+    const k = ({ "и": "b", "ф": "a" })[event.key.toLowerCase()] ?? event.key.toLowerCase();
+    combo = [...combo, k].slice(-10);
+    if (combo.join() === konami.join()) { combo = []; devMode(); return; }
+    if (event.key === "Escape" && root.classList.contains("dl-devmode")) { devMode(false); return; }
+    if (event.key.length !== 1) return;
+    typed = (typed + event.key.toLowerCase()).slice(-12);
+    if (typed.endsWith("devlarion")) { typed = ""; celebrate(); }
+    else if (typed.endsWith("dgx") || typed.endsWith("gpu")) { typed = ""; flyServer(); }
+    else if (typed.endsWith("привет") || typed.endsWith("hello")) { typed = ""; wave(); }
   });
-  function celebrate() {
+
+  function say(text, ms = 3600) {
     const note = document.createElement("div");
     note.className = "dl-egg";
     note.setAttribute("role", "status");
-    note.textContent = ru ? "Вы нашли пасхалку. Илья передаёт привет 👋" : "You found the easter egg. Ilia says hi 👋";
+    note.textContent = text;
+    note.style.animationDuration = ms + "ms";
     document.body.append(note);
-    setTimeout(() => note.remove(), 4200);
+    setTimeout(() => note.remove(), ms);
+  }
+
+  // Konami-код: «режим разработчика» — сетка вёрстки и терминал с логами студии.
+  let term = null, termTimer = null;
+  function devMode(on = !root.classList.contains("dl-devmode")) {
+    root.classList.toggle("dl-devmode", on);
+    clearInterval(termTimer);
+    term?.remove(); term = null;
+    if (!on) return;
+    say(ru ? "Режим разработчика включён. Esc — выключить" : "Developer mode on. Press Esc to exit");
+    term = document.createElement("div");
+    term.className = "dl-term";
+    term.setAttribute("aria-hidden", "true");
+    document.body.append(term);
+    const lines = ru ? [
+      "$ devlarion status", "✓ кофе: 3 чашки", "✓ сборка сайта: зелёная", "✓ GPU: греются, но держатся",
+      "… Илья отвечает клиенту в Telegram", "✓ дедлайны: под контролем", "! найдено 0 багов (пока)", "$ sudo make it beautiful", "✓ готово"
+    ] : [
+      "$ devlarion status", "✓ coffee: 3 cups", "✓ site build: green", "✓ GPUs: warm but holding",
+      "… Ilia is replying to a client on Telegram", "✓ deadlines: under control", "! 0 bugs found (so far)", "$ sudo make it beautiful", "✓ done"
+    ];
+    let i = 0;
+    termTimer = setInterval(() => {
+      const row = document.createElement("p");
+      row.textContent = lines[i % lines.length];
+      term.append(row);
+      while (term.children.length > 7) term.firstChild.remove();
+      i++;
+    }, reduced ? 1200 : 650);
+  }
+
+  // dgx / gpu: через экран пролетает сервер с крутящимися вентиляторами.
+  function flyServer() {
+    say(ru ? "DGX уже в пути. Шутка: поставляем под заказ 😉" : "A DGX is on its way. Kidding, we supply to order 😉");
+    if (reduced) return;
+    const box = document.createElement("div");
+    box.className = "dl-server";
+    box.setAttribute("aria-hidden", "true");
+    box.innerHTML = '<svg viewBox="0 0 220 90"><rect x="2" y="2" width="216" height="86" rx="10"/><rect class="dl-s-top" x="2" y="2" width="216" height="18" rx="9"/>' +
+      [0, 1, 2, 3].map(n => `<g transform="translate(${40 + n * 47} 56)"><circle r="20"/><g class="dl-fan"><path d="M0-16c5 4 5 10 0 13M16 0c-4 5-10 5-13 0M0 16c-5-4-5-10 0-13M-16 0c4-5 10-5 13 0"/></g></g>`).join("") + '</svg>';
+    document.body.append(box);
+    setTimeout(() => box.remove(), 3300);
+  }
+
+  // привет / hello: логотип в шапке машет рукой.
+  function wave() {
+    const logo = document.querySelector("body > header .wordmark");
+    say(ru ? "И вам привет! 👋" : "Hello to you too! 👋", 2600);
+    if (!logo || reduced) return;
+    const hand = document.createElement("span");
+    hand.className = "dl-hand";
+    hand.setAttribute("aria-hidden", "true");
+    hand.textContent = "👋";
+    logo.append(hand);
+    logo.classList.add("dl-wiggle");
+    setTimeout(() => { hand.remove(); logo.classList.remove("dl-wiggle"); }, 2200);
+  }
+
+  // 7 кликов по логотипу на главной: логотип раскручивается и «устаёт», тема на миг меняется.
+  let clicks = 0, clickTimer;
+  document.querySelector("body > header .wordmark")?.addEventListener("click", event => {
+    const logo = event.currentTarget;
+    if (new URL(logo.href, location.href).pathname !== location.pathname) return;
+    event.preventDefault();
+    clearTimeout(clickTimer);
+    clickTimer = setTimeout(() => { clicks = 0; }, 2500);
+    if (++clicks < 7) { if (!reduced) logo.animate([{ transform: "rotate(0)" }, { transform: "rotate(" + clicks * 8 + "deg)" }, { transform: "rotate(0)" }], { duration: 260 }); return; }
+    clicks = 0;
+    say(ru ? "Ой, голова закружилась… 😵‍💫" : "Whoa, I’m dizzy… 😵‍💫", 3000);
+    if (reduced) return;
+    logo.animate([{ transform: "rotate(0)" }, { transform: "rotate(1080deg) scale(1.1)" }, { transform: "rotate(1060deg) scale(.95)" }, { transform: "rotate(1080deg)" }], { duration: 1600, easing: "cubic-bezier(.2,.8,.3,1)" });
+    root.classList.add("dl-flash");
+    setTimeout(() => root.classList.remove("dl-flash"), 900);
+  });
+
+  // Послание для тех, кто открыл консоль.
+  try {
+    console.log("%c\n  ██████╗ ██╗\n  ██╔══██╗██║\n  ██║  ██║██║\n  ██║  ██║██║\n  ██████╔╝███████╗\n  ╚═════╝ ╚══════╝\n", "color:#e8ac8c;font-family:monospace");
+    console.log("%c" + (ru ? "Привет, коллега! Раз ты здесь — тебе точно интересно, как это сделано." : "Hi, fellow developer! If you are here, you want to know how this was built."), "font-size:14px;font-weight:700");
+    console.log(ru ? "Пасхалки: наберите devlarion, dgx или привет; Konami-код; 7 кликов по логотипу на главной. Написать Илье: " + (document.querySelector('a[href*="t.me/"]')?.href.split("?")[0] ?? "") : "Easter eggs: type devlarion, dgx or hello; the Konami code; click the logo 7 times on the home page.");
+  } catch {}
+  function celebrate() {
+    say(ru ? "Вы нашли пасхалку. Илья передаёт привет 👋" : "You found the easter egg. Ilia says hi 👋", 4200);
     if (reduced) return;
     const layer = document.createElement("div");
     layer.className = "dl-confetti";

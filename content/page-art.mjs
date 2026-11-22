@@ -96,10 +96,45 @@ const art = {
       ${[[92, 258, 'var(--surface)'], [170, 120, 'var(--accent)'], [240, 200, 'var(--surface)'], [312, 96, 'var(--accent)'], [388, 168, 'var(--surface)']].map(([x, y, f], i) => `<g class="pa-drift ${i % 2 ? 'pa-d2' : ''}"><circle cx="${x}" cy="${y}" r="30" fill="${f}" stroke="var(--accent)" stroke-width="2"/><circle cx="${x}" cy="${y}" r="42" fill="none" stroke="var(--rule)"/>${line(x - 14, y - 4, 28, 1.6)}${line(x - 8, y + 8, 16, 1.2)}</g>`).join('')}
     </g>`],
 
+  'private-ai/': ['Серверы в российском контуре с журналом запросов', 'Servers inside a Russian perimeter with a request log', `
+    <g class="pa-float">
+      ${[0, 1, 2].map(i => `<g>${card(118, 70 + i * 74, 170, 60)}${[0, 1, 2, 3].map(j => `<rect x="${134 + j * 22}" y="${86 + i * 74}" width="14" height="28" rx="3" fill="var(--surface)" stroke="var(--rule)"/>`).join('')}${dot(258, 100 + i * 74, 5, i === 1 ? 'var(--accent)' : 'var(--ok, var(--accent))')}<circle class="pa-blink" style="--b:${i}" cx="272" cy="100" r="3" transform="translate(0 ${i * 74})" fill="var(--accent)"/></g>`).join('')}
+      <path d="M100 52h206v240H100z" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="6 6"/>
+      <rect x="86" y="40" width="64" height="22" rx="11" fill="var(--accent)"/><text x="118" y="56" text-anchor="middle" font-size="12" font-weight="700" fill="var(--paper)">RU</text>
+    </g>
+    <g class="pa-drift">${card(320, 96, 128, 132)}${[0, 1, 2, 3, 4].map(i => `${line(334, 114 + i * 20, 70 - (i % 2) * 22, i === 0 ? 1.6 : 1)}${dot(426, 117 + i * 20, 3.5)}`).join('')}</g>
+    <g class="pa-drift pa-d2"><path d="M360 262l30-30 30 30-30 30z" fill="var(--paper)" stroke="var(--accent)" stroke-width="2"/><path d="M378 262l8 8 16-16" stroke="var(--accent)" stroke-width="3" fill="none" stroke-linecap="round"/></g>`],
+
+  'hardware/': ['GPU-сервер с вентиляторами', 'GPU server with fans', `
+    <g class="pa-float">
+      ${card(70, 110, 340, 140)}
+      <rect x="70" y="110" width="340" height="26" rx="14" fill="var(--surface)" stroke="var(--rule)"/>${line(88, 120, 90)}${dot(388, 123, 4)}
+      ${[0, 1, 2, 3].map(i => `<g transform="translate(${118 + i * 76} 196)"><circle r="30" fill="var(--surface)" stroke="var(--rule)"/><g class="pa-fan"><path d="M0-24c8 6 8 16 0 20M24 0c-6 8-16 8-20 0M0 24c-8-6-8-16 0-20M-24 0c6-8 16-8 20 0" fill="var(--accent)" opacity=".75"/></g><circle r="5" fill="var(--paper)" stroke="var(--accent)"/></g>`).join('')}
+    </g>
+    <g class="pa-drift">${card(300, 40, 140, 52)}${line(316, 56, 60)}<rect x="316" y="70" width="108" height="8" rx="4" fill="var(--surface)"/><rect class="pa-load" x="316" y="70" width="76" height="8" rx="4" fill="var(--accent)"/></g>
+    <g class="pa-drift pa-d2">${card(54, 274, 150, 46)}${dot(76, 297, 8)}${line(92, 290, 90)}${line(92, 303, 54, .7)}</g>`],
+
+  'shop/': ['Корзина с услугами', 'Basket of services', `
+    <g class="pa-float">
+      <path d="M120 120h250l-26 120H150z" fill="var(--surface)" stroke="var(--ink)" stroke-opacity=".5" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M92 96h28l30 144" fill="none" stroke="var(--ink)" stroke-opacity=".5" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="170" cy="272" r="14" fill="var(--paper)" stroke="var(--ink)" stroke-opacity=".5" stroke-width="2.5"/><circle cx="324" cy="272" r="14" fill="var(--paper)" stroke="var(--ink)" stroke-opacity=".5" stroke-width="2.5"/>
+    </g>
+    ${[[178, 60, 'var(--accent)'], [246, 38, 'var(--paper)'], [300, 70, 'var(--paper)']].map(([x, y, f], i) => `<g class="pa-drop" style="--i:${i}"><rect x="${x}" y="${y}" width="58" height="72" rx="10" fill="${f}" stroke="var(--accent)" stroke-width="2"/>${line(x + 10, y + 16, 34, f === 'var(--paper)' ? 1 : 0)}${line(x + 10, y + 30, 24, f === 'var(--paper)' ? .8 : 0)}<circle cx="${x + 44}" cy="${y + 56}" r="7" fill="${f === 'var(--paper)' ? 'var(--accent)' : 'var(--paper)'}"/></g>`).join('')}`],
+
+  industry: ['Документы под защитой', 'Documents under protection', `
+    <g class="pa-float">
+      ${card(110, 60, 190, 240)}${line(132, 86, 120, 1.6)}${[0, 1, 2, 3, 4, 5].map(i => line(132, 112 + i * 22, 146 - (i % 3) * 30)).join('')}
+      <rect x="132" y="250" width="80" height="26" rx="13" fill="var(--accent)" opacity=".9"/>
+      <g class="pa-scan"><rect x="112" y="80" width="186" height="3" fill="var(--accent)" opacity=".8"/></g>
+    </g>
+    <g class="pa-drift"><path d="M352 96l58 20v48c0 40-26 64-58 78-32-14-58-38-58-78v-48z" fill="var(--paper)" stroke="var(--accent)" stroke-width="2.5"/><path d="M334 166l12 12 24-26" stroke="var(--accent)" stroke-width="3.5" fill="none" stroke-linecap="round"/></g>
+    <g class="pa-drift pa-d2">${card(300, 262, 140, 46)}${dot(322, 285, 8)}${line(338, 278, 80)}${line(338, 291, 50, .7)}</g>`],
+
 };
 
 export function pageArt(lang, route) {
-  const item = art[route];
+  const item = art[route] ?? (route?.startsWith('industries/') ? art.industry : null);
   if (!item) return '';
   const [ru, en, inner] = item;
   return `<div class="page-art" aria-hidden="false">${frame(lang === 'ru' ? ru : en, inner)}</div>`;

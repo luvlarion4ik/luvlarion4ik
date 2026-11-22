@@ -123,3 +123,24 @@
 .dl-confetti i:nth-child(3n) { background: var(--ink); } .dl-confetti i:nth-child(5n) { background: color-mix(in srgb, var(--accent) 50%, #fff); }
 @keyframes dl-fall { to { transform: translate(var(--d), 110vh) rotate(var(--r)); } }
 @media (prefers-reduced-motion: reduce) { .dl-progress, .dl-top { display: none; } }
+
+/* Пасхалки */
+.dl-devmode body { background-image: repeating-linear-gradient(90deg, color-mix(in srgb, var(--accent) 10%, transparent) 0 1px, transparent 1px calc(100% / 12)); }
+.dl-devmode :is(section, header, footer, article, aside) { outline: 1px dashed color-mix(in srgb, var(--accent) 45%, transparent); outline-offset: -1px; }
+.dl-term { position: fixed; left: 1rem; bottom: 1rem; z-index: 85; width: min(360px, calc(100vw - 2rem)); padding: .8rem 1rem; border-radius: 12px; background: #0c0f12; color: #9be39b;
+  font: .82rem/1.5 ui-monospace, Menlo, monospace; box-shadow: 0 20px 60px -20px #000; border: 1px solid #2a3a2a; }
+.dl-term p { margin: 0; animation: cart-row .25s ease-out; }
+.dl-term p:last-child::after { content: "▍"; animation: pa-blink 1s steps(2) infinite; }
+.dl-server { position: fixed; top: 40%; left: -260px; z-index: 84; width: 220px; pointer-events: none; animation: dl-server 3.2s cubic-bezier(.4,.1,.5,1) forwards; }
+.dl-server svg { width: 100%; fill: #1b2128; stroke: var(--accent); stroke-width: 2; }
+.dl-server .dl-s-top { fill: var(--accent); }
+.dl-server circle { fill: #0f1216; }
+.dl-server .dl-fan path { fill: var(--accent); stroke: none; }
+.dl-fan { animation: pa-spin .35s linear infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes dl-server { 0% { transform: translateX(0) rotate(-6deg); } 50% { transform: translateX(calc(50vw + 130px)) translateY(-30px) rotate(4deg); } 100% { transform: translateX(calc(100vw + 300px)) rotate(-4deg); } }
+.wordmark { position: relative; }
+.dl-hand { position: absolute; right: -1.6rem; top: -.4rem; font-size: 1.4rem; transform-origin: 70% 80%; animation: dl-wave .45s ease-in-out 4 alternate; }
+@keyframes dl-wave { from { transform: rotate(-15deg); } to { transform: rotate(25deg); } }
+.dl-wiggle { animation: dl-wiggle .5s ease-in-out 3; }
+@keyframes dl-wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-4deg); } 75% { transform: rotate(4deg); } }
+.dl-flash body { filter: hue-rotate(160deg) saturate(1.4); transition: filter .2s; }
