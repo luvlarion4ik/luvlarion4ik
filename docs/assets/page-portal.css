@@ -1423,6 +1423,11 @@ footer{padding:2rem 0}.fine{margin-top:1.5rem;flex-wrap:wrap}.sub{padding:4rem 0
 .lead-status.is-ok {color:var(--ok, #3d704b)}
 @media (max-width:860px) {.lead,.lead-form {grid-template-columns:1fr}}
 
+.hw-pick-img {display:block;margin:-.2rem -.2rem .4rem;border-radius:12px;overflow:hidden;aspect-ratio:4/3;background:radial-gradient(90% 70% at 30% 20%,color-mix(in srgb,var(--accent) 22%,transparent),transparent 70%),linear-gradient(180deg,#161c24,#0f1216)}
+.hw-pick-img img {display:block;width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.hw-pick-img.is-cut img {object-fit:contain;padding:.5rem}
+.hw-pick:hover .hw-pick-img img {transform:scale(1.05)}
+
 /* Страница «Личный кабинет»: демо клиентского портала в стиле сайта */
 .portal-page { --pt-radius: 14px; }
 .pt-hero { padding-top: clamp(2.5rem, 6vw, 5rem); padding-bottom: clamp(1.5rem, 3vw, 2.5rem); }
