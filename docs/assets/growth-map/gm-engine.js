@@ -585,19 +585,25 @@
     if (models.length || brief.category) brief.models = models.length ? models : [...categoriesById(catalog)[brief.category].models];
     const names = original.slice(0, 100).match(/«([^»]{1,60})»|“([^”]{1,60})”|"([^"]{1,60})"/);
     if (names) brief.name = names[1] ?? names[2] ?? names[3];
-    const check = text.match(new RegExp('(?:средн[а-я]*\\s+чек|чек|стоимост[а-я]*|average (?:order|ticket)|order value|price|(?:^|\\s)от)\\s*(?:от|from)?\\s*' + quantifier + amount, 'u'));
-    if (check) brief.check = readAmount(check[1], check[2]);
+    const checkLabel = '(?:средн[а-я]*\\s+чек|чек|стоимост[а-я]*|average (?:order|ticket)|order value|price|jobs? start at|(?:^|\\s)от)';
+    const check = text.match(new RegExp(checkLabel + '\\s*(?:от|from)?\\s*' + quantifier + '([£$€₽₸])?\\s*' + amount, 'u'));
+    if (check) {
+      brief.check = readAmount(check[2], check[3]);
+      const currencies = { '£': 'GBP', '$': 'USD', '€': 'EUR', '₽': 'RUB', '₸': 'KZT' };
+      if (check[1]) brief.currency = currencies[check[1]];
+    }
     const revenue = text.match(new RegExp('(?:оборот[а-я]*|turnover|(?:monthly )?revenue)\\s*' + quantifier + amount, 'u'));
     if (revenue) brief.revenueBand = [300000, 1000000, 5000000, 20000000, Infinity]
       .findIndex(limit => readAmount(revenue[1], revenue[2]) < limit);
-    const flowWords = 'клиент[а-я]*|заяв[а-я]*|заказ[а-я]*|стриж[а-я]*|запис[а-я]*|обращ[а-я]*|clients?|enquir(?:y|ies)|leads?|customers?|orders?|bookings?|haircuts?';
+    const flowWords = 'клиент[а-я]*|заяв[а-я]*|заказ[а-я]*|стриж[а-я]*|запис[а-я]*|обращ[а-я]*|clients?|enquir(?:y|ies)|leads?|customers?|orders?|bookings?|haircuts?|cuts?';
     const period = 'в месяц|в день|per month|a month|monthly|per day|a day|daily';
     const flow = '(?:' + flowWords + ')(?![a-zа-я])';
     const range = '(' + digits + ')(?:\\s*[-–—]\\s*(' + digits + '))?';
     const measure = range + '(?:\\s*(' + units + ')(?![a-zа-я]))?';
     const volume = text.match(new RegExp(measure + '\\s+' + flow + '(?:\\s+(' + period + '))?', 'u'))
       ?? text.match(new RegExp('(' + period + ')\\s*' + quantifier + measure + '\\s+' + flow, 'u'))?.map((item, index, match) =>
-        index === 1 ? match[2] : index === 2 ? match[3] : index === 3 ? match[4] : index === 4 ? match[1] : item);
+        index === 1 ? match[2] : index === 2 ? match[3] : index === 3 ? match[4] : index === 4 ? match[1] : item)
+      ?? text.match(new RegExp('(?:^|[,;:.]\\s+)' + quantifier + measure + '\\s+(' + period + ')(?![a-zа-я])', 'u'));
     if (volume) {
       const lower = readAmount(volume[1], volume[3]);
       const upper = volume[2] ? readAmount(volume[2], volume[3]) : lower;

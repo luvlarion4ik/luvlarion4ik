@@ -12,6 +12,7 @@
   const attrs = dataset => Object.entries(dataset).map(([key, value]) =>
     'data-gm-p-' + key + '="' + escape(value) + '"').join(' ');
   const valueOf = button => button.dataset.gmPValue;
+  const list = value => Array.isArray(value) ? value : [];
 
   function createPanel(root, { lang, catalog, t = (key, values) => gm.t(key, lang, values), money, config = {}, pricing = {} }) {
     const panel = root.querySelector('[data-gm-panel]');
@@ -40,7 +41,7 @@
     let categoryFilter = '';
     let blockFilter = '';
     let openGroups = new Set(['suggested']);
-    let previous = { phase: '', tab: '', step: 0, selected: '' };
+    let previous = { phase: '', tab: '', step: 0 };
     let briefMountKey = '';
     let furthestStep = 1;
     let sheetSize = 'half';
@@ -53,6 +54,7 @@
     let announce = 0;
     let lastAnnouncement = 0;
     let sheetDrag;
+    let sheetSwipeAt = -Infinity;
     let editing = false;
 
     const draft = () => state.draft ?? state.brief ?? {};
@@ -235,7 +237,7 @@
         '<span>' + index + '</span><small>' + text('brief.step' + index) + '</small>',
         { step: index }, (index === step ? 'aria-current="step"' : '') +
           (index > furthestStep && state.phase !== 'map' ? ' disabled' : '')) + '</li>').join('');
-      const check = state.source === 'text' ? '<p class="gm-field-note gm-text-review">' +
+      const check = state.phase === 'brief' && state.source === 'text' ? '<p class="gm-field-note gm-text-review">' +
         text(state.detected?.includes('category') ? 'auto.check' : 'auto.noCategory') + '</p>' : '';
       const recalc = state.phase === 'map' ? button('gm-secondary gm-recalc', text('brief.recalc'),
         { recalc: '' }, state.briefDirty || editing ? '' : 'disabled') : '';
@@ -257,6 +259,7 @@
     function libraryGroup(id, title, rows, groupIcon, color) {
       if (!rows.length) return '';
       const onMap = new Set(state.variant.nodes.map(node => node.block));
+      const disabled = state.variant.nodes.length >= 60;
       return '<details class="gm-library-group" data-gm-p-group="' + id + '" ' +
         (openGroups.has(id) || blockFilter.trim() ? 'open' : '') + '><summary>' + icon(groupIcon) +
         '<span>' + title + '</span></summary><div class="gm-library-list" style="--gm-stage-color:' + color + '">' +
@@ -266,9 +269,9 @@
             '<span class="gm-library-icon">' + icon(block.icon) + '</span><span class="gm-library-card-text">' +
             '<strong>' + label(block) + '</strong><small>' + escape(local(block.benefit)) + '</small>' +
             '<span class="gm-library-effect">' + (on ? text('lib.onMap') : effect(block)) + '</span></span>' +
-            '<span class="gm-library-plus" aria-hidden="true">' + icon(on ? 'check' : 'plus') + '</span>',
-            { add: block.id }, (mobile.matches ? '' : 'draggable="true"') +
-              ' aria-label="' + text('lib.add') + ': ' + label(block) + '"');
+            '<span class="gm-library-plus" aria-hidden="true">' + icon(on ? 'check' : 'plus') + '</span>' +
+            '<span class="gm-sr">' + text('lib.add') + '</span>',
+            { add: block.id }, disabled ? 'disabled' : mobile.matches ? '' : 'draggable="true"');
         }).join('') + '</div></details>';
     }
 
@@ -337,7 +340,7 @@
         lines.map(([id, value]) => '<tr><th scope="row">' + text('cmp.' + id) + '</th>' +
           variants.map(key => '<td' + (state.variant.key === key ? ' data-active' : '') + '>' +
             value(economies[key]) + '</td>').join('') + '</tr>').join('') +
-        '<tr><th scope="row"></th>' + variants.map(key => '<td>' +
+        '<tr><td></td>' + variants.map(key => '<td>' +
           button('gm-text-button', text('cmp.show'), { variant: key },
             'aria-label="' + text('cmp.show') + ': ' + text('v.' + key) + '"') + '</td>').join('') + '</tr></tbody></table></div>';
       const diff = '<section class="gm-differences"><h3>' + text('cmp.differences') + '</h3>' +
@@ -384,7 +387,7 @@
       const info = currentEconomy();
       const contribution = gm.engine.contribution(state.brief, state.variant, catalog).find(item => item.id === node.id);
       const connected = state.variant.edges.some(edge => edge.from === node.id || edge.to === node.id);
-      const canUseSplit = (node.settings?.paymentMethods ?? []).some(method => ['dolyami', 'split'].includes(method)) &&
+      const canUseSplit = list(node.settings?.paymentMethods).some(method => ['dolyami', 'split'].includes(method)) &&
         !state.variant.nodes.some(item => item.block === 'pay_split');
       const estimate = pricing[block.service]?.[info?.price.tier];
       const share = node.settings?.crmSystem === 'custom' ? 1 : block.share;
@@ -460,8 +463,8 @@
         months: row.payback ? t('cmp.months', { n: numbers.format(row.payback) }).replace(/^≈\s*/, '') : '',
       });
       const was = canGrow ? '<small>' + text('eco.was', { money: money(current.revenue) }) + '</small>' : '';
-      const stats = '<dl class="gm-economy-stats"><div><dt>' + text('eco.revenue') + '</dt><dd data-gm-p-count="0">' +
-        amountText(row.revenue) + '</dd>' + was + '</div><div class="gm-growth"><dt>' + text('eco.growth') +
+      const stats = '<dl class="gm-economy-stats"><div><dt>' + text('eco.revenue') + '</dt><dd><span data-gm-p-count="0">' +
+        amountText(row.revenue) + '</span>' + was + '</dd></div><div class="gm-growth"><dt>' + text('eco.growth') +
         '</dt><dd data-gm-p-count="1">' + formatPct(row.growth) + '</dd></div><div class="gm-loss"><dt>' +
         text(row.key === 'now' ? 'eco.leaking' : 'eco.losing') + '</dt><dd data-gm-p-count="2">' +
         amountText(row.losingNow) + '</dd></div><div><dt>' + text('eco.payback') + '</dt><dd>' +
@@ -567,11 +570,13 @@
         overlay.querySelector('h2')?.focus({ preventScroll: true });
       } else if ((moved || previous.step !== state.step) && (state.phase === 'brief' || tab === 'brief')) {
         content.querySelector('h2')?.focus({ preventScroll: true });
-      } else if (state.phase === 'map' && previous.tab !== tab && !moved) {
+      } else if (moved && state.phase === 'map') {
+        content.querySelector('h2')?.focus({ preventScroll: true });
+      } else if (state.phase === 'map' && previous.tab !== tab) {
         const selectedTab = content.querySelector('[aria-selected="true"]');
         if (tab !== 'block') selectedTab?.focus({ preventScroll: true });
       }
-      previous = { phase: state.phase, tab, step: state.step, selected: selectedNode(state.selected) };
+      previous = { phase: state.phase, tab, step: state.step };
     }
 
     function changed(values, rerender = false) {
@@ -683,8 +688,9 @@
       else if (data.gmPTab) {
         if (sheetSize === 'closed') resizeSheet('half');
         emit('tab', { tab: data.gmPTab });
-      } else if (data.gmPSize) resizeSheet(data.gmPSize);
-      else if (data.gmPStep) emit('step', { step: Number(data.gmPStep) });
+      } else if (data.gmPSize) {
+        if (event.detail === 0 || performance.now() - sheetSwipeAt > 300) resizeSheet(data.gmPSize);
+      } else if (data.gmPStep) emit('step', { step: Number(data.gmPStep) });
       else if ('gmPRecalc' in data) emit('analyze', { draft: draft() });
       else if (data.gmPField) {
         if (data.gmPMulti) toggleList(data.gmPField, valueOf(control));
@@ -700,9 +706,9 @@
       else if (data.gmPAdd && isEditable()) emit('add', { block: data.gmPAdd });
       else if (data.gmPDelete && isEditable()) emit('delete', { ids: [data.gmPDelete] });
       else if (data.gmPSet && node && isEditable()) {
-        const list = node.settings[data.gmPSet] ?? [];
+        const options = list(node.settings[data.gmPSet]);
         const id = valueOf(control);
-        const values = list.includes(id) ? list.filter(value => value !== id) : [...list, id];
+        const values = options.includes(id) ? options.filter(value => value !== id) : [...options, id];
         emit('settings', { id: node.id, settings: { ...node.settings, [data.gmPSet]: values } });
       } else if ('gmPEconomy' in data) {
         economyOpen = !economyOpen;
@@ -785,14 +791,15 @@
     }, true);
     panel.addEventListener('pointerdown', event => {
       const handle = event.target.closest('[data-gm-p-sheet]');
-      if (!handle || event.target.closest('button') || !mobile.matches) return;
-      handle.setPointerCapture(event.pointerId);
+      if (!handle || !mobile.matches || !event.isPrimary) return;
+      (event.target.closest('button') ?? handle).setPointerCapture(event.pointerId);
       sheetDrag = { pointerId: event.pointerId, y: event.clientY };
     });
     panel.addEventListener('pointerup', event => {
       if (sheetDrag?.pointerId !== event.pointerId) return;
       const delta = sheetDrag.y - event.clientY;
       if (Math.abs(delta) > 37) {
+        sheetSwipeAt = performance.now();
         const next = Math.max(0, Math.min(2, sheetSizes.indexOf(sheetSize) + Math.sign(delta)));
         resizeSheet(sheetSizes[next]);
       }

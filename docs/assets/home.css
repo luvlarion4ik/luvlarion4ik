@@ -89,3 +89,26 @@
   .featured-case {margin: .7rem 0 1.6rem}
   .featured-caption {padding: .85rem 1rem}
 }
+
+.gm-teaser {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  align-items: center;
+  gap: clamp(1.25rem, 5vw, 4rem);
+}
+.gm-teaser p { max-width: 52ch; }
+.gm-teaser-art {
+  display: grid;
+  place-items: center;
+  min-height: 154px;
+  padding: clamp(.55rem, 2vw, 1.5rem);
+  border: 1px solid var(--rule);
+  border-radius: .75rem;
+  background: radial-gradient(ellipse at 50% 0, color-mix(in oklab, var(--night) 88%, var(--accent)), var(--night));
+}
+.gm-teaser .gm-preview-art { display: block; width: 100%; height: auto; }
+.gm-teaser .gm-preview-art text { font-size: 10px; }
+.gm-teaser .gm-preview-flow { animation: gm-teaser-flow 2.4s linear infinite; }
+@keyframes gm-teaser-flow { to { stroke-dashoffset: -36; } }
+@media (max-width: 680px) { .gm-teaser { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .gm-teaser .gm-preview-flow { animation: none; } }

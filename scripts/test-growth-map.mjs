@@ -160,6 +160,21 @@ test('local parser recognises the three example briefs', () => {
   assert.equal(english.brief.size, 'team');
 });
 
+test('English examples preserve the entered currency and detect numeric volume', () => {
+  const barber = engine.parseText(copy.en['auto.example1.text'], catalog, 'en');
+  assert.equal(barber.brief.check, 28);
+  assert.equal(barber.brief.leads, 400);
+  assert.equal(barber.brief.currency, 'GBP');
+  assert.ok(barber.detected.includes('currency'));
+  const kitchens = engine.parseText(copy.en['auto.example2.text'], catalog, 'en');
+  assert.equal(kitchens.brief.check, 9000);
+  assert.equal(kitchens.brief.leads, 12.5);
+  assert.equal(kitchens.brief.currency, 'GBP');
+  assert.equal(engine.normalizeBrief(kitchens.brief, catalog).leads, 13);
+  const course = engine.parseText(copy.en['auto.example3.text'], catalog, 'en');
+  assert.equal(course.brief.leads, undefined);
+});
+
 test('migration removes unknown blocks and attached edges', () => {
   const brief = readBrief('barber');
   const variant = normalizeRealm(engine.buildAll(brief, catalog));

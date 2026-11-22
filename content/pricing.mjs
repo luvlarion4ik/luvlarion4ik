@@ -129,7 +129,7 @@ const packages = [
 const isRubles = amount => Number.isSafeInteger(amount) && amount > 0
   && amount <= Math.floor(Number.MAX_SAFE_INTEGER / 1000);
 
-function serviceRate(id, tier, overrides) {
+export function serviceRate(id, tier, overrides) {
   if (!Object.hasOwn(estimator, id) || !Object.hasOwn(estimator[id], tier)) return null;
   const value = Object.hasOwn(overrides, id) ? overrides[id]?.[tier] : undefined;
   if (value === null && !packages.some(item => item.estimateId === id && tier === 'small')) return null;

@@ -7,6 +7,7 @@
   const locale = t('ru-RU', 'en-US');
   const details = control.querySelector('details');
   const summary = details.querySelector('summary');
+  const summaryLabel = summary.getAttribute('aria-label');
   const radios = [...control.querySelectorAll('input[name=region]')];
   const picker = control.querySelector('[data-currency-picker]');
   const quickChoices = new Set(radios.map(input => input.value));
@@ -76,6 +77,7 @@
     selected = code;
     window.devlarionRegion = { code: code.toLowerCase(), currency, rate, date, source };
     label.textContent = requestOnly ? t('По запросу', 'On request') : currency;
+    summary.setAttribute('aria-label', summaryLabel + ' · ' + label.textContent);
     radios.forEach(input => { input.checked = !requestOnly && input.value === currency; });
     priceNodes.forEach(node => {
       node.textContent = (converted ? '≈ ' : '') + format.format(Number(node.dataset.regionPrice) * rate);

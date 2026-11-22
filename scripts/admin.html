@@ -103,6 +103,21 @@
         <pre>{"orient-logic":{"ru":{"result":"Описание результата","curators":[{"person":"ilya","role":"Разработка"}],"stack":{"front":["Next.js"],"integrations":["Telegram"]}}}}</pre>
       </details>
     </details>
+    <details class="panel">
+      <summary>Карта роста</summary>
+      <div class="columns">
+        <label><span>Подбор блоков с ИИ</span><select name="growthAi"><option value="off">Выключено</option><option value="on">Включено</option></select></label>
+        <label><span>Адрес воркера</span><input name="growthEndpoint" type="url" placeholder="https://"></label>
+        <label><span>Публичный ключ Turnstile</span><input name="growthTurnstile"></label>
+        <label><span>Дополнение к сообщению в Telegram</span><input name="growthHandoff"></label>
+      </div>
+      <label><span>Гарантии (JSON)</span><textarea name="growthGuarantees" spellcheck="false"></textarea></label>
+      <label><span>Отзывы (JSON)</span><textarea name="growthReviews" spellcheck="false"></textarea></label>
+      <details><summary>Примеры формата</summary>
+        <pre>[{"ru":"Фиксируем цену в договоре","en":"We fix the price in the contract"}]</pre>
+        <pre>[{"name":"Имя","business":"Компания","text":{"ru":"Отзыв","en":"Review"},"url":"https://example.com/project","date":"2026-11-23"}]</pre>
+      </details>
+    </details>
     <button type="submit">Сохранить и пересобрать</button>
   </form>
   <p id="status" role="status">Загружаем настройки…</p>
@@ -125,6 +140,7 @@
   const advanced = {team: 'Команда', achievements: 'Достижения', caseOverrides: 'Кейсы'};
   let revision;
   let defaults;
+  let portal;
 
   function announce(message, error = false) {
     status.textContent = message;
@@ -186,9 +202,15 @@
 
   function populate(config) {
     const fields = form.elements;
+    portal = config.portal;
+    const map = config.growthMap ?? {};
     for (const [name, value] of Object.entries({
       ...config.exchange, ...config.referral, inn: config.legal.inn, ogrnip: config.legal.ogrnip,
-      legalName: config.legal.name, founderPhoto: config.founderPhoto
+      legalName: config.legal.name, founderPhoto: config.founderPhoto,
+      growthAi: map.ai ?? 'off', growthEndpoint: map.endpoint ?? '',
+      growthTurnstile: map.turnstileSiteKey ?? '', growthHandoff: map.handoffNote ?? '',
+      growthGuarantees: JSON.stringify(map.guarantees ?? [], null, 2),
+      growthReviews: JSON.stringify(map.reviews ?? [], null, 2)
     })) fields[name].value = value;
     for (const key of Object.keys(advanced)) fields[key].value = JSON.stringify(config[key], null, 2);
     setPrices(config.pricing);
@@ -205,16 +227,17 @@
       pricing: {},
       ready: {},
       founderPhoto: text('founderPhoto'),
-      referral: {percent: number('percent'), days: number('days'), cap: number('cap')}
+      portal,
+      referral: {percent: number('percent'), days: number('days'), cap: number('cap')},
+      growthMap: {
+        ai: text('growthAi'), endpoint: text('growthEndpoint'),
+        turnstileSiteKey: text('growthTurnstile'), handoffNote: text('growthHandoff'),
+        guarantees: readJSON('growthGuarantees', 'Гарантии'),
+        reviews: readJSON('growthReviews', 'Отзывы')
+      }
     };
     for (const [name, label] of Object.entries(advanced)) {
-      try {
-        config[name] = JSON.parse(fields[name].value);
-      } catch {
-        fields[name].closest('details').open = true;
-        fields[name].focus();
-        throw new Error('Проверьте формат JSON в поле «' + label + '».');
-      }
+      config[name] = readJSON(name, label);
     }
     for (const input of pricing.querySelectorAll('input')) {
       if (!input.value.trim()) continue;
@@ -229,6 +252,17 @@
       if (select.value && select.value !== item.status) config.ready[item.id] = select.value;
     }
     return config;
+  }
+
+  function readJSON(name, label) {
+    const field = form.elements[name];
+    try {
+      return JSON.parse(field.value);
+    } catch {
+      field.closest('details').open = true;
+      field.focus();
+      throw new Error('Проверьте формат JSON в поле «' + label + '».');
+    }
   }
 
   async function api(options) {
