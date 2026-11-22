@@ -141,6 +141,7 @@ test('portal profile login, requests and Telegram menu', async t => {
   assert.equal((await saved.json()).client.login, 'anna_sever');
   assert.equal((await post('password', { identifier: 'anna_sever', password })).status, 200);
   assert.equal((await post('password', { identifier: 'ANNA_SEVER', password })).status, 200);
+  for (const id of ['@new_client', 'new_client', ' https://t.me/new_client/ ', 't.me/New_Client', '1001', '@1001']) assert.equal((await post('password', { identifier: id, password })).status, 200, id);
   assert.equal((await post('password', { identifier: 'anna_sever', password: 'wrong' })).status, 401);
 
   // Заявка из кабинета сразу становится проектом клиента.

@@ -190,7 +190,8 @@ async function authenticate(req, res, action) {
   const body = await readJson(req, 32 * 1024);
   if (!body || typeof body !== 'object' || Array.isArray(body)) throw new HttpError(400, 'Нужны данные формы.');
   if (action === 'password') {
-    const identifier = str(body.identifier, 80).replace(/^@/, '').toLowerCase();
+    const identifier = str(body.identifier, 120).trim().toLowerCase()
+      .replace(/^https?:\/\//, '').replace(/^(www\.)?(t\.me|telegram\.me)\//, '').replace(/^@+/, '').replace(/[\s/]+$/g, '').replace(/\s+/g, '');
     const denied = () => new HttpError(401, 'Проверьте логин и пароль.');
     if (!/^[a-z0-9_]{1,64}$/.test(identifier) || typeof body.password !== 'string' || !body.password) throw denied();
     const numeric = /^\d+$/.test(identifier);

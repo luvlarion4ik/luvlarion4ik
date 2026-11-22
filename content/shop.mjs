@@ -127,7 +127,22 @@ const mesh = (x, y, w, h, gold) => {
 };
 
 const MODEL3D = { 'park-s': 'spark', 'park-m': 'rack', 'park-l': 'rack', 'dgx-spark': 'spark', 'gb10-oem': 'spark', 'spark-cluster': 'spark', 'rtx5090-ws': 'workstation', 'rtx-pro-ws': 'workstation', 'rtx-pro-server': 'gpu-server', 'hgx-h200': 'hgx', 'dgx-b200': 'hgx', 'amd-mi300x': 'hgx', 'oem-servers': 'gpu-server' };
-const PHOTO = { 'dgx-spark': 'cut-spark.png', 'gb10-oem': 'partners/asus-ascent-gx10.jpg', 'spark-cluster': 'pages/cluster-2spark.jpg', 'park-s': 'pages/park-s.jpg', 'park-m': 'pages/park-m.jpg', 'park-l': 'pages/park-l.jpg', 'rtx5090-ws': 'cut-workstation.png', 'rtx-pro-ws': 'cut-workstation.png', 'rtx-pro-server': 'cut-hgx.png', 'hgx-h200': 'cut-hgx.png', 'dgx-b200': 'cut-rack.png', 'oem-servers': 'cut-hgx.png', 'amd-mi300x': 'cut-hgx.png', 'rent-h100': 'pages/rent-gpu.jpg', 'rent-h200': 'pages/rent-gpu.jpg', 'rent-8h200': 'pages/rent-server.jpg', 'month-h100': 'pages/rent-gpu.jpg', 'month-h200': 'pages/rent-gpu.jpg', 'month-8h200': 'pages/rent-server.jpg', 'provider-pick': 'pages/rent-cloud.jpg' };
+const G = n => 'gallery/' + n + '.jpg';
+const GALLERY = {
+  'dgx-spark': [G('spark-1'), G('spark-2'), G('spark-3'), 'nvidia-dgx-spark-desk.jpg'],
+  'gb10-oem': [G('gb10-1'), G('gb10-2'), G('gb10-3'), 'partners/asus-ascent-gx10.jpg'],
+  'spark-cluster': ['pages/cluster-2spark.jpg', G('spark-1'), G('spark-2')],
+  'park-s': ['pages/park-s.jpg', G('park-s-2'), G('spark-3')],
+  'park-m': ['pages/park-m.jpg', G('park-m-2'), G('hgx-2')],
+  'park-l': ['pages/park-l.jpg', G('rack-1'), G('rack-2'), 'nvidia-gb200-nvl72.jpg'],
+  'rtx5090-ws': [G('ws-1'), G('ws-2')], 'rtx-pro-ws': [G('ws-1'), G('ws-2')],
+  'rtx-pro-server': [G('srv4-1'), G('srv4-2')],
+  'hgx-h200': [G('hgx-1'), G('hgx-2'), 'frame-2-server.jpg'], 'dgx-b200': [G('rack-1'), G('hgx-2'), 'nvidia-gb200-nvl72.jpg'], 'amd-mi300x': [G('hgx-1'), G('hgx-2')], 'oem-servers': [G('srv4-1'), G('srv4-2'), G('hgx-1')],
+  'rent-h100': ['pages/rent-gpu.jpg', G('rack-2')], 'rent-h200': ['pages/rent-gpu.jpg', G('rack-2')], 'rent-8h200': ['pages/rent-server.jpg', G('hgx-2')],
+  'month-h100': ['pages/rent-gpu.jpg', G('rack-2')], 'month-h200': ['pages/rent-gpu.jpg', G('rack-2')], 'month-8h200': ['pages/rent-server.jpg', G('hgx-2')], 'provider-pick': ['pages/rent-cloud.jpg', G('rack-2')],
+};
+const CREDIT = { 'nvidia-dgx-spark-desk.jpg': 'NVIDIA', 'nvidia-gb200-nvl72.jpg': 'NVIDIA', 'partners/asus-ascent-gx10.jpg': 'ASUS' };
+const PHOTO = { 'dgx-spark': 'cut-spark.png', 'gb10-oem': 'gallery/gb10-1.jpg', 'spark-cluster': 'pages/cluster-2spark.jpg', 'park-s': 'pages/park-s.jpg', 'park-m': 'pages/park-m.jpg', 'park-l': 'pages/park-l.jpg', 'rtx5090-ws': 'cut-workstation.png', 'rtx-pro-ws': 'cut-workstation.png', 'rtx-pro-server': 'cut-hgx.png', 'hgx-h200': 'cut-hgx.png', 'dgx-b200': 'cut-rack.png', 'oem-servers': 'cut-hgx.png', 'amd-mi300x': 'cut-hgx.png', 'rent-h100': 'pages/rent-gpu.jpg', 'rent-h200': 'pages/rent-gpu.jpg', 'rent-8h200': 'pages/rent-server.jpg', 'month-h100': 'pages/rent-gpu.jpg', 'month-h200': 'pages/rent-gpu.jpg', 'month-8h200': 'pages/rent-server.jpg', 'provider-pick': 'pages/rent-cloud.jpg' };
 
 export function deviceArt(kind) {
   const box = inner => `<svg class="hw-art" viewBox="0 0 240 150" aria-hidden="true">${inner}</svg>`;
@@ -150,13 +165,14 @@ export function renderShop(lang, ctx) {
   const i = lang === 'ru' ? 0 : 1;
   const priceOf = p => typeof p === 'number' ? p : p ? packageStartingPrice(p, ctx.pricing) : null;
   const unitLabel = u => u === 'hour' ? pick(lang, ' / час', ' / hour') : u === 'month' ? pick(lang, ' / мес.', ' / month') : '';
-  const card = ({ id, cat, title, text, rub, unit, art, specs, market, kind, more, model }) => {
+  const card = ({ id, cat, title, text, rub, unit, art, specs, market, kind, more, model, gallery }) => {
     const price = rub == null ? `<p class="audience-price">${pick(lang, 'По запросу', 'On request')}</p>`
       : `<p class="audience-price" data-region-price-row>${priceMarkup(lang, rub, unitLabel(unit))}</p>`;
     const marketLine = market ? `<p class="shop-market">${pick(lang, 'Рынок', 'Market')}: ${market[0].toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-GB')}–${market[1].toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-GB')} ₽${unitLabel(unit)}</p>` : '';
-    return `<article class="shop-item${kind === 'hw' ? ' shop-hw' : ''}" data-cat="${cat}" data-id="${id}" data-title="${esc(title)}" data-rub="${rub ?? ''}" data-unit="${unit ?? ''}">
+    const gal = gallery ? esc(JSON.stringify(gallery.map(f => [ctx.asset + 'photos/' + f, CREDIT[f] || '']))) : '';
+    return `<article class="shop-item${kind === 'hw' ? ' shop-hw' : ''}" data-cat="${cat}" data-id="${id}" data-title="${esc(title)}" data-rub="${rub ?? ''}" data-unit="${unit ?? ''}"${gal ? ` data-gallery="${gal}"` : ''}>
       ${art}
-      <div class="shop-body"><h3>${esc(title)}</h3>${model ? `<button type="button" class="shop-3d" data-open3d="${model}" data-title="${esc(title)}">${pick(lang, 'Покрутить в 3D', 'Rotate in 3D')}</button>` : ''}<p class="shop-text">${esc(text)}</p>
+      <div class="shop-body"><h3>${gallery ? `<button type="button" class="shop-open" data-open-product>${esc(title)}</button>` : esc(title)}</h3>${model ? `<button type="button" class="shop-3d" data-open3d="${model}" data-title="${esc(title)}">${pick(lang, 'Покрутить в 3D', 'Rotate in 3D')}</button>` : ''}<p class="shop-text">${esc(text)}</p>
       ${specs ? `<ul class="shop-specs">${specs.map(s => `<li>${esc(s)}</li>`).join('')}</ul>` : ''}
       ${more ? `<details class="shop-more"><summary>${pick(lang, 'Подробнее', 'Details')}</summary><dl>${more.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl></details>` : ''}
       <div class="shop-foot">${price}${marketLine}
@@ -167,7 +183,7 @@ export function renderShop(lang, ctx) {
     id, cat, title: title[i], text: text[i], rub: priceOf(p), unit, art: iconArt(ctx.icons, icon),
   }))).join('');
   const hwCards = hardware.map(h => card({
-    id: h.id, cat: 'hw-' + h.mode, kind: 'hw', title: h[lang][0], text: h[lang][1], specs: h[lang][2], rub: h.rub, unit: h.unit, market: h.market, more: h.more?.[lang], model: MODEL3D[h.id], art: `<div class="shop-art${PHOTO[h.id] ? ' shop-art-photo' : ''}">${PHOTO[h.id] ? `<img src="${ctx.asset}photos/${PHOTO[h.id]}" alt="${esc(h[lang][0])}" width="1200" height="900" loading="lazy"${PHOTO[h.id].endsWith('.png') ? '' : ' class="is-full"'}>${PHOTO[h.id].startsWith('partners/') ? `<span class="shop-credit">${pick(lang, 'Фото: ASUS', 'Photo: ASUS')}</span>` : PHOTO[h.id].endsWith('.png') ? '' : `<span class="shop-credit">${pick(lang, 'Визуализация', 'Visualisation')}</span>`}` : deviceArt(h.art)}${h.mode === 'rent' ? `<span class="shop-tag">${pick(lang, 'Аренда', 'Rental')}</span>` : `<span class="shop-tag">${pick(lang, 'Под заказ', 'To order')}</span>`}</div>`,
+    id: h.id, cat: 'hw-' + h.mode, kind: 'hw', title: h[lang][0], text: h[lang][1], specs: h[lang][2], rub: h.rub, unit: h.unit, market: h.market, more: h.more?.[lang], model: MODEL3D[h.id], gallery: GALLERY[h.id], art: `<div class="shop-art${PHOTO[h.id] ? ' shop-art-photo' : ''}">${PHOTO[h.id] ? `<img src="${ctx.asset}photos/${PHOTO[h.id]}" alt="${esc(h[lang][0])}" width="1200" height="900" loading="lazy"${PHOTO[h.id].endsWith('.png') ? '' : ' class="is-full"'}>${PHOTO[h.id].startsWith('partners/') ? `<span class="shop-credit">${pick(lang, 'Фото: ASUS', 'Photo: ASUS')}</span>` : ''}` : deviceArt(h.art)}${h.mode === 'rent' ? `<span class="shop-tag">${pick(lang, 'Аренда', 'Rental')}</span>` : `<span class="shop-tag">${pick(lang, 'Под заказ', 'To order')}</span>`}</div>`,
   })).join('');
   const chips = [['all', pick(lang, 'Все', 'All')], ...services.map(([id, names]) => [id, names[i]]), ['hw-buy', pick(lang, 'Железо: купить', 'Hardware: buy')], ['hw-rent', pick(lang, 'Железо: аренда', 'Hardware: rent')]];
   const labels = JSON.stringify({

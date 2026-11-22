@@ -300,3 +300,67 @@
   new MutationObserver(apply).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', apply);
 })();
+
+
+// Карточка товара: окно с галереей, описанием и характеристиками.
+(() => {
+  const shop = document.querySelector('[data-shop]');
+  if (!shop) return;
+  const ru = document.documentElement.lang === 'ru';
+  let dlg, items = [], idx = 0, current = null;
+  function build() {
+    dlg = document.createElement('dialog');
+    dlg.className = 'pd';
+    dlg.innerHTML = `<div class="pd-card"><button type="button" class="pd-close" aria-label="${ru ? 'Закрыть' : 'Close'}">×</button>
+      <div class="pd-gallery"><div class="pd-main"><img alt=""><span class="pd-credit"></span><button type="button" class="pd-nav pd-prev" aria-label="${ru ? 'Предыдущее фото' : 'Previous'}">‹</button><button type="button" class="pd-nav pd-next" aria-label="${ru ? 'Следующее фото' : 'Next'}">›</button></div><div class="pd-thumbs"></div></div>
+      <div class="pd-info"><h2 class="pd-title"></h2><p class="pd-text"></p><ul class="shop-specs pd-specs"></ul><dl class="pd-more"></dl><div class="pd-price"></div><div class="pd-actions"></div></div></div>`;
+    document.body.append(dlg);
+    dlg.querySelector('.pd-close').onclick = () => dlg.close();
+    dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+    dlg.querySelector('.pd-prev').onclick = () => show(idx - 1);
+    dlg.querySelector('.pd-next').onclick = () => show(idx + 1);
+    dlg.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') show(idx - 1); if (e.key === 'ArrowRight') show(idx + 1); });
+    let x0 = null;
+    const main = dlg.querySelector('.pd-main');
+    main.addEventListener('pointerdown', e => { x0 = e.clientX; });
+    main.addEventListener('pointerup', e => { if (x0 !== null && Math.abs(e.clientX - x0) > 40) show(idx + (e.clientX < x0 ? 1 : -1)); x0 = null; });
+  }
+  function show(i) {
+    if (!items.length) return;
+    idx = (i + items.length) % items.length;
+    const img = dlg.querySelector('.pd-main img');
+    img.classList.remove('pd-in'); void img.offsetWidth;
+    img.src = items[idx][0]; img.alt = current.dataset.title;
+    img.classList.add('pd-in');
+    dlg.querySelector('.pd-credit').textContent = items[idx][1] ? (ru ? 'Фото: ' : 'Photo: ') + items[idx][1] : '';
+    dlg.querySelectorAll('.pd-thumbs button').forEach((b, n) => b.setAttribute('aria-current', String(n === idx)));
+  }
+  function open(card) {
+    if (!dlg) build();
+    current = card;
+    items = JSON.parse(card.dataset.gallery || '[]');
+    dlg.querySelector('.pd-title').textContent = card.dataset.title;
+    dlg.querySelector('.pd-text').textContent = card.querySelector('.shop-text')?.textContent || '';
+    dlg.querySelector('.pd-specs').innerHTML = card.querySelector('.shop-specs')?.innerHTML || '';
+    dlg.querySelector('.pd-more').innerHTML = card.querySelector('.shop-more dl')?.innerHTML || '';
+    dlg.querySelector('.pd-price').innerHTML = (card.querySelector('.audience-price')?.outerHTML || '') + (card.querySelector('.shop-market')?.outerHTML || '');
+    const actions = dlg.querySelector('.pd-actions');
+    actions.replaceChildren();
+    const add = document.createElement('button'); add.type = 'button'; add.className = 'button'; add.textContent = ru ? 'В корзину' : 'Add to basket';
+    add.onclick = () => { card.querySelector('[data-add]')?.click() || card.querySelector('[data-inc]')?.click(); add.textContent = ru ? 'Добавлено ✓' : 'Added ✓'; };
+    actions.append(add);
+    const m3d = card.querySelector('[data-open3d]');
+    if (m3d) { const b = document.createElement('button'); b.type = 'button'; b.className = 'ghost'; b.textContent = m3d.textContent; b.onclick = () => { dlg.close(); m3d.click(); }; actions.append(b); }
+    const thumbs = dlg.querySelector('.pd-thumbs');
+    thumbs.replaceChildren(...items.map((it, n) => { const b = document.createElement('button'); b.type = 'button'; b.innerHTML = '<img alt="" loading="lazy">'; b.firstChild.src = it[0]; b.onclick = () => show(n); return b; }));
+    dlg.querySelectorAll('.pd-nav').forEach(b => { b.hidden = items.length < 2; });
+    dlg.showModal();
+    show(0);
+  }
+  shop.addEventListener('click', e => {
+    const t = e.target.closest('[data-open-product], .shop-art');
+    if (!t) return;
+    const card = t.closest('.shop-item');
+    if (card?.dataset.gallery) open(card);
+  });
+})();

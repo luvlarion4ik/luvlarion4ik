@@ -44,7 +44,8 @@
           <fieldset class="ac-auth-fields" disabled>
             <label class="ac-field" for="ac-identifier">
               <span>Логин</span>
-              <input id="ac-identifier" name="identifier" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Ваш логин, @username или Telegram ID" required>
+              <input id="ac-identifier" name="identifier" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="anna_sever, @username или 123456789" aria-describedby="ac-identifier-hint" required>
+              <small class="ac-note" id="ac-identifier-hint">Подойдёт что угодно из трёх: логин из кабинета, имя в Telegram (с @ или без) или числовой Telegram ID.</small>
             </label>
             <div class="ac-field">
               <label for="ac-password">Пароль</label>

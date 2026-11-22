@@ -83,11 +83,16 @@ for(const lang of ["ru","en"]){
  const servicesMenu = () => {
    const groups = [
      [homeCopy[lang].audience, segments.map(page => [page.route,page[lang].label])],
-     [l("Для бизнеса: ИИ и GPU","Enterprise: AI and GPUs"),[
-       ["private-ai/",l("Корпоративный ИИ","Private AI")],
+     [l("ИИ для бизнеса","AI for business"),[
+       ["private-ai/",l("Корпоративный ИИ в РФ","Private AI in Russia")],
+       ["ai-assistant/",l("ИИ-ассистент","AI assistant")],
+       ["compute/",l("Калькулятор: какое железо нужно","Calculator: what hardware you need")],
+     ]],
+     [l("Железо для бизнеса","Hardware for business"),[
+       ["shop/",l("Магазин услуг и железа","Service and hardware shop")],
        ["hardware/",l("GPU-серверы и DGX","GPU servers and DGX")],
        ["compute/",l("Купить или арендовать мощности","Buy or rent compute")],
-       ["import/",l("Техника под заказ","Equipment to order")],
+       ["import/",l("Техника под заказ, в том числе из Китая","Equipment to order, incl. from China")],
      ]],
      [l("Кейсы по отраслям","Industry cases"),[
        ["industries/clinics/",l("Клиники","Clinics")],
@@ -99,14 +104,13 @@ for(const lang of ["ru","en"]){
      [l("Сайты и боты","Websites and bots"),[
        ["website/",l("Сайт","Website")],
        ["telegram-bot/",l("Бот и мини-приложение","Bot and mini app")],
-       ["ai-assistant/",l("ИИ-ассистент","AI assistant")],
        ["solutions/",l("Готовые модули","Ready modules")],
        ["bundle/",l("Пакетом выгоднее","Better as a bundle")],
      ]],
      [l("Рост","Growth"),topics.filter(page=>page.route!=="bundle/").map(page => [page.route,page.route==="seo/"?"SEO":page[lang].label])],
    ];
    return `<details class="services-nav"><summary>${t.nav[0]}</summary><div class="services-nav-links">
-     <div class="services-top"><a class="services-shop" href="${home}shop/"><span>${l("Магазин услуг и железа","Service and hardware shop")}</span><small>${l("Цены, корзина, DGX и GPU","Prices, basket, DGX and GPUs")}</small></a><a class="services-all" href="${home}services/">${l("Все услуги на одной карте","All services on one map")} <span aria-hidden="true">→</span></a></div>
+     <div class="services-top"><a class="services-all" href="${home}services/">${l("Все услуги на одной карте","All services on one map")} <span aria-hidden="true">→</span></a></div>
      ${groups.map(([title,items],gi)=>`<div class="services-col" style="--c:${gi}"><strong>${esc(title)}</strong><ul>${items.map(([route,label],li)=>`<li style="--r:${li}"><a href="${home}${route}">${esc(label)}</a></li>`).join("")}</ul></div>`).join("")}
    </div></details>`;
  };

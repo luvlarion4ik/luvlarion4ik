@@ -7,7 +7,7 @@
   const root = document.documentElement;
 
   // 1. Первый экран: большой контурный знак D с вырезом L и вращающиеся орбиты.
-  const hero = document.querySelector(".hero, .audience-hero");
+  const hero = document.querySelector(".hero");
   if (hero && !hero.querySelector(".dl-orbit")) {
     const ring = (r, cls = "") => `<circle class="ring ${cls}" cx="500" cy="500" r="${r}"/>`;
     const sat = (r, angle, size) => {
@@ -16,9 +16,6 @@
     };
     hero.insertAdjacentHTML("afterbegin", `<svg class="dl-orbit" viewBox="0 0 1000 1000" aria-hidden="true" focusable="false">
       ${ring(210)}${ring(300, "dash")}${ring(410)}${ring(490, "dash")}
-      <g class="spin s1">${sat(300, -30, 4)}${sat(300, 150, 2.5)}</g>
-      <g class="spin s2">${sat(410, 60, 5)}${sat(410, 200, 3)}</g>
-      <g class="spin s3">${sat(210, 110, 3)}</g>
       <g transform="translate(500 500) scale(4.2) translate(-33 -32)">
         <path class="glyph" pathLength="1" d="M8 6h20c18 0 30 10 30 26S46 58 28 58H8V6Z"/>
         <path class="glyph cut" pathLength="1" d="M24.5 16V43.5H42"/>
@@ -480,7 +477,6 @@
     top.toggleAttribute("data-show", y > innerHeight * 0.9);
     header?.toggleAttribute("data-scrolled", y > 12);
     if (y < innerHeight * 1.2) {
-      heroArt?.style.setProperty("transform", "translate3d(0," + (y * -0.06).toFixed(1) + "px,0) rotate(" + (y * 0.004).toFixed(3) + "deg)");
     }
     if (flow) {
       const box = flow.getBoundingClientRect();

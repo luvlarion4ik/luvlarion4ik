@@ -141,7 +141,7 @@ const HERO = { 'self-employed/': 'self-employed', 'business/': 'business', 'ente
 export function pageArt(lang, route, asset = '') {
   const hero = HERO[route];
   const file = hero && (existsSync(new URL(`../docs/assets/photos/pages/hero-${hero}.jpg`, import.meta.url)) ? `hero-${hero}.jpg` : existsSync(new URL(`../docs/assets/photos/pages/${hero}.jpg`, import.meta.url)) ? `${hero}.jpg` : null);
-  if (file && asset) return `<figure class="page-art page-photo"><img src="${asset}photos/pages/${file}" alt="" width="1200" height="900" fetchpriority="high"><figcaption>${lang === 'ru' ? 'Визуализация' : 'Visualisation'}</figcaption></figure>`;
+  if (file && asset) return `<figure class="page-art page-photo"><img src="${asset}photos/pages/${file}" alt="" width="1200" height="900" fetchpriority="high"></figure>`;
   return pageArtSvg(lang, route);
 }
 
