@@ -4,26 +4,26 @@ Devlarion development studio · Ilia Larionov
 
 I help businesses take enquiries and cut manual work. I build catalogue websites, booking bots and tools that connect the systems your team uses.
 
-[View our work](https://luvlarion4ik.github.io/luvlarion4ik/#work) · [Estimate a project](https://luvlarion4ik.github.io/luvlarion4ik/#quiz) · [Discuss a project](https://t.me/LuvLarion4ik) · [Threads](https://www.threads.com/@luvlarion4ik) · [Русский](README.ru.md)
+[View our work](https://devlarion.ru/#work) · [Estimate a project](https://devlarion.ru/#quiz) · [Discuss a project](https://t.me/LuvLarion4ik) · [Threads](https://www.threads.com/@luvlarion4ik) · [Русский](README.ru.md)
 
 ## Who we work with
 
-- [Self-employed and sole traders](https://luvlarion4ik.github.io/luvlarion4ik/self-employed/)
-- [Small and medium businesses](https://luvlarion4ik.github.io/luvlarion4ik/business/)
-- [Enterprise](https://luvlarion4ik.github.io/luvlarion4ik/enterprise/)
+- [Self-employed and sole traders](https://devlarion.ru/self-employed/)
+- [Small and medium businesses](https://devlarion.ru/business/)
+- [Enterprise](https://devlarion.ru/enterprise/)
 
 ## Growth
 
-- [Why businesses need a website](https://luvlarion4ik.github.io/luvlarion4ik/why-website/)
-- [SEO](https://luvlarion4ik.github.io/luvlarion4ik/seo/)
-- [GEO (AI search)](https://luvlarion4ik.github.io/luvlarion4ik/geo/)
-- [Support](https://luvlarion4ik.github.io/luvlarion4ik/support/)
+- [Why businesses need a website](https://devlarion.ru/why-website/)
+- [SEO](https://devlarion.ru/seo/)
+- [GEO (AI search)](https://devlarion.ru/geo/)
+- [Support](https://devlarion.ru/support/)
 
 ## Project pricing
 
-- [Enquiry website](https://luvlarion4ik.github.io/luvlarion4ik/#small-business) — from ≈ $305
-- [Telegram or MAX bot](https://luvlarion4ik.github.io/luvlarion4ik/#small-business) — from ≈ $244
-- [Catalogue mini app](https://luvlarion4ik.github.io/luvlarion4ik/#small-business) — from ≈ $671
+- [Enquiry website](https://devlarion.ru/#small-business) — from ≈ $305
+- [Telegram or MAX bot](https://devlarion.ru/#small-business) — from ≈ $244
+- [Catalogue mini app](https://devlarion.ru/#small-business) — from ≈ $671
 
 For companies of any size, we tailor the terms and discuss any applicable discount. We send the final quote after our call.
 
@@ -36,7 +36,7 @@ For companies of any size, we tailor the terms and discuss any applicable discou
 
 ## Devlarion products
 
-- [AuraWatch](https://luvlarion4ik.github.io/luvlarion4ik/aurawatch/) — An assistant for iPhone and Apple Watch, currently in closed beta. Silent Prompter displays a suggestion on the dimmed watch face.
+- [AuraWatch](https://devlarion.ru/aurawatch/) — An assistant for iPhone and Apple Watch, currently in closed beta. Silent Prompter displays a suggestion on the dimmed watch face.
 - **City Technologies** — We are integrating a commercial service into a public-sector platform to simplify access for users. Project details are covered by a confidentiality agreement.
 - **Larion Keyway** — A keyboard-driven macOS app based on Magerko’s open-source Copilot. We are preparing a licensed commercial release.
 - **Cognivue** — A tool for teams exploring how an audience might respond to an interface or advertising creative before launch.

@@ -842,7 +842,7 @@ footer{padding:2rem 0}.fine{margin-top:1.5rem;flex-wrap:wrap}.sub{padding:4rem 0
 }
 @media (max-width:860px) {
   .audience-hero-grid {grid-template-columns:1fr}
-  .page-art {justify-self:center;width:min(100%,340px);order:-1}
+  .page-art {justify-self:center;width:min(100%,300px)}
 }
 
 .service-group {scroll-margin-top:1.25rem}

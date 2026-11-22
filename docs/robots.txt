@@ -16,4 +16,4 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-Sitemap: https://luvlarion4ik.github.io/luvlarion4ik/sitemap.xml
+Sitemap: https://devlarion.ru/sitemap.xml

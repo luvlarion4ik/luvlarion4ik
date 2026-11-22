@@ -470,5 +470,5 @@
 }
 @media (max-width:860px) {
   .audience-hero-grid {grid-template-columns:1fr}
-  .page-art {justify-self:center;width:min(100%,340px);order:-1}
+  .page-art {justify-self:center;width:min(100%,300px)}
 }
