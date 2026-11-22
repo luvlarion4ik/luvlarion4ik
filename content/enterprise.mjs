@@ -5,6 +5,7 @@ import { esc } from './site.mjs';
 import { packageStartingPrice } from './pricing.mjs';
 import { parts } from './segments.mjs';
 import { pageArt } from './page-art.mjs';
+import { renderShop, hardware, deviceArt } from './shop.mjs';
 
 const { hero, trustStrip, renderCapacity, renderFAQ, section, priceMarkup, estimateLink, telegramLink, pick } = parts;
 
@@ -364,70 +365,6 @@ export const enterprisePages = [
   }),
 ];
 
-// ---------- Каталог магазина ----------
-const catalogue = [
-  ['sites', ['Сайты', 'Websites'], [
-    ['landing', ['Сайт для заявок', 'Enquiry website'], ['landing', 'small']],
-    ['web', ['Сайт компании с админкой', 'Company website with CMS'], ['web', 'small']],
-    ['shop', ['Интернет-магазин', 'Online shop'], ['shop', 'small']],
-    ['design', ['Дизайн и редизайн', 'Design and redesign'], ['design', 'small']],
-  ]],
-  ['bots', ['Боты и приложения', 'Bots and apps'], [
-    ['bot', ['Telegram- или MAX-бот', 'Telegram or MAX bot'], ['automation', 'small']],
-    ['mini', ['Мини-приложение с каталогом', 'Catalogue mini app'], ['mini', 'small']],
-    ['bot-crm', ['Бот + CRM', 'Bot + CRM'], 'bot-crm'],
-    ['platform', ['Личный кабинет / веб-сервис', 'Portal / web app'], ['platform', 'small']],
-  ]],
-  ['ai', ['ИИ', 'AI'], [
-    ['assistant', ['ИИ-ассистент для заявок', 'AI enquiry assistant'], ['assistant', 'small']],
-    ['llm-api', ['Настройка локального LLM API', 'Local LLM API set-up'], 30000],
-    ['rag', ['Корпоративный RAG', 'Corporate RAG'], 100000],
-    ['finetune', ['Подбор и дообучение модели', 'Model selection and fine-tuning'], ['fine-tuning', 'small']],
-    ['agents', ['Пилот мультиагентной системы', 'Multi-agent pilot'], ['agents', 'medium']],
-  ]],
-  ['search', ['Поиск и ИИ-поиск', 'Search and AI search'], [
-    ['seo', ['SEO-старт', 'SEO starter'], ['seo', 'small']],
-    ['geo', ['GEO-старт', 'GEO starter'], ['geo', 'small']],
-  ]],
-  ['security', ['Безопасность', 'Security'], [
-    ['audit', ['Аудит данных и 152-ФЗ', 'Data and 152-FZ audit'], ['security', 'small']],
-    ['private', ['Выделенный ИИ-контур', 'Dedicated AI perimeter'], null],
-  ]],
-  ['hardware', ['Железо', 'Hardware'], [
-    ['gpu-buy', ['Подбор и поставка GPU-сервера', 'GPU server sizing and supply'], null],
-    ['gpu-rent', ['Аренда GPU в российском ЦОД', 'GPU rental in a Russian data centre'], null],
-  ]],
-  ['care', ['Сопровождение', 'Support'], [
-    ['care-site', ['Сопровождение сайта, в месяц', 'Website support, monthly'], ['support', 'small']],
-    ['care-ai', ['Сопровождение ИИ-сервиса, в месяц', 'AI service support, monthly'], 30000],
-  ]],
-];
-
-function renderShop(lang, ctx) {
-  const i = lang === 'ru' ? 0 : 1;
-  const priceOf = p => typeof p === 'number' ? p : p ? packageStartingPrice(p, ctx.pricing) : null;
-  const filters = `<div class="shop-filters" role="group" aria-label="${pick(lang, 'Категории', 'Categories')}"><button type="button" aria-pressed="true" data-filter="all">${pick(lang, 'Все', 'All')}</button>${catalogue.map(([id, names]) => `<button type="button" aria-pressed="false" data-filter="${id}">${esc(names[i])}</button>`).join('')}</div>`;
-  const items = catalogue.flatMap(([cat, names, list]) => list.map(([id, title, p]) => {
-    const rub = priceOf(p);
-    const price = rub == null ? `<p class="audience-price">${pick(lang, 'По запросу', 'On request')}</p>` : `<p class="audience-price" data-region-price-row>${priceMarkup(lang, rub)}</p>`;
-    return `<article class="shop-item" data-cat="${cat}" data-id="${id}" data-title="${esc(title[i])}" data-rub="${rub ?? ''}"><small class="pack-badge">${esc(names[i])}</small><h3>${esc(title[i])}</h3>${price}
-      <button type="button" class="btn shop-add" data-add="${id}" aria-pressed="false"><span class="shop-add-label">${pick(lang, 'В корзину', 'Add to basket')}</span><span class="shop-added-label">${pick(lang, 'В корзине ✓', 'In basket ✓')}</span></button></article>`;
-  })).join('');
-  const labels = JSON.stringify({ empty: pick(lang, 'Корзина пуста. Добавьте услуги из каталога.', 'Your basket is empty. Add services from the catalogue.'), total: pick(lang, 'Ориентир от', 'Estimate from'), onRequest: pick(lang, 'плюс позиции по запросу', 'plus items on request'), greeting: pick(lang, 'Здравствуйте! Хочу заказать:', 'Hello! I would like to order:'), remove: pick(lang, 'Убрать', 'Remove'), lang });
-  return `<section class="section wrap audience-section shop" data-shop data-tg="${esc(ctx.tg)}" data-labels="${esc(labels)}">
-    <h2>${pick(lang, 'Каталог', 'Catalogue')}</h2>${filters}
-    <div class="service-grid audience-packages shop-grid">${items}</div>
-  </section>
-  <button type="button" class="shop-fab" data-shop-open aria-controls="shop-cart" aria-expanded="false"><span>${pick(lang, 'Корзина', 'Basket')}</span><b data-shop-count>0</b></button>
-  <aside class="shop-cart" id="shop-cart" aria-label="${pick(lang, 'Корзина', 'Basket')}" hidden>
-    <div class="shop-cart-head"><h2>${pick(lang, 'Ваш проект', 'Your project')}</h2><button type="button" class="shop-close" data-shop-close aria-label="${pick(lang, 'Закрыть', 'Close')}">×</button></div>
-    <ul class="shop-list" data-shop-list></ul>
-    <div class="shop-total" data-shop-total></div>
-    <a class="button shop-send" data-shop-send href="${esc(ctx.tg)}">${pick(lang, 'Отправить заявку в Telegram', 'Send enquiry on Telegram')}</a>
-    <p class="audience-note-line">${pick(lang, 'Это заявка, а не оплата. Точную смету фиксируем в договоре.', 'This is an enquiry, not a payment. We fix the quote in the contract.')}</p>
-  </aside>`;
-}
-
 // ---------- Рендеры ----------
 export function renderEnterprisePage(lang, route, ctx) {
   const p = enterprisePages.find(x => x.route === route);
@@ -453,7 +390,7 @@ export function renderEnterprisePage(lang, route, ctx) {
     body = `${trustStrip(lang)}
       ${section(c.optionsTitle, cards(lang, ctx, c.options, { label, cls: 'two-up' }))}
       ${section(c.includedTitle, grid(c.included), 'audience-loss')}
-      ${section(c.lineupTitle, `<div class="lineup">${c.lineup.map(([t, d], i) => `<article><div class="gpu-rack" aria-hidden="true">${'<i></i>'.repeat([8, 6, 2][i])}</div><h3>${esc(t)}</h3><p>${esc(d)}</p></article>`).join('')}</div><p class="audience-note-line">${esc(c.lineupNote)}</p>`)}
+      ${section(pick(lang, 'Модели в каталоге', 'Models in the catalogue'), `<div class="hw-lineup">${hardware.map(h => `<a class="hw-pick" href="${ctx.home}shop/#${h.id}">${deviceArt(h.art)}<strong>${esc(h[lang][0])}</strong><span>${h.rub == null ? pick(lang, 'По запросу', 'On request') : priceMarkup(lang, h.rub, h.unit === 'hour' ? pick(lang, ' / час', ' / hour') : '')}</span></a>`).join('')}</div><p class="audience-note-line">${esc(c.lineupNote)}</p>`)}
       ${renderCapacity(lang, p, ctx)}
       ${renderFAQ(lang, p, ctx)}
       ${section(pick(lang, 'Что логично сделать дальше', 'What to do next'), links(lang, ctx, ['private-ai/', 'shop/', 'industries/clinics/']), 'audience-next')}

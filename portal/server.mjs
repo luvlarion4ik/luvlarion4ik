@@ -22,11 +22,20 @@ const SUPPORT = env.PORTAL_SUPPORT || 'https://t.me/LuvLarion4ik';
 const DATA_DIR = env.PORTAL_DATA || new URL('./data/', import.meta.url).pathname;
 const BOT_TOKEN = (env.TELEGRAM_BOT_TOKEN || '').trim();
 const BOT_NAME = (env.TELEGRAM_BOT_USERNAME || '').trim().replace(/^@/, '');
+const SHOP = env.PORTAL_SHOP || new URL('/ru/shop/', ORIGIN).href;
 const telegramLogin = createTelegramLogin({
   token: BOT_TOKEN,
   username: BOT_NAME,
   apiBase: env.TELEGRAM_API_BASE || 'https://api.telegram.org',
   accountUrl: new URL(BASE, ORIGIN).href,
+  shopUrl: SHOP,
+  supportUrl: SUPPORT,
+  ownerChat: env.PORTAL_OWNER_TG || '',
+  emoji: (() => { try { return JSON.parse(env.PORTAL_TG_EMOJI || '{}'); } catch { return {}; } })(),
+  account: tgId => {
+    const client = db.clients.find(c => c.tgId && String(c.tgId) === String(tgId));
+    return client ? { client, projects: db.projects.filter(p => p.clientId === client.id) } : null;
+  },
 });
 const LOGIN_COOKIE = 'dl_portal_login';
 const LOGIN_COOKIE_SECONDS = 15 * 60;
@@ -176,7 +185,7 @@ async function authenticate(req, res, action) {
     const denied = () => new HttpError(401, 'Проверьте логин и пароль.');
     if (!/^[a-z0-9_]{1,64}$/.test(identifier) || typeof body.password !== 'string' || !body.password) throw denied();
     const numeric = /^\d+$/.test(identifier);
-    const client = db.clients.find(c => c.passwordHash && c.tgId && (numeric ? String(c.tgId) === identifier : c.tgUsername?.toLowerCase() === identifier));
+    const client = db.clients.find(c => c.passwordHash && c.tgId && (numeric ? String(c.tgId) === identifier : (c.login === identifier || c.tgUsername?.toLowerCase() === identifier)));
     if (!allowPasswordAttempt(client ? 'client:' + client.id : 'login:' + identifier)) {
       throw new HttpError(429, 'Слишком много попыток. Войдите по коду Telegram или попробуйте через 15 минут.');
     }
@@ -299,7 +308,46 @@ async function clientHandler(req, res) {
   if (path === '/api/me' && req.method === 'GET') {
     if (!me) throw new HttpError(401, 'Войдите в кабинет.');
     const projects = db.projects.filter(p => p.clientId === me.client.id).map(projectView);
-    return send(res, 200, { client: { name: me.client.name, company: me.client.company, tgUsername: me.client.tgUsername, tgId: me.client.tgId }, preview: me.session.via === 'admin', projects });
+    return send(res, 200, { client: { name: me.client.name, company: me.client.company, tgUsername: me.client.tgUsername, tgId: me.client.tgId, login: me.client.login || '', created: me.client.created }, preview: me.session.via === 'admin', projects, links: { shop: SHOP, site: SITE, support: SUPPORT, bot: BOT_NAME ? 'https://t.me/' + BOT_NAME : SUPPORT } });
+  }
+  if (path === '/api/profile' && req.method === 'POST') {
+    sameOrigin(req);
+    if (!me) throw new HttpError(401, 'Войдите в кабинет.');
+    if (me.session.via === 'admin') throw new HttpError(403, 'В режиме просмотра профиль не меняется.');
+    const body = await readJson(req, 8 * 1024);
+    const login = str(body.login, 40).replace(/^@/, '').toLowerCase();
+    if (login) {
+      if (!/^[a-z][a-z0-9_]{2,31}$/.test(login)) throw new HttpError(422, 'Логин: 3–32 символа, латиница, цифры и _, начинается с буквы.');
+      const taken = db.clients.some(c => c !== me.client && (c.login === login || c.tgUsername?.toLowerCase() === login));
+      if (taken) throw new HttpError(409, 'Такой логин уже занят. Попробуйте другой.');
+    }
+    me.client.login = login;
+    if (typeof body.name === 'string') me.client.name = str(body.name, 80) || me.client.name;
+    if (typeof body.company === 'string') me.client.company = str(body.company, 120);
+    await saveDb();
+    return send(res, 200, { ok: true, client: { name: me.client.name, company: me.client.company, login: me.client.login } });
+  }
+  if (path === '/api/requests' && req.method === 'POST') {
+    sameOrigin(req);
+    if (!me) throw new HttpError(401, 'Войдите в кабинет.');
+    if (me.session.via === 'admin') throw new HttpError(403, 'В режиме просмотра заявки не отправляются.');
+    const body = await readJson(req, 16 * 1024);
+    const topic = str(body.topic, 80) || 'Новый проект';
+    const text = str(body.text, 3000);
+    const budget = str(body.budget, 80);
+    if (text.length < 10) throw new HttpError(422, 'Опишите задачу хотя бы парой предложений.');
+    const mine = db.projects.filter(p => p.clientId === me.client.id);
+    if (mine.filter(p => p.status === 'brief').length >= 5) throw new HttpError(429, 'У вас уже несколько заявок в обсуждении. Дождитесь ответа команды.');
+    const recent = mine.map(p => Date.parse(p.created)).filter(Boolean).sort().at(-1);
+    if (recent && Date.now() - recent < 60_000) throw new HttpError(429, 'Подождите минуту перед следующей заявкой.');
+    const project = cleanProject({ clientId: me.client.id, title: 'Заявка: ' + topic, status: 'brief',
+      summary: text + (budget ? '\n\nБюджет: ' + budget : ''),
+      stages: [{ title: 'Обсуждение задачи', state: 'active' }, { title: 'Смета и договор', state: 'todo' }, { title: 'Работа над проектом', state: 'todo' }, { title: 'Запуск', state: 'todo' }] });
+    project.messages = [{ id: id(), from: 'client', text: '[' + topic + '] ' + text + (budget ? '\nБюджет: ' + budget : ''), at: now(), readByStudio: false }];
+    db.projects.push(project);
+    await saveDb();
+    void telegramLogin.notifyOwner?.(`Новая заявка из кабинета\n${me.client.name}${me.client.company ? ' · ' + me.client.company : ''}\n${topic}: ${text.slice(0, 500)}${budget ? '\nБюджет: ' + budget : ''}`);
+    return send(res, 200, { project: projectView(project) });
   }
   const msg = path.match(/^\/api\/projects\/([a-f0-9]+)\/(messages|read)$/);
   if (msg && req.method === 'POST') {

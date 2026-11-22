@@ -48,7 +48,9 @@
     company.hidden = !company.textContent;
     const loginId = document.querySelector('[data-login-id]');
     const username = (state.client.tgUsername || '').replace(/^@/, '');
-    loginId.textContent = username ? 'Telegram @' + username : state.client.tgId ? 'Telegram ID ' + state.client.tgId : '';
+    loginId.textContent = state.client.login ? 'Логин: ' + state.client.login : username ? 'Telegram @' + username : state.client.tgId ? 'Telegram ID ' + state.client.tgId : '';
+    document.querySelector('[data-open-profile]').hidden = Boolean(state.preview);
+    document.querySelector('[data-new-request]').hidden = Boolean(state.preview) || !state.projects.length;
     loginId.hidden = !loginId.textContent || Boolean(state.preview);
     const saved = new URLSearchParams(location.hash.slice(1));
     if (saved.get('p')) current = Math.max(0, state.projects.findIndex(p => p.id === saved.get('p')));
@@ -60,12 +62,7 @@
     root.removeAttribute('aria-busy');
     supportLink.hidden = !state.projects.length;
     if (!state.projects.length) {
-      root.replaceChildren(h('section', { class: 'ac-card ac-empty-project ac-enter' },
-        h('div', { class: 'ac-empty-mark', 'aria-hidden': 'true' }),
-        h('div', { class: 'ac-stack' },
-          h('h2', { text: 'Пока нет проектов' }),
-          h('p', { class: 'ac-note', text: 'Когда команда добавит проект, здесь появятся его этапы, файлы, счета и переписка.' })),
-        h('a', { class: 'ac-btn', href: support, text: 'Написать команде' })));
+      root.replaceChildren(...welcome());
       return;
     }
 
@@ -272,6 +269,90 @@
     p.unread = 0;
     fetch(`${base}api/projects/${p.id}/read`, { method: 'POST', credentials: 'same-origin' }).catch(() => {});
   }
+
+  // ---- Первый вход: приветствие вместо пустого экрана ----
+  function welcome() {
+    const L = state.links || {};
+    const name = (state.client.name || '').trim().split(/\s+/)[0];
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const art = document.createElementNS(svgNS, 'svg');
+    art.setAttribute('viewBox', '0 0 320 120'); art.setAttribute('class', 'ac-welcome-art'); art.setAttribute('aria-hidden', 'true');
+    art.innerHTML = '<path class="ac-w-line" d="M40 60H280"/>' + [40, 160, 280].map((x, i) => `<g class="ac-w-node" style="--i:${i}"><circle cx="${x}" cy="60" r="22"/><text x="${x}" y="66" text-anchor="middle">${i + 1}</text></g>`).join('') + '<circle class="ac-w-dot" r="5" cy="60" cx="40"/>';
+    const steps = [['Опишите задачу', 'Пара абзацев: что есть сейчас и что хотите получить.'], ['Смета и договор', 'Ответим в течение дня, зафиксируем объём и цену.'], ['Проект — здесь', 'Этапы, файлы, счета и переписка в одном месте.']];
+    const hero = h('section', { class: 'ac-card ac-welcome ac-enter' },
+      h('div', { class: 'ac-stack' },
+        h('p', { class: 'ac-eyebrow', text: 'Добро пожаловать' }),
+        h('h2', { text: 'Кабинет готов к работе' }),
+        h('p', { class: 'ac-note', text: 'Проектов пока нет — это нормально для первого входа. Начните с заявки: она сразу попадёт к команде, а её статус вы увидите здесь и в Telegram-боте.' }),
+        h('div', { class: 'ac-welcome-actions' },
+          h('button', { type: 'button', class: 'ac-btn', onclick: openRequest, text: 'Оставить заявку' }),
+          h('a', { class: 'ac-btn ac-btn--ghost', href: support, text: 'Написать в Telegram' }))),
+      art,
+      h('ol', { class: 'ac-welcome-steps' }, steps.map(([t, d], i) => h('li', { style: '--i:' + i }, h('strong', { text: t }), h('span', { text: d })))));
+    const tile = (title, text, href, label, onclick) => h('a', { class: 'ac-card ac-tile ac-enter', href: href || '#', target: href && /^https?:/.test(href) && !href.startsWith(location.origin) ? '_blank' : null, rel: 'noopener', onclick: onclick ? e => { e.preventDefault(); onclick(); } : null },
+      h('strong', { text: title }), h('span', { class: 'ac-note', text }), h('span', { class: 'ac-tile-go', text: label + ' →' }));
+    const tiles = h('div', { class: 'ac-tiles' },
+      tile('Магазин услуг и железа', 'Сайты, боты, ИИ и серверы NVIDIA с ценами.', L.shop, 'Открыть'),
+      tile('Бот кабинета', 'Статусы проектов, счета и коды входа прямо в Telegram.', L.bot, 'Открыть бота'),
+      tile('Свой логин', state.client.login ? 'Сейчас: ' + state.client.login : 'Задайте логин, чтобы не вводить Telegram ID.', '#', 'Настроить', openProfile));
+    return [hero, tiles];
+  }
+
+  // ---- Диалоги: профиль и заявка ----
+  const profileDialog = document.querySelector('[data-profile-dialog]');
+  const requestDialog = document.querySelector('[data-request-dialog]');
+  for (const d of [profileDialog, requestDialog]) {
+    d.querySelector('[data-close-dialog]').addEventListener('click', () => d.close());
+    d.addEventListener('click', e => { if (e.target === d) d.close(); });
+  }
+  function openProfile() {
+    const f = profileDialog.querySelector('form');
+    f.login.value = state.client.login || '';
+    f.name.value = state.client.name || '';
+    f.company.value = state.client.company || '';
+    profileDialog.querySelector('[data-profile-error]').textContent = '';
+    profileDialog.showModal();
+    f.login.focus();
+  }
+  function openRequest() {
+    requestDialog.querySelector('[data-request-error]').textContent = '';
+    requestDialog.showModal();
+    requestDialog.querySelector('textarea').focus();
+  }
+  document.querySelector('[data-open-profile]').addEventListener('click', openProfile);
+  document.querySelector('[data-new-request]').addEventListener('click', openRequest);
+  async function post(path, body) {
+    const r = await fetch(base + path, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const data = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(data.error || 'Не удалось сохранить. Попробуйте ещё раз.');
+    return data;
+  }
+  profileDialog.querySelector('form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = e.target, err = profileDialog.querySelector('[data-profile-error]'), btn = f.querySelector('[type=submit]');
+    btn.disabled = true; err.textContent = '';
+    try {
+      const data = await post('api/profile', { login: f.login.value.trim(), name: f.name.value.trim(), company: f.company.value.trim() });
+      Object.assign(state.client, data.client);
+      profileDialog.close();
+      toast(data.client.login ? 'Сохранено. Теперь можно входить по логину ' + data.client.login : 'Профиль сохранён');
+      load();
+    } catch (x) { err.textContent = x.message; } finally { btn.disabled = false; }
+  });
+  requestDialog.querySelector('form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = e.target, err = requestDialog.querySelector('[data-request-error]'), btn = f.querySelector('[type=submit]');
+    btn.disabled = true; err.textContent = '';
+    try {
+      const data = await post('api/requests', { topic: f.topic.value, text: f.text.value.trim(), budget: f.budget.value.trim() });
+      state.projects.unshift(data.project);
+      current = 0; tab = 'project';
+      requestDialog.close(); f.reset();
+      toast('Заявка отправлена. Ответим в течение дня');
+      document.querySelector('[data-new-request]').hidden = false;
+      render();
+    } catch (x) { err.textContent = x.message; } finally { btn.disabled = false; }
+  });
 
   load().catch(() => {
     root.removeAttribute('aria-busy');

@@ -114,13 +114,14 @@ const art = {
     <g class="pa-drift">${card(300, 40, 140, 52)}${line(316, 56, 60)}<rect x="316" y="70" width="108" height="8" rx="4" fill="var(--surface)"/><rect class="pa-load" x="316" y="70" width="76" height="8" rx="4" fill="var(--accent)"/></g>
     <g class="pa-drift pa-d2">${card(54, 274, 150, 46)}${dot(76, 297, 8)}${line(92, 290, 90)}${line(92, 303, 54, .7)}</g>`],
 
-  'shop/': ['Корзина с услугами', 'Basket of services', `
-    <g class="pa-float">
-      <path d="M120 120h250l-26 120H150z" fill="var(--surface)" stroke="var(--ink)" stroke-opacity=".5" stroke-width="2.5" stroke-linejoin="round"/>
-      <path d="M92 96h28l30 144" fill="none" stroke="var(--ink)" stroke-opacity=".5" stroke-width="2.5" stroke-linecap="round"/>
-      <circle cx="170" cy="272" r="14" fill="var(--paper)" stroke="var(--ink)" stroke-opacity=".5" stroke-width="2.5"/><circle cx="324" cy="272" r="14" fill="var(--paper)" stroke="var(--ink)" stroke-opacity=".5" stroke-width="2.5"/>
-    </g>
-    ${[[178, 60, 'var(--accent)'], [246, 38, 'var(--paper)'], [300, 70, 'var(--paper)']].map(([x, y, f], i) => `<g class="pa-drop" style="--i:${i}"><rect x="${x}" y="${y}" width="58" height="72" rx="10" fill="${f}" stroke="var(--accent)" stroke-width="2"/>${line(x + 10, y + 16, 34, f === 'var(--paper)' ? 1 : 0)}${line(x + 10, y + 30, 24, f === 'var(--paper)' ? .8 : 0)}<circle cx="${x + 44}" cy="${y + 56}" r="7" fill="${f === 'var(--paper)' ? 'var(--accent)' : 'var(--paper)'}"/></g>`).join('')}`],
+  'shop/': ['Корзина, в которую падают услуги', 'A basket that services drop into', `
+    <path d="M118 150h244l-22 118H140z" fill="var(--surface)" stroke="var(--rule)" stroke-width="2" stroke-linejoin="round"/>
+    ${[[168, 'var(--accent)', 0], [226, 'var(--paper)', 1], [284, 'var(--paper)', 2]].map(([x, f, i]) => `<g class="pa-drop2" style="--i:${i}"><rect x="${x}" y="40" width="52" height="64" rx="9" fill="${f}" stroke="var(--accent)" stroke-width="2"/>${line(x + 9, 54, 30, f === 'var(--accent)' ? 0 : 1)}${line(x + 9, 67, 20, f === 'var(--accent)' ? 0 : .8)}<circle cx="${x + 40}" cy="92" r="6" fill="${f === 'var(--accent)' ? 'var(--paper)' : 'var(--accent)'}"/></g>`).join('')}
+    <path d="M112 176h256l-26 118H138z" fill="var(--paper)" stroke="var(--ink)" stroke-opacity=".55" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M150 204h180M146 232h188M142 260h196" stroke="var(--rule)" stroke-width="2"/>
+    <path d="M84 150h28l26 144" fill="none" stroke="var(--ink)" stroke-opacity=".55" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="170" cy="318" r="13" fill="var(--paper)" stroke="var(--ink)" stroke-opacity=".55" stroke-width="2.5"/><circle cx="314" cy="318" r="13" fill="var(--paper)" stroke="var(--ink)" stroke-opacity=".55" stroke-width="2.5"/>
+    <g class="pa-badge"><circle cx="372" cy="150" r="20" fill="var(--accent)"/><text x="372" y="156" text-anchor="middle" font-size="16" font-weight="700" fill="var(--paper)">3</text></g>`],
 
   industry: ['Документы под защитой', 'Documents under protection', `
     <g class="pa-float">

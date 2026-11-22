@@ -7,7 +7,7 @@ const ATTEMPTS = 5;
 const SESSION_LIMIT = 5_000;
 const DELIVERY_INTERVAL = 10_000;
 const HINT_INTERVAL = 5_000;
-const COMMAND = /^\/(start|change)(?:@([a-zA-Z0-9_]+))?(?: ([A-Za-z0-9_-]{1,64}))?$/;
+const COMMAND = /^\/(start|change|menu|projects|help)(?:@([a-zA-Z0-9_]+))?(?: ([A-Za-z0-9_-]{1,64}))?$/;
 const LOGIN_PAYLOAD = /^dl_([A-Za-z0-9_-]{32})$/;
 const CODE_LABELS = {
   code: 'Код для входа',
@@ -58,7 +58,16 @@ class TelegramError extends Error {
   }
 }
 
-export function createTelegramLogin({ token, username, apiBase, accountUrl }) {
+const STATUS = { brief: 'Обсуждение задачи', design: 'Дизайн', development: 'Разработка', review: 'Проверка и правки', launched: 'Запущен', support: 'Поддержка', paused: 'На паузе' };
+const money = (amount, currency = 'RUB') => new Intl.NumberFormat('ru-RU', { style: 'currency', currency, maximumFractionDigits: 0 }).format(amount || 0);
+
+export function createTelegramLogin({ token, username, apiBase, accountUrl, shopUrl = '', supportUrl = '', ownerChat = '', emoji = {}, account = () => null }) {
+  // Премиум-эмодзи: ID задаются в PORTAL_TG_EMOJI ({"folder":"…","card":"…"}), иначе обычные эмодзи.
+  const E = (name, unicode) => [typeof emoji[name] === 'string' && /^\d{5,25}$/.test(emoji[name]) ? emoji[name] : null, unicode];
+  const ICON = {
+    hello: E('hello', '👋'), folder: E('folder', '📂'), card: E('card', '🧾'), chat: E('chat', '💬'), key: E('key', '🔑'),
+    shop: E('shop', '🛍'), rocket: E('rocket', '🚀'), bell: E('bell', '🔔'),
+  };
   const requests = new Map();
   const lastDelivery = new Map();
   const lastHint = new Map();
@@ -82,14 +91,15 @@ export function createTelegramLogin({ token, username, apiBase, accountUrl }) {
     return payload.result;
   }
 
-  async function sendMessage(chatId, [emojiId, unicode], text, buttons) {
-    const send = symbol => telegram('sendMessage', {
+  async function sendMessage(chatId, [emojiId, unicode], text, buttons, editId) {
+    const send = symbol => telegram(editId ? 'editMessageText' : 'sendMessage', {
       chat_id: chatId,
+      ...(editId ? { message_id: editId } : {}),
       parse_mode: 'HTML',
       text: `${symbol} ${text}`,
       reply_markup: { inline_keyboard: buttons },
     });
-    if (customEmoji) {
+    if (customEmoji && emojiId) {
       try { return await send(`<tg-emoji emoji-id="${emojiId}">${unicode}</tg-emoji>`); }
       catch (error) {
         // Only retry after an explicit API rejection. A transport error may follow delivery.
@@ -147,6 +157,82 @@ export function createTelegramLogin({ token, username, apiBase, accountUrl }) {
     await sendMessage(chatId, SHIELD, text, [[{ text: label, url }]]);
   }
 
+
+  function menuButtons() {
+    const rows = [
+      [{ text: '📂 Мои проекты', callback_data: 'projects' }, { text: '🧾 Счета', callback_data: 'invoices' }],
+      [{ text: '🔐 Открыть кабинет', url: accountUrl }, { text: '🔑 Сменить пароль', callback_data: 'password' }],
+    ];
+    const extra = [];
+    if (shopUrl) extra.push({ text: '🛍 Магазин услуг', url: shopUrl });
+    if (supportUrl) extra.push({ text: '💬 Написать Илье', url: supportUrl });
+    if (extra.length) rows.push(extra);
+    return rows;
+  }
+  const back = [[{ text: '← Меню', callback_data: 'menu' }, { text: '🔐 Кабинет', url: accountUrl }]];
+
+  function menuText(from) {
+    const acc = account(from.id);
+    const name = escapeHtml(String(acc?.client?.name || from.first_name || '').split(/\s+/)[0] || '');
+    if (!acc) return `<b>${name ? name + ', здравствуйте' : 'Здравствуйте'}!</b>\n\nЭто бот личного кабинета Devlarion. Кабинета на этот Telegram пока нет — зарегистрируйтесь за минуту, код придёт сюда.\n\nВаш Telegram ID: <code>${from.id}</code>`;
+    const open = acc.projects.length;
+    const unread = acc.projects.reduce((n, p) => n + (p.messages || []).filter(m => m.from === 'studio' && !m.readByClient).length, 0);
+    const due = acc.projects.flatMap(p => p.invoices || []).filter(i => i.status === 'unpaid' || i.status === 'overdue').length;
+    const login = acc.client.login ? `<code>${escapeHtml(acc.client.login)}</code>` : `<code>${from.id}</code> (Telegram ID)`;
+    return `<b>${name ? name + ', здравствуйте' : 'Здравствуйте'}!</b>\n\n`
+      + `Проектов: <b>${open}</b>${unread ? ` · новых сообщений: <b>${unread}</b>` : ''}${due ? ` · счетов к оплате: <b>${due}</b>` : ''}\n`
+      + `Логин для входа: ${login}\n\nЧто посмотреть?`;
+  }
+
+  async function showMenu(from, editId) {
+    const acc = account(from.id);
+    const buttons = acc ? menuButtons() : [[{ text: '✨ Зарегистрироваться', url: accountUrl + '?mode=register' }], [{ text: '🔐 Войти', url: accountUrl }], ...(shopUrl ? [[{ text: '🛍 Магазин услуг', url: shopUrl }]] : [])];
+    await sendMessage(from.id, ICON.hello, menuText(from), buttons, editId);
+  }
+
+  async function showProjects(from, editId) {
+    const acc = account(from.id);
+    if (!acc) return showMenu(from, editId);
+    if (!acc.projects.length) {
+      return sendMessage(from.id, ICON.folder, '<b>Проектов пока нет</b>\n\nОпишите задачу в кабинете — заявка сразу появится у команды, а статус вы увидите здесь.', [[{ text: '✍️ Оставить заявку', url: accountUrl }], ...back], editId);
+    }
+    const lines = acc.projects.slice(0, 8).map(p => {
+      const done = (p.stages || []).filter(x => x.state === 'done').length, all = (p.stages || []).length;
+      const active = (p.stages || []).find(x => x.state === 'active');
+      const unread = (p.messages || []).filter(m => m.from === 'studio' && !m.readByClient).length;
+      const bar = all ? '▰'.repeat(Math.round(done / all * 8)) + '▱'.repeat(8 - Math.round(done / all * 8)) + ` ${Math.round(done / all * 100)}%` : '';
+      return `<b>${escapeHtml(p.title)}</b>\n${STATUS[p.status] || ''}${active ? ' · ' + escapeHtml(active.title) : ''}\n${bar}${unread ? `\n💬 новых сообщений: ${unread}` : ''}`;
+    });
+    await sendMessage(from.id, ICON.folder, '<b>Ваши проекты</b>\n\n' + lines.join('\n\n'), back, editId);
+  }
+
+  async function showInvoices(from, editId) {
+    const acc = account(from.id);
+    if (!acc) return showMenu(from, editId);
+    const list = acc.projects.flatMap(p => (p.invoices || []).map(i => ({ ...i, project: p.title })));
+    const due = list.filter(i => i.status === 'unpaid' || i.status === 'overdue');
+    const text = !list.length ? '<b>Счетов пока нет</b>\n\nКогда команда выставит счёт, он появится здесь и в кабинете.'
+      : '<b>Счета</b>\n\n' + list.slice(0, 10).map(i => `${i.status === 'paid' ? '✓' : i.status === 'overdue' ? '‼️' : '•'} № ${escapeHtml(i.number)} — ${money(i.amount, i.currency)}\n<i>${escapeHtml(i.project)}</i>${i.status === 'paid' ? ' · оплачен' : i.status === 'overdue' ? ' · просрочен' : i.status === 'cancelled' ? ' · отменён' : ' · ожидает оплаты'}`).join('\n\n')
+        + (due.length ? `\n\nК оплате: <b>${due.length}</b>. Реквизиты — в кабинете.` : '');
+    await sendMessage(from.id, ICON.card, text, back, editId);
+  }
+
+  async function handleCallback(query) {
+    const from = query?.from;
+    if (!from || from.is_bot || !query.message || query.message.chat?.id !== from.id) return;
+    await telegram('answerCallbackQuery', { callback_query_id: query.id }).catch(() => {});
+    const editId = query.message.message_id;
+    if (query.data === 'projects') return showProjects(from, editId);
+    if (query.data === 'invoices') return showInvoices(from, editId);
+    if (query.data === 'password') return sendMessage(from.id, ICON.key, '<b>Смена пароля</b>\n\nОткройте восстановление, запросите код — он придёт сюда — и задайте новый пароль.', [[{ text: '🔑 Восстановить пароль', url: accountUrl + '?mode=reset' }], ...back], editId);
+    return showMenu(from, editId);
+  }
+
+  async function notifyOwner(text) {
+    if (!/^-?\d{3,20}$/.test(String(ownerChat))) return;
+    try { await sendMessage(Number(ownerChat), ICON.bell, escapeHtml(text), [[{ text: 'Открыть админку', url: accountUrl + 'admin/' }]]); } catch {}
+  }
+
   async function handleMessage(message) {
     const from = message?.from;
     if (message?.chat?.type !== 'private' || from?.is_bot || !Number.isSafeInteger(from?.id) || from.id < 1 || from.id !== message.chat.id) return;
@@ -160,14 +246,9 @@ export function createTelegramLogin({ token, username, apiBase, accountUrl }) {
         [[{ text: 'Восстановить пароль', url: accountUrl + '?mode=reset' }]]);
       return;
     }
+    if (command === 'projects') return showProjects(from);
+    if (command === 'menu' || command === 'help' || (command === 'start' && !payload)) return showMenu(from);
     if (command !== 'start') return;
-    if (!payload) {
-      await sendMessage(from.id, SHIELD,
-        '<b>Devlarion · Личный кабинет</b>\n\nОткройте кабинет, чтобы войти или зарегистрироваться. Ваш логин — Telegram ID.\n'
-        + `<code>${from.id}</code>\n\nДля смены пароля отправьте /change.`,
-        [[{ text: 'Открыть кабинет', url: accountUrl }]]);
-      return;
-    }
     const login = LOGIN_PAYLOAD.exec(payload);
     if (!login) return;
     const request = requests.get(login[1]);
@@ -281,12 +362,17 @@ export function createTelegramLogin({ token, username, apiBase, accountUrl }) {
           const webhook = await telegram('getWebhookInfo');
           if (webhook.url) throw new BotConfigurationError('the portal bot already has a webhook');
           ready = true;
+          await telegram('setMyCommands', { commands: [
+            { command: 'menu', description: 'Меню кабинета' },
+            { command: 'projects', description: 'Мои проекты' },
+            { command: 'change', description: 'Сменить пароль' },
+          ] }).catch(() => {});
           console.log('Telegram login: portal bot connected.');
         }
-        const updates = await telegram('getUpdates', { offset, timeout: 20, limit: 30 });
+        const updates = await telegram('getUpdates', { offset, timeout: 20, limit: 30, allowed_updates: ['message', 'callback_query'] });
         reportedProblem = null;
         for (const update of updates) {
-          try { await handleMessage(update.message); }
+          try { if (update.callback_query) await handleCallback(update.callback_query); else await handleMessage(update.message); }
           catch (error) {
             console.warn('Telegram login: bot reply failed', error instanceof TelegramError ? error.status : error.name);
           }
@@ -303,5 +389,5 @@ export function createTelegramLogin({ token, username, apiBase, accountUrl }) {
     }
   }
 
-  return { ready: () => ready, begin, redeem, invalidateUser, notifySession, startPolling };
+  return { ready: () => ready, begin, redeem, invalidateUser, notifySession, notifyOwner, startPolling };
 }

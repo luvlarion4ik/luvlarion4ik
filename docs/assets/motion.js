@@ -110,7 +110,9 @@
   const root = document.documentElement;
   const ru = root.lang === "ru";
 
-  // Пасхалка работает всегда; без анимации — только приветствие.
+  // ---------- Пасхалки ----------
+  const tgLink = (document.querySelector('a[href*="t.me/"]')?.href || "").split("?")[0];
+  const home = document.querySelector("body > header .wordmark")?.getAttribute("href") || "/";
   let typed = "";
   const konami = ["arrowup", "arrowup", "arrowdown", "arrowdown", "arrowleft", "arrowright", "arrowleft", "arrowright", "b", "a"];
   let combo = [];
@@ -118,123 +120,157 @@
     if (event.target.closest?.("input, textarea, select, [contenteditable]") || event.metaKey || event.ctrlKey || event.altKey) return;
     const k = ({ "и": "b", "ф": "a" })[event.key.toLowerCase()] ?? event.key.toLowerCase();
     combo = [...combo, k].slice(-10);
-    if (combo.join() === konami.join()) { combo = []; devMode(); return; }
-    if (event.key === "Escape" && root.classList.contains("dl-devmode")) { devMode(false); return; }
+    if (combo.join() === konami.join()) { combo = []; inspector(); return; }
+    if (event.key === "Escape" && root.classList.contains("dl-devmode")) { inspector(false); return; }
     if (event.key.length !== 1) return;
     typed = (typed + event.key.toLowerCase()).slice(-12);
-    if (typed.endsWith("devlarion")) { typed = ""; celebrate(); }
+    if (typed.endsWith("devlarion")) { typed = ""; sparks(); }
     else if (typed.endsWith("dgx") || typed.endsWith("gpu")) { typed = ""; flyServer(); }
     else if (typed.endsWith("привет") || typed.endsWith("hello")) { typed = ""; wave(); }
   });
 
-  function say(text, ms = 3600) {
-    const note = document.createElement("div");
-    note.className = "dl-egg";
-    note.setAttribute("role", "status");
-    note.textContent = text;
-    note.style.animationDuration = ms + "ms";
-    document.body.append(note);
-    setTimeout(() => note.remove(), ms);
+  // Короткая записка внизу экрана: текст и, если нужно, ссылка.
+  function note(text, link, ms = 5200) {
+    document.querySelector(".dl-note")?.remove();
+    const box = document.createElement("div");
+    box.className = "dl-note";
+    box.setAttribute("role", "status");
+    const p = document.createElement("p");
+    p.textContent = text;
+    box.append(p);
+    if (link) {
+      const a = document.createElement("a");
+      a.href = link[1];
+      a.textContent = link[0];
+      box.append(a);
+    }
+    document.body.append(box);
+    setTimeout(() => box.classList.add("dl-note-out"), ms - 400);
+    setTimeout(() => box.remove(), ms);
   }
 
-  // Konami-код: «режим разработчика» — сетка вёрстки и терминал с логами студии.
-  let term = null, termTimer = null;
-  function devMode(on = !root.classList.contains("dl-devmode")) {
+  const logoBox = () => document.querySelector("body > header .wordmark");
+
+  // devlarion: логотип заново прорисовывается и из него летят медные искры.
+  function sparks() {
+    note(ru ? "Вы дочитали до пасхалок. Значит, вам точно есть о чём поговорить с Ильёй." : "You made it to the easter eggs. You clearly have something to discuss with Ilia.",
+      tgLink ? [ru ? "Написать в Telegram" : "Message on Telegram", tgLink] : null);
+    const logo = logoBox();
+    customElements.whenDefined("devlarion-logo").then(() => logo?.querySelector("devlarion-logo")?.play?.());
+    if (reduced || !logo) return;
+    const r = logo.getBoundingClientRect();
+    const ox = r.left + 26, oy = r.top + r.height / 2;
+    for (let i = 0; i < 46; i++) {
+      const s = document.createElement("i");
+      s.className = "dl-spark";
+      s.style.left = ox + "px";
+      s.style.top = oy + "px";
+      document.body.append(s);
+      const angle = Math.random() * Math.PI - Math.PI * .05, speed = 120 + Math.random() * 260;
+      const dx = Math.cos(angle) * speed, dy = Math.sin(angle) * speed * .55;
+      s.animate([
+        { transform: "translate(-50%,-50%) scale(1)", opacity: 1 },
+        { transform: `translate(calc(-50% + ${dx * .6}px), calc(-50% + ${dy * .6 - 40}px)) scale(.9)`, opacity: 1, offset: .45 },
+        { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy + 160}px)) scale(.2)`, opacity: 0 },
+      ], { duration: 1100 + Math.random() * 700, easing: "cubic-bezier(.2,.7,.4,1)", delay: Math.random() * 120 }).onfinish = () => s.remove();
+    }
+  }
+
+  // Konami: «инспектор» — сетка вёрстки и настоящие цифры этой страницы.
+  let panel = null;
+  function inspector(on = !root.classList.contains("dl-devmode")) {
     root.classList.toggle("dl-devmode", on);
-    clearInterval(termTimer);
-    term?.remove(); term = null;
+    panel?.remove(); panel = null;
     if (!on) return;
-    say(ru ? "Режим разработчика включён. Esc — выключить" : "Developer mode on. Press Esc to exit");
-    term = document.createElement("div");
-    term.className = "dl-term";
-    term.setAttribute("aria-hidden", "true");
-    document.body.append(term);
-    const lines = ru ? [
-      "$ devlarion status", "✓ кофе: 3 чашки", "✓ сборка сайта: зелёная", "✓ GPU: греются, но держатся",
-      "… Илья отвечает клиенту в Telegram", "✓ дедлайны: под контролем", "! найдено 0 багов (пока)", "$ sudo make it beautiful", "✓ готово"
-    ] : [
-      "$ devlarion status", "✓ coffee: 3 cups", "✓ site build: green", "✓ GPUs: warm but holding",
-      "… Ilia is replying to a client on Telegram", "✓ deadlines: under control", "! 0 bugs found (so far)", "$ sudo make it beautiful", "✓ done"
+    const nav = performance.getEntriesByType("navigation")[0];
+    const kb = n => Math.round(n / 1024) + (ru ? " КБ" : " KB");
+    const rows = [
+      [ru ? "страница" : "page", location.pathname],
+      [ru ? "загрузилась за" : "loaded in", nav ? Math.round(nav.duration) + (ru ? " мс" : " ms") : "—"],
+      [ru ? "HTML" : "HTML", nav?.transferSize ? kb(nav.transferSize) : "—"],
+      [ru ? "элементов" : "elements", document.getElementsByTagName("*").length.toLocaleString(root.lang)],
+      [ru ? "анимаций сейчас" : "running animations", String(document.getAnimations().length)],
+      [ru ? "тема" : "theme", root.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")],
+      [ru ? "фреймворк" : "framework", ru ? "нет, чистый HTML/CSS/JS" : "none, plain HTML/CSS/JS"],
     ];
-    let i = 0;
-    termTimer = setInterval(() => {
-      const row = document.createElement("p");
-      row.textContent = lines[i % lines.length];
-      term.append(row);
-      while (term.children.length > 7) term.firstChild.remove();
-      i++;
-    }, reduced ? 1200 : 650);
+    panel = document.createElement("div");
+    panel.className = "dl-term";
+    panel.setAttribute("role", "status");
+    const head = document.createElement("p");
+    head.className = "dl-term-head";
+    head.textContent = "$ devlarion inspect";
+    panel.append(head);
+    rows.forEach(([k, v], i) => {
+      const p = document.createElement("p");
+      p.style.animationDelay = (i * 90 + 120) + "ms";
+      const a = document.createElement("span"); a.textContent = k;
+      const b = document.createElement("b"); b.textContent = v;
+      p.append(a, b);
+      panel.append(p);
+    });
+    const hint = document.createElement("p");
+    hint.className = "dl-term-hint";
+    hint.textContent = ru ? "Esc — закрыть" : "Esc to close";
+    panel.append(hint);
+    document.body.append(panel);
   }
 
-  // dgx / gpu: через экран пролетает сервер с крутящимися вентиляторами.
+  // dgx / gpu: через экран проезжает DGX Spark.
   function flyServer() {
-    say(ru ? "DGX уже в пути. Шутка: поставляем под заказ 😉" : "A DGX is on its way. Kidding, we supply to order 😉");
+    note(ru ? "DGX Spark: 128 ГБ памяти в корпусе размером с книгу." : "DGX Spark: 128 GB of memory in a box the size of a book.",
+      [ru ? "Посмотреть в магазине" : "See it in the shop", home + "shop/#dgx-spark"]);
     if (reduced) return;
     const box = document.createElement("div");
     box.className = "dl-server";
     box.setAttribute("aria-hidden", "true");
-    box.innerHTML = '<svg viewBox="0 0 220 90"><rect x="2" y="2" width="216" height="86" rx="10"/><rect class="dl-s-top" x="2" y="2" width="216" height="18" rx="9"/>' +
-      [0, 1, 2, 3].map(n => `<g transform="translate(${40 + n * 47} 56)"><circle r="20"/><g class="dl-fan"><path d="M0-16c5 4 5 10 0 13M16 0c-4 5-10 5-13 0M0 16c-5-4-5-10 0-13M-16 0c4-5 10-5 13 0"/></g></g>`).join("") + '</svg>';
+    let mesh = "";
+    for (let i = 0; i < 12; i++) for (let j = 0; j < 6; j++) mesh += `<circle cx="${18 + i * 11 + (j % 2) * 5.5}" cy="${16 + j * 10}" r="3"/>`;
+    box.innerHTML = `<svg viewBox="0 0 170 96"><rect x="2" y="2" width="166" height="84" rx="12" class="dl-s-body"/><g class="dl-s-mesh">${mesh}</g><rect x="2" y="74" width="166" height="12" rx="5" class="dl-s-edge"/><circle cx="154" cy="80" r="2.5" class="dl-s-led"/></svg>`;
     document.body.append(box);
-    setTimeout(() => box.remove(), 3300);
+    setTimeout(() => box.remove(), 3600);
   }
 
-  // привет / hello: логотип в шапке машет рукой.
+  // привет / hello: логотип кивает.
   function wave() {
-    const logo = document.querySelector("body > header .wordmark");
-    say(ru ? "И вам привет! 👋" : "Hello to you too! 👋", 2600);
+    note(ru ? "Привет. Если есть вопрос — пишите, отвечаю сам." : "Hi. If you have a question, write to me directly.",
+      tgLink ? [ru ? "Написать" : "Write", tgLink] : null, 4200);
+    const logo = logoBox();
     if (!logo || reduced) return;
-    const hand = document.createElement("span");
-    hand.className = "dl-hand";
-    hand.setAttribute("aria-hidden", "true");
-    hand.textContent = "👋";
-    logo.append(hand);
-    logo.classList.add("dl-wiggle");
-    setTimeout(() => { hand.remove(); logo.classList.remove("dl-wiggle"); }, 2200);
+    logo.animate([{ transform: "rotate(0)" }, { transform: "rotate(-8deg)" }, { transform: "rotate(6deg)" }, { transform: "rotate(-4deg)" }, { transform: "rotate(0)" }],
+      { duration: 900, easing: "ease-in-out" });
   }
 
-  // 7 кликов по логотипу на главной: логотип раскручивается и «устаёт», тема на миг меняется.
+  // 7 кликов по логотипу на главной: страница «вздрагивает».
   let clicks = 0, clickTimer;
-  document.querySelector("body > header .wordmark")?.addEventListener("click", event => {
+  logoBox()?.addEventListener("click", event => {
     const logo = event.currentTarget;
     if (new URL(logo.href, location.href).pathname !== location.pathname) return;
     event.preventDefault();
     clearTimeout(clickTimer);
     clickTimer = setTimeout(() => { clicks = 0; }, 2500);
-    if (++clicks < 7) { if (!reduced) logo.animate([{ transform: "rotate(0)" }, { transform: "rotate(" + clicks * 8 + "deg)" }, { transform: "rotate(0)" }], { duration: 260 }); return; }
+    if (++clicks < 7) { if (!reduced) logo.animate([{ transform: "scale(1)" }, { transform: "scale(" + (1 + clicks * .02) + ")" }, { transform: "scale(1)" }], { duration: 220 }); return; }
     clicks = 0;
-    say(ru ? "Ой, голова закружилась… 😵‍💫" : "Whoa, I’m dizzy… 😵‍💫", 3000);
+    note(ru ? "Всё, всё, я понял. Можно просто написать." : "Alright, I get it. You can just write to me.", tgLink ? [ru ? "Написать" : "Write", tgLink] : null, 4000);
     if (reduced) return;
-    logo.animate([{ transform: "rotate(0)" }, { transform: "rotate(1080deg) scale(1.1)" }, { transform: "rotate(1060deg) scale(.95)" }, { transform: "rotate(1080deg)" }], { duration: 1600, easing: "cubic-bezier(.2,.8,.3,1)" });
-    root.classList.add("dl-flash");
-    setTimeout(() => root.classList.remove("dl-flash"), 900);
+    logo.animate([{ transform: "rotate(0)" }, { transform: "rotate(720deg)" }], { duration: 1100, easing: "cubic-bezier(.3,1.3,.5,1)" });
+    document.querySelector("main")?.animate([{ transform: "none" }, { transform: "rotate(-.6deg) translateY(4px)" }, { transform: "rotate(.4deg)" }, { transform: "none" }], { duration: 700, easing: "ease-in-out" });
   });
 
-  // Послание для тех, кто открыл консоль.
+  // Ночной визит: одна тихая записка за сессию.
   try {
-    console.log("%c\n  ██████╗ ██╗\n  ██╔══██╗██║\n  ██║  ██║██║\n  ██║  ██║██║\n  ██████╔╝███████╗\n  ╚═════╝ ╚══════╝\n", "color:#e8ac8c;font-family:monospace");
-    console.log("%c" + (ru ? "Привет, коллега! Раз ты здесь — тебе точно интересно, как это сделано." : "Hi, fellow developer! If you are here, you want to know how this was built."), "font-size:14px;font-weight:700");
-    console.log(ru ? "Пасхалки: наберите devlarion, dgx или привет; Konami-код; 7 кликов по логотипу на главной. Написать Илье: " + (document.querySelector('a[href*="t.me/"]')?.href.split("?")[0] ?? "") : "Easter eggs: type devlarion, dgx or hello; the Konami code; click the logo 7 times on the home page.");
-  } catch {}
-  function celebrate() {
-    say(ru ? "Вы нашли пасхалку. Илья передаёт привет 👋" : "You found the easter egg. Ilia says hi 👋", 4200);
-    if (reduced) return;
-    const layer = document.createElement("div");
-    layer.className = "dl-confetti";
-    layer.setAttribute("aria-hidden", "true");
-    for (let i = 0; i < 80; i++) {
-      const bit = document.createElement("i");
-      bit.style.setProperty("--x", (Math.random() * 100).toFixed(1) + "vw");
-      bit.style.setProperty("--d", (Math.random() * 40 - 20).toFixed(1) + "vw");
-      bit.style.setProperty("--r", (Math.random() * 900 - 450).toFixed(0) + "deg");
-      bit.style.setProperty("--t", (1.6 + Math.random() * 1.6).toFixed(2) + "s");
-      bit.style.setProperty("--w", (Math.random() * .35).toFixed(2) + "s");
-      bit.style.setProperty("--s", (5 + Math.random() * 7).toFixed(0) + "px");
-      layer.append(bit);
+    const hour = new Date().getHours();
+    if (hour < 5 && !sessionStorage.getItem("dl-night")) {
+      sessionStorage.setItem("dl-night", "1");
+      setTimeout(() => note(ru ? "Поздно, а вы всё ещё выбираете подрядчика. Оставьте заявку — утром ответим первым делом." : "It’s late and you’re still choosing a contractor. Leave an enquiry and we’ll reply first thing.", null, 7000), 9000);
     }
-    document.body.append(layer);
-    setTimeout(() => layer.remove(), 3800);
-  }
+  } catch {}
+
+  // Послание тем, кто открыл консоль.
+  try {
+    console.log("%cDevlarion", "font:700 28px Georgia,serif;color:#e8ac8c");
+    console.log(ru ? "Сайт без фреймворков: статический генератор на Node, чистый CSS и немного JS. Пасхалки: devlarion, dgx, привет, Konami-код и 7 кликов по логотипу на главной." : "No frameworks: a Node static generator, plain CSS and a little JS. Easter eggs: devlarion, dgx, hello, the Konami code and 7 logo clicks on the home page.");
+    if (tgLink) console.log((ru ? "Связаться: " : "Contact: ") + tgLink);
+  } catch {}
 
   if (reduced) return;
   root.classList.add("dl-motion-plus");
@@ -269,9 +305,7 @@
     top.toggleAttribute("data-show", y > innerHeight * 0.9);
     header?.toggleAttribute("data-scrolled", y > 12);
     if (y < innerHeight * 1.2) {
-      heroCopy?.style.setProperty("transform", "translate3d(0," + (y * 0.12).toFixed(1) + "px,0)");
       heroArt?.style.setProperty("transform", "translate3d(0," + (y * -0.06).toFixed(1) + "px,0) rotate(" + (y * 0.004).toFixed(3) + "deg)");
-      if (heroCopy) heroCopy.style.opacity = String(Math.max(0.15, 1 - y / (innerHeight * 1.1)).toFixed(3));
     }
     if (flow) {
       const box = flow.getBoundingClientRect();
