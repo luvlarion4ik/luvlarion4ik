@@ -21,7 +21,7 @@ engine.migrate(doc)                          // → документ после�
 {
   name: 'Барбершоп Борода',          // строка, может быть пустой
   category: 'beauty',               // id сферы
-  niche: 'barber',                  // id подкатегории или '' 
+  niche: 'barber',                  // id подкатегории или ''
   nicheCustom: '',                  // если category === 'other'
   models: ['services','booking'],
   items: ['Мужская стрижка','Борода'],
