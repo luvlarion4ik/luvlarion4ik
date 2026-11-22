@@ -468,7 +468,8 @@
   const flow = document.querySelector(".bundle-flow");
   const tracks = [...document.querySelectorAll(".stack-track")];
 
-  let lastY = scrollY, velocity = 0, queued = false;
+  let lastY = scrollY, velocity = 0, queued = false, lastRate = 1, tracksVisible = true;
+  if (tracks[0] && 'IntersectionObserver' in window) new IntersectionObserver(([e]) => { tracksVisible = e.isIntersecting; }).observe(tracks[0]);
   function frame() {
     queued = false;
     const y = scrollY;
@@ -488,8 +489,8 @@
     }
     velocity = velocity * 0.85 + Math.abs(y - lastY) * 0.15;
     lastY = y;
-    const rate = 1 + Math.min(velocity / 12, 5);
-    for (const track of tracks) for (const anim of track.getAnimations()) anim.playbackRate = rate;
+    const rate = Math.round((1 + Math.min(velocity / 12, 5)) * 4) / 4;
+    if (rate !== lastRate && tracksVisible) { lastRate = rate; for (const track of tracks) for (const anim of track.getAnimations()) anim.playbackRate = rate; }
     if (velocity > 0.3) queue();
   }
   function queue() { if (!queued) { queued = true; requestAnimationFrame(frame); } }
@@ -616,4 +617,28 @@
   const apply = () => frames.forEach(img => { const base = img.src.replace(/\/photos\/.*$/, '/photos/'); img.src = base + 'themes/' + themeOf() + '/' + img.dataset.themeFrame + '.jpg'; });
   apply();
   new MutationObserver(apply).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+})();
+
+
+/* Производительность: тяжёлые анимации на паузе вне экрана; переходы по якорям — мгновенно, без долгого плавного скролла (Safari). */
+(() => {
+  if ("IntersectionObserver" in window) {
+    const heavy = document.querySelectorAll(".dl-orbit, .stack, .page-art, .r3-stage, .story-stage");
+    const io = new IntersectionObserver(entries => entries.forEach(e => e.target.classList.toggle("dl-offscreen", !e.isIntersecting)), { rootMargin: "100px" });
+    heavy.forEach(el => io.observe(el));
+  }
+  document.addEventListener("click", e => {
+    const a = e.target.closest('a[href*="#"]');
+    if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button || a.target === '_blank') return;
+    const url = new URL(a.href, location.href);
+    if (url.pathname !== location.pathname || url.origin !== location.origin || !url.hash || url.hash.length < 2) return;
+    const target = document.getElementById(decodeURIComponent(url.hash.slice(1)));
+    if (!target) return;
+    e.preventDefault();
+    const nav = document.querySelector(".services-nav[open]"); if (nav) nav.open = false;
+    const y = target.getBoundingClientRect().top + scrollY - 80;
+    const far = Math.abs(y - scrollY) > innerHeight * 1.5;
+    scrollTo({ top: y, behavior: far || matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+    history.pushState(null, "", url.hash);
+  });
 })();

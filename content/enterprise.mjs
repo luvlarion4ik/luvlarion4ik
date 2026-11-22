@@ -565,19 +565,20 @@ const TREE = [
   ['ai', ['ИИ для бизнеса', 'AI for business'], ['От ассистента до закрытого контура', 'From an assistant to a private perimeter'], [
     ['ai-assistant/', ['ИИ-ассистент', 'AI assistant'], ['Отвечает и передаёт заявки в CRM', 'Answers and passes enquiries to CRM']],
     ['private-ai/', ['Корпоративный ИИ в РФ', 'Private AI in Russia'], ['LLM, RAG, документы и речь в вашем контуре', 'LLMs, RAG, documents and speech in your perimeter']],
+    ['fintech/', ['FinTech-продукты', 'FinTech products'], ['Сервисы для финансовых компаний', 'Services for financial firms']],
+    ['edtech/', ['EdTech-продукты', 'EdTech products'], ['Платформы и ИИ для обучения', 'Learning platforms and AI']],
+  ]],
+  ['cases', ['Кейсы по отраслям', 'Industry cases'], ['Как ИИ работает в вашей сфере', 'How AI works in your field'], [
     ['industries/clinics/', ['Клиники', 'Clinics'], ['Врачебная тайна внутри', 'Medical confidentiality stays inside']],
     ['industries/legal/', ['Юристы', 'Law firms'], ['Договоры и архив без утечек', 'Contracts and archives without leaks']],
     ['industries/finance/', ['Банки и страхование', 'Banking and insurance'], ['Заявления и поддержка', 'Claims and support']],
     ['industries/operations/', ['Производство и логистика', 'Manufacturing and logistics'], ['Документы, закупки, склад', 'Documents, procurement, warehouse']],
     ['industries/contact-centers/', ['Контакт-центры', 'Contact centres'], ['Расшифровка и качество', 'Transcription and quality']],
-    ['fintech/', ['FinTech-продукты', 'FinTech products'], ['Сервисы для финансовых компаний', 'Services for financial firms']],
-    ['edtech/', ['EdTech-продукты', 'EdTech products'], ['Платформы и ИИ для обучения', 'Learning platforms and AI']],
   ]],
   ['hw', ['Железо и вычисления', 'Hardware and compute'], ['Купить, арендовать, привезти', 'Buy, rent, import'], [
     ['compute/', ['Купить или арендовать', 'Buy or rent'], ['3D-модели, калькулятор, сравнение', '3D models, calculator, comparison']],
     ['hardware/', ['GPU-серверы и DGX', 'GPU servers and DGX'], ['Модели, цены, фото', 'Models, prices, photos']],
     ['import/', ['Техника под заказ', 'Equipment to order'], ['Любая рабочая техника, в том числе из Китая', 'Any working equipment, including from China']],
-    ['shop/', ['Магазин', 'Shop'], ['Услуги и железо с корзиной', 'Services and hardware with a basket']],
   ]],
   ['grow', ['Рост и сопровождение', 'Growth and support'], ['Чтобы проект приносил заявки и дальше', 'So the project keeps bringing enquiries'], [
     ['why-website/', ['Зачем бизнесу сайт', 'Why a website'], ['Что вы теряете без него', 'What you lose without one']],
@@ -590,6 +591,7 @@ function serviceTree(lang, ctx) {
   const i = lang === 'ru' ? 0 : 1;
   return `<section class="section wrap audience-section svc" data-svc>
     <label class="shop-search svc-search"><span class="sr-only">${pick(lang, 'Поиск по услугам', 'Search services')}</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input type="search" data-svc-search placeholder="${pick(lang, 'Например: бот, SEO, клиника, DGX…', 'For example: bot, SEO, clinic, DGX…')}"></label>
+    <a class="svc-shop" href="${ctx.home}shop/"><strong>${pick(lang, 'Магазин услуг и железа', 'Service and hardware shop')}</strong><span>${pick(lang, 'Цены, корзина, DGX и GPU — всё, что можно заказать сразу', 'Prices, basket, DGX and GPUs — everything you can order now')}</span><em aria-hidden="true">→</em></a>
     <div class="svc-root"><span class="svc-root-dot" aria-hidden="true"></span><strong>Devlarion</strong></div>
     <ul class="svc-tree">${TREE.map(([id, name, sub, leaves], n) => `<li class="svc-branch" style="--b:${n}"><details${n < 2 ? ' open' : ''}><summary><span class="svc-num">${String(n + 1).padStart(2, '0')}</span><span class="svc-name">${esc(name[i])}</span><small>${esc(sub[i])}</small><em>${leaves.length}</em></summary>
       <ul class="svc-leaves">${leaves.map(([route, t, d], k) => `<li style="--k:${k}"><a href="${ctx.home}${route}"><strong>${esc(t[i])}</strong><span>${esc(d[i])}</span></a></li>`).join('')}</ul></details></li>`).join('')}</ul>

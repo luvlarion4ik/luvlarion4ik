@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 // Unique hero artwork for every segment and topic page.
 // Only theme variables are used, so copper / midnight / sage all work.
 const frame = (label, inner) => `<svg class="page-art-svg" viewBox="0 0 480 360" role="img" aria-label="${label}" xmlns="http://www.w3.org/2000/svg">
@@ -134,7 +135,17 @@ const art = {
 
 };
 
-export function pageArt(lang, route) {
+const HERO = { 'self-employed/': 'self-employed', 'business/': 'business', 'enterprise/': 'enterprise', 'why-website/': 'why-website', 'seo/': 'seo', 'geo/': 'geo', 'support/': 'support', 'bundle/': 'bundle', 'private-ai/': 'private-ai', 'import/': 'import', 'services/': 'services', 'hardware/': 'park-m', 'compute/': 'park-l', 'shop/': 'cluster-2spark',
+  'industries/clinics/': 'clinics', 'industries/legal/': 'legal', 'industries/finance/': 'finance', 'industries/operations/': 'operations', 'industries/contact-centers/': 'contact-centers' };
+
+export function pageArt(lang, route, asset = '') {
+  const hero = HERO[route];
+  const file = hero && (existsSync(new URL(`../docs/assets/photos/pages/hero-${hero}.jpg`, import.meta.url)) ? `hero-${hero}.jpg` : existsSync(new URL(`../docs/assets/photos/pages/${hero}.jpg`, import.meta.url)) ? `${hero}.jpg` : null);
+  if (file && asset) return `<figure class="page-art page-photo"><img src="${asset}photos/pages/${file}" alt="" width="1200" height="900" fetchpriority="high"><figcaption>${lang === 'ru' ? 'Визуализация' : 'Visualisation'}</figcaption></figure>`;
+  return pageArtSvg(lang, route);
+}
+
+function pageArtSvg(lang, route) {
   const item = art[route] ?? (route?.startsWith('industries/') ? art.industry : null);
   if (!item) return '';
   const [ru, en, inner] = item;

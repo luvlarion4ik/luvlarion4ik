@@ -76,6 +76,18 @@ export const hardware = [
   { id: 'dgx-b200', mode: 'buy', art: 'hgx', rub: null, market: null,
     ru: ['NVIDIA DGX B200', 'Система нового поколения Blackwell для ИИ-фабрик. Поставка и цена — только по запросу.', ['8× B200', '1,4 ТБ памяти HBM3e', 'NVLink 5', 'Для крупных компаний и ЦОД']],
     en: ['NVIDIA DGX B200', 'Next-generation Blackwell system for AI factories. Supply and price on request.', ['8× B200', '1.4 TB HBM3e', 'NVLink 5', 'For large companies and data centres']] },
+  { id: 'park-s', mode: 'buy', art: 'spark-duo', rub: 3890000, market: null,
+    more: { ru: [['Состав', '4× DGX Spark, коммутатор 200 Гбит/с, стеллаж, ИБП.'], ['Для кого', 'Отдел до 30–50 человек: несколько моделей до ~200 млрд параметров одновременно.'], ['Что делаем мы', 'Сборка, сеть, распределение моделей по узлам, единый API, мониторинг.']], en: [['Contents', '4× DGX Spark, a 200 Gb/s switch, shelf, UPS.'], ['Who it is for', 'A team of up to 30–50 people: several models up to ~200B parameters at once.'], ['What we do', 'Assembly, networking, model placement, one API, monitoring.']] },
+    ru: ['DGX-парк S: 4× DGX Spark', 'Компактный парк под столом или в кабинете: свой ИИ для отдела без серверной.', ['4× GB10, 512 ГБ памяти', 'Коммутатор и ИБП', 'Единый API', 'Монтаж и настройка']],
+    en: ['DGX fleet S: 4× DGX Spark', 'A compact fleet under a desk or in an office: AI for a team without a server room.', ['4× GB10, 512 GB memory', 'Switch and UPS', 'One API', 'Installation and set-up']] },
+  { id: 'park-m', mode: 'buy', art: 'hgx', rub: 139900000, market: null,
+    more: { ru: [['Состав', '2× HGX 8× H200 в одной стойке, сеть 400G, СХД, ИБП.'], ['Для кого', 'Компания, которая обучает свои модели и обслуживает сотни пользователей.'], ['Что делаем мы', 'Проект площадки, поставка, монтаж, сеть, планировщик задач, SLA.']], en: [['Contents', '2× HGX 8× H200 in one rack, 400G network, storage, UPS.'], ['Who it is for', 'A company training its own models and serving hundreds of users.'], ['What we do', 'Site design, supply, mounting, networking, scheduler, SLA.']] },
+    ru: ['DGX-парк M: 2× HGX H200', 'Стойка с двумя 8-GPU серверами: 16 GPU и 2,2 ТБ памяти HBM3e.', ['16× H200', 'Сеть 400G', 'СХД под датасеты', 'Сопровождение по SLA']],
+    en: ['DGX fleet M: 2× HGX H200', 'A rack with two 8-GPU servers: 16 GPUs and 2.2 TB of HBM3e.', ['16× H200', '400G networking', 'Storage for datasets', 'SLA support']] },
+  { id: 'park-l', mode: 'buy', art: 'hgx', rub: null, market: null,
+    more: { ru: [['Состав', 'От трёх стоек DGX-класса, сеть, охлаждение и питание под проект.'], ['Для кого', 'Крупная компания или ЦОД, которому нужна собственная ИИ-фабрика.'], ['Что делаем мы', 'Проект, поставки, монтаж, ввод в эксплуатацию, сопровождение.']], en: [['Contents', 'Three or more DGX-class racks, networking, cooling and power per project.'], ['Who it is for', 'A large company or data centre that needs its own AI factory.'], ['What we do', 'Design, supply, mounting, commissioning, support.']] },
+    ru: ['DGX-парк L: от трёх стоек', 'Собственная ИИ-фабрика под ключ. Состав и цена — после обследования площадки.', ['От 24 GPU', 'Проект охлаждения и питания', 'Сеть InfiniBand или 400G', 'Ввод в эксплуатацию']],
+    en: ['DGX fleet L: three racks and up', 'Your own turnkey AI factory. Scope and price after a site survey.', ['24+ GPUs', 'Cooling and power design', 'InfiniBand or 400G', 'Commissioning']] },
   { id: 'oem-servers', mode: 'buy', art: 'rack4', rub: null, market: null,
     ru: ['Готовые GPU-серверы Dell, Supermicro, Lenovo, HPE, xFusion', 'Подберём платформу под ваш ЦОД, бюджет и требования к поставщику, привезём и настроим.', ['От 2 до 8 GPU', 'NVIDIA H100/H200/B200 или RTX PRO', 'Гарантия производителя или партнёра', 'Под ваш стандарт стойки и питания']],
     en: ['Ready GPU servers from Dell, Supermicro, Lenovo, HPE, xFusion', 'We pick a platform for your data centre, budget and vendor policy, then deliver and set it up.', ['2 to 8 GPUs', 'NVIDIA H100/H200/B200 or RTX PRO', 'Vendor or partner warranty', 'Fits your rack and power standard']] },
@@ -91,6 +103,15 @@ export const hardware = [
   { id: 'rent-8h200', mode: 'rent', art: 'cloud8', rub: 5350, unit: 'hour', market: [3200, 5400],
     ru: ['Аренда сервера 8× H200', 'Целый сервер под вашу компанию: обучение, дообучение и высокая нагрузка.', ['8× H200, NVLink', 'Выделенный сервер', 'Резервное копирование в РФ', 'SLA в договоре']],
     en: ['Rent an 8× H200 server', 'A whole server for your company: training, fine-tuning and heavy load.', ['8× H200, NVLink', 'Dedicated server', 'Backups in Russia', 'SLA in the contract']] },
+  { id: 'month-h100', mode: 'rent', art: 'cloud', rub: 449000, unit: 'month', market: [244800, 468000],
+    ru: ['Аренда 1× H100 на месяц', 'Мощность в российском ЦОД партнёра по договору с нами. Дешевле почасовой при постоянной нагрузке.', ['H100 80 ГБ', 'Модель и API настроены', 'Помесячный договор', 'Мониторинг и поддержка']],
+    en: ['Rent 1× H100 for a month', 'Capacity in a partner’s Russian data centre under a contract with us. Cheaper than hourly at steady load.', ['H100 80 GB', 'Model and API set up', 'Monthly contract', 'Monitoring and support']] },
+  { id: 'month-h200', mode: 'rent', art: 'cloud', rub: 539000, unit: 'month', market: [302400, 561600],
+    ru: ['Аренда 1× H200 на месяц', 'Больше памяти для крупных моделей, помесячно и с нашей настройкой.', ['H200 141 ГБ', 'Модель и API настроены', 'Помесячный договор', 'Мониторинг и поддержка']],
+    en: ['Rent 1× H200 for a month', 'More memory for larger models, monthly and set up by us.', ['H200 141 GB', 'Model and API set up', 'Monthly contract', 'Monitoring and support']] },
+  { id: 'month-8h200', mode: 'rent', art: 'cloud8', rub: 3749000, unit: 'month', market: [2300000, 3900000],
+    ru: ['Аренда сервера 8× H200 на месяц', 'Выделенный сервер под вашу компанию на месяц и дольше.', ['8× H200, NVLink', 'Выделенный сервер', 'Резервные копии в РФ', 'SLA в договоре']],
+    en: ['Rent an 8× H200 server for a month', 'A dedicated server for your company for a month or longer.', ['8× H200, NVLink', 'Dedicated server', 'Backups in Russia', 'SLA in the contract']] },
   { id: 'provider-pick', mode: 'rent', art: 'cloud', rub: null, market: null,
     ru: ['Мощности у крупного облака — с нашей настройкой', 'Если удобнее платить провайдеру напрямую, подберём тариф в Selectel, Cloud.ru, Yandex Cloud или другом российском облаке и развернём там модель.', ['Сравнение тарифов под задачу', 'Договор с провайдером — на вас', 'Развёртывание модели и API', 'Сопровождение по желанию']],
     en: ['Capacity from a major cloud, set up by us', 'If you prefer to pay a provider directly, we pick a plan at Selectel, Cloud.ru, Yandex Cloud or another Russian cloud and deploy the model there.', ['Plans compared for your task', 'Your own contract with the provider', 'Model and API deployment', 'Optional support']] },
@@ -105,8 +126,8 @@ const mesh = (x, y, w, h, gold) => {
   return s;
 };
 
-const MODEL3D = { 'dgx-spark': 'spark', 'gb10-oem': 'spark', 'spark-cluster': 'spark', 'rtx5090-ws': 'workstation', 'rtx-pro-ws': 'workstation', 'rtx-pro-server': 'gpu-server', 'hgx-h200': 'hgx', 'dgx-b200': 'hgx', 'amd-mi300x': 'hgx', 'oem-servers': 'gpu-server' };
-const PHOTO = { 'dgx-spark': 'cut-spark', 'gb10-oem': 'cut-spark', 'rtx5090-ws': 'cut-workstation', 'rtx-pro-ws': 'cut-workstation', 'rtx-pro-server': 'cut-hgx', 'hgx-h200': 'cut-hgx', 'dgx-b200': 'cut-rack', 'oem-servers': 'cut-hgx', 'amd-mi300x': 'cut-hgx' };
+const MODEL3D = { 'park-s': 'spark', 'park-m': 'rack', 'park-l': 'rack', 'dgx-spark': 'spark', 'gb10-oem': 'spark', 'spark-cluster': 'spark', 'rtx5090-ws': 'workstation', 'rtx-pro-ws': 'workstation', 'rtx-pro-server': 'gpu-server', 'hgx-h200': 'hgx', 'dgx-b200': 'hgx', 'amd-mi300x': 'hgx', 'oem-servers': 'gpu-server' };
+const PHOTO = { 'dgx-spark': 'cut-spark.png', 'gb10-oem': 'partners/asus-ascent-gx10.jpg', 'spark-cluster': 'pages/cluster-2spark.jpg', 'park-s': 'pages/park-s.jpg', 'park-m': 'pages/park-m.jpg', 'park-l': 'pages/park-l.jpg', 'rtx5090-ws': 'cut-workstation.png', 'rtx-pro-ws': 'cut-workstation.png', 'rtx-pro-server': 'cut-hgx.png', 'hgx-h200': 'cut-hgx.png', 'dgx-b200': 'cut-rack.png', 'oem-servers': 'cut-hgx.png', 'amd-mi300x': 'cut-hgx.png', 'rent-h100': 'pages/rent-gpu.jpg', 'rent-h200': 'pages/rent-gpu.jpg', 'rent-8h200': 'pages/rent-server.jpg', 'month-h100': 'pages/rent-gpu.jpg', 'month-h200': 'pages/rent-gpu.jpg', 'month-8h200': 'pages/rent-server.jpg', 'provider-pick': 'pages/rent-cloud.jpg' };
 
 export function deviceArt(kind) {
   const box = inner => `<svg class="hw-art" viewBox="0 0 240 150" aria-hidden="true">${inner}</svg>`;
@@ -146,7 +167,7 @@ export function renderShop(lang, ctx) {
     id, cat, title: title[i], text: text[i], rub: priceOf(p), unit, art: iconArt(ctx.icons, icon),
   }))).join('');
   const hwCards = hardware.map(h => card({
-    id: h.id, cat: 'hw-' + h.mode, kind: 'hw', title: h[lang][0], text: h[lang][1], specs: h[lang][2], rub: h.rub, unit: h.unit, market: h.market, more: h.more?.[lang], model: MODEL3D[h.id], art: `<div class="shop-art${PHOTO[h.id] ? ' shop-art-photo' : ''}">${PHOTO[h.id] ? `<img src="${ctx.asset}photos/${PHOTO[h.id]}.png" alt="${esc(h[lang][0])}" width="1448" height="1086" loading="lazy">` : deviceArt(h.art)}${h.mode === 'rent' ? `<span class="shop-tag">${pick(lang, 'Аренда', 'Rental')}</span>` : `<span class="shop-tag">${pick(lang, 'Под заказ', 'To order')}</span>`}</div>`,
+    id: h.id, cat: 'hw-' + h.mode, kind: 'hw', title: h[lang][0], text: h[lang][1], specs: h[lang][2], rub: h.rub, unit: h.unit, market: h.market, more: h.more?.[lang], model: MODEL3D[h.id], art: `<div class="shop-art${PHOTO[h.id] ? ' shop-art-photo' : ''}">${PHOTO[h.id] ? `<img src="${ctx.asset}photos/${PHOTO[h.id]}" alt="${esc(h[lang][0])}" width="1200" height="900" loading="lazy"${PHOTO[h.id].endsWith('.png') ? '' : ' class="is-full"'}>${PHOTO[h.id].startsWith('partners/') ? `<span class="shop-credit">${pick(lang, 'Фото: ASUS', 'Photo: ASUS')}</span>` : PHOTO[h.id].endsWith('.png') ? '' : `<span class="shop-credit">${pick(lang, 'Визуализация', 'Visualisation')}</span>`}` : deviceArt(h.art)}${h.mode === 'rent' ? `<span class="shop-tag">${pick(lang, 'Аренда', 'Rental')}</span>` : `<span class="shop-tag">${pick(lang, 'Под заказ', 'To order')}</span>`}</div>`,
   })).join('');
   const chips = [['all', pick(lang, 'Все', 'All')], ...services.map(([id, names]) => [id, names[i]]), ['hw-buy', pick(lang, 'Железо: купить', 'Hardware: buy')], ['hw-rent', pick(lang, 'Железо: аренда', 'Hardware: rent')]];
   const labels = JSON.stringify({

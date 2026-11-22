@@ -1,0 +1,13 @@
+{
+  "asus-ascent-gx10.jpg": {
+    "page_url": "https://press.asus.com/news/press-releases/asus-ascent-gx10-ai-supercomputer/",
+    "image_url": "https://press.asus.com/assets/w_1266,h_760/ec0c9e34-7248-41a6-b9b4-09235c530e74/ASUS_Ascent_GX10_PR%20image.jpg",
+    "status": "downloaded"
+  },
+  "gigabyte-ai-top-atom.jpg": {
+    "page_url": "https://www.gigabyte.com/us/AI-TOP-PC/GIGABYTE-AI-TOP-ATOM",
+    "image_url": "https://www.gigabyte.com/FileUpload/Global/KeyFeature/4102/innergigabyte/images/kv-rwd.jpg",
+    "status": "download_unavailable",
+    "reason": "gigabyte.com returned Access Denied for the direct image download; not used."
+  }
+}

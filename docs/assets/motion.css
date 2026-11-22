@@ -207,3 +207,7 @@
 .dl-footer-word span {transition:opacity .6s ease,transform .8s cubic-bezier(.22,1.2,.4,1)!important;transition-delay:calc(var(--i) * 70ms + 150ms)!important}
 .dl-footer-mark devlarion-logo {transition:transform .9s cubic-bezier(.22,1.1,.4,1)!important}
 .shop-fab,.dl-top {transition:opacity .6s ease,transform .8s cubic-bezier(.22,1,.36,1)!important}
+
+/* Вне экрана тяжёлое не анимируется */
+.dl-offscreen, .dl-offscreen * { animation-play-state: paused !important; }
+.dl-motion-plus .hero-copy, .dl-motion-plus .audience-hero-copy, .dl-motion-plus .featured-case, .dl-motion-plus .page-art { will-change: auto !important; }

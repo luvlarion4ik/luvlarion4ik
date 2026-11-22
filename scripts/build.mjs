@@ -83,27 +83,30 @@ for(const lang of ["ru","en"]){
  const servicesMenu = () => {
    const groups = [
      [homeCopy[lang].audience, segments.map(page => [page.route,page[lang].label])],
-     [l("Рост","Growth"),topics.map(page => [page.route,page.route==="seo/"?"SEO":page[lang].label])],
      [l("Для бизнеса: ИИ и GPU","Enterprise: AI and GPUs"),[
        ["private-ai/",l("Корпоративный ИИ","Private AI")],
        ["hardware/",l("GPU-серверы и DGX","GPU servers and DGX")],
        ["compute/",l("Купить или арендовать мощности","Buy or rent compute")],
        ["import/",l("Техника под заказ","Equipment to order")],
+     ]],
+     [l("Кейсы по отраслям","Industry cases"),[
        ["industries/clinics/",l("Клиники","Clinics")],
        ["industries/legal/",l("Юристы","Law firms")],
        ["industries/finance/",l("Банки и страхование","Banking and insurance")],
        ["industries/operations/",l("Производство и логистика","Manufacturing and logistics")],
        ["industries/contact-centers/",l("Контакт-центры","Contact centres")],
-       ["shop/",l("Магазин услуг и железа","Service and hardware shop")],
      ]],
-     [l("Решения","Solutions"),[
+     [l("Сайты и боты","Websites and bots"),[
        ["website/",l("Сайт","Website")],
        ["telegram-bot/",l("Бот и мини-приложение","Bot and mini app")],
        ["ai-assistant/",l("ИИ-ассистент","AI assistant")],
-       ["solutions/",l("Все решения","All solutions")],
+       ["solutions/",l("Готовые модули","Ready modules")],
+       ["bundle/",l("Пакетом выгоднее","Better as a bundle")],
      ]],
+     [l("Рост","Growth"),topics.filter(page=>page.route!=="bundle/").map(page => [page.route,page.route==="seo/"?"SEO":page[lang].label])],
    ];
-   return `<details class="services-nav"><summary>${t.nav[0]}</summary><div class="services-nav-links"><a class="services-all" href="${home}services/">${l("Все услуги на одной карте","All services on one map")} <span aria-hidden="true">→</span></a>
+   return `<details class="services-nav"><summary>${t.nav[0]}</summary><div class="services-nav-links">
+     <div class="services-top"><a class="services-shop" href="${home}shop/"><span>${l("Магазин услуг и железа","Service and hardware shop")}</span><small>${l("Цены, корзина, DGX и GPU","Prices, basket, DGX and GPUs")}</small></a><a class="services-all" href="${home}services/">${l("Все услуги на одной карте","All services on one map")} <span aria-hidden="true">→</span></a></div>
      ${groups.map(([title,items],gi)=>`<div class="services-col" style="--c:${gi}"><strong>${esc(title)}</strong><ul>${items.map(([route,label],li)=>`<li style="--r:${li}"><a href="${home}${route}">${esc(label)}</a></li>`).join("")}</ul></div>`).join("")}
    </div></details>`;
  };
