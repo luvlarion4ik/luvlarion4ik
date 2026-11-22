@@ -1,0 +1,6 @@
+{
+  "lighthouseVersion": "13.5.0",
+  "requestedUrl": "http://127.0.0.1:4190/ru/growth-map/",
+  "accessibility": 100,
+  "failedBinaryAudits": []
+}
