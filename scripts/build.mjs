@@ -161,8 +161,9 @@ for(const lang of ["ru","en"]){
  const renderCases = items => items.map(project => {
    const people = (project.curators ?? []).map(curator => curator.person).join(" ");
    const details = home + caseRoute(project);
-   const featured = project.id === "orient-logic";
-   return `<article class="case exhibit${featured ? " exhibit-featured" : ""}" id="${esc(project.id)}" data-case-people="${esc(people)}">
+   const featured = project.id === "orient-logic" || project.id === "kitchens";
+   const reverse = project.id === "kitchens";
+   return `<article class="case exhibit${featured ? " exhibit-featured" : ""}${reverse ? " exhibit-reverse" : ""}" id="${esc(project.id)}" data-case-people="${esc(people)}">
      ${caseCover(project,details,featured)}
      <div class="exhibit-copy"><div><small>${esc(project.type)}</small> ${demoBadge(project)}</div>
        <h3>${esc(project.name)}</h3><p>${esc(project.result)}</p>
