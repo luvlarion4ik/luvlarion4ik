@@ -247,6 +247,11 @@ export function createTelegramLogin({ token, username, apiBase, accountUrl, shop
     return showMenu(from, editId);
   }
 
+  async function notifyClient(chat, text, url = accountUrl) {
+    if (!/^\d{3,20}$/.test(String(chat))) return;
+    try { await sendMessage(Number(chat), ICON.bell, text, [[{ text: '🔐 Открыть кабинет', url }]]); } catch {}
+  }
+
   async function notifyOwner(text, chat = ownerChat) {
     if (!/^-?\d{3,20}$/.test(String(chat))) return;
     try { await sendMessage(Number(chat), ICON.bell, escapeHtml(text), [[{ text: 'Открыть админку', url: accountUrl + 'admin/' }]]); } catch {}
@@ -417,5 +422,5 @@ export function createTelegramLogin({ token, username, apiBase, accountUrl, shop
     }
   }
 
-  return { ready: () => ready, begin, redeem, invalidateUser, notifySession, notifyOwner, startPolling };
+  return { ready: () => ready, begin, redeem, invalidateUser, notifySession, notifyOwner, notifyClient, startPolling };
 }

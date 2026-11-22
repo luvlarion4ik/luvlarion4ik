@@ -156,6 +156,22 @@ test('portal profile login, requests and Telegram menu', async t => {
   assert.equal(after.projects.length, 1);
   assert.equal(after.client.login, 'anna_sever');
 
+  // Админ сохраняет проект: клиенту приходит уведомление; клиент согласует смету.
+  const state0 = await (await fetch(admin + 'api/state')).json();
+  const clientId = state0.clients.find(c => c.tgId === '1001').id;
+  const beforeMsgs = messages.length;
+  const saved1 = await fetch(admin + 'api/projects', { method: 'POST', headers: { origin, 'content-type': 'application/json' }, body: JSON.stringify({ clientId, title: 'Сайт клиники', status: 'design', stages: [{ title: 'Дизайн', state: 'active' }], estimates: [{ title: 'Смета v1', amount: 100000, status: 'sent' }], invoices: [{ number: '7', amount: 50000, status: 'unpaid' }] }) });
+  assert.equal(saved1.status, 200);
+  const notice = await until(() => messages.slice(beforeMsgs).find(m => m.chat_id === 1001 && /Смета v1/.test(m.text) && /счёт № 7/.test(m.text)), 'client notification');
+  assert.ok(notice.reply_markup.inline_keyboard[0][0].url.includes('/account/'));
+  const proj = (await (await me(cookie)).json()).projects.find(x => x.title === 'Сайт клиники');
+  const decide = d => fetch(account + 'api/projects/' + proj.id + '/estimates/0', { method: 'POST', headers: { origin, cookie, 'content-type': 'application/json' }, body: JSON.stringify(d) });
+  assert.equal((await decide({ decision: 'maybe' })).status, 422);
+  const ok = await decide({ decision: 'approved' });
+  assert.equal(ok.status, 200);
+  assert.equal((await ok.json()).project.estimates[0].status, 'approved');
+  assert.equal((await decide({ decision: 'declined' })).status, 409);
+
   // Короткая форма заявки с сайта.
   const lead = (data, site = origin) => fetch(account + 'api/lead', { method: 'POST', headers: { origin: site, 'content-type': 'application/json' }, body: JSON.stringify(data) });
   assert.equal((await lead({ name: 'Анна' })).status, 422);
@@ -172,7 +188,13 @@ test('portal profile login, requests and Telegram menu', async t => {
   const list = await until(() => messages.find(m => m.method === 'editMessageText' && m.text.includes('Заявка: Сайт')), 'projects callback');
   assert.equal(list.message_id, 7);
   updates.push({ update_id: ++updateId, callback_query: { id: 'q2', from: { id: 1001, first_name: 'Fixture' }, data: 'invoices', message: { message_id: 7, chat: { id: 1001, type: 'private' } } } });
-  await until(() => messages.find(m => m.method === 'editMessageText' && m.text.includes('Счетов пока нет')), 'invoices callback');
+  await until(() => messages.find(m => m.method === 'editMessageText' && m.text.includes('№ 7')), 'invoices callback');
+  // Выход на всех устройствах.
+  const extra = session(await post('password', { identifier: 'anna_sever', password }));
+  assert.equal((await fetch(account + 'api/logout-all', { method: 'POST', headers: { origin, cookie: extra } })).status, 200);
+  assert.equal((await me(extra)).status, 401);
+  assert.equal((await me(cookie)).status, 401);
+
   // Незарегистрированный пользователь получает кнопку регистрации.
   const stranger = messages.length;
   message(4242, '/start', 'stranger');

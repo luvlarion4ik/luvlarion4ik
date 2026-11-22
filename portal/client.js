@@ -68,7 +68,8 @@
 
     const p = state.projects[current] || state.projects[0];
     history.replaceState(null, '', '#p=' + p.id + '&t=' + tab);
-    const projects = state.projects.length > 1
+    const projects = state.projects.length > 1 ? overview() : null;
+    const projectsOld = false
       ? h('div', { class: 'ac-projects', role: 'group', 'aria-label': 'Выбор проекта' },
         state.projects.map((item, i) => h('button', {
           type: 'button', 'aria-pressed': String(i === current), text: item.title,
@@ -207,10 +208,16 @@
     const td = (label, ...kids) => h('td', { 'data-label': label }, ...kids);
     const est = p.estimates.length ? table(p.estimates, ['Смета', 'Сумма', 'Статус', ''], e => [
       td('Смета', h('strong', { text: e.title }), e.note ? h('div', { class: 'ac-muted', text: e.note }) : null),
-      h('td', { class: 'num', 'data-label': 'Сумма', text: money(e.amount, e.currency) }), td('Статус', pill(EST[e.status] || EST.sent)), td('', link(e))]) : empty('Смет пока нет.');
+      h('td', { class: 'num', 'data-label': 'Сумма', text: money(e.amount, e.currency) }), td('Статус', pill(EST[e.status] || EST.sent)),
+      td('', link(e), e.status === 'sent' && !state.preview ? h('div', { class: 'ac-decide' },
+        h('button', { type: 'button', class: 'ac-btn ac-btn--sm', text: 'Согласовать', onclick: () => decide(p, p.estimates.indexOf(e), 'approved') }),
+        h('button', { type: 'button', class: 'ac-btn ac-btn--ghost ac-btn--sm', text: 'Отклонить', onclick: () => decide(p, p.estimates.indexOf(e), 'declined') })) : null)]) : empty('Смет пока нет.');
+    const invActions = i => (i.status === 'unpaid' || i.status === 'overdue') && !state.preview ? h('div', { class: 'ac-decide' },
+      h('button', { type: 'button', class: 'ac-btn ac-btn--ghost ac-btn--sm', text: 'Скопировать', onclick: () => { navigator.clipboard?.writeText(`Счёт № ${i.number}, ${money(i.amount, i.currency)}`); toast('Номер и сумма скопированы'); } }),
+      h('button', { type: 'button', class: 'ac-btn ac-btn--sm', text: 'Я оплатил', onclick: () => reportPaid(p, i) })) : null;
     const inv = p.invoices.length ? table(p.invoices, ['Счёт', 'Сумма', 'Статус', 'Срок', ''], i => [
       td('Счёт', h('strong', { text: '№ ' + i.number }), i.title ? h('div', { class: 'ac-muted', text: i.title }) : null),
-      h('td', { class: 'num', 'data-label': 'Сумма', text: money(i.amount, i.currency) }), td('Статус', pill(INV[i.status] || INV.unpaid)), td('Срок оплаты', document.createTextNode(fmtDate(i.due) || '—')), td('', link(i))]) : empty('Счетов пока нет.');
+      h('td', { class: 'num', 'data-label': 'Сумма', text: money(i.amount, i.currency) }), td('Статус', pill(INV[i.status] || INV.unpaid)), td('Срок оплаты', document.createTextNode(fmtDate(i.due) || '—')), td('', link(i), invActions(i))]) : empty('Счетов пока нет.');
     const due = p.invoices.filter(i => i.status === 'unpaid' || i.status === 'overdue');
     const totals = new Map();
     for (const invoice of due) {
@@ -270,6 +277,43 @@
     fetch(`${base}api/projects/${p.id}/read`, { method: 'POST', credentials: 'same-origin' }).catch(() => {});
   }
 
+  // ---- Решения по сметам и оплата счетов ----
+  async function decide(p, index, decision) {
+    const comment = decision === 'declined' ? (prompt('Что не подошло? Комментарий увидит команда (необязательно).') ?? null) : '';
+    if (comment === null) return;
+    try {
+      const r = await fetch(`${base}api/projects/${p.id}/estimates/${index}`, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ decision, comment }) });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d.error || 'Не удалось сохранить решение.');
+      Object.assign(p, d.project);
+      toast(decision === 'approved' ? 'Смета согласована. Команда получила уведомление' : 'Смета отклонена. Команда свяжется с вами');
+      render({ animate: false });
+    } catch (e) { toast(e.message); }
+  }
+  async function reportPaid(p, i) {
+    try {
+      const r = await fetch(`${base}api/projects/${p.id}/messages`, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: `Оплатили счёт № ${i.number} на ${money(i.amount, i.currency)}. Проверьте, пожалуйста, поступление.` }) });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d.error || 'Не удалось отправить.');
+      p.messages.push(d.message);
+      toast('Отправили команде. Статус обновится после проверки');
+    } catch (e) { toast(e.message); }
+  }
+
+  // ---- Все проекты одним взглядом (если их несколько) ----
+  function overview() {
+    if (state.projects.length < 2) return null;
+    return h('div', { class: 'ac-overview', role: 'group', 'aria-label': 'Все проекты' }, state.projects.map((p, i) => {
+      const done = p.stages.filter(s => s.state === 'done').length, pct = p.stages.length ? Math.round(done / p.stages.length * 100) : 0;
+      const due = p.invoices.filter(x => x.status === 'unpaid' || x.status === 'overdue').length;
+      return h('button', { type: 'button', class: 'ac-ov' + (i === current ? ' is-on' : ''), 'aria-pressed': String(i === current), onclick: () => { current = i; render({ focusProject: false }); } },
+        h('span', { class: 'ac-ov-top' }, pill(STATUS[p.status] || STATUS.brief), p.unread ? h('span', { class: 'ac-badge', text: String(p.unread) }) : null),
+        h('strong', { text: p.title }),
+        h('span', { class: 'ac-ov-bar' }, h('i', { style: 'width:' + pct + '%' })),
+        h('small', { text: pct + '% · ' + (due ? 'счетов к оплате: ' + due : 'без задолженности') }));
+    }));
+  }
+
   // ---- Первый вход: приветствие вместо пустого экрана ----
   function welcome() {
     const L = state.links || {};
@@ -310,6 +354,7 @@
     f.login.value = state.client.login || '';
     f.name.value = state.client.name || '';
     f.company.value = state.client.company || '';
+    f.notify.checked = state.client.notify !== false;
     profileDialog.querySelector('[data-profile-error]').textContent = '';
     profileDialog.showModal();
     f.login.focus();
@@ -320,6 +365,10 @@
     requestDialog.querySelector('textarea').focus();
   }
   document.querySelector('[data-open-profile]').addEventListener('click', openProfile);
+  document.querySelector('[data-logout-all]')?.addEventListener('click', async () => {
+    if (!confirm('Выйти из кабинета на всех устройствах, включая это?')) return;
+    try { await post('api/logout-all', {}); location.href = base; } catch (e) { toast(e.message); }
+  });
   document.querySelector('[data-new-request]').addEventListener('click', openRequest);
   async function post(path, body) {
     const r = await fetch(base + path, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
@@ -332,7 +381,7 @@
     const f = e.target, err = profileDialog.querySelector('[data-profile-error]'), btn = f.querySelector('[type=submit]');
     btn.disabled = true; err.textContent = '';
     try {
-      const data = await post('api/profile', { login: f.login.value.trim(), name: f.name.value.trim(), company: f.company.value.trim() });
+      const data = await post('api/profile', { login: f.login.value.trim(), name: f.name.value.trim(), company: f.company.value.trim(), notify: f.notify.checked });
       Object.assign(state.client, data.client);
       profileDialog.close();
       toast(data.client.login ? 'Сохранено. Теперь можно входить по логину ' + data.client.login : 'Профиль сохранён');

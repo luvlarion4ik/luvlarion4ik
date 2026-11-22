@@ -463,3 +463,19 @@ h3 { font-size:clamp(1.2rem, 2vw, 1.55rem); }
 @keyframes ac-node { 0%, 20%, 100% { transform:scale(1); } 8% { transform:scale(1.12); } }
 @keyframes ac-travel { 0% { transform:translateX(0); } 33% { transform:translateX(120px); } 66% { transform:translateX(240px); } 100% { transform:translateX(240px); opacity:0; } }
 @media (max-width:760px) { .ac-welcome, .ac-welcome-steps, .ac-tiles { grid-template-columns:1fr; } }
+
+/* ---- Решения, обзор проектов, настройки ---- */
+.ac-btn--sm { padding:.4rem .8rem; min-height:34px; font-size:.85rem; }
+.ac-decide { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.4rem; }
+.ac-overview { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:.8rem; margin-bottom:1rem; }
+.ac-ov { display:grid; gap:.45rem; padding:1rem; border:1px solid var(--rule); border-radius:14px; background:var(--surface); color:var(--ink); text-align:left; font:inherit; cursor:pointer; transition:border-color .2s, transform .2s; }
+.ac-ov:hover { transform:translateY(-2px); }
+.ac-ov.is-on { border-color:var(--accent); box-shadow:0 14px 34px -22px var(--accent); }
+.ac-ov-top { display:flex; justify-content:space-between; align-items:center; gap:.5rem; }
+.ac-ov strong { font-size:1rem; line-height:1.3; }
+.ac-ov-bar { display:block; height:6px; border-radius:99px; background:var(--paper); overflow:hidden; }
+.ac-ov-bar i { display:block; height:100%; background:var(--accent); transition:width .6s cubic-bezier(.2,.8,.2,1); }
+.ac-ov small { color:var(--sub); }
+.ac-check { display:flex; gap:.6rem; align-items:flex-start; cursor:pointer; }
+.ac-check input { margin-top:.25rem; accent-color:var(--accent); }
+.ac-danger { display:flex; justify-content:space-between; align-items:center; gap:1rem; padding-top:.8rem; border-top:1px solid var(--rule); color:var(--sub); font-size:.9rem; }

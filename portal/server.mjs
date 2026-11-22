@@ -24,6 +24,27 @@ const BOT_TOKEN = (env.TELEGRAM_BOT_TOKEN || '').trim();
 const BOT_NAME = (env.TELEGRAM_BOT_USERNAME || '').trim().replace(/^@/, '');
 const certHits = new Map();
 const leadHits = new Map();
+const escHtml = v => String(v).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function tellClient(clientId, lines) {
+  const c = db.clients.find(x => x.id === clientId);
+  if (!c?.tgId || c.notify === false || !lines.length) return;
+  void telegramLogin.notifyClient?.(c.tgId, lines.join('\n'));
+}
+const STATUS_RU = { brief: 'Обсуждение задачи', design: 'Дизайн', development: 'Разработка', review: 'Проверка и правки', launched: 'Запущен', support: 'Поддержка', paused: 'На паузе' };
+function projectChanges(prev, next) {
+  const out = [];
+  const t = `<b>${escHtml(next.title)}</b>`;
+  if (prev && prev.status !== next.status) out.push(`${t}: статус — ${escHtml(STATUS_RU[next.status] || next.status)}`);
+  for (const s of next.stages) {
+    const was = prev?.stages.find(x => x.title === s.title);
+    if (s.state === 'done' && was?.state !== 'done') out.push(`✓ ${t}: этап «${escHtml(s.title)}» завершён`);
+    else if (s.state === 'active' && was?.state !== 'active') out.push(`▶ ${t}: в работе этап «${escHtml(s.title)}»`);
+  }
+  for (const i of next.invoices) if (!prev?.invoices.some(x => x.number === i.number)) out.push(`🧾 ${t}: новый счёт № ${escHtml(i.number)}`);
+  for (const e of next.estimates) if (e.status === 'sent' && !prev?.estimates.some(x => x.title === e.title && x.status === 'sent')) out.push(`📄 ${t}: смета «${escHtml(e.title)}» ждёт вашего решения`);
+  for (const f of next.files) if (!prev?.files.some(x => x.title === f.title)) out.push(`📎 ${t}: новый материал «${escHtml(f.title)}»`);
+  return out;
+}
 // Кому слать уведомления: PORTAL_OWNER_TG или клиент кабинета с тем же Telegram, что и ссылка поддержки.
 const ownerChatId = () => env.PORTAL_OWNER_TG || (() => { const u = (SUPPORT.match(/t\.me\/([A-Za-z0-9_]{4,32})/) || [])[1]; const c = u && db.clients.find(x => x.tgUsername?.toLowerCase() === u.toLowerCase() && x.tgId); return c ? String(c.tgId) : ''; })();
 const SHOP = env.PORTAL_SHOP || new URL('/ru/shop/', ORIGIN).href;
@@ -362,7 +383,7 @@ async function clientHandler(req, res) {
   if (path === '/api/me' && req.method === 'GET') {
     if (!me) throw new HttpError(401, 'Войдите в кабинет.');
     const projects = db.projects.filter(p => p.clientId === me.client.id).map(projectView);
-    return send(res, 200, { client: { name: me.client.name, company: me.client.company, tgUsername: me.client.tgUsername, tgId: me.client.tgId, login: me.client.login || '', created: me.client.created }, preview: me.session.via === 'admin', projects, links: { shop: SHOP, site: SITE, support: SUPPORT, bot: BOT_NAME ? 'https://t.me/' + BOT_NAME : SUPPORT } });
+    return send(res, 200, { client: { name: me.client.name, company: me.client.company, tgUsername: me.client.tgUsername, tgId: me.client.tgId, login: me.client.login || '', created: me.client.created, notify: me.client.notify !== false }, preview: me.session.via === 'admin', projects, links: { shop: SHOP, site: SITE, support: SUPPORT, bot: BOT_NAME ? 'https://t.me/' + BOT_NAME : SUPPORT } });
   }
   if (path === '/api/profile' && req.method === 'POST') {
     sameOrigin(req);
@@ -378,8 +399,9 @@ async function clientHandler(req, res) {
     me.client.login = login;
     if (typeof body.name === 'string') me.client.name = str(body.name, 80) || me.client.name;
     if (typeof body.company === 'string') me.client.company = str(body.company, 120);
+    if (typeof body.notify === 'boolean') me.client.notify = body.notify;
     await saveDb();
-    return send(res, 200, { ok: true, client: { name: me.client.name, company: me.client.company, login: me.client.login } });
+    return send(res, 200, { ok: true, client: { name: me.client.name, company: me.client.company, login: me.client.login, notify: me.client.notify !== false } });
   }
   if (path === '/api/requests' && req.method === 'POST') {
     sameOrigin(req);
@@ -403,6 +425,34 @@ async function clientHandler(req, res) {
     void telegramLogin.notifyOwner?.(`Новая заявка из кабинета\n${me.client.name}${me.client.company ? ' · ' + me.client.company : ''}\n${topic}: ${text.slice(0, 500)}${budget ? '\nБюджет: ' + budget : ''}`, ownerChatId());
     return send(res, 200, { project: projectView(project) });
   }
+  const est = path.match(/^\/api\/projects\/([a-f0-9]+)\/estimates\/(\d{1,3})$/);
+  if (est && req.method === 'POST') {
+    sameOrigin(req);
+    if (!me) throw new HttpError(401, 'Войдите в кабинет.');
+    if (me.session.via === 'admin') throw new HttpError(403, 'В режиме просмотра решения не принимаются.');
+    const p = db.projects.find(x => x.id === est[1] && x.clientId === me.client.id);
+    const e = p?.estimates[Number(est[2])];
+    if (!e) throw new HttpError(404, 'Смета не найдена.');
+    if (e.status !== 'sent') throw new HttpError(409, 'По этой смете решение уже принято.');
+    const body = await readJson(req, 8 * 1024);
+    const decision = pick(body.decision, ['approved', 'declined'], '');
+    if (!decision) throw new HttpError(422, 'Выберите решение.');
+    const comment = str(body.comment, 1000);
+    e.status = decision; e.decidedAt = now();
+    const text = `Смета «${e.title}» ${decision === 'approved' ? 'согласована' : 'отклонена'}${comment ? '. Комментарий: ' + comment : ''}`;
+    p.messages.push({ id: id(), from: 'client', text, at: now(), readByStudio: false });
+    p.updated = now();
+    await saveDb();
+    void telegramLogin.notifyOwner?.(`${me.client.name} · ${p.title}\n${text}`, ownerChatId());
+    return send(res, 200, { project: projectView(p) });
+  }
+  if (path === '/api/logout-all' && req.method === 'POST') {
+    sameOrigin(req);
+    if (!me || me.session.via === 'admin') throw new HttpError(401, 'Войдите в кабинет.');
+    revokeSessions(me.client);
+    await Promise.all([saveDb(), saveSessions()]);
+    return send(res, 200, { ok: true }, undefined, { 'Set-Cookie': sessionCookie('', 0) });
+  }
   const msg = path.match(/^\/api\/projects\/([a-f0-9]+)\/(messages|read)$/);
   if (msg && req.method === 'POST') {
     sameOrigin(req);
@@ -419,6 +469,7 @@ async function clientHandler(req, res) {
     const m = { id: id(), from: 'client', text, at: now(), readByStudio: false };
     p.messages.push(m); p.updated = now();
     await saveDb();
+    void telegramLogin.notifyOwner?.(`Сообщение от клиента\n${me.client.name} · ${p.title}\n\n${text.slice(0, 800)}`, ownerChatId());
     return send(res, 200, { message: { id: m.id, from: m.from, text: m.text, at: m.at } });
   }
   const f = path.match(/^\/files\/([a-f0-9]+)\/([^/]+)$/);
@@ -500,9 +551,11 @@ async function adminHandler(req, res) {
     const b = await readJson(req);
     if (!db.clients.some(c => c.id === b.clientId)) throw new HttpError(422, 'Выберите клиента.');
     const prev = db.projects.find(p => p.id === b.id);
+    const before = prev ? JSON.parse(JSON.stringify(prev)) : null;
     const project = cleanProject(b, prev);
     if (prev) Object.assign(prev, project); else db.projects.push(project);
     await saveDb();
+    tellClient(project.clientId, projectChanges(before, project));
     return send(res, 200, project);
   }
   const proj = path.match(/^\/api\/projects\/([a-f0-9]+)(?:\/(messages|read))?$/);
@@ -519,6 +572,7 @@ async function adminHandler(req, res) {
       const text = str((await readJson(req, 16 * 1024)).text, 4000);
       if (!text) throw new HttpError(422, 'Напишите ответ.');
       p.messages.push({ id: id(), from: 'studio', text, at: now(), readByClient: false });
+      tellClient(p.clientId, [`💬 <b>${escHtml(p.title)}</b>: новый ответ команды\n\n${escHtml(text.slice(0, 600))}`]);
       p.messages.forEach(m => { if (m.from === 'client') m.readByStudio = true; });
       p.updated = now();
       await saveDb();
