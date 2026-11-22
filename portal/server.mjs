@@ -2,11 +2,12 @@
 // Без сторонних пакетов. Два HTTP-сервера на 127.0.0.1:
 //   PORTAL_PORT (4175) — кабинет клиента, nginx отдаёт его по https://devlarion.ru/account/
 //   PORTAL_ADMIN_PORT (4176) — управление, nginx отдаёт его по /account/admin/ только с паролем.
-import { createHash, createHmac, randomBytes, randomUUID, timingSafeEqual } from 'node:crypto';
+import { randomBytes, randomUUID } from 'node:crypto';
 import { createReadStream } from 'node:fs';
 import { mkdir, readFile, rename, rm, stat, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { basename, extname, join } from 'node:path';
+import { createTelegramLogin } from './telegram-login.mjs';
 
 const env = process.env;
 const DEV = env.PORTAL_DEV === '1';
@@ -20,6 +21,13 @@ const SUPPORT = env.PORTAL_SUPPORT || 'https://t.me/LuvLarion4ik';
 const DATA_DIR = env.PORTAL_DATA || new URL('./data/', import.meta.url).pathname;
 const BOT_TOKEN = (env.TELEGRAM_BOT_TOKEN || '').trim();
 const BOT_NAME = (env.TELEGRAM_BOT_USERNAME || '').trim().replace(/^@/, '');
+const telegramLogin = createTelegramLogin({
+  token: BOT_TOKEN,
+  username: BOT_NAME,
+  apiBase: env.TELEGRAM_API_BASE || 'https://api.telegram.org',
+});
+const LOGIN_COOKIE = 'dl_portal_login';
+const LOGIN_COOKIE_SECONDS = 15 * 60;
 const SESSION_DAYS = 30;
 const COOKIE = 'dl_portal';
 const ALLOWED_ORIGINS = new Set([ORIGIN, ...(DEV ? ['http://127.0.0.1:' + PORT, 'http://127.0.0.1:' + ADMIN_PORT, 'http://localhost:' + PORT, 'http://localhost:' + ADMIN_PORT] : [])]);
@@ -94,23 +102,30 @@ function currentClient(req) {
 const page = name => readFile(new URL(name, here), 'utf8');
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
-// ---------- Telegram Login: проверка подписи без обращения к API Telegram ----------
-function verifyTelegram(params) {
-  if (!BOT_TOKEN) throw new HttpError(503, 'Вход через Telegram ещё не настроен.');
-  const hash = params.get('hash') || '';
-  const pairs = [...params.entries()].filter(([k]) => k !== 'hash').sort(([a], [b]) => a.localeCompare(b));
-  const check = pairs.map(([k, v]) => `${k}=${v}`).join('\n');
-  const secret = createHash('sha256').update(BOT_TOKEN).digest();
-  const expected = createHmac('sha256', secret).update(check).digest('hex');
-  const ok = hash.length === expected.length && timingSafeEqual(Buffer.from(hash), Buffer.from(expected));
-  if (!ok) throw new HttpError(403, 'Подпись Telegram не прошла проверку.');
-  const age = Date.now() / 1000 - Number(params.get('auth_date'));
-  if (!(age >= -60 && age < 86400)) throw new HttpError(403, 'Ссылка входа устарела. Войдите ещё раз.');
-  return {
-    tgId: String(params.get('id')),
-    username: str(params.get('username') || '', 64),
-    name: [params.get('first_name'), params.get('last_name')].filter(Boolean).map(s => str(s, 64)).join(' '),
-  };
+function loginCookie(value, maxAge = LOGIN_COOKIE_SECONDS) {
+  return `${LOGIN_COOKIE}=${value}; Path=${BASE}; HttpOnly; SameSite=Strict; Max-Age=${maxAge}${DEV ? '' : '; Secure'}`;
+}
+
+async function completeTelegramLogin(tg, res) {
+  const username = tg.username.toLowerCase();
+  const client = db.clients.find(c => String(c.tgId || '') === tg.tgId)
+    ?? db.clients.find(c => !c.tgId && username && c.tgUsername?.toLowerCase() === username);
+
+  if (!client) {
+    const known = db.pending.find(p => p.tgId === tg.tgId);
+    if (known) Object.assign(known, tg, { at: now() }); else db.pending.unshift({ ...tg, at: now() });
+    db.pending = db.pending.slice(0, 200);
+    await saveDb();
+    return send(res, 200, { pending: true, message: 'Telegram подтверждён. Студия проверит заявку и откроет доступ к кабинету.' },
+      undefined, { 'Set-Cookie': loginCookie('', 0) });
+  }
+
+  client.tgId = tg.tgId;
+  client.tgUsername = tg.username || client.tgUsername;
+  client.lastLogin = now();
+  await saveDb();
+  return send(res, 200, { ok: true }, undefined,
+    { 'Set-Cookie': [loginCookie('', 0), sessionCookie(newSession(client.id), SESSION_DAYS * 86400)] });
 }
 
 // ---------- данные для клиента ----------
@@ -144,7 +159,7 @@ function cleanProject(input, prev = {}) {
 }
 
 // ---------- сервер кабинета ----------
-const CSP_CLIENT = "default-src 'self'; script-src 'self' https://telegram.org; frame-src https://oauth.telegram.org; style-src 'self' 'unsafe-inline' " + (DEV ? '' : ORIGIN) + "; font-src 'self' " + (DEV ? '' : ORIGIN) + "; img-src 'self' data: https://t.me https://telegram.org " + (DEV ? '' : ORIGIN) + "; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'";
+const CSP_CLIENT = "default-src 'self'; script-src 'self'; frame-src 'none'; style-src 'self' 'unsafe-inline' " + (DEV ? '' : ORIGIN) + "; font-src 'self' " + (DEV ? '' : ORIGIN) + "; img-src 'self' data: https://t.me https://telegram.org " + (DEV ? '' : ORIGIN) + "; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'";
 const htmlHeaders = { 'Content-Security-Policy': CSP_CLIENT, 'X-Frame-Options': 'DENY' };
 const types = { '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml' };
 
@@ -160,31 +175,26 @@ async function clientHandler(req, res) {
   if (req.method === 'GET' && (path === '/' || path === '')) {
     const me = currentClient(req);
     if (!me) {
-      const widget = BOT_TOKEN && BOT_NAME
-        ? `<script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="${esc(BOT_NAME)}" data-size="large" data-radius="10" data-auth-url="${esc(ORIGIN + BASE + 'auth')}" data-request-access="write"></script>`
-        : `<p class="ac-note">Вход через Telegram скоро заработает. Пока напишите нам — пришлём новости по проекту в Telegram.</p>`;
-      const reason = { denied: 'Подпись Telegram не прошла проверку. Попробуйте войти ещё раз.', expired: 'Ссылка входа устарела. Войдите ещё раз.', off: 'Вход через Telegram ещё настраивается.' }[u.searchParams.get('error')] || '';
-      return send(res, 200, await renderShell('login.html', { BASE, SITE: esc(SITE), SUPPORT: esc(SUPPORT), WIDGET: widget, ERROR: reason ? `<p class="ac-error" role="alert">${esc(reason)}</p>` : '' }), 'text/html; charset=utf-8', htmlHeaders);
+      const login = telegramLogin.begin(cookies(req)[LOGIN_COOKIE], u.searchParams.get('new-code') === '1');
+      const html = await renderShell('login.html', {
+        BASE, SITE: esc(SITE), SUPPORT: esc(SUPPORT), BOT_URL: esc(login?.link ?? '#'),
+        BOT_AVAILABLE: login ? 'true' : 'false',
+      });
+      const headers = login ? { ...htmlHeaders, 'Set-Cookie': loginCookie(login.cookie) } : htmlHeaders;
+      return send(res, 200, html, 'text/html; charset=utf-8', headers);
     }
     return send(res, 200, await renderShell('client.html', { BASE, SITE: esc(SITE), SUPPORT: esc(SUPPORT) }), 'text/html; charset=utf-8', htmlHeaders);
   }
   if (req.method === 'GET' && path === '/auth') {
-    let tg;
-    try { tg = verifyTelegram(u.searchParams); }
-    catch (e) { const code = e.status === 503 ? 'off' : /устарела/.test(e.message) ? 'expired' : 'denied'; res.writeHead(302, { Location: BASE + '?error=' + code }); return res.end(); }
-    const client = db.clients.find(c => c.tgId === tg.tgId || (tg.username && c.tgUsername && c.tgUsername.toLowerCase() === tg.username.toLowerCase()));
-    if (!client) {
-      const known = db.pending.find(p => p.tgId === tg.tgId);
-      if (known) Object.assign(known, tg, { at: now() }); else db.pending.unshift({ ...tg, at: now() });
-      db.pending = db.pending.slice(0, 200);
-      await saveDb();
-      return send(res, 200, await renderShell('pending.html', { BASE, SITE: esc(SITE), SUPPORT: esc(SUPPORT), NAME: esc(tg.name || tg.username || '') }), 'text/html; charset=utf-8', htmlHeaders);
-    }
-    if (!client.tgId) client.tgId = tg.tgId;
-    client.tgUsername = tg.username || client.tgUsername; client.lastLogin = now();
-    await saveDb();
-    res.writeHead(302, { Location: BASE, 'Set-Cookie': sessionCookie(newSession(client.id), SESSION_DAYS * 86400), 'Cache-Control': 'no-store' });
+    res.writeHead(303, { Location: BASE, 'Cache-Control': 'no-store' });
     return res.end();
+  }
+  if (req.method === 'POST' && path === '/api/login/verify') {
+    sameOrigin(req);
+    const body = await readJson(req, 1024);
+    const result = telegramLogin.redeem(cookies(req)[LOGIN_COOKIE], body?.code);
+    if (result.error) throw new HttpError(result.status, result.error);
+    return completeTelegramLogin(result.user, res);
   }
   if (req.method === 'POST' && path === '/logout') {
     sameOrigin(req);
@@ -233,7 +243,7 @@ const projectHasFile = (p, name) => [...p.files, ...p.estimates, ...p.invoices].
 
 async function serveStatic(res, name) {
   const safe = basename(name);
-  if (!['account.css', 'client.js', 'admin.js', 'admin.css'].includes(safe)) throw new HttpError(404, 'Нет такого файла.');
+  if (!['account.css', 'client.js', 'login.js', 'admin.js', 'admin.css'].includes(safe)) throw new HttpError(404, 'Нет такого файла.');
   const body = await readFile(new URL(safe, here));
   return send(res, 200, body, types[extname(safe)], { 'Cache-Control': 'no-cache' });
 }
@@ -367,4 +377,4 @@ setInterval(() => {
 
 createServer(wrap(clientHandler)).listen(PORT, '127.0.0.1', () => console.log('Кабинет: http://127.0.0.1:' + PORT + ' → ' + ORIGIN + BASE));
 createServer(wrap(adminHandler)).listen(ADMIN_PORT, '127.0.0.1', () => console.log('Управление: http://127.0.0.1:' + ADMIN_PORT + ' → ' + ORIGIN + ADMIN_BASE));
-if (!BOT_TOKEN || !BOT_NAME) console.log('TELEGRAM_BOT_TOKEN / TELEGRAM_BOT_USERNAME не заданы — вход через Telegram выключен.');
+void telegramLogin.startPolling();

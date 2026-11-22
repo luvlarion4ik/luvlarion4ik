@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="/assets/brand/fonts.css">
 <link rel="stylesheet" href="%%BASE%%static/account.css">
 <script src="/assets/theme.js"></script>
+<script defer src="%%BASE%%static/login.js"></script>
 </head>
 <body>
 <a class="ac-skip" href="#main">К содержанию</a>
@@ -16,23 +17,32 @@
   <nav><a href="%%SITE%%" class="ac-hide-sm">Сайт студии</a><a href="%%SUPPORT%%">Telegram</a></nav>
 </div></header>
 <main id="main" class="ac-main"><div class="ac-wrap ac-login">
-  <section>
-    <p class="ac-eyebrow">Devlarion · личный кабинет</p>
+  <section class="ac-login-copy">
+    <p class="ac-eyebrow">Личный кабинет Devlarion</p>
     <h1>Ваш проект — в одном месте</h1>
-    <p class="ac-lead">Этапы и сроки, сметы и счета, макеты и тестовые версии, переписка с командой.</p>
-    <ul class="ac-list">
-      <li>Видно, на каком этапе работа и что будет дальше.</li>
-      <li>Сметы и счета со статусом оплаты и файлами для скачивания.</li>
-      <li>Ссылки на макеты, сборки и документы по проекту.</li>
-      <li>Вопросы команде — прямо в кабинете.</li>
-    </ul>
+    <p class="ac-lead">Этапы работы, сметы, счета и переписка с командой.</p>
   </section>
-  <section class="ac-card ac-signin" aria-labelledby="signin">
-    <h2 id="signin">Вход через Telegram</h2>
-    <p class="ac-note">Нажмите кнопку и подтвердите вход в Telegram. Пароль не нужен.</p>
-    %%ERROR%%
-    <div class="ac-tg">%%WIDGET%%</div>
-    <p class="ac-note">Нет доступа? <a href="%%SUPPORT%%">Напишите нам</a> — откроем кабинет для вашего проекта.</p>
+  <section class="ac-card ac-signin ac-code-card" aria-labelledby="signin" data-bot-available="%%BOT_AVAILABLE%%">
+    <h2 id="signin">Вход по коду</h2>
+    <div class="ac-code-flow">
+      <p class="ac-note" id="ac-code-help">Откройте бота, нажмите «Запустить» и скопируйте код из сообщения.</p>
+      <a class="ac-btn ac-btn--ghost ac-code-telegram" href="%%BOT_URL%%" target="_blank" rel="noopener noreferrer">Получить код в Telegram <span aria-hidden="true">↗</span></a>
+      <form class="ac-code-form" action="%%BASE%%api/login/verify" method="post" data-base="%%BASE%%" novalidate>
+        <fieldset class="ac-code-fields" disabled>
+          <label for="ac-code">Код из Telegram</label>
+          <div class="ac-code-entry">
+            <input id="ac-code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" spellcheck="false" aria-describedby="ac-code-help ac-code-hint" placeholder="00000000" required>
+            <button type="submit" class="ac-btn">Войти</button>
+          </div>
+          <p class="ac-note ac-code-hint" id="ac-code-hint">8 цифр. Код действует 5 минут.</p>
+        </fieldset>
+      </form>
+      <p class="ac-code-status" role="status" data-login-status></p>
+      <a href="%%BASE%%?new-code=1" class="ac-code-reset" data-login-reset hidden>Получить новый код</a>
+      <noscript><p class="ac-note">Для проверки кода включите JavaScript.</p></noscript>
+    </div>
+    <p class="ac-note ac-code-unavailable">Вход по коду временно недоступен. Попробуйте обновить страницу.</p>
+    <p class="ac-note">Нужна помощь? <a href="%%SUPPORT%%">Напишите нам в Telegram</a>.</p>
   </section>
 </div></main>
 <footer class="ac-foot"><div class="ac-wrap"><span>© 2026 Devlarion</span><a href="/ru/privacy/">Конфиденциальность</a></div></footer>

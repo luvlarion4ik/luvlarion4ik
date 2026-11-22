@@ -9,6 +9,7 @@ WorkingDirectory=/opt/devlarion/portal
 EnvironmentFile=-/etc/devlarion-portal.env
 Environment=PORTAL_ORIGIN=https://devlarion.ru
 Environment=PORTAL_DATA=/var/lib/devlarion-portal
+Environment=TELEGRAM_API_BASE=http://127.0.0.1:8088
 ExecStart=/usr/local/bin/node server.mjs
 Restart=on-failure
 NoNewPrivileges=true

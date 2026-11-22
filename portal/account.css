@@ -41,7 +41,24 @@ h1,h2,h3{font-family:'Bureau Serif','Source Serif 4',Georgia,serif;font-weight:4
 .ac-signin h2{font-size:1.6rem}
 .ac-note{color:var(--sub);margin:0}
 .ac-error{color:var(--bad);margin:0;font-weight:600}
-.ac-tg{min-height:48px;display:flex;align-items:center}
+.ac-code-card{align-content:start;min-width:0}
+.ac-code-card h2{font-size:clamp(1.7rem,3vw,2rem)}
+.ac-code-flow{display:grid;gap:.9rem;width:100%;min-width:0}
+.ac-code-card[data-bot-available="false"] .ac-code-flow,
+.ac-code-card[data-bot-available="true"] .ac-code-unavailable{display:none}
+.ac-code-telegram{justify-self:start;max-width:100%}
+.ac-code-form{border-top:1px solid var(--rule);padding-top:1rem;min-width:0}
+.ac-code-fields{border:0;padding:0;margin:0;min-width:0;display:grid;gap:.55rem}
+.ac-code-fields label{font-weight:600}
+.ac-code-entry{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.55rem}
+.ac-code-entry input{width:100%;min-width:0;min-height:46px;padding:.58rem .85rem;border:1px solid var(--rule);border-radius:12px;background:var(--paper);font-family:ui-monospace,Consolas,monospace;font-size:1.08rem;letter-spacing:.16em;font-variant-numeric:tabular-nums}
+.ac-code-entry input::placeholder{color:var(--sub);opacity:.6}
+.ac-code-entry input[aria-invalid="true"]{border-color:var(--bad)}
+.ac-code-hint{font-size:.88rem}
+.ac-code-status{margin:0;color:var(--sub);font-size:.94rem}
+.ac-code-status:empty{position:absolute}
+.ac-code-status[data-tone="error"]{color:var(--bad);font-weight:600}
+.ac-code-reset{justify-self:start;min-height:44px;align-content:center;font-weight:600}
 
 /* кабинет */
 .ac-hello{display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-end;justify-content:space-between;margin-bottom:1.6rem}
@@ -96,6 +113,7 @@ h1,h2,h3{font-family:'Bureau Serif','Source Serif 4',Georgia,serif;font-weight:4
 .ac-toast{position:fixed;left:50%;bottom:1.2rem;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:.7rem 1.1rem;border-radius:999px;box-shadow:0 10px 30px #0004;z-index:20}
 @media (max-width:760px){
   .ac-login{grid-template-columns:1fr}
+  .ac-code-card{grid-row:1}
   .ac-bar nav a.ac-hide-sm{display:none}
   .ac-table thead{display:none}
   .ac-table,.ac-table tbody,.ac-table tr,.ac-table td{display:block;width:100%}
