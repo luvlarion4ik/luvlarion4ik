@@ -48,7 +48,7 @@
       ".section > h2", ".section > p", ".service-group > h3", ".product-feature > *",
       ".product-card", ".offer-panel", ".solution-content", ".exhibit",
       ".home-facts > *", ".home-growth > a", ".home-process > li",
-      ".audience-section .service-grid > article", ".audience-related > a",
+      ".audience-section .service-grid > article", ".loss-grid > article", ".shift", ".trust-strip > div", ".bundle-flow > li", ".bundle-row", ".capacity", ".bundle-teaser", ".audience-related > a",
       ".sub > h2", ".case-gallery-frame", ".ready-solutions-grid > article",
       ".notfound > *", ".pt-section > h2", ".pt-steps > *", ".pt-roles > *",
     ].join(",");

@@ -1,5 +1,6 @@
 import { esc, formatStartingPrice } from './site.mjs';
 import { pageArt } from './page-art.mjs';
+import { sell, shared, bundle } from './persuasion.mjs';
 import { crmStartingPrice, packageStartingPrice } from './pricing.mjs';
 
 export const segments = [
@@ -392,6 +393,17 @@ export const topics = [
   },
 ];
 
+topics.push({
+  route: 'bundle/',
+  icon: 'layers',
+  starting: ['landing', 'small'],
+  estimateServices: ['landing', 'seo', 'geo', 'automation'],
+  estimateTier: 'medium',
+  related: ['seo/', 'geo/'],
+  ru: { label: bundle.ru.label, title: bundle.ru.title, description: bundle.ru.description, card: bundle.ru.card, faq: bundle.ru.faq, detailsTitle: bundle.ru.faqTitle },
+  en: { label: bundle.en.label, title: bundle.en.title, description: bundle.en.description, card: bundle.en.card, faq: bundle.en.faq, detailsTitle: bundle.en.faqTitle },
+});
+
 const pick = (lang, ru, en) => lang === 'ru' ? ru : en;
 
 function section(title, body, extraClass = '') {
@@ -531,6 +543,60 @@ function renderPayback(lang, page, ctx) {
   </section>`;
 }
 
+
+function trustStrip(lang) {
+  return `<div class="wrap trust-strip" role="list">${shared[lang].trust.map(([title, text]) =>
+    `<div role="listitem"><strong>${esc(title)}</strong><span>${esc(text)}</span></div>`).join('')}</div>`;
+}
+
+function renderLoss(lang, route) {
+  const copy = sell[route]?.[lang];
+  if (!copy) return '';
+  return `<section class="section wrap audience-section audience-loss">
+    <p class="loss-badge">${esc(shared[lang].lossBadge)}</p>
+    <h2>${esc(copy.lossTitle)}</h2><p class="loss-lead">${esc(copy.lossLead)}</p>
+    <div class="loss-grid">${copy.losses.map(([title, text], index) =>
+      `<article><span class="loss-index" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span><h3>${esc(title)}</h3><p>${esc(text)}</p></article>`).join('')}</div>
+  </section>`;
+}
+
+function renderShifts(lang, route) {
+  const copy = sell[route]?.[lang];
+  if (!copy) return '';
+  const t = shared[lang];
+  return section(t.shiftsTitle, `<div class="shift-list">${copy.shifts.map(([before, after]) =>
+    `<div class="shift"><div class="shift-before"><small>${esc(t.before)}</small><p>${esc(before)}</p></div><span class="shift-arrow" aria-hidden="true">→</span><div class="shift-after"><small>${esc(t.after)}</small><p>${esc(after)}</p></div></div>`).join('')}</div>`, 'audience-shifts');
+}
+
+function renderCapacity(lang, page, ctx) {
+  const t = shared[lang];
+  return `<aside class="wrap capacity" aria-label="${esc(t.capacityTitle)}"><div class="capacity-pulse" aria-hidden="true"><i></i></div>
+    <div><strong>${esc(t.capacityTitle)}</strong><p>${esc(t.capacityText)}</p></div>
+    <a class="button" href="${telegramLink(lang, ctx, page[lang].label, t.capacityCta)}">${esc(t.capacityCta)}</a></aside>`;
+}
+
+function renderBundleTeaser(lang, ctx) {
+  const t = shared[lang];
+  return `<aside class="wrap bundle-teaser"><span class="service-mark" aria-hidden="true">${ctx.icons.layers}</span>
+    <div><h2>${esc(t.bundleTitle)}</h2><p>${esc(t.bundleText)}</p></div>
+    <a class="ghost" href="${ctx.home}bundle/">${esc(t.bundleCta)} <span aria-hidden="true">→</span></a></aside>`;
+}
+
+function renderCross(lang, route, ctx) {
+  const copy = sell[route]?.[lang];
+  if (!copy) return '';
+  return section(shared[lang].nextTitle, `<div class="audience-related audience-cross">${copy.cross.map(([to, title, text]) =>
+    `<a href="${ctx.home}${to}"><strong>${esc(title)} <span aria-hidden="true">→</span></strong><span>${esc(text)}</span></a>`).join('')}</div>`, 'audience-next');
+}
+
+function renderClose(lang, page, ctx) {
+  const copy = sell[page.route]?.[lang];
+  if (!copy) return renderContact(lang, page, ctx);
+  return `<section class="section wrap audience-section audience-contact audience-close"><h2>${esc(copy.closeTitle)}</h2><p>${esc(copy.closeText)}</p>
+    <div class="actions"><a class="button" href="${telegramLink(lang, ctx, page[lang].label)}">${pick(lang, 'Написать в Telegram', 'Message us on Telegram')}</a>
+    ${estimateLink(lang, ctx.home, page.estimateServices, page.estimateTier ?? 'small', pick(lang, 'Рассчитать стоимость', 'Estimate the cost')).replace('class="button"', 'class="ghost"')}</div></section>`;
+}
+
 export function renderSegmentPage(lang, route, ctx) {
   const page = segments.find(item => item.route === route);
   const { directions, benefits } = page[lang];
@@ -538,21 +604,28 @@ export function renderSegmentPage(lang, route, ctx) {
     'Pay in instalments: 50% at the start and 50% on handover. Projects from RUB 100,000 are billed in stages.');
   return `<article class="audience-page">
     ${hero(lang, page, ctx, true)}
+    ${trustStrip(lang)}
     ${section(pick(lang, 'Узнаёте себя?', 'Sound familiar?'), renderBenefits(benefits, ctx.icons))}
+    ${renderLoss(lang, route)}
     ${renderPackages(lang, page, ctx)}
     <aside class="wrap audience-note"><p>${payment}</p></aside>
+    ${renderShifts(lang, route)}
     ${page.paybackPackages ? renderPayback(lang, page, ctx) : ''}
+    ${renderCapacity(lang, page, ctx)}
     ${directions ? section(pick(lang, 'Направления', 'Capabilities'), `<div class="actions">${directions.map(([label, path, service]) => service
       ? estimateLink(lang, ctx.home, [service], 'medium', label)
       : `<a class="btn" href="${ctx.home}${path}">${esc(label)} <span aria-hidden="true">→</span></a>`).join('')}</div>`) : ''}
     ${renderCases(lang, route, ctx)}
+    ${renderBundleTeaser(lang, ctx)}
     ${renderFAQ(lang, page, ctx)}
+    ${renderCross(lang, route, ctx)}
     ${renderRelated(lang, page, ctx)}
-    ${renderContact(lang, page, ctx)}
+    ${renderClose(lang, page, ctx)}
   </article>`;
 }
 
 export function renderTopicPage(lang, route, ctx) {
+  if (route === 'bundle/') return renderBundlePage(lang, ctx);
   const page = topics.find(item => item.route === route);
   const { benefits, steps, notice } = page[lang];
   const why = route === 'why-website/';
@@ -560,16 +633,47 @@ export function renderTopicPage(lang, route, ctx) {
     : pick(lang, 'Что это даёт', 'What it gives you');
   return `<article class="audience-page">
     ${hero(lang, page, ctx, false)}
+    ${trustStrip(lang)}
+    ${renderLoss(lang, route)}
     ${section(benefitHeading, renderBenefits(benefits, ctx.icons))}
     ${section(pick(lang, 'Что мы делаем', 'What we do'), `<ol class="audience-steps">${steps.map(step => `<li>${esc(step)}</li>`).join('')}</ol>`)}
     ${renderPackages(lang, page, ctx)}
     ${route === 'geo/' ? section(pick(lang, 'Как это сделано на Devlarion', 'How Devlarion applies GEO'),
       `<p>${pick(lang, 'На этом сайте состав услуг, цены и частые вопросы доступны в разметке страниц.', 'This site includes service details, prices and common questions in its structured data.')}</p>
       <a class="link" href="${esc(ctx.llmsUrl)}">llms.txt <span aria-hidden="true">→</span></a>`) : ''}
+    ${renderCapacity(lang, page, ctx)}
+    ${route === 'bundle/' ? '' : renderBundleTeaser(lang, ctx)}
     ${notice ? `<aside class="wrap audience-note"><p>${esc(notice)}</p></aside>` : ''}
     ${renderFAQ(lang, page, ctx)}
+    ${renderCross(lang, route, ctx)}
     ${renderRelated(lang, page, ctx)}
     ${why ? section(pick(lang, 'Что подходит вашему бизнесу?', 'What fits your business?'), ctx.segmentPicker)
-      : renderContact(lang, page, ctx)}
+        : renderClose(lang, page, ctx)}
+  </article>`;
+}
+
+function renderBundlePage(lang, ctx) {
+  const page = topics.find(item => item.route === 'bundle/');
+  const c = bundle[lang];
+  const flow = `<ol class="bundle-flow">${c.flow.map(([title, text], index) =>
+    `<li style="--i:${index}"><span class="bundle-node">${String(index + 1)}</span><strong>${esc(title)}</strong><span>${esc(text)}</span></li>`).join('')}</ol>`;
+  const compare = `<div class="bundle-table" role="table"><div role="row" class="bundle-row bundle-head">${c.compareHead.map(cell => `<span role="columnheader">${esc(cell)}</span>`).join('')}</div>${c.compare.map(row =>
+    `<div role="row" class="bundle-row">${row.map((cell, i) => `<span role="${i ? 'cell' : 'rowheader'}">${esc(cell)}</span>`).join('')}</div>`).join('')}</div>`;
+  const plans = `<div class="service-grid audience-packages bundle-plans">${c.plans.map(([title, text, services, tier]) =>
+    `<article><h3>${esc(title)}</h3><p>${esc(text)}</p><div class="package-action">${estimateLink(lang, ctx.home, services.split(' '), tier, pick(lang, 'Рассчитать «' + title + '»', 'Estimate “' + title + '”'))}</div></article>`).join('')}</div><p class="audience-note-line">${esc(c.discountNote)}</p>`;
+  return `<article class="audience-page">
+    ${hero(lang, page, ctx, false)}
+    ${trustStrip(lang)}
+    ${section(c.whyTitle, `<div class="loss-grid">${c.why.map(([title, text], index) => `<article><span class="loss-index" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span><h3>${esc(title)}</h3><p>${esc(text)}</p></article>`).join('')}</div>`, 'audience-loss')}
+    ${section(c.flowTitle, flow, 'audience-flow')}
+    ${section(c.compareTitle, compare)}
+    ${section(c.plansTitle, plans)}
+    ${renderCapacity(lang, page, ctx)}
+    ${renderFAQ(lang, page, ctx)}
+    ${section(shared[lang].nextTitle, `<div class="audience-related audience-cross">${['seo/', 'geo/', 'support/'].map(to => {
+      const item = topics.find(topic => topic.route === to); const { label, description } = item[lang];
+      return `<a href="${ctx.home}${to}"><strong>${esc(label)} <span aria-hidden="true">→</span></strong><span>${esc(description)}</span></a>`;
+    }).join('')}</div>`, 'audience-next')}
+    ${section(pick(lang, 'Что подходит вашему бизнесу?', 'What fits your business?'), ctx.segmentPicker)}
   </article>`;
 }

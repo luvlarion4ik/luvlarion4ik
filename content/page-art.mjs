@@ -89,6 +89,13 @@ const art = {
     </g>
     <g class="pa-spin"><circle cx="400" cy="70" r="26" fill="var(--paper)" stroke="var(--rule)"/><path d="M400 54v8m0 16v8m-16-16h8m16 0h8" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>${dot(400, 70, 6)}</g>
     <g class="pa-drift pa-d2">${card(48, 300, 120, 40)}${dot(70, 320, 9)}<path d="M65 320l4 4 7-8" stroke="var(--paper)" stroke-width="2.2" fill="none" stroke-linecap="round"/>${line(86, 314, 64)}${line(86, 326, 40, .7)}</g>`],
+  'bundle/': ['Пять частей одной системы', 'Five parts of one system', `
+    <g class="pa-float">
+      <path d="M92 258L170 120 240 200 312 96 388 168" fill="none" stroke="var(--rule)" stroke-width="2" stroke-dasharray="4 7"/>
+      <path class="pa-trend" d="M92 258L170 120 240 200 312 96 388 168" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      ${[[92, 258, 'var(--surface)'], [170, 120, 'var(--accent)'], [240, 200, 'var(--surface)'], [312, 96, 'var(--accent)'], [388, 168, 'var(--surface)']].map(([x, y, f], i) => `<g class="pa-drift ${i % 2 ? 'pa-d2' : ''}"><circle cx="${x}" cy="${y}" r="30" fill="${f}" stroke="var(--accent)" stroke-width="2"/><circle cx="${x}" cy="${y}" r="42" fill="none" stroke="var(--rule)"/>${line(x - 14, y - 4, 28, 1.6)}${line(x - 8, y + 8, 16, 1.2)}</g>`).join('')}
+    </g>`],
+
 };
 
 export function pageArt(lang, route) {
