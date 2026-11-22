@@ -1113,7 +1113,6 @@ header .wordmark {
 
 /* Переходы между страницами (Chrome, Edge, Safari 18.2+). Логотип в шапке остаётся на месте. */
 @media (prefers-reduced-motion: no-preference) {
-  @view-transition { navigation: auto; }
   header .wordmark { view-transition-name: dl-logo; }
   main { view-transition-name: dl-main; }
   ::view-transition-old(dl-main) { animation: dl-page-out .22s cubic-bezier(.4, 0, 1, 1) both; }
