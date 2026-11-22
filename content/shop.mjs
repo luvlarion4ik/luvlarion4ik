@@ -59,7 +59,8 @@ export const hardware = [
     ru: ['Кластер из двух DGX Spark', 'Два Spark, связанные 200-гигабитной сетью: модели до ~400 млрд параметров.', ['2× GB10', '256 ГБ памяти суммарно', 'Связка ConnectX-7', 'Настроенный распределённый inference']],
     en: ['Two-unit DGX Spark cluster', 'Two Sparks linked over 200 Gb networking: models up to ~400B parameters.', ['2× GB10', '256 GB memory in total', 'ConnectX-7 link', 'Distributed inference set up']] },
   // Apple. Линейка на 22.11.2026: Mac mini на M6 и M5 Pro (анонс 25.08.2026, продажи с 22.09.2026),
-  // M4 и M4 Pro сняты с производства 25.08.2026 — в каталог не берём. Отдельного Mac mini на «простом» M5 нет.
+  // M4 и M4 Pro сняты с производства 25.08.2026, но M4 ещё продаётся из остатков — по просьбе владельца добавлен как бюджетный вариант.
+  // Отдельного Mac mini на «простом» M5 нет.
   // configs[].market — минимум и максимум открытых цен за эту конфигурацию у российских продавцов, rub — наша цена.
   { id: 'mac-mini', mode: 'buy', art: 'spark-dark',
     sources: { date: '2026-11-22', urls: [
@@ -71,13 +72,19 @@ export const hardware = [
       'https://apple-store.net.ru/mac/apple-mac-mini/mac-mini-m5-pro/ — M5 Pro 24/512 158 552 ₽, 48/512 254 507–255 739 ₽, 64 ГБ/1 ТБ 340 413–391 551 ₽',
       'https://store-apple.msk.ru/mac/mac-mini/mac-mini-m5-pro/ — M5 Pro 48/512 255 616 ₽, 64 ГБ/1 ТБ 340 249 ₽',
       'https://i-ray.ru/mac_mini — M5 Pro 48/512 254 999 ₽',
+      'M4 (поиск 22.11.2026): https://re-store.ru/catalog/MU9D3/ — 16/256 99 990 ₽; https://www.icases.ru/catalog/kompyutery_noutbuki/macmini/sistemnyy_blok_apple_mac_mini_m4_16_256_mu9d3/ — 63 990 ₽; https://applegod.ru/shop/nastolnyy-kompyuter-apple-mac-mini-m4-10c-cpu-10c-gpu-16gb-256gb-ssd-serebristyy-mu9d3/ — 72 590 ₽',
+      'M4: https://apple-market.ru/mac/mac-mini/ — 16/512 77 090 ₽; https://i-ray.ru/mac-mini-m4-2024-16-512-gb — 79 999 ₽; https://lab-store40.ru/catalog/mac-mini-m4/mac-mini-m4-16-512-silver-2024/ — 92 990 ₽; https://mac-mini.ru/modeli/mac-mini-m4/m4-24-512/ — 24/512 от 84 990 ₽; https://labburo.ru/catalog/mac-mini/mac-mini-m4/apple-mac-mini-m4-24-512gb/ — 109 990 ₽; lab-store40 — 137 990 ₽',
       'https://www.apple.com/newsroom/2026/09/the-new-mac-mini-and-mac-studio-are-available-today/ — справочно: M6 от $899, M5 Pro от $1 699',
     ] },
     chips: {
+      M4: { ru: 'M4: 10 ядер CPU, 10 ядер GPU, до 32 ГБ памяти, 120 ГБ/с. Прошлое поколение из остатков — самый доступный вход: модели до ~8–14 млрд параметров в 4 бит.', en: 'M4: 10-core CPU, 10-core GPU, up to 32 GB, 120 GB/s. Previous generation from remaining stock, the cheapest entry: models up to ~8–14B parameters in 4-bit.' },
       M6: { ru: 'M6: 12 ядер CPU, 12 ядер GPU, до 32 ГБ памяти, 170 ГБ/с. Модели до ~14 млрд параметров в 4 бит.', en: 'M6: 12-core CPU, 12-core GPU, up to 32 GB, 170 GB/s. Models up to ~14B parameters in 4-bit.' },
       'M5 Pro': { ru: 'M5 Pro: до 18 ядер CPU и 20 ядер GPU, до 64 ГБ памяти, 307 ГБ/с, Thunderbolt 5. С 64 ГБ — модели до ~70 млрд в 4 бит.', en: 'M5 Pro: up to 18-core CPU and 20-core GPU, up to 64 GB, 307 GB/s, Thunderbolt 5. With 64 GB: models up to ~70B in 4-bit.' },
     },
     configs: [
+      { k: 'm4-16-256', chip: 'M4', ru: '16 ГБ · SSD 256 ГБ', en: '16 GB · 256 GB SSD', rub: 89900, market: [63990, 99990] },
+      { k: 'm4-16-512', chip: 'M4', ru: '16 ГБ · SSD 512 ГБ', en: '16 GB · 512 GB SSD', rub: 99900, market: [77090, 92990] },
+      { k: 'm4-24-512', chip: 'M4', ru: '24 ГБ · SSD 512 ГБ', en: '24 GB · 512 GB SSD', rub: 124900, market: [84990, 137990] },
       { k: 'm6-16-256', chip: 'M6', ru: '16 ГБ · SSD 256 ГБ', en: '16 GB · 256 GB SSD', rub: 134900, market: [77890, 141999] },
       { k: 'm6-16-512', chip: 'M6', ru: '16 ГБ · SSD 512 ГБ', en: '16 GB · 512 GB SSD', rub: 164900, market: [154990, 170999] },
       { k: 'm6-24-512', chip: 'M6', ru: '24 ГБ · SSD 512 ГБ', en: '24 GB · 512 GB SSD', rub: 189900, market: [158779, 199999] },
@@ -85,9 +92,9 @@ export const hardware = [
       { k: 'm5p-48-512', chip: 'M5 Pro', ru: '48 ГБ · SSD 512 ГБ', en: '48 GB · 512 GB SSD', rub: 259900, market: [254507, 255739] },
       { k: 'm5p-64-1t', chip: 'M5 Pro', ru: '64 ГБ · SSD 1 ТБ · 18/20 ядер', en: '64 GB · 1 TB SSD · 18/20 cores', rub: 384900, market: [340249, 391551] },
     ],
-    more: { ru: [['Для кого', 'Небольшой офис или отдел: ИИ-помощник по документам, расшифровка встреч, поиск по базе знаний — без облака и без серверной.'], ['Какую версию брать', 'M6 — для одного-двух сотрудников и моделей до ~14 млрд параметров. M5 Pro с 48–64 ГБ — для команды и моделей уровня 30–70 млрд в 4 бит.'], ['Связка', 'Несколько Mac mini на M5 Pro объединяются через Thunderbolt 5 в кластер; соберём его с 10-гигабитным коммутатором.'], ['Что делаем мы', 'Поставка, настройка macOS, Ollama/LM Studio/MLX, развёртывание модели и OpenAI-совместимого API, подключение к вашим системам, гарантия на нашу работу.']], en: [['Who it is for', 'A small office or team: a document assistant, meeting transcription, knowledge-base search, with no cloud and no server room.'], ['Which version', 'M6 for one or two people and models up to ~14B. M5 Pro with 48–64 GB for a team and 30–70B models in 4-bit.'], ['Linking', 'Several M5 Pro Mac minis can be clustered over Thunderbolt 5; we set it up with a 10 Gb switch.'], ['What we do', 'Supply, macOS set-up, Ollama/LM Studio/MLX, model and OpenAI-compatible API deployment, integration, warranty on our work.']] },
-    ru: ['Apple Mac mini', 'Компактный и тихий компьютер для локальных ИИ-моделей: помощник по документам и базе знаний прямо в офисе.', ['Чип M6 или M5 Pro', 'Единая память 16–64 ГБ', 'Ethernet 2,5 Гбит/с, Wi‑Fi 7', 'Модель и API настроены']],
-    en: ['Apple Mac mini', 'A compact, quiet computer for local AI models: a document and knowledge-base assistant right in the office.', ['M6 or M5 Pro chip', '16–64 GB unified memory', '2.5 Gb Ethernet, Wi‑Fi 7', 'Model and API set up']] },
+    more: { ru: [['Для кого', 'Небольшой офис или отдел: ИИ-помощник по документам, расшифровка встреч, поиск по базе знаний — без облака и без серверной.'], ['Какую версию брать', 'M4 — самый доступный вход для одного сотрудника. M6 — для одного-двух сотрудников и моделей до ~14 млрд параметров. M5 Pro с 48–64 ГБ — для команды и моделей уровня 30–70 млрд в 4 бит.'], ['Связка', 'Несколько Mac mini на M5 Pro объединяются через Thunderbolt 5 в кластер; соберём его с 10-гигабитным коммутатором.'], ['Что делаем мы', 'Поставка, настройка macOS, Ollama/LM Studio/MLX, развёртывание модели и OpenAI-совместимого API, подключение к вашим системам, гарантия на нашу работу.']], en: [['Who it is for', 'A small office or team: a document assistant, meeting transcription, knowledge-base search, with no cloud and no server room.'], ['Which version', 'M4 is the cheapest entry for one person. M6 for one or two people and models up to ~14B. M5 Pro with 48–64 GB for a team and 30–70B models in 4-bit.'], ['Linking', 'Several M5 Pro Mac minis can be clustered over Thunderbolt 5; we set it up with a 10 Gb switch.'], ['What we do', 'Supply, macOS set-up, Ollama/LM Studio/MLX, model and OpenAI-compatible API deployment, integration, warranty on our work.']] },
+    ru: ['Apple Mac mini', 'Компактный и тихий компьютер для локальных ИИ-моделей: помощник по документам и базе знаний прямо в офисе.', ['Чип M4, M6 или M5 Pro', 'Единая память 16–64 ГБ', 'Ethernet 2,5 Гбит/с, Wi‑Fi 7', 'Модель и API настроены']],
+    en: ['Apple Mac mini', 'A compact, quiet computer for local AI models: a document and knowledge-base assistant right in the office.', ['M4, M6 or M5 Pro chip', '16–64 GB unified memory', '2.5 Gb Ethernet, Wi‑Fi 7', 'Model and API set up']] },
   { id: 'mac-studio', mode: 'buy', art: 'spark-dark',
     sources: { date: '2026-11-22', urls: [
       'https://re-store.ru/kompyutery-noutbuki/apple/mac-studio/ — M5 Max 36/512 399 990 ₽, M5 Ultra 96 ГБ/1 ТБ 899 990 ₽',
@@ -270,6 +277,7 @@ export function renderShop(lang, ctx) {
     const price = rub == null ? `<p class="audience-price">${pick(lang, 'По запросу', 'On request')}</p>`
       : `<p class="audience-price" data-region-price-row>${priceMarkup(lang, rub, unitLabel(unit))}</p>`;
     const marketLine = market ? `<p class="shop-market">${marketText(market, unit)}</p>` : '';
+    const quote = kind === 'hw' ? `<p class="shop-quote">${pick(lang, 'Цена по запросу: указанная — ориентир, не финальная. Точную рассчитаем под вашу конфигурацию, курс и сроки поставки.', 'Price on request: the figure shown is a guide, not final. We calculate the exact price for your configuration, exchange rate and lead time.')}</p>` : '';
     const gal = gallery ? esc(JSON.stringify(gallery.map(f => [ctx.asset + 'photos/' + f, CREDIT[f] || '']))) : '';
     return `<article class="shop-item${kind === 'hw' ? ' shop-hw' : ''}" data-cat="${cat}" data-id="${id}" data-title="${esc(configs ? cfgTitle(configs[0]) : title)}" data-rub="${rub ?? ''}" data-unit="${unit ?? ''}"${gal ? ` data-gallery="${gal}"` : ''}${configs ? ` data-cfg="${configs[0].k}" data-configs="${cfgData}"` : ''}${chips ? ` data-chips="${chipData}"` : ''}>
       ${art}
@@ -277,7 +285,7 @@ export function renderShop(lang, ctx) {
       ${specs ? `<ul class="shop-specs">${specs.map(s => `<li>${esc(s)}</li>`).join('')}</ul>` : ''}
       ${configs ? configPicker(title, configs, chips) : ''}
       ${more ? `<details class="shop-more"><summary>${pick(lang, 'Подробнее', 'Details')}</summary><dl>${more.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl></details>` : ''}
-      <div class="shop-foot">${price}${marketLine}
+      <div class="shop-foot">${price}${marketLine}${quote}
       <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="${pick(lang, 'Меньше', 'Fewer')}">−</button><output data-count>1</output><button type="button" data-inc aria-label="${pick(lang, 'Больше', 'More')}">+</button></div>
       <button type="button" class="btn shop-add" data-add="${id}"><span class="shop-add-label">${pick(lang, 'В корзину', 'Add to basket')}</span></button></div></div></article>`;
   };

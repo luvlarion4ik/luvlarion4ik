@@ -666,6 +666,7 @@
 .shop-foot {margin-top:auto;display:grid;gap:.5rem;padding-top:.6rem;border-top:1px dashed var(--rule)}
 .shop-foot .audience-price {margin:0;font-size:1.25rem}
 .shop-market {margin:0;font-size:.78rem;color:var(--sub)}
+.shop-quote {margin:0;padding:.45rem .6rem;border-radius:8px;background:color-mix(in srgb,var(--accent) 8%,transparent);font-size:.76rem;line-height:1.4;color:var(--sub)}
 .shop-add {justify-self:stretch}
 .shop-qty {display:grid;grid-template-columns:44px 1fr 44px;align-items:center;border:1px solid var(--accent);border-radius:12px;overflow:hidden}
 .shop-qty button {min-height:44px;border:0;background:transparent;color:var(--accent);font-size:1.3rem;cursor:pointer}

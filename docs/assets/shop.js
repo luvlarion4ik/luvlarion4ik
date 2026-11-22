@@ -387,7 +387,7 @@
     dlg.querySelector('.pd-text').textContent = card.querySelector('.shop-text')?.textContent || '';
     dlg.querySelector('.pd-specs').innerHTML = card.querySelector('.shop-specs')?.innerHTML || '';
     dlg.querySelector('.pd-more').innerHTML = card.querySelector('.shop-more dl')?.innerHTML || '';
-    dlg.querySelector('.pd-price').innerHTML = (card.querySelector('.audience-price')?.outerHTML || '') + (card.querySelector('.shop-market')?.outerHTML || '');
+    dlg.querySelector('.pd-price').innerHTML = (card.querySelector('.audience-price')?.outerHTML || '') + (card.querySelector('.shop-market')?.outerHTML || '') + (card.querySelector('.shop-quote')?.outerHTML || '');
     const actions = dlg.querySelector('.pd-actions');
     actions.replaceChildren();
     const add = document.createElement('button'); add.type = 'button'; add.className = 'button'; add.textContent = ru ? 'В корзину' : 'Add to basket';
