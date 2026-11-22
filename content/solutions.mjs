@@ -286,8 +286,8 @@ function readyStatusBadge(solution, status, lang) {
 }
 
 export function renderOffers(lang, icons, statusOverrides = {}) {
-  const popular = pick(lang, 'Популярные задачи', 'Common projects');
-  const ready = pick(lang, 'Готовые решения Devlarion', 'Ready-made Devlarion solutions');
+  const popular = pick(lang, 'С чего чаще всего начинают', 'Where most projects begin');
+  const ready = pick(lang, 'Готовые модули: быстрее и дешевле', 'Ready-made modules: faster and cheaper');
   const preview = readySolutions.slice(0, 2).map(solution => {
     const [title, description] = solution[lang];
     const status = readyStatusBadge(solution, statusOverrides[solution.id], lang);
@@ -305,7 +305,7 @@ export function renderOffers(lang, icons, statusOverrides = {}) {
     <div class="offer-panel" id="popular-projects">
       <h2 class="offer-panel-heading">${popular}</h2>
       <div class="service-grid">${primaryOffers.map(offer => offerCard(offer, lang, icons, 'h3')).join('')}</div>
-      <h3 class="offer-bundle-title">${pick(lang, 'Комбо-пакеты', 'Project bundles')}</h3>
+      <h3 class="offer-bundle-title">${pick(lang, 'Проект из нескольких услуг сразу', 'Several services in one project')}</h3>
       <p>${pick(lang, 'Соберите несколько услуг в одном проекте. Калькулятор учтёт скидку за объём.', 'Combine services in one project. The estimator applies a bundle discount.')}</p>
       <div class="service-grid offer-bundles">${bundles.map(offer => offerCard(offer, lang, icons, 'h4')).join('')}</div>
     </div>

@@ -45,7 +45,7 @@ export function regionControl(lang, asset) {
     data-rate-date="${esc(date)}" data-byn-rate="${1 / BYN}" data-kzt-rate="${100 / KZT}"
     data-usd-rate="${1 / USD}" data-eur-rate="${1 / EUR}" hidden>
     <details>
-      <summary aria-label="${t('Выбрать валюту', 'Choose a currency')}"><span data-region-label>${initial}</span></summary>
+      <summary><span class="region-label-prefix">${t('Выбрать валюту', 'Choose a currency')} </span><span data-region-label>${initial}</span></summary>
       <div class="region-panel">
         <fieldset class="currency-quick">
           <legend>${t('Валюта цен', 'Display currency')}</legend>

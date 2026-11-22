@@ -1,0 +1,37 @@
+# Devlarion
+
+> Студия разработки Ильи Ларионова. Сайты, боты, мини-приложения, ИИ и интеграции, SEO, GEO и сопровождение.
+> Ilia Larionov’s development studio builds websites, bots, mini apps, AI tools and integrations and offers SEO, GEO and ongoing support.
+
+## Услуги и стартовые цены / Services and starting prices
+
+- [Сайт для заявок / Enquiry website](https://luvlarion4ik.github.io/luvlarion4ik/ru/website/): от 25 000 ₽
+- [Сайт компании с админкой / Company website with CMS](https://luvlarion4ik.github.io/luvlarion4ik/ru/business/): от 55 000 ₽
+- [Интернет-магазин / Online shop](https://luvlarion4ik.github.io/luvlarion4ik/ru/business/): от 90 000 ₽
+- [Telegram- или MAX-бот / Telegram or MAX bot](https://luvlarion4ik.github.io/luvlarion4ik/ru/telegram-bot/): от 20 000 ₽
+- [Мини-приложение с каталогом / Catalogue mini app](https://luvlarion4ik.github.io/luvlarion4ik/ru/telegram-bot/): от 55 000 ₽
+- [ИИ-ассистент / AI assistant](https://luvlarion4ik.github.io/luvlarion4ik/ru/ai-assistant/): от 55 000 ₽
+- [Пилот мультиагентной системы / Multi-agent pilot](https://luvlarion4ik.github.io/luvlarion4ik/ru/enterprise/): от 220 000 ₽
+- [SEO-оптимизация / SEO](https://luvlarion4ik.github.io/luvlarion4ik/ru/seo/): от 15 000 ₽
+- [GEO-аудит / GEO audit](https://luvlarion4ik.github.io/luvlarion4ik/ru/geo/): от 20 000 ₽
+- [Сопровождение / Support](https://luvlarion4ik.github.io/luvlarion4ik/ru/support/): от 8 000 ₽ / мес.
+
+## Для кого / Who we work with
+
+- [Самозанятым и ИП](https://luvlarion4ik.github.io/luvlarion4ik/ru/self-employed/) · [Self-employed and sole traders](https://luvlarion4ik.github.io/luvlarion4ik/self-employed/)
+- [Малому и среднему бизнесу](https://luvlarion4ik.github.io/luvlarion4ik/ru/business/) · [Small and medium businesses](https://luvlarion4ik.github.io/luvlarion4ik/business/)
+- [Крупным компаниям](https://luvlarion4ik.github.io/luvlarion4ik/ru/enterprise/) · [Enterprise](https://luvlarion4ik.github.io/luvlarion4ik/enterprise/)
+
+## Рост / Growth
+
+- [Зачем бизнесу сайт](https://luvlarion4ik.github.io/luvlarion4ik/ru/why-website/) · [Why businesses need a website](https://luvlarion4ik.github.io/luvlarion4ik/why-website/)
+- [SEO](https://luvlarion4ik.github.io/luvlarion4ik/ru/seo/) · [SEO](https://luvlarion4ik.github.io/luvlarion4ik/seo/)
+- [GEO (ИИ-поиск)](https://luvlarion4ik.github.io/luvlarion4ik/ru/geo/) · [GEO (AI search)](https://luvlarion4ik.github.io/luvlarion4ik/geo/)
+- [Сопровождение](https://luvlarion4ik.github.io/luvlarion4ik/ru/support/) · [Support](https://luvlarion4ik.github.io/luvlarion4ik/support/)
+- [Пакетом выгоднее](https://luvlarion4ik.github.io/luvlarion4ik/ru/bundle/) · [Why a bundle is better](https://luvlarion4ik.github.io/luvlarion4ik/bundle/)
+
+## Контакты / Contact
+
+- [Telegram](https://t.me/LuvLarion4ik)
+- [Threads](https://www.threads.com/@luvlarion4ik)
+- [Сайт](https://luvlarion4ik.github.io/luvlarion4ik/ru/) · [Website](https://luvlarion4ik.github.io/luvlarion4ik/)

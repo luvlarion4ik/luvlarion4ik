@@ -1,0 +1,588 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style media="(prefers-reduced-motion: no-preference)">@view-transition { navigation: auto; }</style><title>Магазин цифровых услуг Devlarion — Devlarion</title><meta name="description" content="Выберите услуги, добавьте их в корзину и отправьте заявку в Telegram. Цены указаны «от» — точную смету фиксируем в договоре до старта."><link rel="canonical" href="https://luvlarion4ik.github.io/luvlarion4ik/ru/shop/"><link rel="alternate" hreflang="en" href="https://luvlarion4ik.github.io/luvlarion4ik/shop/"><link rel="alternate" hreflang="ru" href="https://luvlarion4ik.github.io/luvlarion4ik/ru/shop/"><link rel="alternate" hreflang="x-default" href="https://luvlarion4ik.github.io/luvlarion4ik/shop/"><meta property="og:title" content="Магазин цифровых услуг Devlarion — Devlarion"><meta property="og:description" content="Выберите услуги, добавьте их в корзину и отправьте заявку в Telegram. Цены указаны «от» — точную смету фиксируем в договоре до старта."><meta property="og:type" content="website"><meta property="og:url" content="https://luvlarion4ik.github.io/luvlarion4ik/ru/shop/"><meta property="og:locale" content="ru_RU"><meta property="og:image" content="https://luvlarion4ik.github.io/luvlarion4ik/assets/brand/og-ru.png?v=ce35cb2c43"><meta property="og:image:type" content="image/png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Сайты, боты и ИИ-сервисы — Devlarion"><meta name="twitter:card" content="summary_large_image"><link rel="icon" type="image/svg+xml" href="https://luvlarion4ik.github.io/luvlarion4ik/assets/brand/favicon.svg?v=fc7638ba39"><link rel="icon" type="image/png" sizes="32x32" href="https://luvlarion4ik.github.io/luvlarion4ik/assets/brand/favicon-32.png?v=f05559dac9"><link rel="icon" type="image/png" sizes="48x48" href="https://luvlarion4ik.github.io/luvlarion4ik/assets/brand/favicon-48.png?v=65663f65a8"><link rel="apple-touch-icon" href="https://luvlarion4ik.github.io/luvlarion4ik/assets/brand/apple-touch-icon.png?v=6e192977e1"><link rel="manifest" href="https://luvlarion4ik.github.io/luvlarion4ik/assets/brand/site.webmanifest"><script>(() => {
+  const system = matchMedia('(prefers-color-scheme: dark)');
+  const key = 'devlarion-theme';
+  const themes = ['auto', 'copper', 'midnight', 'sage'];
+  let choice = 'auto';
+  try {
+    const saved = localStorage.getItem(key);
+    if (themes.includes(saved)) choice = saved;
+  } catch {}
+
+  function apply() {
+    document.documentElement.dataset.theme = choice === 'auto' ? (system.matches ? 'midnight' : 'copper') : choice;
+  }
+  apply();
+  if (system.addEventListener) system.addEventListener('change', apply);
+  else system.addListener?.(apply);
+
+  addEventListener('DOMContentLoaded', () => {
+    const picker = document.querySelector('.theme-picker');
+    if (!picker) return;
+    const button = picker.querySelector('button');
+    const options = picker.querySelector('#theme-choices');
+    picker.querySelector('input[value="' + choice + '"]').checked = true;
+    picker.hidden = false;
+
+    function toggle(open, moveFocus = false) {
+      options.hidden = !open;
+      button.setAttribute('aria-expanded', String(open));
+      if (open && moveFocus) (picker.querySelector('input:checked') || picker.querySelector('input')).focus();
+    }
+
+    button.addEventListener('click', event => toggle(options.hidden, event.detail === 0));
+    options.addEventListener('change', event => {
+      if (event.target.name !== 'theme-choice') return;
+      choice = event.target.value;
+      try { localStorage.setItem(key, choice); } catch {}
+      apply();
+    });
+    picker.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !options.hidden) {
+        toggle(false);
+        button.focus();
+      }
+    });
+    document.addEventListener('focusin', event => {
+      if (!options.hidden && !picker.contains(event.target)) toggle(false);
+    });
+    document.addEventListener('pointerdown', event => {
+      if (!picker.contains(event.target) && !options.hidden) toggle(false);
+    });
+
+    let clicks = 0;
+    document.querySelector('footer .wordmark')?.addEventListener('click', event => {
+      if (!event.detail || location.href !== event.currentTarget.href) return;
+      if (++clicks <= 5) event.preventDefault();
+      if (clicks === 5) {
+        choice = 'bordeaux';
+        const selected = picker.querySelector('input:checked');
+        if (selected) selected.checked = false;
+        apply();
+        clicks = 0;
+      }
+    });
+  });
+})();
+</script><link rel="preload" href="https://luvlarion4ik.github.io/luvlarion4ik/assets/brand/fonts/source-serif-4-cyrillic.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="https://luvlarion4ik.github.io/luvlarion4ik/assets/brand/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="https://luvlarion4ik.github.io/luvlarion4ik/assets/page-common.css?v=6baa3c5e89"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"ProfessionalService","name":"Devlarion","url":"https://luvlarion4ik.github.io/luvlarion4ik/ru/","logo":"https://luvlarion4ik.github.io/luvlarion4ik/assets/brand/icon-512.png","sameAs":["https://t.me/LuvLarion4ik","https://github.com/luvlarion4ik","https://www.threads.com/@luvlarion4ik"],"founder":{"@type":"Person","name":"Илья Ларионов"}},{"@type":"Service","name":"Магазин цифровых услуг Devlarion","description":"Выберите услуги, добавьте их в корзину и отправьте заявку в Telegram. Цены указаны «от» — точную смету фиксируем в договоре до старта.","url":"https://luvlarion4ik.github.io/luvlarion4ik/ru/shop/","provider":{"@type":"Organization","name":"Devlarion","url":"https://luvlarion4ik.github.io/luvlarion4ik/ru/"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Как оплатить?","acceptedAnswer":{"@type":"Answer","text":"После заявки уточним детали и пришлём договор и счёт. Онлайн-оплаты на сайте нет."}},{"@type":"Question","name":"Корзина — это окончательный заказ?","acceptedAnswer":{"@type":"Answer","text":"Нет, это заявка. Можно менять состав до подписания договора."}},{"@type":"Question","name":"Цены окончательные?","acceptedAnswer":{"@type":"Answer","text":"Нет, это ориентир «от». Итоговая цена — в коммерческом предложении после уточнения состава."}},{"@type":"Question","name":"Можно ли собрать комплект из услуг и железа?","acceptedAnswer":{"@type":"Answer","text":"Да, добавьте в корзину всё нужное — посчитаем вместе со скидкой за объём."}},{"@type":"Question","name":"Есть ли рассрочка?","acceptedAnswer":{"@type":"Answer","text":"Для проектов от 100 000 ₽ — оплата по этапам. Лизинг железа — через партнёров, по запросу."}}]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://luvlarion4ik.github.io/luvlarion4ik/ru/"},{"@type":"ListItem","position":2,"name":"Магазин услуг","item":"https://luvlarion4ik.github.io/luvlarion4ik/ru/shop/"}]}]}</script><script defer src="https://luvlarion4ik.github.io/luvlarion4ik/assets/settings.js"></script><script defer src="https://luvlarion4ik.github.io/luvlarion4ik/assets/site-version.js?v=c331176667"></script><script defer src="https://luvlarion4ik.github.io/luvlarion4ik/assets/studio.js?v=4738b9693d"></script><script defer src="https://luvlarion4ik.github.io/luvlarion4ik/assets/devlarion-logo.js?v=0891ff7542"></script><script defer src="https://luvlarion4ik.github.io/luvlarion4ik/assets/currency.js?v=6ce7221f98"></script><script defer src="https://luvlarion4ik.github.io/luvlarion4ik/assets/commercial.js?v=5fbc1d4343"></script><script defer src="https://luvlarion4ik.github.io/luvlarion4ik/assets/solutions.js?v=7caf411f9d"></script><script defer src="https://luvlarion4ik.github.io/luvlarion4ik/assets/shop.js?v=163819b5ed"></script><script defer src="https://luvlarion4ik.github.io/luvlarion4ik/assets/viewer3d.js?v=6d89db8545"></script><script defer src="https://luvlarion4ik.github.io/luvlarion4ik/assets/motion.js?v=58b34f4339"></script></head><body  data-privacy-url="https://luvlarion4ik.github.io/luvlarion4ik/ru/privacy/" data-motion-url="https://luvlarion4ik.github.io/devlarion-motion/" ><a class="skip" href="#main">К содержанию</a><header><div class="wrap bar"><a class="wordmark" href="https://luvlarion4ik.github.io/luvlarion4ik/ru/" aria-label="Devlarion — главная">
+     <devlarion-logo variant="full" height="33" aria-hidden="true" ></devlarion-logo>
+     <img class="wordmark-fallback" src="https://luvlarion4ik.github.io/luvlarion4ik/assets/brand/logo-horizontal-copper-light.svg?v=2f442922ee" alt="" width="235" height="52">
+   </a><nav><details class="services-nav"><summary>Услуги</summary><div class="services-nav-links">
+     <div class="services-top"><a class="services-all" href="https://luvlarion4ik.github.io/luvlarion4ik/ru/services/">Все услуги на одной карте <span aria-hidden="true">→</span></a></div>
+     <div class="services-col" style="--c:0"><strong>Для кого</strong><ul><li style="--r:0"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/self-employed/">Самозанятым и ИП</a></li><li style="--r:1"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/business/">Малому и среднему бизнесу</a></li><li style="--r:2"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/enterprise/">Крупным компаниям</a></li></ul></div><div class="services-col" style="--c:1"><strong>ИИ для бизнеса</strong><ul><li style="--r:0"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/private-ai/">Корпоративный ИИ в РФ</a></li><li style="--r:1"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/ai-assistant/">ИИ-ассистент</a></li><li style="--r:2"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/documents/">Документы, OCR и 1С</a></li><li style="--r:3"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/vision/">Компьютерное зрение</a></li><li style="--r:4"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/ml/">Дообучение и точность</a></li></ul></div><div class="services-col" style="--c:2"><strong>Железо для бизнеса</strong><ul><li style="--r:0"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/shop/">Магазин услуг и железа</a></li><li style="--r:1"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/hardware/">GPU-серверы и DGX</a></li><li style="--r:2"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/compute/">Купить или арендовать мощности</a></li><li style="--r:3"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/import/">Техника под заказ, в том числе из Китая</a></li></ul></div><div class="services-col" style="--c:3"><strong>Кейсы по отраслям</strong><ul><li style="--r:0"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/scenarios/">Все кейсы и сценарии</a></li><li style="--r:1"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/industries/clinics/">Клиники</a></li><li style="--r:2"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/industries/legal/">Юристы</a></li><li style="--r:3"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/industries/finance/">Банки и страхование</a></li><li style="--r:4"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/industries/operations/">Производство и логистика</a></li><li style="--r:5"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/industries/contact-centers/">Контакт-центры</a></li></ul></div><div class="services-col" style="--c:4"><strong>Сайты и боты</strong><ul><li style="--r:0"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/website/">Сайт</a></li><li style="--r:1"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/telegram-bot/">Бот и мини-приложение</a></li><li style="--r:2"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/solutions/">Готовые модули</a></li><li style="--r:3"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/bundle/">Пакетом выгоднее</a></li></ul></div><div class="services-col" style="--c:5"><strong>Рост и поддержка</strong><ul><li style="--r:0"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/why-website/">Зачем бизнесу сайт</a></li><li style="--r:1"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/seo/">SEO</a></li><li style="--r:2"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/geo/">GEO (ИИ-поиск)</a></li><li style="--r:3"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/support/">Сопровождение</a></li><li style="--r:4"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/outsourcing/">ИТ-аутсорсинг</a></li></ul></div>
+   </div></details><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/#work">Кейсы</a><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/#bureau">Команда</a><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/#contact">Контакты</a><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/cabinet/">Кабинет</a></nav><div class="tools"><button class="menu" data-menu aria-label="Меню">☰</button><a class="header-social" href="https://www.threads.com/@luvlarion4ik" data-goal="threads" aria-label="Threads"><svg fill="currentColor" aria-hidden="true" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.263 11.097c-.03-3.486-1.92-5.586-5.111-5.586-2.13 0-3.922.963-4.863 2.499l2.062 1.438c.535-.843 1.272-1.543 2.628-1.543 1.528 0 2.318.85 2.544 2.431a15 15 0 0 0-2.236-.173c-4.125 0-6.068 1.867-6.068 4.336s1.943 3.99 4.804 3.99c3.139 0 5.013-2.115 5.781-4.735.798.361 1.348 1.204 1.348 2.47 0 3.387-3.907 5.232-7.22 5.232-4.885 0-8.077-3.207-8.077-8.424 0-6.392 4.223-10.487 9.9-10.487 3.808 0 5.69 1.671 6.97 3.914l2.108-1.475C21.44 2.078 18.331 0 13.663 0 6.227 0 1.168 5.277 1.168 12.934c0 7 4.953 11.066 10.856 11.066 4.878 0 9.809-2.846 9.809-7.716 0-2.545-1.46-4.231-3.569-5.187m-6.33 4.855c-1.077 0-2.026-.512-2.026-1.453 0-1.483 1.822-1.934 3.606-1.934.678 0 1.34.045 1.927.173-.422 1.927-1.671 3.215-3.508 3.214Z"/></svg></a><span data-channel hidden></span><div class="region-control" data-region-control data-rates-url="https://luvlarion4ik.github.io/luvlarion4ik/assets/exchange-rates.json?v=96f28f5885"
+    data-rate-date="2026-11-20" data-byn-rate="0.036547436745523854" data-kzt-rate="5.4212883149551665"
+    data-usd-rate="0.01220569029281451" data-eur-rate="0.011128459142418681" hidden>
+    <details>
+      <summary><span class="region-label-prefix">Выбрать валюту </span><span data-region-label>RUB</span></summary>
+      <div class="region-panel">
+        <fieldset class="currency-quick">
+          <legend>Валюта цен</legend>
+          <label title="Российский рубль"><input type="radio" name="region" value="RUB" checked><span>RUB</span></label><label title="Доллар США"><input type="radio" name="region" value="USD" ><span>USD</span></label><label title="Евро"><input type="radio" name="region" value="EUR" ><span>EUR</span></label><label title="Белорусский рубль"><input type="radio" name="region" value="BYN" ><span>BYN</span></label><label title="Казахстанский тенге"><input type="radio" name="region" value="KZT" ><span>KZT</span></label>
+        </fieldset>
+        <div class="currency-list" data-currency-picker hidden>
+          <label for="currency-search">Все валюты</label>
+          <input type="search" id="currency-search" data-currency-search placeholder="Код или название" autocomplete="off">
+          <ul data-currency-list aria-label="Доступные валюты"></ul>
+          <p data-currency-empty role="status" hidden>Валюты не найдены.</p>
+        </div>
+        <p data-currency-status role="status"></p>
+        <p>Валюту счёта согласуем в договоре.</p>
+      </div>
+    </details>
+  </div><div class="theme-picker" hidden>
+   <button type="button" id="theme" aria-label="Цветовая тема" title="Цветовая тема" aria-expanded="false" aria-controls="theme-choices">
+     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><g class="theme-sun"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"></path></g><path class="theme-moon" d="M20.5 14A8.8 8.8 0 0 1 10 3.5 8.8 8.8 0 1 0 20.5 14Z"></path></svg>
+   </button>
+   <div id="theme-choices" hidden><fieldset><legend>Цветовая тема</legend><label><input type="radio" name="theme-choice" value="auto"><span>Авто</span></label><label><input type="radio" name="theme-choice" value="copper"><span>Медь</span></label><label><input type="radio" name="theme-choice" value="midnight"><span>Тёмно-синяя</span></label><label><input type="radio" name="theme-choice" value="sage"><span>Шалфей</span></label></fieldset><fieldset class="version-choices"><legend>Версия сайта</legend><button type="button" class="btn" data-site-version="classic">Классическая</button>
+   <a class="btn" href="https://luvlarion4ik.github.io/devlarion-motion/" data-site-version="motion">С анимацией <span aria-hidden="true">→</span></a></fieldset></div>
+ </div><button type="button" class="header-share" data-share data-share-anchor="" aria-label="Поделиться" title="Поделиться"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V3m-4 4 4-4 4 4M7 11H5v10h14V11h-2"/></svg>
+</button><a href="https://luvlarion4ik.github.io/luvlarion4ik/shop/">EN</a><a class="button" href="https://t.me/LuvLarion4ik" data-goal="telegram">Обсудить проект <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M5 19 19 5 M6 5h13v13"/></svg>
+</a></div></div></header><main id="main"><article class="audience-page enterprise-page"><section class="audience-hero"><div class="wrap audience-hero-grid">
+    <div class="audience-hero-copy">
+    <p class="eyebrow"><i></i>Магазин цифровых услуг</p>
+    <h1>Магазин цифровых услуг Devlarion</h1>
+    <p class="intro">Выберите услуги, добавьте их в корзину и отправьте заявку в Telegram. Цены указаны «от» — точную смету фиксируем в договоре до старта.</p>
+    <div class="actions">
+      <a class="button" href="https://luvlarion4ik.github.io/luvlarion4ik/ru/?service=landing+automation&amp;tier=medium#quiz" data-estimate-services="landing automation" data-estimate-tier="medium">Рассчитать стоимость</a>
+      <a class="ghost" href="https://t.me/LuvLarion4ik?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21+%D0%A5%D0%BE%D1%87%D1%83+%D0%BE%D0%B1%D1%81%D1%83%D0%B4%D0%B8%D1%82%D1%8C+%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82.+%D0%9C%D0%B0%D0%B3%D0%B0%D0%B7%D0%B8%D0%BD+%D1%83%D1%81%D0%BB%D1%83%D0%B3.">Написать в Telegram</a>
+    </div>
+    </div>
+    <figure class="page-art page-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/cluster-2spark.jpg" alt="" width="1200" height="900" fetchpriority="high"></figure>
+  </div></section><div class="wrap trust-strip" role="list"><div role="listitem"><strong>Лично Илья</strong><span>Один человек отвечает за проект от первого созвона до запуска.</span></div><div role="listitem"><strong>Смета до старта</strong><span>Объём, цену и сроки фиксируем в договоре до первой строчки кода.</span></div><div role="listitem"><strong>2 месяца поддержки</strong><span>Исправления в согласованном объёме входят в каждый проект.</span></div><div role="listitem"><strong>Живые кейсы</strong><span>Можно открыть работающие проекты и увидеть результат, а не обещание.</span></div></div><section class="section wrap audience-section shop" data-shop data-tg="https://t.me/LuvLarion4ik" data-labels="{&quot;empty&quot;:&quot;Корзина пуста. Добавьте услуги или железо из каталога.&quot;,&quot;total&quot;:&quot;Итого от&quot;,&quot;monthly&quot;:&quot;Ежемесячно от&quot;,&quot;hourly&quot;:&quot;Аренда, в час от&quot;,&quot;onRequest&quot;:&quot;Позиции по запросу оценим отдельно&quot;,&quot;greeting&quot;:&quot;Здравствуйте! Хочу обсудить заказ:&quot;,&quot;remove&quot;:&quot;Убрать&quot;,&quot;saved&quot;:&quot;Заказ сохранён в кабинете.&quot;,&quot;login&quot;:&quot;Войдите в кабинет, чтобы сохранить заказ.&quot;,&quot;open&quot;:&quot;Открыть кабинет&quot;,&quot;added&quot;:&quot;В корзине&quot;,&quot;from&quot;:&quot;от&quot;,&quot;request&quot;:&quot;по запросу&quot;,&quot;hour&quot;:&quot;/ час&quot;,&quot;month&quot;:&quot;/ мес.&quot;,&quot;none&quot;:&quot;Ничего не нашлось. Попробуйте другое слово.&quot;,&quot;lang&quot;:&quot;ru&quot;}">
+    <div class="shop-toolbar">
+      <label class="shop-search"><span class="sr-only">Поиск по каталогу</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input type="search" data-search placeholder="Найти: бот, H200, Mac mini…"></label>
+      <label class="shop-sort"><span>Сортировка</span><select data-sort><option value="default">По разделам</option><option value="asc">Сначала дешевле</option><option value="desc">Сначала дороже</option></select></label>
+    </div>
+    <div class="shop-filters" role="group" aria-label="Категории"><button type="button" aria-pressed="true" data-filter="all">Все</button><button type="button" aria-pressed="false" data-filter="sites">Сайты</button><button type="button" aria-pressed="false" data-filter="bots">Боты и приложения</button><button type="button" aria-pressed="false" data-filter="ai">ИИ</button><button type="button" aria-pressed="false" data-filter="search">Поиск и ИИ-поиск</button><button type="button" aria-pressed="false" data-filter="security">Безопасность</button><button type="button" aria-pressed="false" data-filter="order">Техника под заказ</button><button type="button" aria-pressed="false" data-filter="care">Сопровождение</button><button type="button" aria-pressed="false" data-filter="hw-buy">Железо: купить</button><button type="button" aria-pressed="false" data-filter="hw-rent">Железо: аренда</button></div>
+    <h2 class="shop-group-title" data-group="services">Цифровые услуги</h2>
+    <div class="shop-grid" data-grid="services"><article class="shop-item" data-cat="sites" data-id="landing" data-title="Сайт для заявок" data-rub="25000" data-unit="">
+      <span class="service-mark shop-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <rect x="3" y="5" width="26" height="22" rx="3.5"/><path d="M4 12h24M8 8.5h.2m3.7 0h.2M17 17h7m-7 4h5"/><rect x="7" y="16" width="6" height="7" rx="1" fill="currentColor" fill-opacity=".16"/>
+</svg>
+</span>
+      <div class="shop-body"><h3>Сайт для заявок</h3><p class="shop-text">До 5 блоков, форма, заявки в Telegram</p>
+
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="25000">25 000 ₽</span></p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="landing"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item" data-cat="sites" data-id="web" data-title="Сайт компании с админкой" data-rub="55000" data-unit="">
+      <span class="service-mark shop-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <rect x="3" y="5" width="26" height="22" rx="3.5"/><path d="M4 12h24M8 8.5h.2m3.7 0h.2M17 17h7m-7 4h5"/><rect x="7" y="16" width="6" height="7" rx="1" fill="currentColor" fill-opacity=".16"/>
+</svg>
+</span>
+      <div class="shop-body"><h3>Сайт компании с админкой</h3><p class="shop-text">До 10 страниц, управление контентом</p>
+
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="55000">55 000 ₽</span></p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="web"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item" data-cat="sites" data-id="shop" data-title="Интернет-магазин" data-rub="90000" data-unit="">
+      <span class="service-mark shop-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <path d="m3 10 13-7 13 7-13 7z" fill="currentColor" fill-opacity=".14"/><path d="m3 16 13 7 13-7M3 22l13 7 13-7"/>
+</svg>
+</span>
+      <div class="shop-body"><h3>Интернет-магазин</h3><p class="shop-text">Каталог, корзина, оплата, уведомления</p>
+
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="90000">90 000 ₽</span></p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="shop"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item" data-cat="sites" data-id="design" data-title="Дизайн и редизайн" data-rub="25000" data-unit="">
+      <span class="service-mark shop-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <path d="m4 28 4-13L20 5l7 7-10 12z" fill="currentColor" fill-opacity=".10"/><path d="m8 15 9 9m-3-10 6-6m-15 19 7-7"/><circle cx="14" cy="18" r="2"/>
+</svg>
+</span>
+      <div class="shop-body"><h3>Дизайн и редизайн</h3><p class="shop-text">Интерфейс ключевого сценария</p>
+
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="25000">25 000 ₽</span></p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="design"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item" data-cat="bots" data-id="bot" data-title="Telegram- или MAX-бот" data-rub="20000" data-unit="">
+      <span class="service-mark shop-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <path d="M16 7v3m-11 7H3m26 0h-2"/><circle cx="16" cy="5" r="2"/><rect x="5" y="10" width="22" height="16" rx="5" fill="currentColor" fill-opacity=".1"/><path d="M11 16v2m10-2v2m-8 4h6"/>
+</svg>
+</span>
+      <div class="shop-body"><h3>Telegram- или MAX-бот</h3><p class="shop-text">Меню, сценарий записи, уведомления</p>
+
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="20000">20 000 ₽</span></p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="bot"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item" data-cat="bots" data-id="mini" data-title="Мини-приложение с каталогом" data-rub="55000" data-unit="">
+      <span class="service-mark shop-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <rect x="4" y="4" width="24" height="24" rx="6"/><g fill="currentColor" fill-opacity=".12"><rect x="8" y="8" width="6" height="6" rx="1.4"/><rect x="18" y="8" width="6" height="6" rx="1.4"/><rect x="8" y="18" width="6" height="6" rx="1.4"/></g><path d="M18 21h6m-3-3v6"/>
+</svg>
+</span>
+      <div class="shop-body"><h3>Мини-приложение с каталогом</h3><p class="shop-text">Каталог до 10 позиций, заявка в клик</p>
+
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="55000">55 000 ₽</span></p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="mini"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item" data-cat="bots" data-id="bot-crm" data-title="Бот + CRM" data-rub="55000" data-unit="">
+      <span class="service-mark shop-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <path d="M16 7v3m-11 7H3m26 0h-2"/><circle cx="16" cy="5" r="2"/><rect x="5" y="10" width="22" height="16" rx="5" fill="currentColor" fill-opacity=".1"/><path d="M11 16v2m10-2v2m-8 4h6"/>
+</svg>
+</span>
+      <div class="shop-body"><h3>Бот + CRM</h3><p class="shop-text">Заявки сразу в amoCRM или Битрикс24</p>
+
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="55000">55 000 ₽</span></p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="bot-crm"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item" data-cat="bots" data-id="platform" data-title="Личный кабинет / веб-сервис" data-rub="100000" data-unit="">
+      <span class="service-mark shop-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <path d="m3 10 13-7 13 7-13 7z" fill="currentColor" fill-opacity=".14"/><path d="m3 16 13 7 13-7M3 22l13 7 13-7"/>
+</svg>
+</span>
+      <div class="shop-body"><h3>Личный кабинет / веб-сервис</h3><p class="shop-text">Роли, данные и история операций</p>
+
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="100000">100 000 ₽</span></p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="platform"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item" data-cat="ai" data-id="assistant" data-title="ИИ-ассистент для заявок" data-rub="55000" data-unit="">
+      <span class="service-mark shop-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <path d="m10 10 6 6 8-8M16 16v9m0-9 9 5"/><g fill="currentColor" fill-opacity=".14"><circle cx="8" cy="8" r="3.5"/><circle cx="25" cy="7" r="3"/><circle cx="25" cy="22" r="3"/><circle cx="16" cy="26" r="2.5"/></g><circle cx="16" cy="16" r="3" fill="currentColor"/>
+</svg>
+</span>
+      <div class="shop-body"><h3>ИИ-ассистент для заявок</h3><p class="shop-text">Ответы по базе знаний, передача в CRM</p>
+
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="55000">55 000 ₽</span></p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="assistant"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item" data-cat="ai" data-id="llm-api" data-title="Настройка локального LLM API" data-rub="30000" data-unit="">
+      <span class="service-mark shop-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <g fill="currentColor" fill-opacity=".09"><rect x="4" y="5" width="24" height="9" rx="3"/><rect x="4" y="18" width="24" height="9" rx="3"/></g><path d="M9 9.5h6m-6 13h6"/><g fill="currentColor"><circle cx="23" cy="9.5" r="1"/><circle cx="23" cy="22.5" r="1"/></g>
+</svg>
+</span>
+      <div class="shop-body"><h3>Настройка локального LLM API</h3><p class="shop-text">OpenAI-совместимый API на вашем железе</p>
+
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="30000">30 000 ₽</span></p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="llm-api"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item" data-cat="ai" data-id="rag" data-title="Корпоративный RAG" data-rub="100000" data-unit="">
+      <span class="service-mark shop-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <path d="m10 10 6 6 8-8M16 16v9m0-9 9 5"/><g fill="currentColor" fill-opacity=".14"><circle cx="8" cy="8" r="3.5"/><circle cx="25" cy="7" r="3"/><circle cx="25" cy="22" r="3"/><circle cx="16" cy="26" r="2.5"/></g><circle cx="16" cy="16" r="3" fill="currentColor"/>
+</svg>
+</span>
+      <div class="shop-body"><h3>Корпоративный RAG</h3><p class="shop-text">Поиск по документам с источниками</p>
+
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="100000">100 000 ₽</span></p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="rag"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item" data-cat="ai" data-id="finetune" data-title="Подбор и дообучение модели" data-rub="45000" data-unit="">
+      <span class="service-mark shop-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <path d="m16 3 10 6v13l-10 6-10-6V9z" fill="currentColor" fill-opacity=".09"/><path d="m6 9 10 6 10-6m-10 6v13M11 6l10 6"/>
+</svg>
+</span>
+      <div class="shop-body"><h3>Подбор и дообучение модели</h3><p class="shop-text">Модель под задачу, язык и железо</p>
+
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="45000">45 000 ₽</span></p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="finetune"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item" data-cat="ai" data-id="agents" data-title="Пилот мультиагентной системы" data-rub="220000" data-unit="">
+      <span class="service-mark shop-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <path d="m3 10 13-7 13 7-13 7z" fill="currentColor" fill-opacity=".14"/><path d="m3 16 13 7 13-7M3 22l13 7 13-7"/>
+</svg>
+</span>
+      <div class="shop-body"><h3>Пилот мультиагентной системы</h3><p class="shop-text">Один процесс, метрики заранее</p>
+
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="220000">220 000 ₽</span></p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="agents"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item" data-cat="search" data-id="seo" data-title="SEO-старт" data-rub="15000" data-unit="">
+      <span class="service-mark shop-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <rect x="3" y="5" width="26" height="22" rx="3.5"/><path d="M4 12h24M8 8.5h.2m3.7 0h.2M17 17h7m-7 4h5"/><rect x="7" y="16" width="6" height="7" rx="1" fill="currentColor" fill-opacity=".16"/>
+</svg>
+</span>
+      <div class="shop-body"><h3>SEO-старт</h3><p class="shop-text">Аудит, Вебмастер, метатеги, карты</p>
+
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="15000">15 000 ₽</span></p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="seo"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item" data-cat="search" data-id="geo" data-title="GEO-старт" data-rub="20000" data-unit="">
+      <span class="service-mark shop-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <path d="m16 3 10 6v13l-10 6-10-6V9z" fill="currentColor" fill-opacity=".09"/><path d="m6 9 10 6 10-6m-10 6v13M11 6l10 6"/>
+</svg>
+</span>
+      <div class="shop-body"><h3>GEO-старт</h3><p class="shop-text">Видимость в ответах нейросетей</p>
+
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="20000">20 000 ₽</span></p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="geo"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item" data-cat="security" data-id="audit" data-title="Аудит данных и 152-ФЗ" data-rub="25000" data-unit="">
+      <span class="service-mark shop-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <path d="m16 3 11 4v8c0 6-4 11-11 14C9 26 5 21 5 15V7z" fill="currentColor" fill-opacity=".12"/><path d="m11 15 3.5 3.5 7-8"/>
+</svg>
+</span>
+      <div class="shop-body"><h3>Аудит данных и 152-ФЗ</h3><p class="shop-text">Карта потоков ПДн и план мер</p>
+
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="25000">25 000 ₽</span></p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="audit"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item" data-cat="security" data-id="private" data-title="Выделенный ИИ-контур" data-rub="" data-unit="">
+      <span class="service-mark shop-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <g fill="currentColor" fill-opacity=".09"><rect x="4" y="5" width="24" height="9" rx="3"/><rect x="4" y="18" width="24" height="9" rx="3"/></g><path d="M9 9.5h6m-6 13h6"/><g fill="currentColor"><circle cx="23" cy="9.5" r="1"/><circle cx="23" cy="22.5" r="1"/></g>
+</svg>
+</span>
+      <div class="shop-body"><h3>Выделенный ИИ-контур</h3><p class="shop-text">Изолированные GPU, сеть и журнал</p>
+
+
+
+      <div class="shop-foot"><p class="audience-price">По запросу</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="private"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item" data-cat="order" data-id="import-any" data-title="Любая рабочая техника под заказ, в том числе из Китая" data-rub="" data-unit="">
+      <span class="service-mark shop-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <path d="m3 10 13-7 13 7-13 7z" fill="currentColor" fill-opacity=".14"/><path d="m3 16 13 7 13-7M3 22l13 7 13-7"/>
+</svg>
+</span>
+      <div class="shop-body"><h3>Любая рабочая техника под заказ, в том числе из Китая</h3><p class="shop-text">Серверы, станции, сеть, торговое и промышленное оборудование: подбор, проверка, доставка, ввоз, запуск</p>
+
+
+
+      <div class="shop-foot"><p class="audience-price">По запросу</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="import-any"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item" data-cat="care" data-id="care-site" data-title="Сопровождение сайта" data-rub="8000" data-unit="month">
+      <span class="service-mark shop-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <path d="m16 3 11 4v8c0 6-4 11-11 14C9 26 5 21 5 15V7z" fill="currentColor" fill-opacity=".12"/><path d="m11 15 3.5 3.5 7-8"/>
+</svg>
+</span>
+      <div class="shop-body"><h3>Сопровождение сайта</h3><p class="shop-text">Правки, мониторинг, обновления</p>
+
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="8000">8 000 ₽</span> / мес.</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="care-site"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item" data-cat="care" data-id="care-ai" data-title="Сопровождение ИИ-сервиса" data-rub="30000" data-unit="month">
+      <span class="service-mark shop-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <path d="m16 3 11 4v8c0 6-4 11-11 14C9 26 5 21 5 15V7z" fill="currentColor" fill-opacity=".12"/><path d="m11 15 3.5 3.5 7-8"/>
+</svg>
+</span>
+      <div class="shop-body"><h3>Сопровождение ИИ-сервиса</h3><p class="shop-text">Обновления моделей и мониторинг</p>
+
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="30000">30 000 ₽</span> / мес.</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="care-ai"><span class="shop-add-label">В корзину</span></button></div></div></article></div>
+    <h2 class="shop-group-title" data-group="hw">Железо для ИИ: NVIDIA, Apple, хранение и сеть</h2>
+    <div class="shop-grid shop-grid-hw" data-grid="hw"><article class="shop-item shop-hw" data-cat="hw-buy" data-id="dgx-spark" data-title="NVIDIA DGX Spark" data-rub="939000" data-unit="" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/spark-1.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/spark-2.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/spark-3.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/nvidia-dgx-spark-desk.jpg&quot;,&quot;NVIDIA&quot;]]">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/cut-spark.png" alt="NVIDIA DGX Spark" width="1200" height="900" loading="lazy"><span class="shop-tag">Под заказ</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>NVIDIA DGX Spark</button></h3><button type="button" class="shop-3d" data-open3d="spark" data-title="NVIDIA DGX Spark">Покрутить в 3D</button><p class="shop-text">Персональный ИИ-суперкомпьютер размером с книгу. Запускает модели до ~200 млрд параметров локально.</p>
+      <ul class="shop-specs"><li>Grace Blackwell GB10</li><li>128 ГБ единой памяти</li><li>SSD 4 ТБ</li><li>До 1 PFLOP FP4</li></ul>
+
+      <details class="shop-more"><summary>Подробнее</summary><dl><div><dt>Для кого</dt><dd>Разработчик, аналитик или небольшой отдел, которому нужен свой ИИ без облака.</dd></div><div><dt>Какие модели потянет</dt><dd>Llama, Qwen, DeepSeek до ~200 млрд параметров в формате FP4; дообучение моделей до ~70 млрд.</dd></div><div><dt>Размер и питание</dt><dd>150 × 150 × 50,5 мм, 1,2 кг, до 240 Вт — работает от обычной розетки.</dd></div><div><dt>Что делаем мы</dt><dd>Поставка, настройка DGX OS, развёртывание модели и API, подключение к вашим системам, гарантия на нашу работу.</dd></div></dl></details>
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="939000">939 000 ₽</span></p><p class="shop-market">Рынок: 710 000–950 000 ₽</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="dgx-spark"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-buy" data-id="gb10-oem" data-title="GB10 от партнёров NVIDIA" data-rub="715000" data-unit="" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/gb10-1.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/gb10-2.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/gb10-3.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/partners/asus-ascent-gx10.jpg&quot;,&quot;ASUS&quot;]]">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/gb10-1.jpg" alt="GB10 от партнёров NVIDIA" width="1200" height="900" loading="lazy" class="is-full"><span class="shop-tag">Под заказ</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>GB10 от партнёров NVIDIA</button></h3><button type="button" class="shop-3d" data-open3d="spark" data-title="GB10 от партнёров NVIDIA">Покрутить в 3D</button><p class="shop-text">Тот же чип GB10 в корпусах ASUS, Gigabyte и других производителей — дешевле оригинала.</p>
+      <ul class="shop-specs"><li>Grace Blackwell GB10</li><li>128 ГБ единой памяти</li><li>SSD 1–4 ТБ</li><li>Совместим с DGX OS</li></ul>
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="715000">715 000 ₽</span></p><p class="shop-market">Рынок: 660 000–720 000 ₽</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="gb10-oem"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-buy" data-id="spark-cluster" data-title="Кластер из двух DGX Spark" data-rub="1955000" data-unit="" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/cluster-2spark.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/spark-1.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/spark-2.jpg&quot;,&quot;&quot;]]">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/cluster-2spark.jpg" alt="Кластер из двух DGX Spark" width="1200" height="900" loading="lazy" class="is-full"><span class="shop-tag">Под заказ</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>Кластер из двух DGX Spark</button></h3><button type="button" class="shop-3d" data-open3d="spark" data-title="Кластер из двух DGX Spark">Покрутить в 3D</button><p class="shop-text">Два Spark, связанные 200-гигабитной сетью: модели до ~400 млрд параметров.</p>
+      <ul class="shop-specs"><li>2× GB10</li><li>256 ГБ памяти суммарно</li><li>Связка ConnectX-7</li><li>Настроенный распределённый inference</li></ul>
+
+      <details class="shop-more"><summary>Подробнее</summary><dl><div><dt>Для кого</dt><dd>Отдел, которому мало одного Spark: большие модели или несколько пользователей.</dd></div><div><dt>Какие модели потянет</dt><dd>До ~405 млрд параметров в FP4 при распределённом inference.</dd></div><div><dt>Связка</dt><dd>Два устройства соединяются напрямую через ConnectX-7 (200 Гбит/с).</dd></div><div><dt>Что делаем мы</dt><dd>Сборка кластера, распределённый inference, балансировка, мониторинг.</dd></div></dl></details>
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="1955000">1 955 000 ₽</span></p><p class="shop-market">Рынок: 1 900 000–1 960 000 ₽</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="spark-cluster"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-buy" data-id="mac-mini" data-title="Apple Mac mini M6 · 16 ГБ · SSD 256 ГБ" data-rub="134900" data-unit="" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/mac-mini-1.jpg&quot;,&quot;Apple&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/mac-mini-2.jpg&quot;,&quot;Apple&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/mac-mini-3.jpg&quot;,&quot;Apple&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/mac-mini-4.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/mac-mini-5.jpg&quot;,&quot;&quot;]]" data-cfg="m6-16-256" data-configs="[{&quot;k&quot;:&quot;m6-16-256&quot;,&quot;chip&quot;:&quot;M6&quot;,&quot;title&quot;:&quot;Apple Mac mini M6 · 16 ГБ · SSD 256 ГБ&quot;,&quot;rub&quot;:134900,&quot;market&quot;:&quot;Рынок: 77 890–141 999 ₽&quot;},{&quot;k&quot;:&quot;m6-16-512&quot;,&quot;chip&quot;:&quot;M6&quot;,&quot;title&quot;:&quot;Apple Mac mini M6 · 16 ГБ · SSD 512 ГБ&quot;,&quot;rub&quot;:164900,&quot;market&quot;:&quot;Рынок: 154 990–170 999 ₽&quot;},{&quot;k&quot;:&quot;m6-24-512&quot;,&quot;chip&quot;:&quot;M6&quot;,&quot;title&quot;:&quot;Apple Mac mini M6 · 24 ГБ · SSD 512 ГБ&quot;,&quot;rub&quot;:189900,&quot;market&quot;:&quot;Рынок: 158 779–199 999 ₽&quot;},{&quot;k&quot;:&quot;m5p-24-512&quot;,&quot;chip&quot;:&quot;M5 Pro&quot;,&quot;title&quot;:&quot;Apple Mac mini M5 Pro · 24 ГБ · SSD 512 ГБ&quot;,&quot;rub&quot;:244900,&quot;market&quot;:&quot;Рынок: 158 552–249 990 ₽&quot;},{&quot;k&quot;:&quot;m5p-48-512&quot;,&quot;chip&quot;:&quot;M5 Pro&quot;,&quot;title&quot;:&quot;Apple Mac mini M5 Pro · 48 ГБ · SSD 512 ГБ&quot;,&quot;rub&quot;:259900,&quot;market&quot;:&quot;Рынок: 254 507–255 739 ₽&quot;},{&quot;k&quot;:&quot;m5p-64-1t&quot;,&quot;chip&quot;:&quot;M5 Pro&quot;,&quot;title&quot;:&quot;Apple Mac mini M5 Pro · 64 ГБ · SSD 1 ТБ · 18/20 ядер&quot;,&quot;rub&quot;:384900,&quot;market&quot;:&quot;Рынок: 340 249–391 551 ₽&quot;}]" data-chips="{&quot;M6&quot;:&quot;M6: 12 ядер CPU, 12 ядер GPU, до 32 ГБ памяти, 170 ГБ/с. Модели до ~14 млрд параметров в 4 бит.&quot;,&quot;M5 Pro&quot;:&quot;M5 Pro: до 18 ядер CPU и 20 ядер GPU, до 64 ГБ памяти, 307 ГБ/с, Thunderbolt 5. С 64 ГБ — модели до ~70 млрд в 4 бит.&quot;}">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/mac-mini.jpg" alt="Apple Mac mini" width="1200" height="900" loading="lazy" class="is-full"><span class="shop-credit">Фото: Apple</span><span class="shop-tag">Под заказ</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>Apple Mac mini</button></h3><p class="shop-text">Компактный и тихий компьютер для локальных ИИ-моделей: помощник по документам и базе знаний прямо в офисе.</p>
+      <ul class="shop-specs"><li>Чип M6 или M5 Pro</li><li>Единая память 16–64 ГБ</li><li>Ethernet 2,5 Гбит/с, Wi‑Fi 7</li><li>Модель и API настроены</li></ul>
+      <div class="shop-config"><p class="shop-config-label">Чип</p>
+      <div class="shop-seg" role="group" aria-label="Чип"><button type="button" data-chip="M6" aria-pressed="true">M6</button><button type="button" data-chip="M5 Pro" aria-pressed="false">M5 Pro</button></div>
+      <p class="shop-config-label">Память и SSD</p>
+      <div class="shop-seg" role="group" aria-label="Память и SSD"><button type="button" data-pick-cfg="m6-16-256" aria-pressed="true">16 ГБ · SSD 256 ГБ</button><button type="button" data-pick-cfg="m6-16-512" aria-pressed="false">16 ГБ · SSD 512 ГБ</button><button type="button" data-pick-cfg="m6-24-512" aria-pressed="false">24 ГБ · SSD 512 ГБ</button><button type="button" data-pick-cfg="m5p-24-512" aria-pressed="false" hidden>24 ГБ · SSD 512 ГБ</button><button type="button" data-pick-cfg="m5p-48-512" aria-pressed="false" hidden>48 ГБ · SSD 512 ГБ</button><button type="button" data-pick-cfg="m5p-64-1t" aria-pressed="false" hidden>64 ГБ · SSD 1 ТБ · 18/20 ядер</button></div>
+      <p class="shop-chip-note" data-chip-note>M6: 12 ядер CPU, 12 ядер GPU, до 32 ГБ памяти, 170 ГБ/с. Модели до ~14 млрд параметров в 4 бит.</p></div>
+      <details class="shop-more"><summary>Подробнее</summary><dl><div><dt>Для кого</dt><dd>Небольшой офис или отдел: ИИ-помощник по документам, расшифровка встреч, поиск по базе знаний — без облака и без серверной.</dd></div><div><dt>Какую версию брать</dt><dd>M6 — для одного-двух сотрудников и моделей до ~14 млрд параметров. M5 Pro с 48–64 ГБ — для команды и моделей уровня 30–70 млрд в 4 бит.</dd></div><div><dt>Связка</dt><dd>Несколько Mac mini на M5 Pro объединяются через Thunderbolt 5 в кластер; соберём его с 10-гигабитным коммутатором.</dd></div><div><dt>Что делаем мы</dt><dd>Поставка, настройка macOS, Ollama/LM Studio/MLX, развёртывание модели и OpenAI-совместимого API, подключение к вашим системам, гарантия на нашу работу.</dd></div></dl></details>
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="134900">134 900 ₽</span></p><p class="shop-market">Рынок: 77 890–141 999 ₽</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="mac-mini"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-buy" data-id="mac-studio" data-title="Apple Mac Studio M5 Max · 36 ГБ · SSD 512 ГБ · 32 ядра GPU" data-rub="389900" data-unit="" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/mac-studio-1.jpg&quot;,&quot;Apple&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/mac-studio-2.jpg&quot;,&quot;Apple&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/mac-studio-3.jpg&quot;,&quot;Apple&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/mac-studio-4.jpg&quot;,&quot;&quot;]]" data-cfg="max-36-512" data-configs="[{&quot;k&quot;:&quot;max-36-512&quot;,&quot;chip&quot;:&quot;M5 Max&quot;,&quot;title&quot;:&quot;Apple Mac Studio M5 Max · 36 ГБ · SSD 512 ГБ · 32 ядра GPU&quot;,&quot;rub&quot;:389900,&quot;market&quot;:&quot;Рынок: 261 963–399 990 ₽&quot;},{&quot;k&quot;:&quot;max-128-1t&quot;,&quot;chip&quot;:&quot;M5 Max&quot;,&quot;title&quot;:&quot;Apple Mac Studio M5 Max · 128 ГБ · SSD 1 ТБ · 40 ядер GPU&quot;,&quot;rub&quot;:724900,&quot;market&quot;:&quot;Рынок: 667 000–730 000 ₽&quot;},{&quot;k&quot;:&quot;ultra-96-1t&quot;,&quot;chip&quot;:&quot;M5 Ultra&quot;,&quot;title&quot;:&quot;Apple Mac Studio M5 Ultra · 96 ГБ · SSD 1 ТБ · 30/64 ядра&quot;,&quot;rub&quot;:894900,&quot;market&quot;:&quot;Рынок: 853 000–899 990 ₽&quot;}]" data-chips="{&quot;M5 Max&quot;:&quot;M5 Max: 18 ядер CPU, до 40 ядер GPU, до 128 ГБ памяти, до 614 ГБ/с. Со 128 ГБ — модели до ~120 млрд параметров в 4 бит.&quot;,&quot;M5 Ultra&quot;:&quot;M5 Ultra: до 36 ядер CPU и 80 ядер GPU, 1,2 ТБ/с. Версии с 256–512 ГБ памяти — по запросу.&quot;}">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/mac-studio.jpg" alt="Apple Mac Studio" width="1200" height="900" loading="lazy" class="is-full"><span class="shop-credit">Фото: Apple</span><span class="shop-tag">Под заказ</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>Apple Mac Studio</button></h3><p class="shop-text">Настольная станция с большой единой памятью: крупные открытые модели локально, тихо и без серверной.</p>
+      <ul class="shop-specs"><li>Чип M5 Max или M5 Ultra</li><li>Единая память 36–128 ГБ и больше</li><li>Thunderbolt 5, Wi‑Fi 7</li><li>Модель и API настроены</li></ul>
+      <div class="shop-config"><p class="shop-config-label">Чип</p>
+      <div class="shop-seg" role="group" aria-label="Чип"><button type="button" data-chip="M5 Max" aria-pressed="true">M5 Max</button><button type="button" data-chip="M5 Ultra" aria-pressed="false">M5 Ultra</button></div>
+      <p class="shop-config-label">Память и SSD</p>
+      <div class="shop-seg" role="group" aria-label="Память и SSD"><button type="button" data-pick-cfg="max-36-512" aria-pressed="true">36 ГБ · SSD 512 ГБ · 32 ядра GPU</button><button type="button" data-pick-cfg="max-128-1t" aria-pressed="false">128 ГБ · SSD 1 ТБ · 40 ядер GPU</button><button type="button" data-pick-cfg="ultra-96-1t" aria-pressed="false" hidden>96 ГБ · SSD 1 ТБ · 30/64 ядра</button></div>
+      <p class="shop-chip-note" data-chip-note>M5 Max: 18 ядер CPU, до 40 ядер GPU, до 128 ГБ памяти, до 614 ГБ/с. Со 128 ГБ — модели до ~120 млрд параметров в 4 бит.</p></div>
+      <details class="shop-more"><summary>Подробнее</summary><dl><div><dt>Для кого</dt><dd>Отдел, которому мало Mac mini: модели на десятки миллиардов параметров, несколько пользователей, генерация изображений.</dd></div><div><dt>Какие модели потянет</dt><dd>M5 Max со 128 ГБ — модели до ~120 млрд параметров в 4 бит; M5 Ultra — крупнее и быстрее, особенно на длинном контексте.</dd></div><div><dt>Связка</dt><dd>Несколько Mac Studio объединяются в кластер через Thunderbolt 5 с RDMA — так делают для самых больших открытых моделей.</dd></div><div><dt>Что делаем мы</dt><dd>Поставка, настройка, развёртывание модели и API, подключение к RAG и вашим системам, мониторинг, гарантия на нашу работу.</dd></div></dl></details>
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="389900">389 900 ₽</span></p><p class="shop-market">Рынок: 261 963–399 990 ₽</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="mac-studio"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-buy" data-id="rtx-pro-ws" data-title="Рабочая станция с RTX PRO 6000 Blackwell" data-rub="3150000" data-unit="" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/ws-1.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/ws-2.jpg&quot;,&quot;&quot;]]">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/cut-workstation.png" alt="Рабочая станция с RTX PRO 6000 Blackwell" width="1200" height="900" loading="lazy"><span class="shop-tag">Под заказ</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>Рабочая станция с RTX PRO 6000 Blackwell</button></h3><button type="button" class="shop-3d" data-open3d="workstation" data-title="Рабочая станция с RTX PRO 6000 Blackwell">Покрутить в 3D</button><p class="shop-text">Самая мощная видеокарта для рабочих станций: 96 ГБ памяти на одной карте.</p>
+      <ul class="shop-specs"><li>RTX PRO 6000 96 ГБ GDDR7</li><li>Процессор и ОЗУ под задачу</li><li>Тихое охлаждение</li><li>Для RAG, дообучения и генерации</li></ul>
+
+      <details class="shop-more"><summary>Подробнее</summary><dl><div><dt>Для кого</dt><dd>Компания, которой нужна быстрая модель для RAG, генерации и дообучения у себя в офисе.</dd></div><div><dt>Какие модели потянет</dt><dd>До ~70 млрд параметров в 8 бит на одной карте с 96 ГБ; быстрая генерация изображений и видео.</dd></div><div><dt>Охлаждение и шум</dt><dd>Подбираем корпус и охлаждение под офис, а не под серверную.</dd></div><div><dt>Что делаем мы</dt><dd>Сборка, тест под нагрузкой, драйверы, vLLM, API, гарантия на сборку и работу.</dd></div></dl></details>
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="3150000">3 150 000 ₽</span></p><p class="shop-market">Рынок: 2 500 000–3 200 000 ₽</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="rtx-pro-ws"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-buy" data-id="rtx5090-ws" data-title="ИИ-станция на RTX 5090 32 ГБ" data-rub="1490000" data-unit="" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/ws-1.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/ws-2.jpg&quot;,&quot;&quot;]]">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/cut-workstation.png" alt="ИИ-станция на RTX 5090 32 ГБ" width="1200" height="900" loading="lazy"><span class="shop-tag">Под заказ</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>ИИ-станция на RTX 5090 32 ГБ</button></h3><button type="button" class="shop-3d" data-open3d="workstation" data-title="ИИ-станция на RTX 5090 32 ГБ">Покрутить в 3D</button><p class="shop-text">Доступный вход в локальный ИИ: модели до ~30 млрд параметров, генерация изображений, эксперименты.</p>
+      <ul class="shop-specs"><li>GeForce RTX 5090 32 ГБ</li><li>Ryzen 9 / 64–128 ГБ ОЗУ</li><li>NVMe 2–4 ТБ</li><li>Настроенная среда для моделей</li></ul>
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="1490000">1 490 000 ₽</span></p><p class="shop-market">Рынок: 1 030 000–1 550 000 ₽</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="rtx5090-ws"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-buy" data-id="rtx-pro-server" data-title="Сервер 4× RTX PRO 6000 Server Edition" data-rub="12300000" data-unit="" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/srv4-1.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/srv4-2.jpg&quot;,&quot;&quot;]]">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/cut-hgx.png" alt="Сервер 4× RTX PRO 6000 Server Edition" width="1200" height="900" loading="lazy"><span class="shop-tag">Под заказ</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>Сервер 4× RTX PRO 6000 Server Edition</button></h3><button type="button" class="shop-3d" data-open3d="gpu-server" data-title="Сервер 4× RTX PRO 6000 Server Edition">Покрутить в 3D</button><p class="shop-text">Стоечный сервер для отдела или всей компании: 384 ГБ видеопамяти.</p>
+      <ul class="shop-specs"><li>4× RTX PRO 6000 96 ГБ</li><li>2U/4U, стойка 19″</li><li>Резервные блоки питания</li><li>Несколько моделей одновременно</li></ul>
+
+      <details class="shop-more"><summary>Подробнее</summary><dl><div><dt>Для кого</dt><dd>Отдел или компания: несколько моделей и десятки пользователей одновременно.</dd></div><div><dt>Какие модели потянет</dt><dd>Модели до ~200 млрд параметров или несколько моделей поменьше параллельно.</dd></div><div><dt>Размещение</dt><dd>Ваша серверная или ЦОД партнёра в России; резервное питание.</dd></div><div><dt>Что делаем мы</dt><dd>Подбор платформы, поставка, монтаж в стойку, настройка, мониторинг, SLA.</dd></div></dl></details>
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="12300000">12 300 000 ₽</span></p><p class="shop-market">Рынок: 10 500 000–12 500 000 ₽</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="rtx-pro-server"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-buy" data-id="hgx-h200" data-title="Сервер HGX 8× H200" data-rub="68900000" data-unit="" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/hgx-1.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/hgx-2.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/frame-2-server.jpg&quot;,&quot;&quot;]]">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/cut-hgx.png" alt="Сервер HGX 8× H200" width="1200" height="900" loading="lazy"><span class="shop-tag">Под заказ</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>Сервер HGX 8× H200</button></h3><button type="button" class="shop-3d" data-open3d="hgx" data-title="Сервер HGX 8× H200">Покрутить в 3D</button><p class="shop-text">Флагман для обучения и тяжёлого inference: 1,1 ТБ памяти HBM3e.</p>
+      <ul class="shop-specs"><li>8× H200 SXM 141 ГБ</li><li>NVLink между GPU</li><li>2× AMD EPYC или Intel Xeon</li><li>Сеть 400G по запросу</li></ul>
+
+      <details class="shop-more"><summary>Подробнее</summary><dl><div><dt>Для кого</dt><dd>Крупная компания: обучение своих моделей и высокая нагрузка на inference.</dd></div><div><dt>Какие модели потянет</dt><dd>Обучение и дообучение крупных моделей; inference моделей на сотни миллиардов параметров.</dd></div><div><dt>Требования</dt><dd>Стойка, питание порядка 10 кВт и охлаждение ЦОД — проверим площадку заранее.</dd></div><div><dt>Что делаем мы</dt><dd>Подбор вендора, поставка, монтаж, сеть, планировщик задач, сопровождение по SLA.</dd></div></dl></details>
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="68900000">68 900 000 ₽</span></p><p class="shop-market">Рынок: 34 000 000–72 000 000 ₽</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="hgx-h200"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-buy" data-id="dgx-b200" data-title="NVIDIA DGX B200" data-rub="" data-unit="" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/rack-1.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/hgx-2.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/nvidia-gb200-nvl72.jpg&quot;,&quot;NVIDIA&quot;]]">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/cut-rack.png" alt="NVIDIA DGX B200" width="1200" height="900" loading="lazy"><span class="shop-tag">Под заказ</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>NVIDIA DGX B200</button></h3><button type="button" class="shop-3d" data-open3d="hgx" data-title="NVIDIA DGX B200">Покрутить в 3D</button><p class="shop-text">Система нового поколения Blackwell для ИИ-фабрик. Поставка и цена — только по запросу.</p>
+      <ul class="shop-specs"><li>8× B200</li><li>1,4 ТБ памяти HBM3e</li><li>NVLink 5</li><li>Для крупных компаний и ЦОД</li></ul>
+
+
+      <div class="shop-foot"><p class="audience-price">По запросу</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="dgx-b200"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-buy" data-id="park-s" data-title="DGX-парк S: 4× DGX Spark" data-rub="3890000" data-unit="" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/park-s.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/park-s-2.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/spark-3.jpg&quot;,&quot;&quot;]]">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/park-s.jpg" alt="DGX-парк S: 4× DGX Spark" width="1200" height="900" loading="lazy" class="is-full"><span class="shop-tag">Под заказ</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>DGX-парк S: 4× DGX Spark</button></h3><button type="button" class="shop-3d" data-open3d="spark" data-title="DGX-парк S: 4× DGX Spark">Покрутить в 3D</button><p class="shop-text">Компактный парк под столом или в кабинете: свой ИИ для отдела без серверной.</p>
+      <ul class="shop-specs"><li>4× GB10, 512 ГБ памяти</li><li>Коммутатор и ИБП</li><li>Единый API</li><li>Монтаж и настройка</li></ul>
+
+      <details class="shop-more"><summary>Подробнее</summary><dl><div><dt>Состав</dt><dd>4× DGX Spark, коммутатор 200 Гбит/с, стеллаж, ИБП.</dd></div><div><dt>Для кого</dt><dd>Отдел до 30–50 человек: несколько моделей до ~200 млрд параметров одновременно.</dd></div><div><dt>Что делаем мы</dt><dd>Сборка, сеть, распределение моделей по узлам, единый API, мониторинг.</dd></div></dl></details>
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="3890000">3 890 000 ₽</span></p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="park-s"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-buy" data-id="park-m" data-title="DGX-парк M: 2× HGX H200" data-rub="139900000" data-unit="" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/park-m.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/park-m-2.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/hgx-2.jpg&quot;,&quot;&quot;]]">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/park-m.jpg" alt="DGX-парк M: 2× HGX H200" width="1200" height="900" loading="lazy" class="is-full"><span class="shop-tag">Под заказ</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>DGX-парк M: 2× HGX H200</button></h3><button type="button" class="shop-3d" data-open3d="rack" data-title="DGX-парк M: 2× HGX H200">Покрутить в 3D</button><p class="shop-text">Стойка с двумя 8-GPU серверами: 16 GPU и 2,2 ТБ памяти HBM3e.</p>
+      <ul class="shop-specs"><li>16× H200</li><li>Сеть 400G</li><li>СХД под датасеты</li><li>Сопровождение по SLA</li></ul>
+
+      <details class="shop-more"><summary>Подробнее</summary><dl><div><dt>Состав</dt><dd>2× HGX 8× H200 в одной стойке, сеть 400G, СХД, ИБП.</dd></div><div><dt>Для кого</dt><dd>Компания, которая обучает свои модели и обслуживает сотни пользователей.</dd></div><div><dt>Что делаем мы</dt><dd>Проект площадки, поставка, монтаж, сеть, планировщик задач, SLA.</dd></div></dl></details>
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="139900000">139 900 000 ₽</span></p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="park-m"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-buy" data-id="park-l" data-title="DGX-парк L: от трёх стоек" data-rub="" data-unit="" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/park-l.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/rack-1.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/rack-2.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/nvidia-gb200-nvl72.jpg&quot;,&quot;NVIDIA&quot;]]">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/park-l.jpg" alt="DGX-парк L: от трёх стоек" width="1200" height="900" loading="lazy" class="is-full"><span class="shop-tag">Под заказ</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>DGX-парк L: от трёх стоек</button></h3><button type="button" class="shop-3d" data-open3d="rack" data-title="DGX-парк L: от трёх стоек">Покрутить в 3D</button><p class="shop-text">Собственная ИИ-фабрика под ключ. Состав и цена — после обследования площадки.</p>
+      <ul class="shop-specs"><li>От 24 GPU</li><li>Проект охлаждения и питания</li><li>Сеть InfiniBand или 400G</li><li>Ввод в эксплуатацию</li></ul>
+
+      <details class="shop-more"><summary>Подробнее</summary><dl><div><dt>Состав</dt><dd>От трёх стоек DGX-класса, сеть, охлаждение и питание под проект.</dd></div><div><dt>Для кого</dt><dd>Крупная компания или ЦОД, которому нужна собственная ИИ-фабрика.</dd></div><div><dt>Что делаем мы</dt><dd>Проект, поставки, монтаж, ввод в эксплуатацию, сопровождение.</dd></div></dl></details>
+      <div class="shop-foot"><p class="audience-price">По запросу</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="park-l"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-buy" data-id="oem-servers" data-title="Готовые GPU-серверы Dell, Supermicro, Lenovo, HPE, xFusion" data-rub="" data-unit="" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/srv4-1.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/srv4-2.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/hgx-1.jpg&quot;,&quot;&quot;]]">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/cut-hgx.png" alt="Готовые GPU-серверы Dell, Supermicro, Lenovo, HPE, xFusion" width="1200" height="900" loading="lazy"><span class="shop-tag">Под заказ</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>Готовые GPU-серверы Dell, Supermicro, Lenovo, HPE, xFusion</button></h3><button type="button" class="shop-3d" data-open3d="gpu-server" data-title="Готовые GPU-серверы Dell, Supermicro, Lenovo, HPE, xFusion">Покрутить в 3D</button><p class="shop-text">Подберём платформу под ваш ЦОД, бюджет и требования к поставщику, привезём и настроим.</p>
+      <ul class="shop-specs"><li>От 2 до 8 GPU</li><li>NVIDIA H100/H200/B200 или RTX PRO</li><li>Гарантия производителя или партнёра</li><li>Под ваш стандарт стойки и питания</li></ul>
+
+
+      <div class="shop-foot"><p class="audience-price">По запросу</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="oem-servers"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-buy" data-id="amd-mi300x" data-title="Сервер 8× AMD Instinct MI300X" data-rub="" data-unit="" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/hgx-1.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/hgx-2.jpg&quot;,&quot;&quot;]]">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/cut-hgx.png" alt="Сервер 8× AMD Instinct MI300X" width="1200" height="900" loading="lazy"><span class="shop-tag">Под заказ</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>Сервер 8× AMD Instinct MI300X</button></h3><button type="button" class="shop-3d" data-open3d="hgx" data-title="Сервер 8× AMD Instinct MI300X">Покрутить в 3D</button><p class="shop-text">Альтернатива NVIDIA с 192 ГБ памяти на ускоритель — для больших моделей и inference.</p>
+      <ul class="shop-specs"><li>8× MI300X 192 ГБ</li><li>1,5 ТБ HBM3 суммарно</li><li>ROCm и vLLM</li><li>Поставка и цена по запросу</li></ul>
+
+
+      <div class="shop-foot"><p class="audience-price">По запросу</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="amd-mi300x"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-buy" data-id="nas-ds925" data-title="Сетевое хранилище Synology DS925+" data-rub="87900" data-unit="" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/ds925-1.jpg&quot;,&quot;Synology&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/ds925-2.jpg&quot;,&quot;Synology&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/ds925-3.jpg&quot;,&quot;Synology&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/ds925-4.jpg&quot;,&quot;&quot;]]">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/ds925.jpg" alt="Сетевое хранилище Synology DS925+" width="1200" height="900" loading="lazy" class="is-full"><span class="shop-credit">Фото: Synology</span><span class="shop-tag">Под заказ</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>Сетевое хранилище Synology DS925+</button></h3><p class="shop-text">Хранилище на 4 диска для документов, базы знаний и резервных копий — данные остаются в офисе.</p>
+      <ul class="shop-specs"><li>4 отсека + 2× M.2 NVMe</li><li>2× Ethernet 2,5 Гбит/с</li><li>Гарантия производителя 3 года</li><li>Без дисков</li></ul>
+
+      <details class="shop-more"><summary>Подробнее</summary><dl><div><dt>Для кого</dt><dd>Компания, которой нужно хранить документы, базу знаний для RAG и резервные копии рядом с локальной моделью.</dd></div><div><dt>Что внутри</dt><dd>AMD Ryzen V1500B, 4 ГБ ECC (до 32 ГБ), 4 отсека 3,5″/2,5″ и 2 слота M.2 NVMe; до 9 дисков с модулем расширения.</dd></div><div><dt>Диски</dt><dd>Цена — без дисков. Подберём диски под объём и RAID, посчитаем отдельно в КП.</dd></div><div><dt>Что делаем мы</dt><dd>Установка, RAID, права доступа, резервное копирование Mac и серверов, подключение к RAG-поиску.</dd></div></dl></details>
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="87900">87 900 ₽</span></p><p class="shop-market">Рынок: 79 799–88 410 ₽</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="nas-ds925"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-buy" data-id="switch-crs312" data-title="Коммутатор 10 Гбит/с MikroTik CRS312" data-rub="99900" data-unit="" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/crs312-1.jpg&quot;,&quot;MikroTik&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/mac-mini-4.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/mac-studio-4.jpg&quot;,&quot;&quot;]]">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/crs312.jpg" alt="Коммутатор 10 Гбит/с MikroTik CRS312" width="1200" height="900" loading="lazy" class="is-full"><span class="shop-credit">Фото: MikroTik</span><span class="shop-tag">Под заказ</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>Коммутатор 10 Гбит/с MikroTik CRS312</button></h3><p class="shop-text">Быстрая сеть для ИИ-контура: связывает Mac, DGX Spark, хранилище и рабочие места.</p>
+      <ul class="shop-specs"><li>12 портов 10 Гбит/с</li><li>4 комбо-порта SFP+</li><li>Два блока питания</li><li>Стойка 19″, 1U</li></ul>
+
+      <details class="shop-more"><summary>Подробнее</summary><dl><div><dt>Для кого</dt><dd>Офис, где ИИ-станции, хранилище и рабочие места должны обмениваться данными быстрее гигабита.</dd></div><div><dt>Порты</dt><dd>8× 10 Гбит/с RJ45 и 4 комбо-порта RJ45/SFP+, два блока питания, монтаж в стойку 19″ (1U).</dd></div><div><dt>Что делаем мы</dt><dd>Схема сети, VLAN для ИИ-контура, подключение Mac, DGX Spark и хранилища, документация для службы безопасности.</dd></div></dl></details>
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="99900">99 900 ₽</span></p><p class="shop-market">Рынок: 70 101–107 900 ₽</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="switch-crs312"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-rent" data-id="rent-h100" data-title="Аренда 1× H100 80 ГБ" data-rub="640" data-unit="hour" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/rent-gpu.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/rack-2.jpg&quot;,&quot;&quot;]]">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/rent-gpu.jpg" alt="Аренда 1× H100 80 ГБ" width="1200" height="900" loading="lazy" class="is-full"><span class="shop-tag">Аренда</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>Аренда 1× H100 80 ГБ</button></h3><p class="shop-text">Выделенный GPU в российском ЦОД, модель развёрнута и отвечает по API.</p>
+      <ul class="shop-specs"><li>H100 80 ГБ</li><li>Модель и API настроены</li><li>Изолированная сеть</li><li>Помесячно со скидкой</li></ul>
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="640">640 ₽</span> / час</p><p class="shop-market">Рынок: 340–650 ₽ / час</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="rent-h100"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-rent" data-id="rent-h200" data-title="Аренда 1× H200 141 ГБ" data-rub="770" data-unit="hour" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/rent-gpu.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/rack-2.jpg&quot;,&quot;&quot;]]">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/rent-gpu.jpg" alt="Аренда 1× H200 141 ГБ" width="1200" height="900" loading="lazy" class="is-full"><span class="shop-tag">Аренда</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>Аренда 1× H200 141 ГБ</button></h3><p class="shop-text">Больше памяти — больше модель без разбиения на несколько карт.</p>
+      <ul class="shop-specs"><li>H200 141 ГБ</li><li>Модель и API настроены</li><li>Мониторинг нагрузки</li><li>Помесячно со скидкой</li></ul>
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="770">770 ₽</span> / час</p><p class="shop-market">Рынок: 420–780 ₽ / час</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="rent-h200"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-rent" data-id="rent-8h200" data-title="Аренда сервера 8× H200" data-rub="5350" data-unit="hour" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/rent-server.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/hgx-2.jpg&quot;,&quot;&quot;]]">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/rent-server.jpg" alt="Аренда сервера 8× H200" width="1200" height="900" loading="lazy" class="is-full"><span class="shop-tag">Аренда</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>Аренда сервера 8× H200</button></h3><p class="shop-text">Целый сервер под вашу компанию: обучение, дообучение и высокая нагрузка.</p>
+      <ul class="shop-specs"><li>8× H200, NVLink</li><li>Выделенный сервер</li><li>Резервное копирование в РФ</li><li>SLA в договоре</li></ul>
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="5350">5 350 ₽</span> / час</p><p class="shop-market">Рынок: 3 200–5 400 ₽ / час</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="rent-8h200"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-rent" data-id="month-h100" data-title="Аренда 1× H100 на месяц" data-rub="449000" data-unit="month" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/rent-gpu.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/rack-2.jpg&quot;,&quot;&quot;]]">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/rent-gpu.jpg" alt="Аренда 1× H100 на месяц" width="1200" height="900" loading="lazy" class="is-full"><span class="shop-tag">Аренда</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>Аренда 1× H100 на месяц</button></h3><p class="shop-text">Мощность в российском ЦОД партнёра по договору с нами. Дешевле почасовой при постоянной нагрузке.</p>
+      <ul class="shop-specs"><li>H100 80 ГБ</li><li>Модель и API настроены</li><li>Помесячный договор</li><li>Мониторинг и поддержка</li></ul>
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="449000">449 000 ₽</span> / мес.</p><p class="shop-market">Рынок: 244 800–468 000 ₽ / мес.</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="month-h100"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-rent" data-id="month-h200" data-title="Аренда 1× H200 на месяц" data-rub="539000" data-unit="month" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/rent-gpu.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/rack-2.jpg&quot;,&quot;&quot;]]">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/rent-gpu.jpg" alt="Аренда 1× H200 на месяц" width="1200" height="900" loading="lazy" class="is-full"><span class="shop-tag">Аренда</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>Аренда 1× H200 на месяц</button></h3><p class="shop-text">Больше памяти для крупных моделей, помесячно и с нашей настройкой.</p>
+      <ul class="shop-specs"><li>H200 141 ГБ</li><li>Модель и API настроены</li><li>Помесячный договор</li><li>Мониторинг и поддержка</li></ul>
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="539000">539 000 ₽</span> / мес.</p><p class="shop-market">Рынок: 302 400–561 600 ₽ / мес.</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="month-h200"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-rent" data-id="month-8h200" data-title="Аренда сервера 8× H200 на месяц" data-rub="3749000" data-unit="month" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/rent-server.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/hgx-2.jpg&quot;,&quot;&quot;]]">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/rent-server.jpg" alt="Аренда сервера 8× H200 на месяц" width="1200" height="900" loading="lazy" class="is-full"><span class="shop-tag">Аренда</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>Аренда сервера 8× H200 на месяц</button></h3><p class="shop-text">Выделенный сервер под вашу компанию на месяц и дольше.</p>
+      <ul class="shop-specs"><li>8× H200, NVLink</li><li>Выделенный сервер</li><li>Резервные копии в РФ</li><li>SLA в договоре</li></ul>
+
+
+      <div class="shop-foot"><p class="audience-price" data-region-price-row>от <span data-region-price="3749000">3 749 000 ₽</span> / мес.</p><p class="shop-market">Рынок: 2 300 000–3 900 000 ₽ / мес.</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="month-8h200"><span class="shop-add-label">В корзину</span></button></div></div></article><article class="shop-item shop-hw" data-cat="hw-rent" data-id="provider-pick" data-title="Мощности у крупного облака — с нашей настройкой" data-rub="" data-unit="" data-gallery="[[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/rent-cloud.jpg&quot;,&quot;&quot;],[&quot;https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/gallery/rack-2.jpg&quot;,&quot;&quot;]]">
+      <div class="shop-art shop-art-photo"><img src="https://luvlarion4ik.github.io/luvlarion4ik/assets/photos/pages/rent-cloud.jpg" alt="Мощности у крупного облака — с нашей настройкой" width="1200" height="900" loading="lazy" class="is-full"><span class="shop-tag">Аренда</span></div>
+      <div class="shop-body"><h3><button type="button" class="shop-open" data-open-product>Мощности у крупного облака — с нашей настройкой</button></h3><p class="shop-text">Если удобнее платить провайдеру напрямую, подберём тариф в Selectel, Cloud.ru, Yandex Cloud или другом российском облаке и развернём там модель.</p>
+      <ul class="shop-specs"><li>Сравнение тарифов под задачу</li><li>Договор с провайдером — на вас</li><li>Развёртывание модели и API</li><li>Сопровождение по желанию</li></ul>
+
+
+      <div class="shop-foot"><p class="audience-price">По запросу</p>
+      <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="Меньше">−</button><output data-count>1</output><button type="button" data-inc aria-label="Больше">+</button></div>
+      <button type="button" class="btn shop-add" data-add="provider-pick"><span class="shop-add-label">В корзину</span></button></div></div></article></div>
+    <p class="shop-none" data-none hidden></p>
+  </section>
+  <section class="section wrap audience-section why-price"><p class="loss-badge">Про цены</p>
+    <h2>Почему наша цена у верхней границы рынка</h2>
+    <div class="loss-grid"><article><span class="loss-index" aria-hidden="true">01</span><h3>Всё от покупки до запуска — в наших руках</h3><p>Подбор, поставка, монтаж, установка ОС и драйверов, развёртывание модели (vLLM), API и проверка под вашей нагрузкой. Вы получаете работающую систему, а не коробку.</p></article><article><span class="loss-index" aria-hidden="true">02</span><h3>Гарантия</h3><p>Даём гарантию на нашу работу и сами ведём гарантийные случаи с поставщиком: вам не нужно разбираться с вендором.</p></article><article><span class="loss-index" aria-hidden="true">03</span><h3>Одна команда отвечает за всё</h3><p>Если модель тормозит или падает, не нужно выяснять, виноваты железо, драйверы или софт. Отвечаем мы.</p></article><article><span class="loss-index" aria-hidden="true">04</span><h3>Документы для службы безопасности</h3><p>Даём документы о размещении и описание архитектуры — то, что обычно спрашивают при проверке.</p></article><article><span class="loss-index" aria-hidden="true">05</span><h3>Поддержка после запуска</h3><p>Первые два месяца исправления входят в проект, дальше — сопровождение по договору.</p></article><article><span class="loss-index" aria-hidden="true">06</span><h3>Честный ориентир</h3><p>Рядом с ценой показываем диапазон у других поставщиков. Мы у верхней границы, потому что в цену входят настройка, гарантия и сопровождение.</p></article></div>
+    <p class="audience-note-line">Рыночные диапазоны — открытые цены российских поставщиков на ноябрь 2026 года. Железо поставляем под заказ через партнёров: цена зависит от курса и конфигурации, итог фиксируем в КП.</p>
+  </section>
+  <button type="button" class="shop-fab" data-shop-open aria-controls="shop-cart" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h3l2.4 11h10.2L21 7H7"/><circle cx="10" cy="19.5" r="1.5"/><circle cx="17" cy="19.5" r="1.5"/></svg><span>Корзина</span><b data-shop-count>0</b></button>
+  <div class="shop-scrim" data-shop-scrim hidden></div>
+  <aside class="shop-cart" id="shop-cart" aria-label="Корзина" hidden>
+    <div class="shop-cart-head"><h2>Ваш заказ</h2><button type="button" class="shop-close" data-shop-close aria-label="Закрыть">×</button></div>
+    <ul class="shop-list" data-shop-list></ul>
+    <div class="shop-total" data-shop-total></div>
+    <a class="button shop-send" data-shop-send href="https://t.me/LuvLarion4ik">Отправить заявку в Telegram</a>
+    <button type="button" class="shop-save" data-shop-save>Сохранить заказ в кабинете</button>
+    <p class="shop-save-status" data-shop-status role="status"></p>
+    <button type="button" class="shop-clear" data-shop-clear>Очистить корзину</button>
+    <p class="audience-note-line">Это заявка, а не оплата. Итоговую цену, сроки поставки и условия фиксируем в коммерческом предложении и договоре.</p>
+  </aside><section class="section wrap audience-section "><h2>Частые вопросы</h2><details><summary>Как оплатить?</summary><p>После заявки уточним детали и пришлём договор и счёт. Онлайн-оплаты на сайте нет.</p></details><details><summary>Корзина — это окончательный заказ?</summary><p>Нет, это заявка. Можно менять состав до подписания договора.</p></details><details><summary>Цены окончательные?</summary><p>Нет, это ориентир «от». Итоговая цена — в коммерческом предложении после уточнения состава.</p></details><details><summary>Можно ли собрать комплект из услуг и железа?</summary><p>Да, добавьте в корзину всё нужное — посчитаем вместе со скидкой за объём.</p></details><details><summary>Есть ли рассрочка?</summary><p>Для проектов от 100 000 ₽ — оплата по этапам. Лизинг железа — через партнёров, по запросу.</p></details></section>
+      <section class="section wrap audience-section audience-next"><h2>Не нашли нужное?</h2><div class="audience-related audience-cross"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/private-ai/"><strong>Корпоративный ИИ <span aria-hidden="true">→</span></strong><span>LLM, RAG, распознавание документов и речи на серверах в России.</span></a><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/hardware/"><strong>GPU-серверы и DGX <span aria-hidden="true">→</span></strong><span>Покупка или аренда GPU-серверов с нашей настройкой под вашу модель.</span></a></div></section></article></main><footer class="wrap"><div class="row"><a class="wordmark" href="https://luvlarion4ik.github.io/luvlarion4ik/ru/" aria-label="Devlarion — главная">
+     <devlarion-logo variant="full" height="33" aria-hidden="true" ></devlarion-logo>
+     <img class="wordmark-fallback" src="https://luvlarion4ik.github.io/luvlarion4ik/assets/brand/logo-horizontal-copper.svg?v=fe971dcfa1" alt="" width="235" height="52">
+   </a><div class="social social--icons"><span data-channel hidden></span><a class="social-icon" href="https://www.threads.com/@luvlarion4ik" aria-label="Threads" title="Threads" data-goal="threads"><svg fill="currentColor" aria-hidden="true" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.263 11.097c-.03-3.486-1.92-5.586-5.111-5.586-2.13 0-3.922.963-4.863 2.499l2.062 1.438c.535-.843 1.272-1.543 2.628-1.543 1.528 0 2.318.85 2.544 2.431a15 15 0 0 0-2.236-.173c-4.125 0-6.068 1.867-6.068 4.336s1.943 3.99 4.804 3.99c3.139 0 5.013-2.115 5.781-4.735.798.361 1.348 1.204 1.348 2.47 0 3.387-3.907 5.232-7.22 5.232-4.885 0-8.077-3.207-8.077-8.424 0-6.392 4.223-10.487 9.9-10.487 3.808 0 5.69 1.671 6.97 3.914l2.108-1.475C21.44 2.078 18.331 0 13.663 0 6.227 0 1.168 5.277 1.168 12.934c0 7 4.953 11.066 10.856 11.066 4.878 0 9.809-2.846 9.809-7.716 0-2.545-1.46-4.231-3.569-5.187m-6.33 4.855c-1.077 0-2.026-.512-2.026-1.453 0-1.483 1.822-1.934 3.606-1.934.678 0 1.34.045 1.927.173-.422 1.927-1.671 3.215-3.508 3.214Z"/></svg></a><a class="social-icon" href="https://github.com/luvlarion4ik" aria-label="GitHub" title="GitHub" data-goal="github"><svg fill="currentColor" aria-hidden="true" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a><a class="social-icon" href="https://t.me/LuvLarion4ik" aria-label="Telegram" title="Telegram" data-goal="telegram"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="m2 11 20-8-4 18-6-6-3 3v-5l9-7-11 6z"/></svg>
+</a><a class="social-icon" href="mailto:larion4ik123@gmail.com" aria-label="Почта" title="Почта" data-goal="email"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M2 5h20v14H2z M2 5l10 8L22 5"/></svg>
+</a></div></div>
+   <div class="row fine"><span>© 2026 Devlarion · ИП Илья Ларионов</span>
+     <a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/privacy/">Конфиденциальность</a>
+     <a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/cabinet/">Кабинет</a>
+     <a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/licenses/">Лицензии</a>
+     <a href="https://luvlarion4ik.github.io/devlarion-motion/" data-goal="motion" data-site-version="motion">Версия с анимацией</a>
+
+     <button hidden data-preferences>Настройки аналитики</button>
+     <button type="button" class="share-control" data-share data-share-anchor="" >Поделиться</button>
+   </div></footer><div class="mobilebar"><a class="button" href="https://t.me/LuvLarion4ik" data-goal="telegram">Обсудить проект <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M5 19 19 5 M6 5h13v13"/></svg>
+</a><a class="link" href="https://www.threads.com/@luvlarion4ik" data-goal="threads">Threads <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M5 19 19 5 M6 5h13v13"/></svg>
+</a></div><div id="progress" aria-hidden="true"></div><dialog id="commands" aria-label="Быстрые действия"><form method="dialog"><button aria-label="Закрыть">×</button></form><nav><details class="services-nav"><summary>Услуги</summary><div class="services-nav-links">
+     <div class="services-top"><a class="services-all" href="https://luvlarion4ik.github.io/luvlarion4ik/ru/services/">Все услуги на одной карте <span aria-hidden="true">→</span></a></div>
+     <div class="services-col" style="--c:0"><strong>Для кого</strong><ul><li style="--r:0"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/self-employed/">Самозанятым и ИП</a></li><li style="--r:1"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/business/">Малому и среднему бизнесу</a></li><li style="--r:2"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/enterprise/">Крупным компаниям</a></li></ul></div><div class="services-col" style="--c:1"><strong>ИИ для бизнеса</strong><ul><li style="--r:0"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/private-ai/">Корпоративный ИИ в РФ</a></li><li style="--r:1"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/ai-assistant/">ИИ-ассистент</a></li><li style="--r:2"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/documents/">Документы, OCR и 1С</a></li><li style="--r:3"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/vision/">Компьютерное зрение</a></li><li style="--r:4"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/ml/">Дообучение и точность</a></li></ul></div><div class="services-col" style="--c:2"><strong>Железо для бизнеса</strong><ul><li style="--r:0"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/shop/">Магазин услуг и железа</a></li><li style="--r:1"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/hardware/">GPU-серверы и DGX</a></li><li style="--r:2"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/compute/">Купить или арендовать мощности</a></li><li style="--r:3"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/import/">Техника под заказ, в том числе из Китая</a></li></ul></div><div class="services-col" style="--c:3"><strong>Кейсы по отраслям</strong><ul><li style="--r:0"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/scenarios/">Все кейсы и сценарии</a></li><li style="--r:1"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/industries/clinics/">Клиники</a></li><li style="--r:2"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/industries/legal/">Юристы</a></li><li style="--r:3"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/industries/finance/">Банки и страхование</a></li><li style="--r:4"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/industries/operations/">Производство и логистика</a></li><li style="--r:5"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/industries/contact-centers/">Контакт-центры</a></li></ul></div><div class="services-col" style="--c:4"><strong>Сайты и боты</strong><ul><li style="--r:0"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/website/">Сайт</a></li><li style="--r:1"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/telegram-bot/">Бот и мини-приложение</a></li><li style="--r:2"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/solutions/">Готовые модули</a></li><li style="--r:3"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/bundle/">Пакетом выгоднее</a></li></ul></div><div class="services-col" style="--c:5"><strong>Рост и поддержка</strong><ul><li style="--r:0"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/why-website/">Зачем бизнесу сайт</a></li><li style="--r:1"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/seo/">SEO</a></li><li style="--r:2"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/geo/">GEO (ИИ-поиск)</a></li><li style="--r:3"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/support/">Сопровождение</a></li><li style="--r:4"><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/outsourcing/">ИТ-аутсорсинг</a></li></ul></div>
+   </div></details><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/#work">Кейсы</a><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/#bureau">Команда</a><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/#contact">Контакты</a><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/cabinet/">Кабинет</a><a href="https://luvlarion4ik.github.io/luvlarion4ik/ru/#quiz">Рассчитать проект</a><a href="https://luvlarion4ik.github.io/devlarion-motion/" data-site-version="motion">Версия с анимацией</a><a class="link" href="https://www.threads.com/@luvlarion4ik" data-goal="threads">Threads <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M5 19 19 5 M6 5h13v13"/></svg>
+</a><a href="https://luvlarion4ik.github.io/luvlarion4ik/shop/">English</a><button type="button" class="select-theme">Сменить тему</button><button type="button" class="share-control" data-share data-share-anchor="" >Поделиться</button><a class="button" href="https://t.me/LuvLarion4ik" data-goal="telegram">Обсудить проект <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M5 19 19 5 M6 5h13v13"/></svg>
+</a></nav></dialog><dialog id="share-options" class="share-actions" aria-labelledby="share-title">
+   <form method="dialog"><button aria-label="Закрыть">×</button></form>
+   <h2 id="share-title">Поделиться</h2>
+   <button type="button" class="share-copy" data-share-copy>Скопировать ссылку</button>
+   <div class="actions"><a data-share-telegram>Telegram</a><a data-share-vk>VK</a><a data-share-email>Почта</a></div>
+   <label hidden>Ссылка<input readonly data-share-field></label>
+   <p role="status" data-share-status></p>
+ </dialog></body></html>

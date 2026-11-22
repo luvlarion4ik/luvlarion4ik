@@ -6,7 +6,9 @@ document.addEventListener('keydown', event => {
     if (dialog.open) dialog.close(); else dialog.showModal();
   }
 });
-dialog.querySelector('nav').addEventListener('click', () => dialog.close());
+dialog.querySelector('nav').addEventListener('click', event => {
+  if (event.target.closest('a, button')) dialog.close();
+});
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const watch=document.querySelector('[data-watch]');
 if(watch){

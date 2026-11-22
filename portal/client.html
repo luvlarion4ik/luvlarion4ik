@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Личный кабинет — Devlarion</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/brand/favicon.svg">
+  <link rel="stylesheet" href="/assets/brand/fonts.css">
+  <link rel="stylesheet" href="%%BASE%%static/account.css">
+  <script src="/assets/theme.js"></script>
+  <script defer src="%%BASE%%static/client.js"></script>
+</head>
+<body data-base="%%BASE%%" data-support="%%SUPPORT%%">
+  <a class="ac-skip" href="#main">К содержанию</a>
+  <header class="ac-bar">
+    <div class="ac-wrap">
+      <a class="ac-brand" href="%%SITE%%"><img src="/assets/brand/logo-horizontal-copper-light.svg" width="140" height="32" alt="Devlarion"></a>
+      <nav aria-label="Настройки кабинета">
+        <button type="button" class="ac-linkbtn" data-open-profile hidden>Профиль и логин</button>
+        <a href="%%BASE%%?mode=reset" data-password-settings hidden>Изменить пароль</a>
+        <form method="post" action="%%BASE%%logout"><button type="submit">Выйти</button></form>
+      </nav>
+    </div>
+  </header>
+  <main id="main" class="ac-main">
+    <div class="ac-wrap">
+      <div data-preview hidden class="ac-preview">Режим просмотра кабинета клиента. Отправка сообщений отключена.</div>
+      <div class="ac-hello">
+        <div>
+          <p class="ac-eyebrow">Личный кабинет</p>
+          <h1 data-hello>Мои проекты</h1>
+          <p class="ac-note" data-company hidden></p>
+          <p class="ac-note ac-caption" data-login-id hidden></p>
+        </div>
+        <div class="ac-hello-actions"><button type="button" class="ac-btn" data-new-request hidden>Новая заявка</button><a class="ac-btn ac-btn--ghost" href="%%SUPPORT%%" data-client-support hidden>Написать команде</a></div>
+      </div>
+      <div data-root aria-busy="true">
+        <p class="ac-loading" role="status">Загружаем проекты…</p>
+        <noscript><p class="ac-note">Для просмотра проектов включите JavaScript.</p></noscript>
+      </div>
+    </div>
+  </main>
+  <dialog class="ac-dialog" data-profile-dialog aria-labelledby="ac-profile-title">
+    <form method="dialog" class="ac-stack" data-profile-form>
+      <h2 id="ac-profile-title">Профиль</h2>
+      <p class="ac-note">Задайте удобный логин, чтобы входить без Telegram ID. Вход по @username и по Telegram ID тоже продолжит работать.</p>
+      <label class="ac-field"><span>Логин для входа</span><input name="login" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="32" placeholder="например, anna_sever"></label>
+      <small class="ac-note">3–32 символа: латиница, цифры и _. Начинается с буквы.</small>
+      <label class="ac-field"><span>Как к вам обращаться</span><input name="name" maxlength="80"></label>
+      <label class="ac-field"><span>Компания</span><input name="company" maxlength="120"></label>
+      <label class="ac-check"><input type="checkbox" name="notify" checked><span>Уведомления в Telegram: новые этапы, счета, сметы и ответы команды</span></label>
+      <div class="ac-danger"><span>Безопасность</span><button type="button" class="ac-btn ac-btn--ghost ac-btn--sm" data-logout-all>Выйти на всех устройствах</button></div>
+      <p class="ac-form-error" data-profile-error role="alert"></p>
+      <div class="ac-dialog-actions"><button class="ac-btn" type="submit" value="save">Сохранить</button><button class="ac-btn ac-btn--ghost" type="button" data-close-dialog>Отмена</button></div>
+    </form>
+  </dialog>
+  <dialog class="ac-dialog" data-request-dialog aria-labelledby="ac-request-title">
+    <form method="dialog" class="ac-stack" data-request-form>
+      <h2 id="ac-request-title">Новая заявка</h2>
+      <p class="ac-note">Заявка сразу появится у команды и в вашем кабинете. Ответим в течение дня.</p>
+      <fieldset class="ac-topics"><legend>Что нужно</legend>
+        <label><input type="radio" name="topic" value="Сайт" checked><span>Сайт</span></label>
+        <label><input type="radio" name="topic" value="Бот или мини-приложение"><span>Бот</span></label>
+        <label><input type="radio" name="topic" value="ИИ-ассистент"><span>ИИ-ассистент</span></label>
+        <label><input type="radio" name="topic" value="Корпоративный ИИ / железо"><span>ИИ и железо</span></label>
+        <label><input type="radio" name="topic" value="SEO / GEO"><span>SEO / GEO</span></label>
+        <label><input type="radio" name="topic" value="Другое"><span>Другое</span></label>
+      </fieldset>
+      <label class="ac-field"><span>Опишите задачу</span><textarea name="text" rows="5" maxlength="3000" required placeholder="Что сейчас не так, что хотите получить, есть ли сроки"></textarea></label>
+      <label class="ac-field"><span>Бюджет (необязательно)</span><input name="budget" maxlength="80" placeholder="например, до 150 000 ₽"></label>
+      <p class="ac-form-error" data-request-error role="alert"></p>
+      <div class="ac-dialog-actions"><button class="ac-btn" type="submit" value="send">Отправить заявку</button><button class="ac-btn ac-btn--ghost" type="button" data-close-dialog>Отмена</button></div>
+    </form>
+  </dialog>
+  <footer class="ac-foot">
+    <div class="ac-wrap"><span>© 2026 Devlarion</span><a href="/ru/privacy/">Конфиденциальность</a></div>
+  </footer>
+</body>
+</html>

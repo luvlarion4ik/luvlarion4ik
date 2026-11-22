@@ -3,6 +3,7 @@ import { relative } from 'node:path';
 import { estimator, starterPackages } from '../content/pricing.mjs';
 import { cases } from '../content/work.mjs';
 import { readySolutions } from '../content/solutions.mjs';
+import { sell } from '../content/persuasion.mjs';
 
 const caseIds = cases.ru.map(project => project.id);
 const readyIds = readySolutions.map(solution => solution.id);
@@ -135,9 +136,33 @@ function validateAchievements(value) {
   }
 }
 
+function validateSales(sales) {
+  record(sales, 'sales', ['capacity', 'pages']);
+  if (sales.capacity !== undefined) {
+    record(sales.capacity, 'sales.capacity', ['enabled', 'ru', 'en']);
+    if (sales.capacity.enabled !== undefined) check(typeof sales.capacity.enabled === 'boolean', 'sales.capacity.enabled', 'нужно true или false');
+    for (const lang of ['ru', 'en']) {
+      if (sales.capacity[lang] === undefined) continue;
+      record(sales.capacity[lang], 'sales.capacity.' + lang, ['title', 'text']);
+      for (const [key, text] of Object.entries(sales.capacity[lang])) { string(text, 'sales.capacity.' + lang + '.' + key, true); check(text.length <= 400, 'sales.capacity.' + lang + '.' + key, 'не длиннее 400 символов'); }
+    }
+  }
+  if (sales.pages !== undefined) {
+    record(sales.pages, 'sales.pages', Object.keys(sell));
+    for (const [route, langs] of Object.entries(sales.pages)) {
+      record(langs, 'sales.pages.' + route, ['ru', 'en']);
+      for (const [lang, fields] of Object.entries(langs)) {
+        record(fields, 'sales.pages.' + route + '.' + lang, ['closeTitle', 'closeText']);
+        for (const [key, text] of Object.entries(fields)) { string(text, 'sales.pages.' + route + '.' + lang + '.' + key, true); check(text.length <= 600, 'sales.pages.' + route + '.' + lang + '.' + key, 'не длиннее 600 символов'); }
+      }
+    }
+  }
+}
+
 export async function validateSite(value) {
   const keys = ['exchange', 'legal', 'pricing', 'ready', 'caseOverrides', 'founderPhoto', 'team', 'achievements', 'referral', 'portal'];
-  record(value, 'site.json', keys, keys);
+  record(value, 'site.json', [...keys, 'sales'], keys);
+  if (value.sales !== undefined) validateSales(value.sales);
   const { exchange, legal, referral } = value;
   const currencies = { BYN: 1, KZT: 100, USD: 1, EUR: 1 };
   const exchangeKeys = ['date', ...Object.keys(currencies)];

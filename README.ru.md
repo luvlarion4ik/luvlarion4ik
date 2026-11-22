@@ -6,6 +6,20 @@
 
 [Смотреть кейсы](https://luvlarion4ik.github.io/luvlarion4ik/ru/#work) · [Рассчитать проект](https://luvlarion4ik.github.io/luvlarion4ik/ru/#quiz) · [Обсудить проект](https://t.me/LuvLarion4ik) · [Threads](https://www.threads.com/@luvlarion4ik) · [English](README.md)
 
+## Для кого
+
+- [Самозанятым и ИП](https://luvlarion4ik.github.io/luvlarion4ik/ru/self-employed/)
+- [Малому и среднему бизнесу](https://luvlarion4ik.github.io/luvlarion4ik/ru/business/)
+- [Крупным компаниям](https://luvlarion4ik.github.io/luvlarion4ik/ru/enterprise/)
+
+## Рост
+
+- [Зачем бизнесу сайт](https://luvlarion4ik.github.io/luvlarion4ik/ru/why-website/)
+- [SEO](https://luvlarion4ik.github.io/luvlarion4ik/ru/seo/)
+- [GEO (ИИ-поиск)](https://luvlarion4ik.github.io/luvlarion4ik/ru/geo/)
+- [Сопровождение](https://luvlarion4ik.github.io/luvlarion4ik/ru/support/)
+- [Пакетом выгоднее](https://luvlarion4ik.github.io/luvlarion4ik/ru/bundle/)
+
 ## Стоимость разработки
 
 - [Сайт для заявок](https://luvlarion4ik.github.io/luvlarion4ik/ru/#small-business) — от 25 000 ₽
