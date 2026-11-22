@@ -1,4 +1,5 @@
 import { esc, formatStartingPrice } from './site.mjs';
+import { pageArt } from './page-art.mjs';
 import { crmStartingPrice, packageStartingPrice } from './pricing.mjs';
 
 export const segments = [
@@ -415,7 +416,8 @@ function telegramLink(lang, ctx, audience, pack) {
 
 function hero(lang, page, ctx, isSegment) {
   const { label, title, description } = page[lang];
-  return `<section class="audience-hero"><div class="wrap">
+  return `<section class="audience-hero"><div class="wrap audience-hero-grid">
+    <div class="audience-hero-copy">
     <p class="eyebrow"><i></i>${isSegment ? pick(lang, 'Для кого', 'Who we work with') : pick(lang, 'Рост после запуска', 'Growth after launch')}</p>
     <h1>${esc(title)}</h1>
     <p class="intro">${esc(description)}</p>
@@ -423,6 +425,8 @@ function hero(lang, page, ctx, isSegment) {
       ${estimateLink(lang, ctx.home, page.estimateServices, page.estimateTier ?? 'small')}
       <a class="ghost" href="${telegramLink(lang, ctx, label)}">${pick(lang, 'Написать в Telegram', 'Message us on Telegram')}</a>
     </div>
+    </div>
+    ${pageArt(lang, page.route)}
   </div></section>`;
 }
 

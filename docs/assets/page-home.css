@@ -817,6 +817,34 @@ footer{padding:2rem 0}.fine{margin-top:1.5rem;flex-wrap:wrap}.sub{padding:4rem 0
   .version-dismiss {grid-row:1;grid-column:2}
 }
 
+/* Page artwork */
+.audience-hero-grid {display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(1.5rem,4vw,4rem);align-items:center}
+.audience-hero h1 {max-width:20ch}
+.page-art {justify-self:end;width:min(100%,460px)}
+.page-art-svg {display:block;width:100%;height:auto;overflow:visible}
+.page-art-svg text {font-family:inherit}
+@keyframes pa-float {0%,100% {transform:translateY(0)} 50% {transform:translateY(-8px)}}
+@keyframes pa-drift {0%,100% {transform:translate(0,0)} 50% {transform:translate(6px,-6px)}}
+@keyframes pa-spin {to {transform:rotate(360deg)}}
+@keyframes pa-slide {0%,45% {transform:translateX(0)} 60%,100% {transform:translateX(108px)}}
+@keyframes pa-draw {from {stroke-dashoffset:520} to {stroke-dashoffset:0}}
+@keyframes pa-grow {from {transform:scaleY(.15)} to {transform:scaleY(1)}}
+@media (prefers-reduced-motion:no-preference) {
+  .pa-float {animation:pa-float 6s ease-in-out infinite}
+  .pa-drift {animation:pa-drift 7s ease-in-out infinite}
+  .pa-d2 {animation-delay:-3s;animation-duration:8.5s}
+  .pa-spin {transform-box:fill-box;transform-origin:center;animation:pa-spin 18s linear infinite}
+  .pa-slide {animation:pa-slide 5s ease-in-out infinite alternate}
+  .pa-ring {transform-box:fill-box;transform-origin:center;animation:pa-spin 90s linear infinite}
+  .pa-ring-2 {animation-direction:reverse;animation-duration:140s}
+  .pa-trend {stroke-dasharray:520;animation:pa-draw 2.2s ease-out both}
+  .pa-bar {transform-box:fill-box;transform-origin:bottom;animation:pa-grow .9s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 90ms)}
+}
+@media (max-width:860px) {
+  .audience-hero-grid {grid-template-columns:1fr}
+  .page-art {justify-self:center;width:min(100%,340px);order:-1}
+}
+
 .estimate-form {
   padding: clamp(1.15rem, 3vw, 2.5rem);
   background: var(--surface);
