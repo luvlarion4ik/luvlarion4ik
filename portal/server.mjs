@@ -23,6 +23,9 @@ const DATA_DIR = env.PORTAL_DATA || new URL('./data/', import.meta.url).pathname
 const BOT_TOKEN = (env.TELEGRAM_BOT_TOKEN || '').trim();
 const BOT_NAME = (env.TELEGRAM_BOT_USERNAME || '').trim().replace(/^@/, '');
 const certHits = new Map();
+const leadHits = new Map();
+// Кому слать уведомления: PORTAL_OWNER_TG или клиент кабинета с тем же Telegram, что и ссылка поддержки.
+const ownerChatId = () => env.PORTAL_OWNER_TG || (() => { const u = (SUPPORT.match(/t\.me\/([A-Za-z0-9_]{4,32})/) || [])[1]; const c = u && db.clients.find(x => x.tgUsername?.toLowerCase() === u.toLowerCase() && x.tgId); return c ? String(c.tgId) : ''; })();
 const SHOP = env.PORTAL_SHOP || new URL('/ru/shop/', ORIGIN).href;
 const telegramLogin = createTelegramLogin({
   token: BOT_TOKEN,
@@ -303,6 +306,22 @@ async function clientHandler(req, res) {
     res.writeHead(303, { Location: BASE, 'Cache-Control': 'no-store' });
     return res.end();
   }
+  if (path === '/api/lead' && req.method === 'POST') {
+    sameOrigin(req);
+    const ip = String(req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
+    const nowMs = Date.now();
+    const hits = (leadHits.get(ip) || []).filter(t => nowMs - t < 3600_000);
+    if (hits.length >= 5) throw new HttpError(429, 'Слишком много заявок за час. Напишите в Telegram.');
+    leadHits.set(ip, [...hits, nowMs]);
+    const body = await readJson(req, 16 * 1024);
+    const name = str(body.name, 80), contact = str(body.contact, 120), text = str(body.text, 2000), from = str(body.page, 200);
+    if (!name || !contact) throw new HttpError(422, 'Укажите имя и один контакт.');
+    await mkdir(DATA_DIR, { recursive: true });
+    const lead = { id: id(), at: now(), name, contact, text, page: from };
+    await writeFile(join(DATA_DIR, 'leads.jsonl'), JSON.stringify(lead) + '\n', { flag: 'a' });
+    void telegramLogin.notifyOwner?.(`Новая заявка с сайта\n${name} · ${contact}${text ? '\n' + text.slice(0, 800) : ''}${from ? '\nСтраница: ' + from : ''}`, ownerChatId());
+    return send(res, 200, { ok: true });
+  }
   if (path === '/api/certificate' && req.method === 'POST') {
     sameOrigin(req);
     const ip = String(req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
@@ -381,7 +400,7 @@ async function clientHandler(req, res) {
     project.messages = [{ id: id(), from: 'client', text: '[' + topic + '] ' + text + (budget ? '\nБюджет: ' + budget : ''), at: now(), readByStudio: false }];
     db.projects.push(project);
     await saveDb();
-    void telegramLogin.notifyOwner?.(`Новая заявка из кабинета\n${me.client.name}${me.client.company ? ' · ' + me.client.company : ''}\n${topic}: ${text.slice(0, 500)}${budget ? '\nБюджет: ' + budget : ''}`);
+    void telegramLogin.notifyOwner?.(`Новая заявка из кабинета\n${me.client.name}${me.client.company ? ' · ' + me.client.company : ''}\n${topic}: ${text.slice(0, 500)}${budget ? '\nБюджет: ' + budget : ''}`, ownerChatId());
     return send(res, 200, { project: projectView(project) });
   }
   const msg = path.match(/^\/api\/projects\/([a-f0-9]+)\/(messages|read)$/);

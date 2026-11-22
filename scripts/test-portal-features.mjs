@@ -156,6 +156,13 @@ test('portal profile login, requests and Telegram menu', async t => {
   assert.equal(after.projects.length, 1);
   assert.equal(after.client.login, 'anna_sever');
 
+  // Короткая форма заявки с сайта.
+  const lead = (data, site = origin) => fetch(account + 'api/lead', { method: 'POST', headers: { origin: site, 'content-type': 'application/json' }, body: JSON.stringify(data) });
+  assert.equal((await lead({ name: 'Анна' })).status, 422);
+  assert.equal((await lead({ name: 'Анна', contact: '@anna' }, 'https://elsewhere.invalid')).status, 403);
+  assert.equal((await lead({ name: 'Анна', contact: '@anna', text: 'Нужен бот', page: '/ru/' })).status, 200);
+  assert.match(await readFile(join(dir, 'leads.jsonl'), 'utf8'), /"contact":"@anna"/);
+
   // Меню бота и кнопки.
   const before = messages.length;
   message(1001, '/menu', 'new_client');

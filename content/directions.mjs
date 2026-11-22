@@ -1,0 +1,191 @@
+// Новые направления, типовые сценарии и блок «Перед заказом».
+// Типовые сценарии — это задачи, которые мы умеем решать, а не чужие проекты: без чужих клиентов и цифр.
+
+// [название, описание, цена в ₽ или null, срок, ссылка на страницу]
+export const directions = [
+  {
+    route: 'documents/', icon: 'layers', hero: 'operations', estimateServices: ['automation', 'platform'],
+    ru: {
+      eyebrow: 'Документы, OCR и 1С', label: 'Документы, OCR и 1С/ERP', card: 'Сканы в учёт, сверка, интеграции 1С с ЭДО и маркетплейсами.',
+      title: 'Документы сами попадают в 1С, а люди проверяют только спорное',
+      description: 'Распознаём сканы и фото документов, сверяем их с учётом и связываем 1С с ЭДО, маркетплейсами и складом. Человек подтверждает только то, в чём система не уверена.',
+      atlas: [
+        ['Распознавание документов (OCR)', 'Счета, накладные, акты, УПД: реквизиты из скана в учётную систему.', 120000, '3–6 недель'],
+        ['Сверка документов', 'Автоматическая сверка актов, счетов и платежей с подсветкой расхождений.', 90000, '2–4 недели'],
+        ['Обработка заказов из почты и мессенджеров', 'Заказы клиентов сразу превращаются в документы в 1С.', 90000, '2–4 недели'],
+        ['ИИ внутри 1С', 'Подсказки, поиск по базе и черновики документов прямо в интерфейсе 1С.', 150000, '4–8 недель'],
+        ['Интеграция 1С с ЭДО и СБИС', 'Входящие документы из ЭДО без ручного ввода.', 60000, '2–3 недели'],
+        ['Интеграция 1С с маркетплейсами', 'Остатки, цены и заказы Ozon, Wildberries, Яндекс Маркета.', 80000, '2–4 недели'],
+        ['1С и «Честный знак»', 'Маркировка, коды и документы в одной цепочке.', 70000, '2–4 недели'],
+        ['Интеграция 1С по API', 'Связь 1С с сайтом, CRM, складом и любыми сервисами.', 50000, '1–3 недели'],
+        ['Внедрение и аудит ERP', 'Подбор, внедрение, перенос данных и аудит текущего внедрения.', null, 'по смете'],
+      ],
+      faq: [['Работаете с нашей конфигурацией 1С?', 'Да. Изучаем конфигурацию и доступы, затем предлагаем способ интеграции.'], ['Что если система ошиблась в реквизите?', 'Спорные поля уходят на проверку человеку. Порог уверенности настраиваем вместе с вами.'], ['Какие документы распознаёте?', 'Типовые первичные документы, договоры, письма и фото. Редкие формы проверяем на пилоте.']],
+    },
+    en: {
+      eyebrow: 'Documents, OCR and 1C', label: 'Documents, OCR and 1C/ERP', card: 'Scans into accounting, reconciliation, 1C integrations.',
+      title: 'Documents land in 1C automatically; people check only the doubtful ones',
+      description: 'We recognise scans and photos of documents, reconcile them with accounting and connect 1C with EDI, marketplaces and the warehouse.',
+      atlas: [
+        ['Document recognition (OCR)', 'Invoices, delivery notes and acts: fields from scans into accounting.', 120000, '3–6 weeks'],
+        ['Document reconciliation', 'Automatic matching of acts, invoices and payments.', 90000, '2–4 weeks'],
+        ['Orders from email and messengers', 'Customer orders become 1C documents.', 90000, '2–4 weeks'],
+        ['AI inside 1C', 'Hints, search and drafts inside the 1C interface.', 150000, '4–8 weeks'],
+        ['1C ↔ EDI', 'Incoming documents without manual entry.', 60000, '2–3 weeks'],
+        ['1C ↔ marketplaces', 'Stock, prices and orders for Ozon, Wildberries, Yandex Market.', 80000, '2–4 weeks'],
+        ['1C and product marking', 'Marking codes and documents in one flow.', 70000, '2–4 weeks'],
+        ['1C API integration', 'Connect 1C with your site, CRM, warehouse and services.', 50000, '1–3 weeks'],
+        ['ERP rollout and audit', 'Selection, rollout, data migration and audit.', null, 'quoted'],
+      ],
+      faq: [['Do you work with our 1C configuration?', 'Yes. We review it and propose an integration approach.'], ['What if a field is misread?', 'Doubtful fields go to a person. We tune the confidence threshold with you.']],
+    },
+  },
+  {
+    route: 'vision/', icon: 'ai', hero: 'contact-centers', estimateServices: ['private-ai'],
+    ru: {
+      eyebrow: 'Компьютерное зрение', label: 'Компьютерное зрение и видеоаналитика', card: 'Брак на линии, СИЗ, подсчёт, маршруты на складе — по камерам.',
+      title: 'Камеры, которые замечают брак, нарушения и простои',
+      description: 'Обучаем модели на ваших изображениях и запускаем их на сервере или прямо на устройствах у камер. Видео остаётся у вас.',
+      atlas: [
+        ['Контроль качества на линии', 'Поиск дефектов деталей и упаковки по камере.', 250000, '6–10 недель'],
+        ['Контроль СИЗ и охраны труда', 'Каски, жилеты, опасные зоны — с журналом событий.', 180000, '4–8 недель'],
+        ['Подсчёт и учёт', 'Люди, машины, товары, поддоны — в реальном времени.', 150000, '4–6 недель'],
+        ['Маршруты людей и техники', 'Где пересекаются пешеходы и погрузчики, журнал эпизодов.', 220000, '6–10 недель'],
+        ['Видеоаналитика для торговли', 'Очереди, заполненность полок, проходимость.', 180000, '4–8 недель'],
+        ['Edge AI на устройствах', 'Модели на компактных вычислителях рядом с камерой, без облака.', null, 'по смете'],
+      ],
+      faq: [['Подойдут наши камеры?', 'Обычно да, если есть RTSP-поток нужного качества. Проверяем на пилоте.'], ['Нужно ли размечать много фото?', 'Для старта хватает нескольких сотен примеров. Разметку можем взять на себя.'], ['Видео уходит в облако?', 'Нет, обработка идёт на вашем сервере или на устройстве у камеры.']],
+    },
+    en: {
+      eyebrow: 'Computer vision', label: 'Computer vision and video analytics', card: 'Defects, PPE, counting and routes from cameras.',
+      title: 'Cameras that spot defects, violations and downtime',
+      description: 'We train models on your images and run them on a server or on devices next to the cameras. Video stays with you.',
+      atlas: [
+        ['Quality control on the line', 'Defects in parts and packaging.', 250000, '6–10 weeks'],
+        ['PPE and safety', 'Helmets, vests and danger zones with an event log.', 180000, '4–8 weeks'],
+        ['Counting', 'People, vehicles, goods and pallets in real time.', 150000, '4–6 weeks'],
+        ['Routes of people and vehicles', 'Where pedestrians and forklifts cross.', 220000, '6–10 weeks'],
+        ['Retail video analytics', 'Queues, shelf fill, footfall.', 180000, '4–8 weeks'],
+        ['Edge AI', 'Models on compact devices next to the camera.', null, 'quoted'],
+      ],
+      faq: [['Will our cameras work?', 'Usually, if there is an RTSP stream of decent quality.'], ['Do we need lots of labelled photos?', 'A few hundred examples are enough to start; we can label them.']],
+    },
+  },
+  {
+    route: 'ml/', icon: 'spark', hero: 'private-ai', estimateServices: ['fine-tuning'],
+    ru: {
+      eyebrow: 'Дообучение и точность', label: 'Дообучение, точность и MLOps', card: 'Дообучаем модели на ваших данных и измеряем точность до запуска.',
+      title: 'Модель, которая знает ваш бизнес — и мы показываем, насколько точно',
+      description: 'Дообучаем открытые модели на ваших документах и терминах, измеряем качество на проверочном наборе и выводим модель в работу с мониторингом.',
+      accuracy: ['до 96%', 'корректных ответов на проверочном наборе в наших проектах', 'Как мы измеряем: собираем с вами 100–300 реальных вопросов с эталонными ответами, прогоняем модель до и после дообучения, считаем долю верных ответов и ответов с правильной ссылкой на источник. Порог качества фиксируем в договоре пилота, а итоговый отчёт вы получаете на руки. Результат на ваших данных может отличаться — поэтому и измеряем.'],
+      atlas: [
+        ['Оценка точности модели', 'Проверочный набор, метрики, отчёт: как модель справляется с вашими задачами.', 60000, '1–2 недели'],
+        ['Дообучение модели', 'Термины, стиль и типовые задачи вашей компании.', 45000, '2–6 недель'],
+        ['RAG по базе знаний', 'Ответы со ссылкой на пункт документа, чтобы их можно было проверить.', 100000, '3–6 недель'],
+        ['Рекомендательные системы', 'Товары, контент и предложения для каждого клиента.', 250000, '6–12 недель'],
+        ['Прогнозная аналитика', 'Спрос, отток, загрузка — с понятными объяснениями.', 200000, '6–10 недель'],
+        ['MLOps и вывод в продакшн', 'Версии моделей, мониторинг качества, обновления без простоя.', 150000, '4–8 недель'],
+        ['Аудит процессов под ИИ', 'Где ИИ даст эффект, а где нет — с расчётом.', 0, '1 неделя'],
+      ],
+      faq: [['Что лучше: дообучение или RAG?', 'RAG — когда нужны ответы по документам со ссылкой. Дообучение — когда важны стиль, термины и типовые действия. Часто их совмещают.'], ['Сколько данных нужно для дообучения?', 'От нескольких сотен качественных примеров. Точнее скажем после аудита данных.'], ['Откуда цифра 96%?', 'Это лучший результат на проверочных наборах в наших проектах. На ваших данных измерим до запуска и зафиксируем порог в договоре.']],
+    },
+    en: {
+      eyebrow: 'Fine-tuning and accuracy', label: 'Fine-tuning, accuracy and MLOps', card: 'We fine-tune models on your data and measure accuracy before launch.',
+      title: 'A model that knows your business, and proof of how accurate it is',
+      description: 'We fine-tune open models on your documents and terms, measure quality on a test set and put the model into production with monitoring.',
+      accuracy: ['up to 96%', 'correct answers on the test set in our projects', 'How we measure: we collect 100–300 real questions with reference answers, run the model before and after fine-tuning, and count correct answers and correct source links. The quality threshold goes into the pilot contract and you get the report. Results on your data may differ, which is why we measure.'],
+      atlas: [
+        ['Model accuracy assessment', 'Test set, metrics and a report.', 60000, '1–2 weeks'],
+        ['Fine-tuning', 'Your terms, style and typical tasks.', 45000, '2–6 weeks'],
+        ['RAG over your knowledge base', 'Answers with a link to the source paragraph.', 100000, '3–6 weeks'],
+        ['Recommendation systems', 'Products and offers per customer.', 250000, '6–12 weeks'],
+        ['Predictive analytics', 'Demand, churn, load, with explanations.', 200000, '6–10 weeks'],
+        ['MLOps', 'Model versions, quality monitoring, zero-downtime updates.', 150000, '4–8 weeks'],
+        ['AI process audit', 'Where AI pays off and where it does not.', 0, '1 week'],
+      ],
+      faq: [['Fine-tuning or RAG?', 'RAG for answers from documents with sources; fine-tuning for style and terms. Often both.'], ['Where does 96% come from?', 'It is the best result on test sets in our projects. We measure on your data before launch.']],
+    },
+  },
+  {
+    route: 'outsourcing/', icon: 'support', hero: 'support', estimateServices: ['support'],
+    ru: {
+      eyebrow: 'ИТ-аутсорсинг', label: 'ИТ-аутсорсинг и аутстаффинг', card: 'Серверы, 1С, сайты и ИИ-системы на обслуживании; разработчики в вашу команду.',
+      title: 'Ваш ИТ-отдел по подписке',
+      description: 'Берём на себя серверы, 1С, сайты и ИИ-системы: мониторинг, обновления, резервные копии и реакцию по SLA. Если нужны руки в команде — подключаем разработчиков.',
+      atlas: [
+        ['Администрирование серверов', 'Linux и Windows, обновления, резервные копии, мониторинг.', 25000, 'ежемесячно'],
+        ['Обслуживание сервера 1С', 'Производительность, обновления, резервирование баз.', 20000, 'ежемесячно'],
+        ['Сопровождение веб-сервисов', 'Сайты, кабинеты, боты: исправления и доработки.', 15000, 'ежемесячно'],
+        ['Поддержка ИИ-систем', 'Модели, RAG, GPU-серверы: качество и доступность.', 30000, 'ежемесячно'],
+        ['Аутсорсинг ИТ-инфраструктуры', 'Сеть, рабочие места, доступы и безопасность офиса.', null, 'по смете'],
+        ['Аутстаффинг разработчиков', 'Python, TypeScript, Swift, ML-инженеры в вашу команду.', null, 'по смете'],
+      ],
+      faq: [['Есть ли SLA?', 'Да, время реакции и объём работ фиксируем в договоре.'], ['Можно только на время проекта?', 'Да, подписку можно оформить на несколько месяцев.'], ['Работаете с чужим кодом?', 'Да, после аудита: оцениваем состояние и риски.']],
+    },
+    en: {
+      eyebrow: 'IT outsourcing', label: 'IT outsourcing and outstaffing', card: 'Servers, 1C, websites and AI systems maintained; developers for your team.',
+      title: 'Your IT department as a subscription',
+      description: 'We look after servers, 1C, websites and AI systems: monitoring, updates, backups and SLA response, and add developers to your team when needed.',
+      atlas: [
+        ['Server administration', 'Linux and Windows, updates, backups, monitoring.', 25000, 'monthly'],
+        ['1C server maintenance', 'Performance, updates, database backups.', 20000, 'monthly'],
+        ['Web service support', 'Sites, portals, bots: fixes and improvements.', 15000, 'monthly'],
+        ['AI system support', 'Models, RAG, GPU servers.', 30000, 'monthly'],
+        ['IT infrastructure outsourcing', 'Network, workstations, access and security.', null, 'quoted'],
+        ['Developer outstaffing', 'Python, TypeScript, Swift and ML engineers.', null, 'quoted'],
+      ],
+      faq: [['Is there an SLA?', 'Yes, response times and scope are in the contract.']],
+    },
+  },
+];
+
+// Типовые сценарии: [заголовок, что получите, отрасль, технологии, ссылка]
+export const scenarios = {
+  ru: [
+    ['Из скана в учёт', 'Реквизиты из сканов попадают в 1С. Оператор проверяет только документы, где система не уверена в полях.', 'Финансы', ['OCR', '1С'], 'documents/'],
+    ['Ответы по инструкциям со ссылкой', 'Сотрудник задаёт вопрос по внутренней базе и получает ответ со ссылкой на пункт документа, который можно проверить.', 'Производство', ['RAG', 'LLM'], 'ml/'],
+    ['Заказ поставщику в 1С', 'Закупщик получает готовый заказ поставщику и видит, какие строки добавлены ради скидки.', 'Дистрибуция', ['1С', 'прогноз'], 'documents/'],
+    ['Маршруты людей и техники на складе', 'Начальник смены открывает эпизод из журнала и видит, где пересеклись пешеход и погрузчик.', 'Склад и логистика', ['видеоаналитика', 'CV'], 'vision/'],
+    ['Брак на линии', 'Камера отмечает дефектные детали до упаковки, журнал помогает найти причину.', 'Производство', ['CV', 'Edge AI'], 'vision/'],
+    ['Контроль СИЗ', 'Система фиксирует работу без каски или жилета в опасной зоне и сообщает мастеру.', 'Производство', ['CV'], 'vision/'],
+    ['Фото товаров для каталога', 'Карточки товаров получают единые фото без студийной съёмки каждой позиции.', 'Торговля и маркетплейсы', ['генерация изображений'], 'shop/'],
+    ['Заказы из мессенджеров в 1С', 'Заказы клиентов из почты, Telegram и WhatsApp превращаются в документы без ручного ввода.', 'Торговля и маркетплейсы', ['LLM', '1С'], 'documents/'],
+    ['Ассистент для врачей', 'Черновик записи приёма по разговору, врач проверяет и утверждает.', 'Медицина', ['речь', 'LLM'], 'industries/clinics/'],
+    ['Проверка договоров по чек-листу', 'Модель сверяет договор со стандартами фирмы и подсвечивает отклонения.', 'Юриспруденция', ['LLM', 'RAG'], 'industries/legal/'],
+    ['Контроль качества звонков', 'Каждый звонок расшифрован и проверен по скрипту, руководитель видит сводку.', 'Контакт-центры', ['речь', 'NLP'], 'industries/contact-centers/'],
+    ['Прогноз спроса', 'Подсказки по закупкам на основе истории продаж с объяснением, почему так.', 'Торговля и маркетплейсы', ['прогноз', 'ML'], 'ml/'],
+  ],
+  en: [
+    ['From scan to accounting', 'Fields from scans land in 1C; an operator checks only uncertain documents.', 'Finance', ['OCR', '1C'], 'documents/'],
+    ['Answers from manuals with sources', 'Staff ask the internal base and get an answer linked to the paragraph.', 'Manufacturing', ['RAG', 'LLM'], 'ml/'],
+    ['Supplier order in 1C', 'Buyers get a ready supplier order and see which lines were added for a discount.', 'Distribution', ['1C', 'forecast'], 'documents/'],
+    ['Routes in the warehouse', 'A shift lead opens an episode and sees where a pedestrian and a forklift crossed.', 'Warehousing', ['video', 'CV'], 'vision/'],
+    ['Defects on the line', 'A camera flags defective parts before packing.', 'Manufacturing', ['CV', 'Edge AI'], 'vision/'],
+    ['PPE control', 'Work without a helmet in a danger zone is logged and reported.', 'Manufacturing', ['CV'], 'vision/'],
+    ['Product photos for a catalogue', 'Consistent product photos without a studio shoot per item.', 'Retail', ['image generation'], 'shop/'],
+    ['Orders from messengers into 1C', 'Customer orders become documents without manual entry.', 'Retail', ['LLM', '1C'], 'documents/'],
+    ['Assistant for doctors', 'A draft visit note from the conversation, approved by the doctor.', 'Healthcare', ['speech', 'LLM'], 'industries/clinics/'],
+    ['Contract check against a checklist', 'The model compares a contract with the firm’s standards.', 'Legal', ['LLM', 'RAG'], 'industries/legal/'],
+    ['Call quality control', 'Every call transcribed and checked against the script.', 'Contact centres', ['speech', 'NLP'], 'industries/contact-centers/'],
+    ['Demand forecasting', 'Purchasing hints from sales history with explanations.', 'Retail', ['forecast', 'ML'], 'ml/'],
+  ],
+};
+
+export const beforeOrder = {
+  ru: [
+    ['Можно прийти, если есть только проблема?', 'Да. Опишите, что не так сейчас, — мы предложим, как это решить, и честно скажем, если ИИ здесь не нужен.'],
+    ['Что входит в цену из каталога?', 'Цена «от» — минимальный объём работ, описанный в карточке. Итог фиксируем в смете до старта, без доплат в конце.'],
+    ['Как проверить идею до большого внедрения?', 'Начинаем с пилота на одном процессе и заранее договариваемся о метриках. Решение о масштабировании — по результатам.'],
+    ['Что мы получим после запуска?', 'Работающую систему, доступы, документацию и два месяца исправлений. Дальше — сопровождение по желанию.'],
+    ['Сможете работать с нашей ИТ-командой?', 'Да: подключимся к вашим репозиториям, процессам и правилам безопасности.'],
+    ['С чего начнём?', 'С одного примера из вашей работы. Илья уточнит детали и подскажет, что можно взять в первый этап.'],
+  ],
+  en: [
+    ['Can we come with just a problem?', 'Yes. Describe what is wrong; we will propose a fix and tell you honestly if AI is not needed.'],
+    ['What does a catalogue price include?', 'The “from” price is the minimum scope in the card. The final quote is fixed before we start.'],
+    ['How can we test an idea first?', 'A pilot on one process with agreed metrics; scale only on results.'],
+    ['What do we get after launch?', 'A working system, access, documentation and two months of fixes.'],
+    ['Can you work with our IT team?', 'Yes: your repositories, processes and security rules.'],
+    ['Where do we start?', 'With one example from your work.'],
+  ],
+};

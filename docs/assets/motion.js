@@ -638,3 +638,49 @@
     history.pushState(null, "", url.hash);
   });
 })();
+
+
+/* Фильтры сценариев и короткая форма заявки «имя + контакт». */
+(() => {
+  const page = document.querySelector('[data-scn]');
+  if (page) {
+    let ind = '', tech = '';
+    const apply = () => {
+      let shown = 0;
+      page.querySelectorAll('.scn').forEach(c => {
+        const ok = (!ind || c.dataset.ind === ind) && (!tech || c.dataset.tech.split('|').includes(tech));
+        c.hidden = !ok; if (ok) shown++;
+      });
+      page.querySelector('[data-scn-none]').hidden = shown > 0;
+    };
+    page.addEventListener('click', e => {
+      const b = e.target.closest('[data-scn-ind], [data-scn-tech]');
+      if (!b) return;
+      const group = b.parentElement;
+      group.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      if (b.hasAttribute('data-scn-ind')) ind = b.dataset.scnInd; else tech = b.dataset.scnTech;
+      apply();
+    });
+  }
+  const ru = document.documentElement.lang === 'ru';
+  document.querySelectorAll('[data-lead] form').forEach(form => {
+    const status = form.querySelector('.lead-status'), btn = form.querySelector('[type=submit]');
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const name = form.name.value.trim(), contact = form.contact.value.trim();
+      if (!name || !contact) { status.textContent = ru ? 'Укажите имя и один контакт.' : 'Please add a name and one contact.'; (name ? form.contact : form.name).focus(); return; }
+      btn.disabled = true; status.classList.remove('is-ok'); status.textContent = ru ? 'Отправляем…' : 'Sending…';
+      try {
+        const r = await fetch('/account/api/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, contact, text: form.text.value.trim(), page: location.pathname }) });
+        const d = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(d.error || '');
+        status.classList.add('is-ok'); status.textContent = ru ? 'Готово! Ответим в течение дня.' : 'Done! We will reply within a day.';
+        form.reset();
+      } catch (err) {
+        const tg = document.querySelector('a[href*="t.me/"]')?.href.split('?')[0];
+        status.textContent = (ru ? 'Не получилось отправить. ' : 'Could not send. ') + (err.message || '');
+        if (tg) { const a = document.createElement('a'); a.href = tg; a.textContent = ru ? 'Написать в Telegram' : 'Message on Telegram'; status.append(' ', a); }
+      } finally { btn.disabled = false; }
+    });
+  });
+})();

@@ -6,6 +6,7 @@ import { packageStartingPrice } from './pricing.mjs';
 import { parts, segments as segmentPages } from './segments.mjs';
 import { pageArt } from './page-art.mjs';
 import { renderShop, hardware, deviceArt } from './shop.mjs';
+import { directions, scenarios, beforeOrder } from './directions.mjs';
 
 const { hero, trustStrip, renderCapacity, renderFAQ, section, priceMarkup, estimateLink, telegramLink, pick } = parts;
 
@@ -484,6 +485,19 @@ export const enterprisePages = [
     faq: [['Can’t find your task?', 'Message us on Telegram: if it is about websites, bots, AI or hardware, we will take it on or point you to someone better.']],
   }),
 
+  ...directions.map(d => page(d.route, d.icon, d.estimateServices, { ...d.ru, faq: [...d.ru.faq, ...beforeOrder.ru] }, { ...d.en, faq: [...d.en.faq, ...beforeOrder.en] }, { direction: d })),
+  page('scenarios/', 'layers', ['custom'], {
+    eyebrow: 'Кейсы и сценарии', label: 'Кейсы и типовые сценарии', card: 'Наши проекты и задачи, которые мы решаем, с фильтрами по отрасли и технологии.',
+    title: 'Кейсы и типовые сценарии',
+    description: 'Слева — наши реальные проекты, дальше — типовые задачи, которые мы решаем для компаний. Выберите отрасль или технологию.',
+    faq: beforeOrder.ru,
+  }, {
+    eyebrow: 'Cases and scenarios', label: 'Cases and typical scenarios', card: 'Our projects and the tasks we solve, filtered by industry and technology.',
+    title: 'Cases and typical scenarios',
+    description: 'Our real projects first, then typical tasks we solve for companies. Pick an industry or technology.',
+    faq: beforeOrder.en,
+  }),
+
   page('shop/', 'layers', ['landing', 'automation'], {
     eyebrow: 'Магазин цифровых услуг',
     label: 'Магазин услуг',
@@ -574,6 +588,10 @@ const TREE = [
   ]],
   ['ai', ['ИИ для бизнеса', 'AI for business'], ['От ассистента до закрытого контура', 'From an assistant to a private perimeter'], [
     ['ai-assistant/', ['ИИ-ассистент', 'AI assistant'], ['Отвечает и передаёт заявки в CRM', 'Answers and passes enquiries to CRM']],
+    ['documents/', ['Документы, OCR и 1С', 'Documents, OCR and 1C'], ['Сканы в учёт, сверка, интеграции', 'Scans into accounting, reconciliation']],
+    ['vision/', ['Компьютерное зрение', 'Computer vision'], ['Брак, СИЗ, подсчёт по камерам', 'Defects, PPE, counting']],
+    ['ml/', ['Дообучение и точность', 'Fine-tuning and accuracy'], ['До 96% на проверочном наборе', 'Up to 96% on test sets']],
+    ['scenarios/', ['Кейсы и типовые сценарии', 'Cases and scenarios'], ['С фильтрами по отрасли и технологии', 'Filter by industry and technology']],
     ['private-ai/', ['Корпоративный ИИ в РФ', 'Private AI in Russia'], ['LLM, RAG, документы и речь в вашем контуре', 'LLMs, RAG, documents and speech in your perimeter']],
     ['fintech/', ['FinTech-продукты', 'FinTech products'], ['Сервисы для финансовых компаний', 'Services for financial firms']],
     ['edtech/', ['EdTech-продукты', 'EdTech products'], ['Платформы и ИИ для обучения', 'Learning platforms and AI']],
@@ -596,8 +614,17 @@ const TREE = [
     ['seo/', ['SEO', 'SEO'], ['Яндекс, Google, карты', 'Yandex, Google, maps']],
     ['geo/', ['GEO', 'GEO'], ['Видимость в ответах ИИ', 'Visibility in AI answers']],
     ['support/', ['Сопровождение', 'Support'], ['Правки, мониторинг, обновления', 'Edits, monitoring, updates']],
+    ['outsourcing/', ['ИТ-аутсорсинг и аутстаффинг', 'IT outsourcing'], ['Серверы, 1С, сайты и ИИ по подписке', 'Servers, 1C, sites and AI by subscription']],
   ]],
 ];
+
+const META = {
+  'self-employed/': ['от 20 000 ₽ · 5–7 дней', 'from RUB 20,000 · 5–7 days'], 'business/': ['от 55 000 ₽ · 2–6 недель', 'from RUB 55,000 · 2–6 weeks'], 'enterprise/': ['пилот от 220 000 ₽', 'pilot from RUB 220,000'],
+  'website/': ['от 25 000 ₽ · от 1 недели', 'from RUB 25,000 · 1+ week'], 'telegram-bot/': ['от 20 000 ₽ · 5–7 дней', 'from RUB 20,000 · 5–7 days'], 'solutions/': ['быстрее и дешевле', 'faster and cheaper'], 'bundle/': ['скидка за объём', 'volume discount'],
+  'ai-assistant/': ['от 55 000 ₽ · 2–4 недели', 'from RUB 55,000 · 2–4 weeks'], 'private-ai/': ['от 30 000 ₽', 'from RUB 30,000'], 'documents/': ['от 50 000 ₽ · 1–6 недель', 'from RUB 50,000 · 1–6 weeks'], 'vision/': ['от 150 000 ₽ · 4–10 недель', 'from RUB 150,000 · 4–10 weeks'], 'ml/': ['от 45 000 ₽ · 1–6 недель', 'from RUB 45,000 · 1–6 weeks'], 'scenarios/': ['12 сценариев + наши проекты', '12 scenarios + our projects'],
+  'compute/': ['калькулятор и 3D', 'calculator and 3D'], 'hardware/': ['от 715 000 ₽', 'from RUB 715,000'], 'import/': ['по коммерческому предложению', 'quoted'], 'shop/': ['цены и корзина', 'prices and basket'],
+  'why-website/': ['от 25 000 ₽', 'from RUB 25,000'], 'seo/': ['от 15 000 ₽ · 3–5 дней', 'from RUB 15,000 · 3–5 days'], 'geo/': ['от 20 000 ₽ · 5–7 дней', 'from RUB 20,000 · 5–7 days'], 'support/': ['от 8 000 ₽/мес.', 'from RUB 8,000/month'], 'outsourcing/': ['от 15 000 ₽/мес.', 'from RUB 15,000/month'],
+};
 function serviceTree(lang, ctx) {
   const i = lang === 'ru' ? 0 : 1;
   return `<section class="section wrap audience-section svc" data-svc>
@@ -605,7 +632,7 @@ function serviceTree(lang, ctx) {
 
     <div class="svc-root"><span class="svc-root-dot" aria-hidden="true"></span><strong>Devlarion</strong></div>
     <ul class="svc-tree">${TREE.map(([id, name, sub, leaves], n) => `<li class="svc-branch" style="--b:${n}"><details${n < 2 ? ' open' : ''}><summary><span class="svc-num">${String(n + 1).padStart(2, '0')}</span><span class="svc-name">${esc(name[i])}</span><small>${esc(sub[i])}</small><em>${leaves.length}</em></summary>
-      <ul class="svc-leaves">${leaves.map(([route, t, d], k) => `<li style="--k:${k}"><a href="${ctx.home}${route}"><strong>${esc(t[i])}</strong><span>${esc(d[i])}</span></a></li>`).join('')}</ul></details></li>`).join('')}</ul>
+      <ul class="svc-leaves">${leaves.map(([route, t, d], k) => `<li style="--k:${k}"><a href="${ctx.home}${route}"><strong>${esc(t[i])}</strong><span>${esc(d[i])}</span>${META[route] ? `<em class="svc-meta">${esc(META[route][i])}</em>` : ''}</a></li>`).join('')}</ul></details></li>`).join('')}</ul>
     <p class="shop-none" data-svc-none hidden>${pick(lang, 'Ничего не нашлось. Напишите нам — подскажем.', 'Nothing found. Write to us and we will help.')}</p>
   </section>`;
 }
@@ -622,6 +649,28 @@ const moreFaq = {
 for (const p of enterprisePages) {
   const extra = [...(p.ru.faqExtra ?? []), ...(moreFaq[p.route] ?? [])];
   if (extra.length) p.ru.faq = [...(p.ru.faq ?? []), ...extra];
+}
+
+
+function leadForm(lang) {
+  return `<section class="section wrap audience-section lead" data-lead><div class="lead-copy"><h2>${pick(lang, 'С чего начнём?', 'Where do we start?')}</h2><p class="loss-lead">${pick(lang, 'Опишите один пример из вашей работы. Достаточно имени и одного контакта — ответим удобным вам способом.', 'Describe one example from your work. A name and one contact are enough.')}</p></div>
+    <form class="lead-form" novalidate>
+      <label><span>${pick(lang, 'Как вас зовут', 'Your name')} *</span><input name="name" required maxlength="80" autocomplete="name"></label>
+      <label><span>${pick(lang, 'Телефон, почта или Telegram', 'Phone, email or Telegram')} *</span><input name="contact" required maxlength="120" autocomplete="email"></label>
+      <label class="lead-wide"><span>${pick(lang, 'Что нужно сделать', 'What needs doing')} <small>${pick(lang, 'по желанию', 'optional')}</small></span><textarea name="text" rows="3" maxlength="2000"></textarea></label>
+      <div class="lead-actions"><button class="button" type="submit">${pick(lang, 'Отправить задачу', 'Send')}</button><span class="lead-status" role="status"></span></div>
+      <p class="audience-note-line">${pick(lang, 'Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности.', 'By sending you agree to the privacy policy.')}</p>
+    </form></section>`;
+}
+function atlasCards(lang, ctx, list, label) {
+  return `<div class="service-grid audience-packages atlas">${list.map(([t, d, rub, term]) => `<article><h3>${esc(t)}</h3><p>${esc(d)}</p>
+    ${rub === 0 ? `<p class="audience-price">${pick(lang, 'Бесплатно', 'Free')}</p>` : rub == null ? `<p class="audience-price">${pick(lang, 'По смете', 'Quoted')}</p>` : `<p class="audience-price" data-region-price-row>${priceMarkup(lang, rub)}</p>`}
+    <p class="atlas-term">${esc(term)}</p><div class="package-action"><a class="btn" href="${telegramLink(lang, ctx, label, t)}">${pick(lang, 'Обсудить', 'Discuss')}</a></div></article>`).join('')}</div>`;
+}
+function scenarioCards(lang, ctx, list, withReal = false) {
+  const real = withReal ? ctx.work.map(w => ({ t: w.name, d: w.result, ind: w.type, tech: (w.stackTags || []), href: ctx.home + 'work/' + w.id + '/', real: true })) : [];
+  const items = [...real, ...list.map(([t, d, ind, tech, href]) => ({ t, d, ind, tech, href: ctx.home + href }))];
+  return `<div class="scn-grid">${items.map(x => `<a class="scn" href="${x.href}" data-ind="${esc(x.ind)}" data-tech="${esc(x.tech.join('|'))}"><small class="scn-kind${x.real ? ' is-real' : ''}">${x.real ? pick(lang, 'Проект студии', 'Studio project') : pick(lang, 'Типовой сценарий', 'Typical scenario')}</small><strong>${esc(x.t)}</strong><span>${esc(x.d)}</span><em>${esc(x.ind)}${x.tech.length ? ' · ' + esc(x.tech.join(', ')) : ''}</em></a>`).join('')}</div>`;
 }
 
 // ---------- Рендеры ----------
@@ -688,7 +737,29 @@ export function renderEnterprisePage(lang, route, ctx) {
       ${section(pick(lang, 'Что логично сделать дальше', 'What to do next'), links(lang, ctx, ['hardware/', 'shop/', 'enterprise/']), 'audience-next')}
       ${close(lang, p, ctx, c.closeTitle, c.closeText)}`;
   } else if (route === 'services/') {
-    body = `${serviceTree(lang, ctx)}${renderFAQ(lang, p, ctx)}${close(lang, p, ctx, pick(lang, 'Не уверены, что выбрать?', 'Not sure what to choose?'), pick(lang, 'Опишите задачу своими словами — подскажем, какой раздел ваш, в течение дня.', 'Describe your task in your own words and we will point you to the right section within a day.'))}`;
+    body = `${serviceTree(lang, ctx)}${renderFAQ(lang, p, ctx)}${leadForm(lang)}${close(lang, p, ctx, pick(lang, 'Не уверены, что выбрать?', 'Not sure what to choose?'), pick(lang, 'Опишите задачу своими словами — подскажем, какой раздел ваш, в течение дня.', 'Describe your task in your own words and we will point you to the right section within a day.'))}`;
+  } else if (p.direction) {
+    const acc = c.accuracy;
+    const related = scenarios[lang].filter(x => x[4] === route);
+    body = `${trustStrip(lang)}
+      ${section(pick(lang, 'Услуги, цены и сроки', 'Services, prices and timing'), atlasCards(lang, ctx, c.atlas, c.label))}
+      ${acc ? `<section class="section wrap audience-section accuracy"><div class="acc-num">${esc(acc[0])}</div><div><h2>${esc(acc[1])}</h2><p>${esc(acc[2])}</p></div></section>` : ''}
+      ${related.length ? section(pick(lang, 'Типовые сценарии', 'Typical scenarios'), scenarioCards(lang, ctx, related)) : ''}
+      ${renderCapacity(lang, p, ctx)}
+      ${renderFAQ(lang, p, ctx)}
+      ${leadForm(lang)}
+      ${section(pick(lang, 'Что ещё посмотреть', 'See also'), links(lang, ctx, ['scenarios/', 'services/', 'private-ai/']), 'audience-next')}`;
+  } else if (route === 'scenarios/') {
+    const all = scenarios[lang];
+    const inds = [...new Set(all.map(x => x[2]))], techs = [...new Set(all.flatMap(x => x[3]))];
+    body = `<section class="section wrap audience-section scn-page" data-scn>
+        <div class="scn-filters"><div class="shop-filters" role="group" aria-label="${pick(lang, 'Отрасль', 'Industry')}"><button type="button" aria-pressed="true" data-scn-ind="">${pick(lang, 'Все отрасли', 'All industries')}</button>${inds.map(x => `<button type="button" aria-pressed="false" data-scn-ind="${esc(x)}">${esc(x)}</button>`).join('')}</div>
+        <div class="shop-filters scn-tech" role="group" aria-label="${pick(lang, 'Технология', 'Technology')}"><button type="button" aria-pressed="true" data-scn-tech="">${pick(lang, 'Все технологии', 'All technologies')}</button>${techs.map(x => `<button type="button" aria-pressed="false" data-scn-tech="${esc(x)}">${esc(x)}</button>`).join('')}</div></div>
+        ${scenarioCards(lang, ctx, all, true)}
+        <p class="shop-none" data-scn-none hidden>${pick(lang, 'Под этот фильтр пока ничего нет — напишите, обсудим вашу задачу.', 'Nothing for this filter yet — tell us about your task.')}</p>
+      </section>
+      ${renderFAQ(lang, p, ctx)}
+      ${leadForm(lang)}`;
   } else if (route === 'shop/') {
     body = `${trustStrip(lang)}${renderShop(lang, ctx)}${renderFAQ(lang, p, ctx)}
       ${section(pick(lang, 'Не нашли нужное?', 'Can’t find it?'), links(lang, ctx, ['private-ai/', 'hardware/']), 'audience-next')}`;

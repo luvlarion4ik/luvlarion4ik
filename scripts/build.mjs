@@ -86,7 +86,9 @@ for(const lang of ["ru","en"]){
      [l("ИИ для бизнеса","AI for business"),[
        ["private-ai/",l("Корпоративный ИИ в РФ","Private AI in Russia")],
        ["ai-assistant/",l("ИИ-ассистент","AI assistant")],
-       ["compute/",l("Калькулятор: какое железо нужно","Calculator: what hardware you need")],
+       ["documents/",l("Документы, OCR и 1С","Documents, OCR and 1C")],
+       ["vision/",l("Компьютерное зрение","Computer vision")],
+       ["ml/",l("Дообучение и точность","Fine-tuning and accuracy")],
      ]],
      [l("Железо для бизнеса","Hardware for business"),[
        ["shop/",l("Магазин услуг и железа","Service and hardware shop")],
@@ -95,6 +97,7 @@ for(const lang of ["ru","en"]){
        ["import/",l("Техника под заказ, в том числе из Китая","Equipment to order, incl. from China")],
      ]],
      [l("Кейсы по отраслям","Industry cases"),[
+       ["scenarios/",l("Все кейсы и сценарии","All cases and scenarios")],
        ["industries/clinics/",l("Клиники","Clinics")],
        ["industries/legal/",l("Юристы","Law firms")],
        ["industries/finance/",l("Банки и страхование","Banking and insurance")],
@@ -107,7 +110,7 @@ for(const lang of ["ru","en"]){
        ["solutions/",l("Готовые модули","Ready modules")],
        ["bundle/",l("Пакетом выгоднее","Better as a bundle")],
      ]],
-     [l("Рост","Growth"),topics.filter(page=>page.route!=="bundle/").map(page => [page.route,page.route==="seo/"?"SEO":page[lang].label])],
+     [l("Рост и поддержка","Growth and support"),[...topics.filter(page=>page.route!=="bundle/").map(page => [page.route,page.route==="seo/"?"SEO":page[lang].label]),["outsourcing/",l("ИТ-аутсорсинг","IT outsourcing")]]],
    ];
    return `<details class="services-nav"><summary>${t.nav[0]}</summary><div class="services-nav-links">
      <div class="services-top"><a class="services-all" href="${home}services/">${l("Все услуги на одной карте","All services on one map")} <span aria-hidden="true">→</span></a></div>

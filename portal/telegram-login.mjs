@@ -247,9 +247,9 @@ export function createTelegramLogin({ token, username, apiBase, accountUrl, shop
     return showMenu(from, editId);
   }
 
-  async function notifyOwner(text) {
-    if (!/^-?\d{3,20}$/.test(String(ownerChat))) return;
-    try { await sendMessage(Number(ownerChat), ICON.bell, escapeHtml(text), [[{ text: 'Открыть админку', url: accountUrl + 'admin/' }]]); } catch {}
+  async function notifyOwner(text, chat = ownerChat) {
+    if (!/^-?\d{3,20}$/.test(String(chat))) return;
+    try { await sendMessage(Number(chat), ICON.bell, escapeHtml(text), [[{ text: 'Открыть админку', url: accountUrl + 'admin/' }]]); } catch {}
   }
 
   async function handleMessage(message) {

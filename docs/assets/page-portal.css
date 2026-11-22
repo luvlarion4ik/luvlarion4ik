@@ -1389,6 +1389,40 @@ footer{padding:2rem 0}.fine{margin-top:1.5rem;flex-wrap:wrap}.sub{padding:4rem 0
 .pd-actions {display:flex;flex-wrap:wrap;gap:.6rem;margin-top:auto}
 @media (max-width:860px) {.pd-card {grid-template-columns:1fr}.pd-info {padding-right:0}}
 
+/* Атлас, точность, сценарии, форма заявки */
+.atlas article {display:flex;flex-direction:column;gap:.45rem}
+.atlas article p {margin:0}
+.atlas-term {color:var(--sub);font-size:.86rem}
+.atlas .package-action {margin-top:auto}
+.accuracy {display:grid;grid-template-columns:auto 1fr;gap:clamp(1rem,4vw,3rem);align-items:center;padding:clamp(1.4rem,3vw,2.4rem)!important;border:1px solid var(--accent);border-radius:22px;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 14%,var(--surface)),var(--surface))}
+.acc-num {font:400 clamp(3.4rem,9vw,6.4rem)/1 Georgia,serif;color:var(--accent);white-space:nowrap}
+.accuracy h2 {margin:0 0 .6rem;font-size:clamp(1.4rem,2.6vw,2rem)}
+.accuracy p {margin:0;color:var(--sub);line-height:1.6}
+@media (max-width:860px) {.accuracy {grid-template-columns:1fr}}
+.scn-filters {display:grid;gap:.6rem;margin-bottom:1.4rem}
+.scn-tech button {font-size:.85rem;padding:.4rem .8rem}
+.scn-grid {display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+.scn {display:flex;flex-direction:column;gap:.45rem;padding:1.2rem;border:1px solid var(--rule);border-radius:18px;background:var(--surface);color:var(--ink);text-decoration:none;transition:border-color .25s,transform .25s}
+.scn:hover {border-color:var(--accent);transform:translateY(-3px)}
+.scn strong {font-size:1.08rem}
+.scn span {color:var(--sub);line-height:1.5}
+.scn em {margin-top:auto;font-style:normal;font-size:.8rem;color:var(--sub)}
+.scn-kind {align-self:flex-start;padding:.15rem .55rem;border-radius:99px;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--rule);color:var(--sub)}
+.scn-kind.is-real {border-color:var(--accent);color:var(--accent)}
+.scn[hidden] {display:none}
+.svc-meta {font-style:normal;font-size:.78rem;color:var(--accent);font-weight:650}
+.lead {display:grid;grid-template-columns:1fr 1.3fr;gap:clamp(1rem,4vw,3rem);align-items:start;padding:clamp(1.4rem,3vw,2.4rem)!important;border:1px solid var(--rule);border-radius:22px;background:var(--surface)}
+.lead h2 {margin:0}
+.lead-form {display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+.lead-form label {display:grid;gap:.35rem;font-size:.9rem;color:var(--sub)}
+.lead-form input,.lead-form textarea {padding:.75rem .9rem;border:1px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink);font:inherit}
+.lead-form input:focus,.lead-form textarea:focus {outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+.lead-wide,.lead-actions,.lead-form .audience-note-line {grid-column:1/-1}
+.lead-actions {display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.lead-status {color:var(--sub)}
+.lead-status.is-ok {color:var(--ok, #3d704b)}
+@media (max-width:860px) {.lead,.lead-form {grid-template-columns:1fr}}
+
 /* Страница «Личный кабинет»: демо клиентского портала в стиле сайта */
 .portal-page { --pt-radius: 14px; }
 .pt-hero { padding-top: clamp(2.5rem, 6vw, 5rem); padding-bottom: clamp(1.5rem, 3vw, 2.5rem); }

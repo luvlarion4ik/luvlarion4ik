@@ -135,7 +135,7 @@ const art = {
 
 };
 
-const HERO = { 'self-employed/': 'self-employed', 'business/': 'business', 'enterprise/': 'enterprise', 'why-website/': 'why-website', 'seo/': 'seo', 'geo/': 'geo', 'support/': 'support', 'bundle/': 'bundle', 'private-ai/': 'private-ai', 'import/': 'import', 'services/': 'services', 'hardware/': 'park-m', 'compute/': 'park-l', 'shop/': 'cluster-2spark',
+const HERO = { 'documents/': 'finance', 'vision/': 'operations', 'ml/': 'private-ai', 'outsourcing/': 'support', 'scenarios/': 'services', 'self-employed/': 'self-employed', 'business/': 'business', 'enterprise/': 'enterprise', 'why-website/': 'why-website', 'seo/': 'seo', 'geo/': 'geo', 'support/': 'support', 'bundle/': 'bundle', 'private-ai/': 'private-ai', 'import/': 'import', 'services/': 'services', 'hardware/': 'park-m', 'compute/': 'park-l', 'shop/': 'cluster-2spark',
   'industries/clinics/': 'clinics', 'industries/legal/': 'legal', 'industries/finance/': 'finance', 'industries/operations/': 'operations', 'industries/contact-centers/': 'contact-centers' };
 
 export function pageArt(lang, route, asset = '') {
