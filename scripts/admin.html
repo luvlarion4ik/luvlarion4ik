@@ -5,48 +5,210 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Настройки сайта Devlarion</title>
 <style nonce="%%NONCE%%">
-  :root { color-scheme: light; font: 16px/1.5 system-ui, sans-serif; background: #f6f2e9; color: #241d17; }
+  :root {
+    --paper: #f5f1e9;
+    --ink: #231e19;
+    --sub: #635b52;
+    --rule: #c9c2b7;
+    --surface: #eee8dd;
+    --accent: #964c32;
+    --night: #211d1b;
+    --light: #faf4ea;
+    color-scheme: light;
+    font: 16px/1.55 system-ui, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+  }
   * { box-sizing: border-box; }
   body { margin: 0; }
-  main { max-width: 1040px; margin: auto; padding: 2rem clamp(1rem, 4vw, 3rem) 4rem; }
-  h1 { font-family: Georgia, serif; font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.1; font-weight: 400; letter-spacing: -.035em; margin: 0 0 1rem; }
-  h2 { font-size: 1.15rem; margin: 0; }
-  p { margin: .4rem 0 .8rem; }
-  .muted, small { color: #65594d; }
-  .panel { border: 1px solid #c9bbab; padding: 1rem; margin: 1rem 0; background: #fffdf7; }
-  .columns, #ready { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); gap: .75rem 1rem; }
-  label { display: grid; gap: .25rem; }
+  .wrap { width: min(72rem, 92%); margin-inline: auto; }
+  .masthead {
+    padding-block: clamp(1.7rem, 4vw, 3.3rem);
+    background: var(--night);
+    color: var(--light);
+    border-block-end: 1px solid var(--accent);
+  }
+  .masthead-brand {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    margin: 0 0 .8rem;
+    font: .83rem/1.3 ui-monospace, monospace;
+  }
+  .masthead-brand::before {
+    content: "";
+    width: 1.8rem;
+    height: 1px;
+    background: color-mix(in srgb, var(--accent) 55%, var(--light));
+  }
+  .masthead .intro { max-width: 70ch; margin: .8rem 0 0; }
+  main { padding-block: clamp(1.25rem, 3vw, 2.5rem) 4rem; }
+  h1, h2, .panel > summary {
+    margin: 0;
+    font-family: Georgia, serif;
+    font-weight: 400;
+    line-height: 1.12;
+    letter-spacing: -.04em;
+  }
+  h1 { font-size: clamp(2.7rem, 6vw, 4.8rem); }
+  h2, .panel > summary { font-size: clamp(1.6rem, 2.6vw, 2.1rem); }
+  p { margin: .5rem 0 1rem; }
+  .muted { color: var(--sub); }
+  form:not([hidden]) {
+    display: grid;
+    grid-template-columns: 10rem minmax(0, 1fr);
+    gap: clamp(1rem, 3vw, 2.75rem);
+    align-items: start;
+  }
+  .section-nav { position: sticky; top: 1.25rem; }
+  .section-nav ul { list-style: none; margin: 0; padding: 0; }
+  .section-nav a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: .45rem .75rem;
+    border-inline-start: 1px solid var(--rule);
+    color: var(--sub);
+    font-size: .94rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .section-nav a:hover { border-color: var(--accent); background: var(--surface); color: var(--accent); }
+  .panel {
+    margin: 0 0 1rem;
+    padding: clamp(1rem, 2.5vw, 1.6rem);
+    scroll-margin-top: 1rem;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--paper) 70%, var(--light));
+  }
+  .panel:target { border-color: var(--accent); }
+  .panel > :last-child { margin-bottom: 0; }
+  .panel h2 + .columns { margin-top: 1rem; }
+  .columns, #ready {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+    gap: .8rem 1rem;
+  }
+  label { display: grid; gap: .3rem; min-width: 0; }
   label > span { font-weight: 600; }
   input, textarea, select, button { font: inherit; color: inherit; }
-  input, textarea, select { background: #fffdf7; padding: .45rem .55rem; border: 1px solid #a99b8a; border-radius: 3px; width: 100%; min-width: 0; }
-  input::placeholder { color: #6e6256; opacity: 1; }
-  input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible, button:focus-visible { outline: 2px solid #963b24; outline-offset: 2px; }
+  input, textarea, select {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: .5rem .65rem;
+    border: 1px solid color-mix(in srgb, var(--sub) 70%, var(--paper));
+    border-radius: 3px;
+    background: var(--paper);
+  }
+  input::placeholder { color: var(--sub); opacity: 1; }
+  :is(a, button, input, select, summary, textarea, .table-scroll):focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
   textarea { font: .9rem/1.45 ui-monospace, monospace; resize: vertical; min-height: 7rem; }
-  .table-scroll { overflow-x: auto; }
-  table { border-collapse: collapse; width: 100%; min-width: 610px; }
-  th, td { text-align: start; border-bottom: 1px solid #dccfbd; padding: .5rem .35rem; }
-  th { font-size: .9rem; }
-  th[scope=row] { width: 32%; }
-  th[scope=col]:not(:first-child) { width: 22%; }
-  details > summary { cursor: pointer; font-weight: 600; margin: .25rem 0; }
-  details[open] > summary { margin-bottom: .8rem; }
+  .table-scroll { overflow-x: auto; max-width: 100%; }
+  .table-hint { display: none; }
+  table { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 36rem; }
+  th, td { text-align: start; border-block-end: 1px solid var(--rule); padding: .5rem .55rem; }
+  th { font-size: .89rem; font-weight: 650; }
+  thead th { background: var(--surface); }
+  th[scope=row] { width: 31%; }
+  th[scope=col]:not(:first-child) { width: 23%; }
+  tr:focus-within td { background: var(--surface); }
+  details > summary { cursor: pointer; min-height: 44px; align-content: center; }
+  details > summary::marker { color: var(--accent); }
+  details[open] > summary { margin-bottom: .75rem; }
   details label + label { margin-top: .7rem; }
+  .panel details { border-block-start: 1px solid var(--rule); margin-top: 1rem; font-weight: 600; }
   code, pre { font: .85rem/1.45 ui-monospace, monospace; }
-  pre { margin: .4rem 0; white-space: pre-wrap; overflow-wrap: anywhere; }
-  button { border: 1px solid #7b3523; padding: .62rem 1rem; background: #7b3523; color: #fffdf7; font-weight: 600; cursor: pointer; border-radius: 3px; }
-  button:disabled { opacity: .55; cursor: wait; }
-  #status:not(:empty) { padding: .65rem .85rem; border-inline-start: 3px solid #426446; background: #eef2e9; margin-top: .75rem; }
-  #status[data-error] { background: #faece8; border-color: #a83c2a; }
-  .skip { position: absolute; top: 0; left: -999px; }
-  .skip:focus { left: 0; }
+  pre { margin: .4rem 0; padding: .65rem .75rem; white-space: pre-wrap; overflow-wrap: anywhere; background: var(--surface); }
+  button {
+    min-height: 44px;
+    padding: .65rem 1.15rem;
+    border: 1px solid var(--ink);
+    border-radius: 3px;
+    background: var(--ink);
+    color: var(--paper);
+    font-weight: 650;
+    cursor: pointer;
+  }
+  button:hover:not(:disabled) { background: var(--accent); border-color: var(--accent); }
+  button:disabled { opacity: .6; cursor: wait; }
+  #status:not(:empty) {
+    margin: .75rem 0 0;
+    padding: .65rem .85rem;
+    border-inline-start: 3px solid var(--sub);
+    background: var(--surface);
+  }
+  #status[data-error] { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--paper)); }
+  .skip {
+    position: absolute;
+    top: .5rem;
+    inset-inline-start: .5rem;
+    z-index: 2;
+    padding: .65rem .85rem;
+    transform: translateY(calc(-100% - 1rem));
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .skip:focus { transform: none; }
+  @media (min-width: 67rem) {
+    #exchange .columns { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  }
+  @media (max-width: 53rem) {
+    form:not([hidden]) { grid-template-columns: minmax(0, 1fr); }
+    .section-nav { position: static; }
+    .section-nav ul { display: flex; flex-wrap: wrap; gap: .35rem; }
+    .section-nav a { border: 1px solid var(--rule); border-radius: 3px; }
+  }
+  @media (max-width: 41rem) {
+    .table-hint { display: block; font-size: .86rem; }
+    table { table-layout: fixed; }
+    th[scope=col]:not(:first-child) { width: auto; }
+    th[scope=row], thead th:first-child {
+      position: sticky;
+      inset-inline-start: 0;
+      min-width: 7.2rem;
+      max-width: 7.2rem;
+      width: 7.2rem;
+      overflow-wrap: anywhere;
+      border-inline-end: 1px solid var(--rule);
+      background: var(--surface);
+    }
+    button[type=submit] { width: 100%; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .masthead .wrap { animation: settle .32s ease-out; }
+    .section-nav a, button { transition: background-color .18s ease-out, border-color .18s ease-out, color .18s ease-out; }
+    @keyframes settle { from { transform: translateY(5px); opacity: .8; } to { transform: none; opacity: 1; } }
+  }
 </style>
 </head>
 <body>
-<main>
-  <h1>Настройки сайта Devlarion</h1>
-  <p class="muted">Изменения сохраняются в <code>content/site.json</code> и пересобирают страницы в <code>docs/</code>.</p>
+<a class="skip" href="#settings">К настройкам</a>
+<header class="masthead">
+  <div class="wrap">
+    <p class="masthead-brand">Devlarion</p>
+    <h1>Настройки сайта</h1>
+    <p class="intro">Изменения сохраняются в <code>content/site.json</code> и пересобирают страницы в <code>docs/</code>.</p>
+  </div>
+</header>
+<main id="settings" class="wrap" tabindex="-1">
   <form hidden>
-    <section class="panel" aria-labelledby="legal-title">
+    <nav class="section-nav" aria-label="Разделы настроек">
+      <ul>
+        <li><a href="#legal">Реквизиты</a></li>
+        <li><a href="#exchange">Курсы валют</a></li>
+        <li><a href="#rates">Цены</a></li>
+        <li><a href="#solutions">Готовые решения</a></li>
+        <li><a href="#referral">Рефералы</a></li>
+        <li><a href="#advanced">Команда и кейсы</a></li>
+      </ul>
+    </nav>
+    <div>
+    <section id="legal" class="panel" aria-labelledby="legal-title">
       <h2 id="legal-title">Реквизиты и портрет</h2>
       <p class="muted">Реквизиты выводятся в подвале сайта. Фото загрузите в <code>docs/assets/</code> и укажите путь к файлу.</p>
       <div class="columns">
@@ -56,7 +218,7 @@
         <label><span>Фото основателя</span><input name="founderPhoto" placeholder="team/ilya.webp"></label>
       </div>
     </section>
-    <section class="panel" aria-labelledby="exchange-title">
+    <section id="exchange" class="panel" aria-labelledby="exchange-title">
       <h2 id="exchange-title">Резервные курсы валют</h2>
       <p class="muted">Укажите курс в рублях за указанное количество единиц и дату курса.</p>
       <div class="columns">
@@ -67,19 +229,20 @@
         <label><span>За 1 EUR</span><input name="EUR" type="number" min="0.000001" step="any" required></label>
       </div>
     </section>
-    <section class="panel" aria-labelledby="rates-title">
+    <section id="rates" class="panel" aria-labelledby="rates-title">
       <h2 id="rates-title">Цены калькулятора</h2>
       <p class="muted">Суммы в целых рублях. Для малого проекта введите стартовую цену, для среднего и крупного — диапазон, например 60000–120000. Пустое поле использует указанное в нём значение по умолчанию. Введите «индивидуально», если цена требует сметы.</p>
-      <div class="table-scroll" tabindex="0">
+      <p class="table-hint muted">Прокрутите таблицу вправо, чтобы увидеть цены для каждого масштаба.</p>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Таблица цен по услугам и масштабу проекта">
         <table><thead><tr><th scope="col">Услуга</th><th scope="col">Малый</th><th scope="col">Средний</th><th scope="col">Крупный</th></tr></thead><tbody id="pricing"></tbody></table>
       </div>
     </section>
-    <section class="panel" aria-labelledby="ready-title">
+    <section id="solutions" class="panel" aria-labelledby="ready-title">
       <h2 id="ready-title">Статусы готовых решений</h2>
       <p class="muted">Выберите статус, который нужно показать в каталоге.</p>
       <div id="ready"></div>
     </section>
-    <section class="panel" aria-labelledby="referral-title">
+    <section id="referral" class="panel" aria-labelledby="referral-title">
       <h2 id="referral-title">Реферальная программа</h2>
       <div class="columns">
         <label><span>Скидка каждой стороне, %</span><input name="percent" type="number" min="1" max="100" step="1" required></label>
@@ -87,7 +250,7 @@
         <label><span>Лимит всех скидок, %</span><input name="cap" type="number" min="8" max="100" step="1" required></label>
       </div>
     </section>
-    <details class="panel">
+    <details id="advanced" class="panel">
       <summary>Команда, достижения и кейсы</summary>
       <p class="muted">Эти поля редактируются в JSON. Добавляйте участников после согласия на публикацию. Изменения применяются к указанному языку.</p>
       <label><span>Участники команды</span><textarea name="team" spellcheck="false"></textarea></label>
@@ -104,6 +267,7 @@
       </details>
     </details>
     <button type="submit">Сохранить и пересобрать</button>
+    </div>
   </form>
   <p id="status" role="status">Загружаем настройки…</p>
 </main>
@@ -125,6 +289,7 @@
   const advanced = {team: 'Команда', achievements: 'Достижения', caseOverrides: 'Кейсы'};
   let revision;
   let defaults;
+  let savedConfig;
 
   function announce(message, error = false) {
     status.textContent = message;
@@ -200,6 +365,7 @@
     const text = name => fields[name].value.trim();
     const number = name => fields[name].valueAsNumber;
     const config = {
+      ...savedConfig,
       exchange: {date: text('date'), BYN: number('BYN'), KZT: number('KZT'), USD: number('USD'), EUR: number('EUR')},
       legal: {name: text('legalName'), inn: text('inn'), ogrnip: text('ogrnip')},
       pricing: {},
@@ -232,7 +398,7 @@
   }
 
   async function api(options) {
-    const response = await fetch('/api/config', options);
+    const response = await fetch('api/config', options);
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error || 'Не удалось обновить настройки.');
     return payload;
@@ -240,10 +406,10 @@
 
   try {
     const payload = await api();
-    ({revision, defaults} = payload);
+    ({revision, defaults, config: savedConfig} = payload);
     document.querySelector('#project-ids').textContent = 'Идентификаторы кейсов — '
       + payload.projects.map(({name, id}) => name + ' (' + id + ')').join(', ') + '.';
-    populate(payload.config);
+    populate(savedConfig);
     form.hidden = false;
     announce('');
   } catch (error) {
@@ -262,7 +428,7 @@
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({revision, config})
       });
-      revision = payload.revision;
+      ({revision, config: savedConfig} = payload);
       announce('Настройки сохранены. Страницы в docs/ пересобраны.');
     } catch (error) {
       announce(error.message, true);
