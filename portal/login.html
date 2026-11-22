@@ -1,50 +1,107 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Вход в личный кабинет — Devlarion</title>
-<meta name="robots" content="noindex">
-<link rel="icon" type="image/svg+xml" href="/assets/brand/favicon.svg">
-<link rel="stylesheet" href="/assets/brand/fonts.css">
-<link rel="stylesheet" href="%%BASE%%static/account.css">
-<script src="/assets/theme.js"></script>
-<script defer src="%%BASE%%static/login.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Личный кабинет — Devlarion</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/brand/favicon.svg">
+  <link rel="stylesheet" href="/assets/brand/fonts.css">
+  <link rel="stylesheet" href="%%BASE%%static/account.css">
+  <script src="/assets/theme.js"></script>
+  <script defer src="%%BASE%%static/login.js"></script>
 </head>
-<body>
-<a class="ac-skip" href="#main">К содержанию</a>
-<header class="ac-bar"><div class="ac-wrap">
-  <a class="ac-brand" href="%%SITE%%"><svg viewBox="6 4 54 56" aria-hidden="true"><path fill="currentColor" d="M8 6h22c15 0 26 11 26 26S45 58 30 58H8Z"/><path fill="#211d1b" d="M19 17h8v24h13v8H19Z"/></svg>Devlarion</a>
-  <nav><a href="%%SITE%%" class="ac-hide-sm">Сайт студии</a><a href="%%SUPPORT%%">Telegram</a></nav>
-</div></header>
-<main id="main" class="ac-main"><div class="ac-wrap ac-login">
-  <section class="ac-login-copy">
-    <p class="ac-eyebrow">Личный кабинет Devlarion</p>
-    <h1>Ваш проект — в одном месте</h1>
-    <p class="ac-lead">Этапы работы, сметы, счета и переписка с командой.</p>
-  </section>
-  <section class="ac-card ac-signin ac-code-card" aria-labelledby="signin" data-bot-available="%%BOT_AVAILABLE%%">
-    <h2 id="signin">Вход по коду</h2>
-    <div class="ac-code-flow">
-      <p class="ac-note" id="ac-code-help">Откройте бота, нажмите «Запустить» и скопируйте код из сообщения.</p>
-      <a class="ac-btn ac-btn--ghost ac-code-telegram" href="%%BOT_URL%%" target="_blank" rel="noopener noreferrer">Получить код в Telegram <span aria-hidden="true">↗</span></a>
-      <form class="ac-code-form" action="%%BASE%%api/login/verify" method="post" data-base="%%BASE%%" novalidate>
-        <fieldset class="ac-code-fields" disabled>
-          <label for="ac-code">Код из Telegram</label>
-          <div class="ac-code-entry">
-            <input id="ac-code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" spellcheck="false" aria-describedby="ac-code-help ac-code-hint" placeholder="00000000" required>
-            <button type="submit" class="ac-btn">Войти</button>
-          </div>
-          <p class="ac-note ac-code-hint" id="ac-code-hint">8 цифр. Код действует 5 минут.</p>
-        </fieldset>
-      </form>
-      <p class="ac-code-status" role="status" data-login-status></p>
-      <a href="%%BASE%%?new-code=1" class="ac-code-reset" data-login-reset hidden>Получить новый код</a>
-      <noscript><p class="ac-note">Для проверки кода включите JavaScript.</p></noscript>
+<body class="ac-auth-page">
+  <a class="ac-skip" href="#signin">К форме входа</a>
+  <header class="ac-bar">
+    <div class="ac-wrap">
+      <a class="ac-brand" href="%%SITE%%"><img src="/assets/brand/logo-horizontal-copper-light.svg" width="140" height="32" alt="Devlarion"></a>
+      <nav aria-label="Ссылки студии">
+        <a href="%%SITE%%" class="ac-hide-sm">Сайт студии</a>
+        <a href="%%SUPPORT%%">Поддержка</a>
+      </nav>
     </div>
-    <p class="ac-note ac-code-unavailable">Вход по коду временно недоступен. Попробуйте обновить страницу.</p>
-    <p class="ac-note">Нужна помощь? <a href="%%SUPPORT%%">Напишите нам в Telegram</a>.</p>
-  </section>
-</div></main>
-<footer class="ac-foot"><div class="ac-wrap"><span>© 2026 Devlarion</span><a href="/ru/privacy/">Конфиденциальность</a></div></footer>
+  </header>
+  <main class="ac-main ac-auth-main" id="main">
+    <div class="ac-wrap ac-login">
+      <section class="ac-login-copy" aria-labelledby="ac-intro-title">
+        <p class="ac-eyebrow">Личный кабинет Devlarion</p>
+        <h1 id="ac-intro-title">Проекты и документы в одном месте</h1>
+        <p class="ac-lead">Следите за этапами, открывайте файлы и счета, общайтесь с командой проекта.</p>
+      </section>
+      <section class="ac-card ac-auth" aria-labelledby="signin" data-auth-mode="%%MODE%%" data-base="%%BASE%%" data-bot-available="%%BOT_AVAILABLE%%">
+        <nav class="ac-auth-switch" aria-label="Доступ к кабинету">
+          <a href="%%BASE%%?mode=login" data-auth-tab="login">Вход</a>
+          <a href="%%BASE%%?mode=register" data-auth-tab="register">Регистрация</a>
+        </nav>
+        <h2 id="signin" tabindex="-1">
+          <span data-auth-only="login">Войти в кабинет</span>
+          <span data-auth-only="register">Создать аккаунт</span>
+          <span data-auth-only="reset">Восстановить доступ</span>
+          <span data-auth-only="code">Войти по коду</span>
+        </h2>
+        <form class="ac-auth-form" action="%%BASE%%api/login/password" method="post" data-auth-kind="password" data-auth-only="login" novalidate>
+          <fieldset class="ac-auth-fields" disabled>
+            <label class="ac-field" for="ac-identifier">
+              <span>Telegram</span>
+              <input id="ac-identifier" name="identifier" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="@имя или числовой ID" required>
+            </label>
+            <div class="ac-field">
+              <label for="ac-password">Пароль</label>
+              <div class="ac-password">
+                <input id="ac-password" name="password" type="password" autocomplete="current-password" required>
+                <button type="button" data-reveal-password aria-controls="ac-password" aria-label="Показать пароль">Показать</button>
+              </div>
+            </div>
+            <button class="ac-btn ac-auth-submit" type="submit">Войти</button>
+          </fieldset>
+          <div class="ac-auth-links">
+            <a href="%%BASE%%?mode=reset">Забыли пароль?</a>
+            <a href="%%BASE%%?mode=code">Войти по коду</a>
+          </div>
+        </form>
+        <div class="ac-auth-challenge" data-auth-only="register reset code">
+          <div class="ac-auth-code-body">
+            <p class="ac-note" id="ac-code-help">
+              <span data-auth-only="register">Получите код в боте и задайте пароль. Кабинет откроется сразу.</span>
+              <span data-auth-only="reset">Откройте бота с того же аккаунта Telegram, с которым зарегистрировались. В чате работает команда <code>/change</code>.</span>
+              <span data-auth-only="code">Откройте бота, нажмите «Запустить» и скопируйте код из сообщения.</span>
+            </p>
+            <a class="ac-btn ac-btn--ghost ac-open-telegram" href="%%BOT_URL%%" target="_blank" rel="noopener noreferrer">Получить код в Telegram <span aria-hidden="true">↗</span></a>
+            <form class="ac-auth-form" action="%%BASE%%api/login/verify" method="post" data-auth-kind="code" novalidate>
+              <fieldset class="ac-auth-fields" disabled>
+                <div class="ac-field ac-code-field">
+                  <label for="ac-code">Код из Telegram</label>
+                  <input id="ac-code" name="code" inputmode="numeric" autocomplete="one-time-code" spellcheck="false" aria-describedby="ac-code-help ac-code-hint" placeholder="00000000" required>
+                  <small class="ac-note" id="ac-code-hint">8 цифр. Код действует 5 минут.</small>
+                </div>
+                <div class="ac-field ac-new-password" data-new-password>
+                  <label for="ac-new-password">Новый пароль</label>
+                  <div class="ac-password">
+                    <input id="ac-new-password" name="password" type="password" autocomplete="new-password" aria-describedby="ac-password-hint">
+                    <button type="button" data-reveal-password aria-controls="ac-new-password" aria-label="Показать пароль">Показать</button>
+                  </div>
+                  <small class="ac-note" id="ac-password-hint">От 6 символов. Нужны заглавная и строчная буквы.</small>
+                </div>
+                <button class="ac-btn ac-auth-submit" type="submit" data-code-submit>
+                  <span data-auth-only="register">Создать аккаунт</span>
+                  <span data-auth-only="reset">Сохранить пароль</span>
+                  <span data-auth-only="code">Войти по коду</span>
+                </button>
+              </fieldset>
+            </form>
+          </div>
+          <p class="ac-note ac-code-unavailable">Бот сейчас недоступен. Попробуйте обновить страницу.</p>
+          <a href="%%BASE%%?mode=login" class="ac-auth-back">Вернуться ко входу</a>
+        </div>
+        <p class="ac-auth-status" role="status" data-login-status></p>
+        <a href="%%BASE%%?mode=code&amp;new-code=1" class="ac-auth-back" data-login-reset hidden>Получить новый код</a>
+        <noscript><p class="ac-note">Для входа в кабинет включите JavaScript.</p></noscript>
+      </section>
+    </div>
+  </main>
+  <footer class="ac-foot">
+    <div class="ac-wrap"><span>© 2026 Devlarion</span><a href="/ru/privacy/">Конфиденциальность</a></div>
+  </footer>
 </body>
 </html>

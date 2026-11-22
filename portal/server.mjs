@@ -8,6 +8,7 @@ import { mkdir, readFile, rename, rm, stat, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { basename, extname, join } from 'node:path';
 import { createTelegramLogin } from './telegram-login.mjs';
+import { allowPasswordAttempt, clearPasswordAttempts, makePasswordHash, passwordMatches, passwordProblem, PasswordBusy } from './password-auth.mjs';
 
 const env = process.env;
 const DEV = env.PORTAL_DEV === '1';
@@ -25,6 +26,7 @@ const telegramLogin = createTelegramLogin({
   token: BOT_TOKEN,
   username: BOT_NAME,
   apiBase: env.TELEGRAM_API_BASE || 'https://api.telegram.org',
+  accountUrl: new URL(BASE, ORIGIN).href,
 });
 const LOGIN_COOKIE = 'dl_portal_login';
 const LOGIN_COOKIE_SECONDS = 15 * 60;
@@ -40,18 +42,24 @@ const filesDir = join(DATA_DIR, 'files');
 await mkdir(filesDir, { recursive: true });
 
 const empty = () => ({ clients: [], projects: [], pending: [] });
-let db = await readFile(dataFile, 'utf8').then(JSON.parse).catch(() => empty());
+async function readStore(file, fallback) {
+  try { return JSON.parse(await readFile(file, 'utf8')); }
+  catch (error) { if (error.code === 'ENOENT') return fallback; throw error; }
+}
+let db = await readStore(dataFile, empty());
 for (const k of ['clients', 'projects', 'pending']) if (!Array.isArray(db[k])) db[k] = [];
-let sessions = await readFile(sessionsFile, 'utf8').then(JSON.parse).catch(() => ({}));
+let sessions = await readStore(sessionsFile, {});
 
 let writing = Promise.resolve();
 function persist(file, value) {
-  writing = writing.then(async () => {
+  const snapshot = JSON.stringify(value, null, 2);
+  const saved = writing.then(async () => {
     const tmp = file + '.' + randomUUID() + '.tmp';
-    await writeFile(tmp, JSON.stringify(value, null, 2));
+    await writeFile(tmp, snapshot, { mode: 0o600 });
     await rename(tmp, file);
-  }).catch(e => console.error('save failed', e));
-  return writing;
+  });
+  writing = saved.catch(e => console.error('Portal store write failed:', e.code || e.name));
+  return saved;
 }
 const saveDb = () => persist(dataFile, db);
 const saveSessions = () => persist(sessionsFile, sessions);
@@ -86,10 +94,9 @@ function cookies(req) {
 function sessionCookie(token, maxAge) {
   return `${COOKIE}=${token}; Path=${BASE}; HttpOnly; SameSite=Lax; Max-Age=${maxAge}${DEV ? '' : '; Secure'}`;
 }
-function newSession(clientId, via = 'telegram') {
+function newSession(client, via, lifetime = SESSION_DAYS * 86400) {
   const token = randomBytes(32).toString('base64url');
-  sessions[token] = { clientId, via, created: now(), expires: Date.now() + SESSION_DAYS * 864e5 };
-  saveSessions();
+  sessions[token] = { clientId: client.id, via, authVersion: client.authVersion, created: now(), expires: Date.now() + lifetime * 1000 };
   return token;
 }
 function currentClient(req) {
@@ -97,35 +104,121 @@ function currentClient(req) {
   const s = token && sessions[token];
   if (!s || s.expires < Date.now()) return null;
   const client = db.clients.find(c => c.id === s.clientId);
-  return client ? { client, token, session: s } : null;
+  return client && s.authVersion === client.authVersion ? { client, token, session: s } : null;
 }
 const page = name => readFile(new URL(name, here), 'utf8');
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
-function loginCookie(value, maxAge = LOGIN_COOKIE_SECONDS) {
-  return `${LOGIN_COOKIE}=${value}; Path=${BASE}; HttpOnly; SameSite=Strict; Max-Age=${maxAge}${DEV ? '' : '; Secure'}`;
+const challengeCookieName = purpose => purpose === 'code' ? LOGIN_COOKIE : LOGIN_COOKIE + '_' + purpose;
+function loginCookie(purpose, value, maxAge = LOGIN_COOKIE_SECONDS) {
+  return `${challengeCookieName(purpose)}=${value}; Path=${BASE}; HttpOnly; SameSite=Strict; Max-Age=${maxAge}${DEV ? '' : '; Secure'}`;
 }
 
-async function completeTelegramLogin(tg, res) {
-  const username = tg.username.toLowerCase();
-  const client = db.clients.find(c => String(c.tgId || '') === tg.tgId)
-    ?? db.clients.find(c => !c.tgId && username && c.tgUsername?.toLowerCase() === username);
+function sessionContext(req) {
+  const ua = (req.headers['user-agent'] || '').slice(0, 512);
+  const device = /iPad|Macintosh.*Mobile/i.test(ua) ? 'iPad' : /iPhone/i.test(ua) ? 'iPhone' :
+    /Android/i.test(ua) ? 'Android' : /Windows/i.test(ua) ? 'Windows' : /Mac OS|Macintosh/i.test(ua) ? 'Mac' :
+    /CrOS/i.test(ua) ? 'ChromeOS' : /Linux/i.test(ua) ? 'Linux' : 'Устройство не определено';
+  const browser = /YaBrowser/i.test(ua) ? 'Яндекс Браузер' : /Edg(?:e|A|iOS)?\//i.test(ua) ? 'Edge' :
+    /Firefox|FxiOS/i.test(ua) ? 'Firefox' : /OPR\//.test(ua) ? 'Opera' :
+    /SamsungBrowser/i.test(ua) ? 'Samsung Internet' : /Chrome|CriOS/i.test(ua) ? 'Chrome' :
+    /Safari/i.test(ua) ? 'Safari' : 'Браузер не определён';
+  return { device, browser, timeZone: 'Europe/Moscow' };
+}
 
-  if (!client) {
-    const known = db.pending.find(p => p.tgId === tg.tgId);
-    if (known) Object.assign(known, tg, { at: now() }); else db.pending.unshift({ ...tg, at: now() });
-    db.pending = db.pending.slice(0, 200);
-    await saveDb();
-    return send(res, 200, { pending: true, message: 'Telegram подтверждён. Студия проверит заявку и откроет доступ к кабинету.' },
-      undefined, { 'Set-Cookie': loginCookie('', 0) });
+function clientForTelegram(tg, allowInvitation) {
+  const bound = db.clients.find(c => c.tgId && String(c.tgId) === tg.tgId);
+  if (bound || !allowInvitation || !tg.username) return bound;
+  // Retain empty invitations made before numeric IDs were required for recovery.
+  // A recycled username cannot claim an existing client's projects or credentials.
+  return db.clients.find(c => !c.tgId && !c.passwordHash && c.tgUsername?.toLowerCase() === tg.username.toLowerCase()
+    && !db.projects.some(p => p.clientId === c.id));
+}
+
+function bindTelegram(client, tg) {
+  client.tgId = tg.tgId;
+  client.tgUsername = tg.username;
+  for (const other of db.clients) {
+    if (tg.username && other !== client && other.tgId && other.tgUsername?.toLowerCase() === tg.username.toLowerCase()) other.tgUsername = '';
+  }
+  db.pending = db.pending.filter(p => String(p.tgId) !== tg.tgId);
+}
+
+function revokeSessions(client) {
+  client.authVersion = randomUUID();
+  for (const [token, session] of Object.entries(sessions)) if (session.clientId === client.id) delete sessions[token];
+}
+
+async function signIn(req, res, client, via, event, purpose) {
+  client.lastLogin = now();
+  const token = newSession(client, via);
+  try { await Promise.all([saveDb(), saveSessions()]); }
+  catch (error) { delete sessions[token]; throw error; }
+  clearPasswordAttempts(client.id);
+  void telegramLogin.notifySession(client.tgId, { event, ...sessionContext(req) });
+  const cookie = [sessionCookie(token, SESSION_DAYS * 86400)];
+  if (purpose) cookie.push(loginCookie(purpose, '', 0));
+  return send(res, 200, { ok: true }, undefined, { 'Set-Cookie': cookie });
+}
+
+function checkedTelegram(cookie, code, purpose, consume) {
+  const result = telegramLogin.redeem(cookie, code, purpose, consume);
+  if (result.error) throw new HttpError(result.status, result.error);
+  return result.user;
+}
+
+async function authenticate(req, res, action) {
+  sameOrigin(req);
+  const body = await readJson(req, 32 * 1024);
+  if (!body || typeof body !== 'object' || Array.isArray(body)) throw new HttpError(400, 'Нужны данные формы.');
+  if (action === 'password') {
+    const identifier = str(body.identifier, 80).replace(/^@/, '').toLowerCase();
+    const denied = () => new HttpError(401, 'Проверьте логин и пароль.');
+    if (!/^[a-z0-9_]{1,64}$/.test(identifier) || typeof body.password !== 'string' || !body.password) throw denied();
+    const numeric = /^\d+$/.test(identifier);
+    const client = db.clients.find(c => c.passwordHash && c.tgId && (numeric ? String(c.tgId) === identifier : c.tgUsername?.toLowerCase() === identifier));
+    if (!allowPasswordAttempt(client ? 'client:' + client.id : 'login:' + identifier)) {
+      throw new HttpError(429, 'Слишком много попыток. Войдите по коду Telegram или попробуйте через 15 минут.');
+    }
+    const hash = client?.passwordHash;
+    const matches = await passwordMatches(body.password, hash);
+    if (!matches || !client || client.passwordHash !== hash || !db.clients.includes(client)) throw denied();
+    return signIn(req, res, client, 'password', 'login');
   }
 
-  client.tgId = tg.tgId;
-  client.tgUsername = tg.username || client.tgUsername;
-  client.lastLogin = now();
-  await saveDb();
-  return send(res, 200, { ok: true }, undefined,
-    { 'Set-Cookie': [loginCookie('', 0), sessionCookie(newSession(client.id), SESSION_DAYS * 86400)] });
+  const jar = cookies(req);
+  let purpose = action === 'verify' ? 'code' : action;
+  if (action === 'register' && (body.source === 'code' || !jar[challengeCookieName('register')])) purpose = 'code';
+  const cookie = jar[challengeCookieName(purpose)];
+  const tg = checkedTelegram(cookie, body.code, purpose, false);
+  let client = clientForTelegram(tg, action !== 'reset');
+  if (action === 'verify') {
+    if (!client) return send(res, 409, { needsPassword: true, message: 'Telegram подтверждён. Придумайте пароль для нового кабинета.' });
+    checkedTelegram(cookie, body.code, purpose, true);
+    bindTelegram(client, tg);
+    return signIn(req, res, client, 'telegram', 'login', purpose);
+  }
+
+  const problem = passwordProblem(body.password);
+  if (problem) throw new HttpError(422, problem);
+  if (action === 'reset' && !client) throw new HttpError(404, 'К этому аккаунту Telegram ещё не привязан кабинет. Откройте регистрацию.');
+  if (action === 'register' && client?.passwordHash) throw new HttpError(409, 'У вас уже есть пароль. Войдите или воспользуйтесь восстановлением.');
+  const previous = client;
+  const version = client?.authVersion;
+  const hash = await makePasswordHash(body.password);
+  // Recheck ownership and consume exactly once after the asynchronous hash.
+  checkedTelegram(cookie, body.code, purpose, true);
+  client = clientForTelegram(tg, action !== 'reset');
+  if (client !== previous || client?.authVersion !== version) throw new HttpError(409, 'Данные кабинета изменились. Получите новый код.');
+  if (!client) {
+    client = { id: id(), name: tg.name || tg.username || 'Клиент', company: '', note: '', created: now() };
+    db.clients.push(client);
+  }
+  bindTelegram(client, tg);
+  client.passwordHash = hash;
+  telegramLogin.invalidateUser(tg.tgId);
+  revokeSessions(client);
+  return signIn(req, res, client, 'telegram', action, purpose);
 }
 
 // ---------- данные для клиента ----------
@@ -174,13 +267,15 @@ async function clientHandler(req, res) {
   const path = u.pathname;
   if (req.method === 'GET' && (path === '/' || path === '')) {
     const me = currentClient(req);
-    if (!me) {
-      const login = telegramLogin.begin(cookies(req)[LOGIN_COOKIE], u.searchParams.get('new-code') === '1');
+    const mode = pick(u.searchParams.get('mode'), ['code', 'register', 'reset'], 'login');
+    if (!me || mode === 'reset') {
+      const login = mode === 'login' ? null : telegramLogin.begin(cookies(req)[challengeCookieName(mode)], u.searchParams.get('new-code') === '1', mode, sessionContext(req));
       const html = await renderShell('login.html', {
         BASE, SITE: esc(SITE), SUPPORT: esc(SUPPORT), BOT_URL: esc(login?.link ?? '#'),
+        MODE: mode, BOT_HOME: esc(BOT_NAME ? 'https://t.me/' + encodeURIComponent(BOT_NAME) : SUPPORT),
         BOT_AVAILABLE: login ? 'true' : 'false',
       });
-      const headers = login ? { ...htmlHeaders, 'Set-Cookie': loginCookie(login.cookie) } : htmlHeaders;
+      const headers = login ? { ...htmlHeaders, 'Set-Cookie': loginCookie(mode, login.cookie) } : htmlHeaders;
       return send(res, 200, html, 'text/html; charset=utf-8', headers);
     }
     return send(res, 200, await renderShell('client.html', { BASE, SITE: esc(SITE), SUPPORT: esc(SUPPORT) }), 'text/html; charset=utf-8', htmlHeaders);
@@ -189,17 +284,12 @@ async function clientHandler(req, res) {
     res.writeHead(303, { Location: BASE, 'Cache-Control': 'no-store' });
     return res.end();
   }
-  if (req.method === 'POST' && path === '/api/login/verify') {
-    sameOrigin(req);
-    const body = await readJson(req, 1024);
-    const result = telegramLogin.redeem(cookies(req)[LOGIN_COOKIE], body?.code);
-    if (result.error) throw new HttpError(result.status, result.error);
-    return completeTelegramLogin(result.user, res);
-  }
+  const auth = path.match(/^\/api\/login\/(verify|register|reset|password)$/);
+  if (req.method === 'POST' && auth) return authenticate(req, res, auth[1]);
   if (req.method === 'POST' && path === '/logout') {
     sameOrigin(req);
     const me = currentClient(req);
-    if (me) { delete sessions[me.token]; saveSessions(); }
+    if (me) { delete sessions[me.token]; await saveSessions(); }
     res.writeHead(303, { Location: BASE, 'Set-Cookie': sessionCookie('', 0) });
     return res.end();
   }
@@ -207,14 +297,14 @@ async function clientHandler(req, res) {
   // дальше — только для вошедших клиентов
   const me = currentClient(req);
   if (path === '/api/me' && req.method === 'GET') {
-    if (!me) throw new HttpError(401, 'Войдите через Telegram.');
+    if (!me) throw new HttpError(401, 'Войдите в кабинет.');
     const projects = db.projects.filter(p => p.clientId === me.client.id).map(projectView);
-    return send(res, 200, { client: { name: me.client.name, company: me.client.company, tgUsername: me.client.tgUsername }, preview: me.session.via === 'admin', projects });
+    return send(res, 200, { client: { name: me.client.name, company: me.client.company, tgUsername: me.client.tgUsername, tgId: me.client.tgId }, preview: me.session.via === 'admin', projects });
   }
   const msg = path.match(/^\/api\/projects\/([a-f0-9]+)\/(messages|read)$/);
   if (msg && req.method === 'POST') {
     sameOrigin(req);
-    if (!me) throw new HttpError(401, 'Войдите через Telegram.');
+    if (!me) throw new HttpError(401, 'Войдите в кабинет.');
     const p = db.projects.find(x => x.id === msg[1] && x.clientId === me.client.id);
     if (!p) throw new HttpError(404, 'Проект не найден.');
     if (msg[2] === 'read') { p.messages.forEach(m => { if (m.from === 'studio') m.readByClient = true; }); await saveDb(); return send(res, 200, { ok: true }); }
@@ -231,7 +321,7 @@ async function clientHandler(req, res) {
   }
   const f = path.match(/^\/files\/([a-f0-9]+)\/([^/]+)$/);
   if (f && req.method === 'GET') {
-    if (!me) throw new HttpError(401, 'Войдите через Telegram.');
+    if (!me) throw new HttpError(401, 'Войдите в кабинет.');
     const p = db.projects.find(x => x.id === f[1] && x.clientId === me.client.id);
     const name = fileName(decodeURIComponent(f[2]));
     if (!p || !projectHasFile(p, name)) throw new HttpError(404, 'Файл не найден.');
@@ -264,7 +354,9 @@ async function adminHandler(req, res) {
   if (req.method === 'GET' && path === '/') return send(res, 200, await renderShell('admin.html', { BASE, ADMIN_BASE }), 'text/html; charset=utf-8', { 'Content-Security-Policy': CSP_ADMIN, 'X-Frame-Options': 'DENY' });
   if (req.method === 'GET' && path.startsWith('/static/')) return serveStatic(res, path.slice(8));
   if (req.method === 'GET' && path === '/api/state') {
-    return send(res, 200, { ...db, telegram: { configured: Boolean(BOT_TOKEN && BOT_NAME), bot: BOT_NAME }, files: undefined });
+    const clients = db.clients.map(({ id, name, company, tgId, tgUsername, note, created, lastLogin }) =>
+      ({ id, name, company, tgId, tgUsername, note, created, lastLogin }));
+    return send(res, 200, { clients, projects: db.projects, pending: db.pending, telegram: { configured: Boolean(BOT_TOKEN && BOT_NAME), bot: BOT_NAME } });
   }
   if (req.method !== 'GET') sameOrigin(req);
   if (req.method === 'POST' && path === '/api/clients') {
@@ -276,9 +368,16 @@ async function adminHandler(req, res) {
     const clash = db.clients.find(c => c.id !== b.id && ((tgId && c.tgId === tgId) || (tgUsername && c.tgUsername?.toLowerCase() === tgUsername.toLowerCase())));
     if (clash) throw new HttpError(409, 'Этот Telegram уже привязан к клиенту «' + clash.name + '».');
     const client = { id: prev?.id || id(), name: str(b.name, 120) || tgUsername || 'Клиент', company: str(b.company, 120), tgId, tgUsername, note: str(b.note, 600), created: prev?.created || now(), lastLogin: prev?.lastLogin };
+    const rebind = prev?.tgId && String(prev.tgId) !== tgId;
+    if (rebind) {
+      telegramLogin.invalidateUser(prev.tgId);
+      delete prev.passwordHash;
+      revokeSessions(prev);
+    }
     if (prev) Object.assign(prev, client); else db.clients.push(client);
     db.pending = db.pending.filter(p => !(tgId && p.tgId === tgId) && !(tgUsername && p.username?.toLowerCase() === tgUsername.toLowerCase()));
     await saveDb();
+    if (rebind) await saveSessions();
     return send(res, 200, client);
   }
   const delClient = path.match(/^\/api\/clients\/([a-f0-9]+)$/);
@@ -286,7 +385,7 @@ async function adminHandler(req, res) {
     if (db.projects.some(p => p.clientId === delClient[1])) throw new HttpError(409, 'Сначала удалите или передайте проекты клиента.');
     db.clients = db.clients.filter(c => c.id !== delClient[1]);
     for (const [t, s] of Object.entries(sessions)) if (s.clientId === delClient[1]) delete sessions[t];
-    await saveDb(); saveSessions();
+    await saveDb(); await saveSessions();
     return send(res, 200, { ok: true });
   }
   if (req.method === 'DELETE' && path.startsWith('/api/pending/')) {
@@ -344,9 +443,12 @@ async function adminHandler(req, res) {
   }
   const view = path.match(/^\/api\/preview\/([a-f0-9]+)$/);
   if (req.method === 'POST' && view) {
-    if (!db.clients.some(c => c.id === view[1])) throw new HttpError(404, 'Клиент не найден.');
+    const client = db.clients.find(c => c.id === view[1]);
+    if (!client) throw new HttpError(404, 'Клиент не найден.');
     // просмотр кабинета глазами клиента: короткая сессия только для чтения
-    return send(res, 200, { url: BASE }, undefined, { 'Set-Cookie': sessionCookie(newSession(view[1], 'admin'), 3600) });
+    const token = newSession(client, 'admin', 3600);
+    await saveSessions();
+    return send(res, 200, { url: BASE }, undefined, { 'Set-Cookie': sessionCookie(token, 3600) });
   }
   throw new HttpError(404, 'Не найдено.');
 }
@@ -361,6 +463,7 @@ function wrap(handler) {
     }
     catch (e) {
       req.resume();
+      if (e instanceof PasswordBusy) e = new HttpError(503, 'Сейчас выполняется несколько входов. Попробуйте через несколько секунд.');
       if (!(e instanceof HttpError)) console.error(e);
       const status = e instanceof HttpError ? e.status : 500;
       if (res.headersSent) return res.end();
@@ -372,7 +475,7 @@ function wrap(handler) {
 setInterval(() => {
   let changed = false;
   for (const [t, s] of Object.entries(sessions)) if (s.expires < Date.now()) { delete sessions[t]; changed = true; }
-  if (changed) saveSessions();
+  if (changed) void saveSessions().catch(() => {});
 }, 3600e3).unref();
 
 createServer(wrap(clientHandler)).listen(PORT, '127.0.0.1', () => console.log('Кабинет: http://127.0.0.1:' + PORT + ' → ' + ORIGIN + BASE));

@@ -1,33 +1,47 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Личный кабинет — Devlarion</title>
-<meta name="robots" content="noindex">
-<link rel="icon" type="image/svg+xml" href="/assets/brand/favicon.svg">
-<link rel="stylesheet" href="/assets/brand/fonts.css">
-<link rel="stylesheet" href="%%BASE%%static/account.css">
-<script src="/assets/theme.js"></script>
-<script defer src="%%BASE%%static/client.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Личный кабинет — Devlarion</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/brand/favicon.svg">
+  <link rel="stylesheet" href="/assets/brand/fonts.css">
+  <link rel="stylesheet" href="%%BASE%%static/account.css">
+  <script src="/assets/theme.js"></script>
+  <script defer src="%%BASE%%static/client.js"></script>
 </head>
 <body data-base="%%BASE%%" data-support="%%SUPPORT%%">
-<a class="ac-skip" href="#main">К содержанию</a>
-<header class="ac-bar"><div class="ac-wrap">
-  <a class="ac-brand" href="%%SITE%%"><svg viewBox="6 4 54 56" aria-hidden="true"><path fill="currentColor" d="M8 6h22c15 0 26 11 26 26S45 58 30 58H8Z"/><path fill="#211d1b" d="M19 17h8v24h13v8H19Z"/></svg>Devlarion</a>
-  <nav>
-    <a href="%%SITE%%" class="ac-hide-sm">Сайт студии</a>
-    <a href="%%SUPPORT%%" class="ac-hide-sm">Telegram</a>
-    <form method="post" action="%%BASE%%logout"><button type="submit">Выйти</button></form>
-  </nav>
-</div></header>
-<main id="main" class="ac-main"><div class="ac-wrap">
-  <div data-preview hidden class="ac-preview">Режим просмотра: так кабинет видит клиент. Отправка сообщений отключена.</div>
-  <div class="ac-hello">
-    <div><p class="ac-eyebrow">Личный кабинет</p><h1 data-hello>Загружаем…</h1></div>
-    <a class="ac-btn ac-btn--ghost" href="%%SUPPORT%%">Связаться в Telegram</a>
-  </div>
-  <div data-root aria-live="polite"></div>
-</div></main>
-<footer class="ac-foot"><div class="ac-wrap"><span>© 2026 Devlarion</span><a href="/ru/privacy/">Конфиденциальность</a></div></footer>
+  <a class="ac-skip" href="#main">К содержанию</a>
+  <header class="ac-bar">
+    <div class="ac-wrap">
+      <a class="ac-brand" href="%%SITE%%"><img src="/assets/brand/logo-horizontal-copper-light.svg" width="140" height="32" alt="Devlarion"></a>
+      <nav aria-label="Настройки кабинета">
+        <a href="%%BASE%%?mode=reset" data-password-settings hidden>Изменить пароль</a>
+        <form method="post" action="%%BASE%%logout"><button type="submit">Выйти</button></form>
+      </nav>
+    </div>
+  </header>
+  <main id="main" class="ac-main">
+    <div class="ac-wrap">
+      <div data-preview hidden class="ac-preview">Режим просмотра кабинета клиента. Отправка сообщений отключена.</div>
+      <div class="ac-hello">
+        <div>
+          <p class="ac-eyebrow">Личный кабинет</p>
+          <h1 data-hello>Мои проекты</h1>
+          <p class="ac-note" data-company hidden></p>
+          <p class="ac-note ac-caption" data-login-id hidden></p>
+        </div>
+        <a class="ac-btn ac-btn--ghost" href="%%SUPPORT%%" data-client-support hidden>Написать команде</a>
+      </div>
+      <div data-root aria-busy="true">
+        <p class="ac-loading" role="status">Загружаем проекты…</p>
+        <noscript><p class="ac-note">Для просмотра проектов включите JavaScript.</p></noscript>
+      </div>
+    </div>
+  </main>
+  <footer class="ac-foot">
+    <div class="ac-wrap"><span>© 2026 Devlarion</span><a href="/ru/privacy/">Конфиденциальность</a></div>
+  </footer>
 </body>
 </html>
