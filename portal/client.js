@@ -25,8 +25,33 @@
   };
   const EST = { draft: ['Черновик', 'mute'], sent: ['На согласовании', 'warn'], approved: ['Согласована', 'ok'], declined: ['Отклонена', 'bad'] };
   const INV = { unpaid: ['Ожидает оплаты', 'warn'], paid: ['Оплачен', 'ok'], overdue: ['Просрочен', 'bad'], cancelled: ['Отменён', 'mute'] };
-  const KIND = { design: 'МК', build: 'ТВ', document: 'ДК', link: '↗' };
-  const TABS = [['project', 'Обзор'], ['money', 'Сметы и счета'], ['files', 'Файлы'], ['chat', 'Сообщения']];
+  // Единый набор линейных иконок: сетка 24, обводка 1.75, скруглённые концы.
+  const ICONS = {
+    design: 'M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-.5-.2-.8-.4-1.1-.3-.3-.4-.6-.4-1 0-.9.7-1.6 1.6-1.6H16a5 5 0 0 0 5-5C21 6.4 17 3 12 3ZM7.5 12.5h.01M9.5 8h.01M14.5 8h.01M17 11.5h.01',
+    build: 'M4 5h16v11H4zM2.5 19.5h19M9 9.5l-2 1.5 2 1.5M15 9.5l2 1.5-2 1.5',
+    document: 'M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5M9 13h6M9 17h4',
+    link: 'M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1',
+    client: 'M12 16V4M7 9l5-5 5 5M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4',
+    money: 'M3 7h18v11H3zM3 10.5h18M7 14.5h3',
+    chat: 'M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12Z',
+    check: 'M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM8 12.2l2.7 2.6L16 9.5',
+    alert: 'M12 3.5 2.5 20h19zM12 10v4.5M12 17.4h.01',
+    stage: 'M5 21V4M5 4h11l-2 4 2 4H5',
+    history: 'M3 12a9 9 0 1 0 2.6-6.4L3 8M3 3.5V8h4.5M12 7.5V12l3 2',
+    studio: 'M4 20V9l8-5 8 5v11M9.5 20v-5.5h5V20',
+    request: 'M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z',
+    shop: 'M5 7h14l-1.2 12.1a2 2 0 0 1-2 1.9H8.2a2 2 0 0 1-2-1.9zM9 7a3 3 0 0 1 6 0',
+    bot: 'M5 9h14v10H5zM12 5v4M9 13.5h.01M15 13.5h.01M9.5 16.5h5M2.5 13v2.5M21.5 13v2.5',
+    user: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM4.5 20.5a7.5 7.5 0 0 1 15 0',
+  };
+  const icon = (name, cls = 'ac-ico') => {
+    const ns = 'http://www.w3.org/2000/svg';
+    const el = document.createElementNS(ns, 'svg');
+    el.setAttribute('viewBox', '0 0 24 24'); el.setAttribute('class', cls); el.setAttribute('aria-hidden', 'true');
+    const path = document.createElementNS(ns, 'path'); path.setAttribute('d', ICONS[name] || ICONS.document);
+    el.append(path); return el;
+  };
+  const TABS = [['project', 'Обзор'], ['money', 'Сметы и счета'], ['files', 'Файлы'], ['chat', 'Сообщения'], ['history', 'История']];
   const pill = ([text, tone]) => h('span', { class: 'ac-status', 'data-tone': tone, text });
   const toast = text => { const t = h('div', { class: 'ac-toast', role: 'status', text }); document.body.append(t); setTimeout(() => t.remove(), 2600); };
   const empty = text => h('p', { class: 'ac-empty', text });
@@ -102,7 +127,7 @@
       class: 'ac-panel' + (animate ? ' ac-enter' : ''), role: 'tabpanel',
       id: 'panel-' + tab, 'aria-labelledby': 'tab-' + tab, tabindex: '0',
     });
-    panel.append(...{ project: projectPanel, money: moneyPanel, files: filesPanel, chat: chatPanel }[tab](p));
+    panel.append(...{ project: projectPanel, money: moneyPanel, files: filesPanel, chat: chatPanel, history: historyPanel }[tab](p));
     root.replaceChildren(projectHead, tabs, panel);
 
     if (tab === 'chat') {
@@ -183,24 +208,49 @@
     const late = due.filter(i => i.status === 'overdue');
     if (due.length) items.push(['money', late.length ? 'Есть просроченные счета' : 'Есть счета к оплате', 'Счетов: ' + due.length + ' · ' + dueTotals(p), late.length ? 'bad' : 'warn']);
     if (p.unread) items.push(['chat', 'Новые сообщения от команды', 'Непрочитано: ' + p.unread, 'warn']);
-    if (!items.length) return h('section', { class: 'ac-card ac-attention ac-attention--clear' }, h('span', { class: 'ac-attn-dot', 'aria-hidden': 'true' }), h('div', {}, h('h3', { text: 'От вас ничего не требуется' }), h('p', { class: 'ac-note', text: 'Команда работает по плану. Если появится вопрос или счёт, он отобразится здесь.' })));
+    if (!items.length) return h('section', { class: 'ac-card ac-attention ac-attention--clear' }, h('span', { class: 'ac-attn-ico' }, icon('check')), h('div', {}, h('h3', { text: 'От вас ничего не требуется' }), h('p', { class: 'ac-note', text: 'Команда работает по плану. Если появится вопрос или счёт, он отобразится здесь.' })));
     return h('section', { class: 'ac-card ac-stack ac-attention' }, h('h3', { text: 'Требует вашего внимания' }),
       h('ul', { class: 'ac-attn-list' }, items.map(([key, title, note, tone]) => h('li', { 'data-tone': tone },
-        h('span', { class: 'ac-attn-dot', 'aria-hidden': 'true' }),
+        h('span', { class: 'ac-attn-ico' }, icon(tone === 'bad' ? 'alert' : key)),
         h('div', {}, h('strong', { text: title }), h('small', { text: note })),
         h('button', { type: 'button', class: 'ac-btn ac-btn--ghost', onclick: () => openTab(key, p), text: key === 'chat' ? 'Открыть' : 'Перейти' })))));
   }
-  function activityCard(p) {
+  function events(p) {
+    if (p.history?.length) return p.history.map(e => [e.at, e.who === 'client' ? 'Вы' : 'Команда', e.text, kindOf(e.text, e.who)]).reverse();
     const ev = [];
-    for (const s of p.stages) if (s.date && s.state === 'done') ev.push([s.date, 'Этап завершён', s.title]);
-    for (const f of p.files) if (f.date) ev.push([f.date, 'Новый материал', f.title]);
-    for (const e of p.estimates) if (e.date) ev.push([e.date, 'Смета', e.title]);
-    for (const i of p.invoices) if (i.date) ev.push([i.date, 'Счёт № ' + i.number, i.title || '']);
-    for (const m of p.messages.slice(-3)) ev.push([m.at, m.from === 'client' ? 'Вы написали' : 'Ответ команды', m.text.length > 90 ? m.text.slice(0, 90) + '…' : m.text]);
-    ev.sort((a, b) => new Date(b[0]) - new Date(a[0]));
+    for (const s of p.stages) if (s.date && s.state === 'done') ev.push([s.date, 'Команда', 'Этап завершён: ' + s.title, 'stage']);
+    for (const f of p.files) if (f.date) ev.push([f.date, f.byClient ? 'Вы' : 'Команда', 'Файл: ' + f.title, f.byClient ? 'client' : 'document']);
+    for (const e of p.estimates) if (e.date) ev.push([e.date, 'Команда', 'Смета: ' + e.title, 'money']);
+    for (const i of p.invoices) if (i.date) ev.push([i.date, 'Команда', 'Счёт № ' + i.number, 'money']);
+    for (const m of p.messages.slice(-3)) ev.push([m.at, m.from === 'client' ? 'Вы' : 'Команда', m.text.length > 90 ? m.text.slice(0, 90) + '…' : m.text, 'chat']);
+    return ev.sort((a, b) => new Date(b[0]) - new Date(a[0]));
+  }
+  function kindOf(text, who) {
+    if (/смет|счёт|оплат/i.test(text)) return 'money';
+    if (/файл|макет|верси|документ/i.test(text)) return who === 'client' ? 'client' : 'document';
+    if (/этап|статус|создан/i.test(text)) return 'stage';
+    if (/сообщ|ответ|переписк/i.test(text)) return 'chat';
+    if (/заявк/i.test(text)) return 'request';
+    return who === 'client' ? 'user' : 'studio';
+  }
+  const feedItem = ([at, who, text, kind], timeOnly) => h('li', { 'data-who': who === 'Вы' ? 'client' : 'studio' },
+    h('span', { class: 'ac-feed-ico' }, icon(kind)),
+    h('div', {}, h('strong', { text }), h('small', { text: who + (at.length === 10 ? '' : ' · ' + (timeOnly === true ? new Date(at).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) : fmtTime(at))) })));
+  function activityCard(p) {
+    const ev = events(p);
     if (!ev.length) return null;
-    return h('section', { class: 'ac-card ac-stack' }, h('h3', { text: 'Последние события' }),
-      h('ol', { class: 'ac-feed' }, ev.slice(0, 6).map(([at, title, note]) => h('li', {}, h('span', { class: 'ac-feed-dot', 'aria-hidden': 'true' }), h('div', {}, h('strong', { text: title }), note ? h('small', { text: note }) : null), h('time', { datetime: at, text: fmtDate(at) })))));
+    return h('section', { class: 'ac-card ac-stack' },
+      h('div', { class: 'ac-card-head' }, h('h3', { text: 'Последние события' }), ev.length > 5 ? h('button', { type: 'button', class: 'ac-link-btn', text: 'Вся история →', onclick: () => openTab('history', p) }) : null),
+      h('ol', { class: 'ac-feed' }, ev.slice(0, 5).map(e => feedItem(e))));
+  }
+  function historyPanel(p) {
+    const ev = events(p);
+    if (!ev.length) return [empty('История появится, когда по проекту начнутся изменения: этапы, сметы, счета, файлы.')];
+    const days = new Map();
+    for (const e of ev) { const d = fmtDate(e[0].slice(0, 10)); if (!days.has(d)) days.set(d, []); days.get(d).push(e); }
+    return [h('section', { class: 'ac-card ac-stack' }, h('h3', { text: 'История изменений' }),
+      h('p', { class: 'ac-note', text: 'Всё, что происходило с проектом: решения по сметам, счета, файлы, смена этапов. Об этих событиях бот присылает уведомления в Telegram.' }),
+      ...[...days].map(([day, list]) => h('div', { class: 'ac-day' }, h('h4', { class: 'ac-day-title', text: day }), h('ol', { class: 'ac-feed ac-feed--full' }, list.map(e => feedItem(e, true))))))];
   }
 
   function moneyPanel(p) {
@@ -234,18 +284,54 @@
     ].filter(Boolean);
   }
 
+  function uploader(p) {
+    const input = h('input', { type: 'file', multiple: true, class: 'ac-sr', 'aria-label': 'Выбрать файлы' });
+    const bar = h('i'); const status = h('span', { class: 'ac-up-status', 'aria-live': 'polite' });
+    const zone = h('label', { class: 'ac-card ac-upload' + (state.preview ? ' is-off' : '') },
+      input, h('span', { class: 'ac-upload-ico' }, icon('client')),
+      h('span', { class: 'ac-stack ac-upload-copy' }, h('strong', { text: 'Передать файлы команде' }),
+        h('span', { class: 'ac-note', text: state.preview ? 'В режиме просмотра загрузка отключена.' : 'Перетащите сюда или нажмите, чтобы выбрать. ТЗ, логотипы, выгрузки, фото — до 25 МБ за файл.' })),
+      h('span', { class: 'ac-up-bar' }, bar), status);
+    const send1 = file => new Promise((resolve, reject) => {
+      const x = new XMLHttpRequest();
+      x.open('PUT', `${base}upload/${p.id}?name=${encodeURIComponent(file.name)}`);
+      x.withCredentials = true;
+      x.upload.onprogress = e => { if (e.lengthComputable) bar.style.width = Math.round(e.loaded / e.total * 100) + '%'; };
+      x.onload = () => { let d = {}; try { d = JSON.parse(x.responseText); } catch {} x.status < 300 ? resolve(d) : reject(new Error(d.error || (x.status === 413 ? 'Файл больше 25 МБ.' : 'Не удалось загрузить файл.'))); };
+      x.onerror = () => reject(new Error('Нет связи с сервером.'));
+      x.send(file);
+    });
+    const run = async files => {
+      if (state.preview || !files.length) return;
+      zone.classList.add('is-busy');
+      let ok = 0;
+      for (const [n, file] of [...files].entries()) {
+        status.textContent = `Загружаем ${n + 1} из ${files.length}: ${file.name}`; bar.style.width = '0%';
+        if (file.size > 25 * 1024 * 1024) { toast(`«${file.name}» больше 25 МБ — пришлите ссылкой в сообщениях`); continue; }
+        try { const d = await send1(file); Object.assign(p, d.project); ok++; } catch (e) { toast(e.message); }
+      }
+      zone.classList.remove('is-busy'); status.textContent = '';
+      if (ok) { toast(ok === 1 ? 'Файл передан команде' : `Передано файлов: ${ok}`); render({ animate: false }); }
+    };
+    input.addEventListener('change', () => run(input.files));
+    for (const ev of ['dragenter', 'dragover']) zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.add('is-drag'); });
+    for (const ev of ['dragleave', 'drop']) zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.remove('is-drag'); });
+    zone.addEventListener('drop', e => run(e.dataTransfer.files));
+    if (state.preview) input.disabled = true;
+    return zone;
+  }
   function filesPanel(p) {
-    if (!p.files.length) return [empty('Здесь появятся макеты, тестовые версии и документы по проекту.')];
-    const groups = [['build', 'Тестовые версии и сборки'], ['design', 'Макеты'], ['document', 'Документы'], ['link', 'Ссылки']];
-    return groups.map(([kind, title]) => {
-      const items = p.files.filter(f => f.kind === kind);
+    const groups = [['client', 'Ваши файлы'], ['build', 'Тестовые версии и сборки'], ['design', 'Макеты'], ['document', 'Документы'], ['link', 'Ссылки']];
+    const lists = groups.map(([kind, title]) => {
+      const items = p.files.filter(f => (f.byClient ? 'client' : f.kind) === kind);
       if (!items.length) return null;
       return h('section', { class: 'ac-card ac-stack' }, h('h3', { text: title }),
         h('ul', { class: 'ac-files' }, items.map(f => h('li', {},
-          h('span', { class: 'ac-kind', 'aria-hidden': 'true', text: KIND[f.kind] }),
+          h('span', { class: 'ac-kind', 'data-kind': f.byClient ? 'client' : f.kind }, icon(f.byClient ? 'client' : f.kind)),
           h('div', {}, f.href ? h('a', { href: f.href, target: f.file ? null : '_blank', rel: f.file ? null : 'noopener', text: f.title }) : h('strong', { text: f.title }),
             f.note || f.date ? h('div', { class: 'ac-muted', text: [f.note, fmtDate(f.date)].filter(Boolean).join(' · ') }) : null)))));
     }).filter(Boolean);
+    return [uploader(p), ...(lists.length ? lists : [empty('Здесь появятся макеты, тестовые версии и документы по проекту.')])];
   }
 
   function chatPanel(p) {
@@ -318,10 +404,6 @@
   function welcome() {
     const L = state.links || {};
     const name = (state.client.name || '').trim().split(/\s+/)[0];
-    const svgNS = 'http://www.w3.org/2000/svg';
-    const art = document.createElementNS(svgNS, 'svg');
-    art.setAttribute('viewBox', '0 0 320 120'); art.setAttribute('class', 'ac-welcome-art'); art.setAttribute('aria-hidden', 'true');
-    art.innerHTML = '<path class="ac-w-line" d="M40 60H280"/>' + [40, 160, 280].map((x, i) => `<g class="ac-w-node" style="--i:${i}"><circle cx="${x}" cy="60" r="22"/><text x="${x}" y="66" text-anchor="middle">${i + 1}</text></g>`).join('') + '<circle class="ac-w-dot" r="5" cy="60" cx="40"/>';
     const steps = [['Опишите задачу', 'Пара абзацев: что есть сейчас и что хотите получить.'], ['Смета и договор', 'Ответим в течение дня, зафиксируем объём и цену.'], ['Проект — здесь', 'Этапы, файлы, счета и переписка в одном месте.']];
     const hero = h('section', { class: 'ac-card ac-welcome ac-enter' },
       h('div', { class: 'ac-stack' },
@@ -331,14 +413,13 @@
         h('div', { class: 'ac-welcome-actions' },
           h('button', { type: 'button', class: 'ac-btn', onclick: openRequest, text: 'Оставить заявку' }),
           h('a', { class: 'ac-btn ac-btn--ghost', href: support, text: 'Написать в Telegram' }))),
-      art,
-      h('ol', { class: 'ac-welcome-steps' }, steps.map(([t, d], i) => h('li', { style: '--i:' + i }, h('strong', { text: t }), h('span', { text: d })))));
-    const tile = (title, text, href, label, onclick) => h('a', { class: 'ac-card ac-tile ac-enter', href: href || '#', target: href && /^https?:/.test(href) && !href.startsWith(location.origin) ? '_blank' : null, rel: 'noopener', onclick: onclick ? e => { e.preventDefault(); onclick(); } : null },
-      h('strong', { text: title }), h('span', { class: 'ac-note', text }), h('span', { class: 'ac-tile-go', text: label + ' →' }));
+      h('ol', { class: 'ac-welcome-steps' }, steps.map(([t, d], i) => h('li', { style: '--i:' + i }, h('span', { class: 'ac-step-ico' }, icon(['request', 'money', 'stage'][i])), h('small', { class: 'ac-step-n', text: 'Шаг ' + (i + 1) }), h('strong', { text: t }), h('span', { text: d })))));
+    const tile = (title, text, href, label, onclick, ico) => h('a', { class: 'ac-card ac-tile ac-enter', href: href || '#', target: href && /^https?:/.test(href) && !href.startsWith(location.origin) ? '_blank' : null, rel: 'noopener', onclick: onclick ? e => { e.preventDefault(); onclick(); } : null },
+      h('span', { class: 'ac-tile-ico' }, icon(ico)), h('strong', { text: title }), h('span', { class: 'ac-note', text }), h('span', { class: 'ac-tile-go', text: label + ' →' }));
     const tiles = h('div', { class: 'ac-tiles' },
-      tile('Магазин услуг и железа', 'Сайты, боты, ИИ и серверы NVIDIA с ценами.', L.shop, 'Открыть'),
-      tile('Бот кабинета', 'Статусы проектов, счета и коды входа прямо в Telegram.', L.bot, 'Открыть бота'),
-      tile('Свой логин', state.client.login ? 'Сейчас: ' + state.client.login : 'Задайте логин, чтобы не вводить Telegram ID.', '#', 'Настроить', openProfile));
+      tile('Магазин услуг и железа', 'Сайты, боты, ИИ и серверы NVIDIA с ценами.', L.shop, 'Открыть', null, 'shop'),
+      tile('Бот кабинета', 'Статусы проектов, счета и коды входа прямо в Telegram.', L.bot, 'Открыть бота', null, 'bot'),
+      tile('Свой логин', state.client.login ? 'Сейчас: ' + state.client.login : 'Задайте логин, чтобы не вводить Telegram ID.', '#', 'Настроить', openProfile, 'user'));
     return [hero, tiles];
   }
 

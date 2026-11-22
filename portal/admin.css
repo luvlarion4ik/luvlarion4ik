@@ -85,3 +85,6 @@
 .ad-list li:nth-child(2) { animation-delay:.04s; } .ad-list li:nth-child(3) { animation-delay:.08s; } .ad-list li:nth-child(4) { animation-delay:.12s; } .ad-list li:nth-child(n+5) { animation-delay:.16s; }
 @keyframes ad-rise { from { opacity:0; transform:translateY(10px); } }
 @media (prefers-reduced-motion:reduce) { .ad-summary div,.ad-client-list,.ad-workspace > .ac-card,.ad-side > .ac-card,.ad-list li { animation:none; } .ad-summary div:hover,.ad-list button:hover { transform:none; } }
+.ad-history { list-style:none; margin:0; padding:0; display:grid; gap:.55rem; max-height:320px; overflow:auto; font-size:.9rem; }
+.ad-history li { display:grid; gap:.15rem; padding:.55rem .7rem; border-radius:10px; background:var(--surface); }
+.ad-history time { color:var(--muted); font-size:.78rem; }

@@ -76,7 +76,7 @@ test('portal profile login, requests and Telegram menu', async t => {
   await writeFile(join(dir, 'data.json'), JSON.stringify(fixture));
   const start = async () => {
     processHandle = spawn(process.execPath, [fileURLToPath(new URL('../portal/server.mjs', import.meta.url))], {
-      env: { ...process.env, PORTAL_DATA: dir, PORTAL_PORT: String(clientPort), PORTAL_ADMIN_PORT: String(adminPort),
+      env: { ...process.env, PORTAL_OWNER_TG: '999', PORTAL_DATA: dir, PORTAL_PORT: String(clientPort), PORTAL_ADMIN_PORT: String(adminPort),
         PORTAL_DEV: '1', PORTAL_ORIGIN: origin, TELEGRAM_BOT_TOKEN: '10:fixture', TELEGRAM_BOT_USERNAME: 'fixture_bot',
         TELEGRAM_API_BASE: 'http://127.0.0.1:' + botPort },
       stdio: ['ignore', 'pipe', 'inherit'],
@@ -171,6 +171,23 @@ test('portal profile login, requests and Telegram menu', async t => {
   assert.equal(ok.status, 200);
   assert.equal((await ok.json()).project.estimates[0].status, 'approved');
   assert.equal((await decide({ decision: 'declined' })).status, 409);
+
+  // Загрузка файла клиентом и история проекта.
+  const upload = (name, body, site = origin) => fetch(account + 'upload/' + proj.id + '?name=' + encodeURIComponent(name), { method: 'PUT', headers: { origin: site, cookie }, body });
+  assert.equal((await upload('brief.pdf', 'x', 'https://elsewhere.invalid')).status, 403);
+  assert.equal((await upload('run.exe', 'x')).status, 415);
+  assert.equal((await upload('empty.txt', '')).status, 422);
+  const beforeUp = messages.length;
+  const up = await upload('ТЗ клиники.pdf', 'PDF-данные');
+  assert.equal(up.status, 200);
+  const upProject = (await up.json()).project;
+  const mine = upProject.files.find(f => f.byClient);
+  assert.equal(mine.title, 'ТЗ клиники.pdf');
+  assert.equal(await (await fetch(origin + mine.href.replace(/^https?:\/\/[^/]+/, ''), { headers: { cookie } })).text(), 'PDF-данные');
+  assert.ok(upProject.history.some(e => e.who === 'client' && /ТЗ клиники/.test(e.text)));
+  assert.ok(upProject.history.some(e => e.who === 'client' && /согласована/i.test(e.text)));
+  assert.ok(upProject.history.some(e => e.who === 'studio'));
+  await until(() => messages.slice(beforeUp).find(m => String(m.chat_id) === '999' && /Загружен файл/.test(m.text)), 'owner upload notification');
 
   // Короткая форма заявки с сайта.
   const lead = (data, site = origin) => fetch(account + 'api/lead', { method: 'POST', headers: { origin: site, 'content-type': 'application/json' }, body: JSON.stringify(data) });

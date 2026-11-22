@@ -31,6 +31,9 @@ function tellClient(clientId, lines) {
   void telegramLogin.notifyClient?.(c.tgId, lines.join('\n'));
 }
 const STATUS_RU = { brief: 'Обсуждение задачи', design: 'Дизайн', development: 'Разработка', review: 'Проверка и правки', launched: 'Запущен', support: 'Поддержка', paused: 'На паузе' };
+function logHistory(p, who, text) {
+  p.history = [...(p.history || []), { at: now(), who, text: String(text).replace(/<[^>]+>/g, '').slice(0, 300) }].slice(-200);
+}
 function projectChanges(prev, next) {
   const out = [];
   const t = `<b>${escHtml(next.title)}</b>`;
@@ -270,7 +273,7 @@ function projectView(p) {
   return {
     id: p.id, title: p.title, summary: p.summary, status: p.status, updated: p.updated,
     stages: p.stages, estimates: p.estimates.map(fileLink(p)), invoices: p.invoices.map(fileLink(p)),
-    files: p.files.map(fileLink(p)), messages: p.messages.map(({ id, from, text, at }) => ({ id, from, text, at })), unread,
+    files: p.files.map(fileLink(p)), history: (p.history || []).slice(-100), messages: p.messages.map(({ id, from, text, at }) => ({ id, from, text, at })), unread,
   };
 }
 const fileLink = p => item => ({ ...item, href: item.file ? `${BASE}files/${p.id}/${encodeURIComponent(item.file)}` : item.url || '' });
@@ -287,7 +290,7 @@ function cleanProject(input, prev = {}) {
     stages: list(input.stages, s => str(s.title, 140) && { title: str(s.title, 140), state: pick(s.state, ['todo', 'active', 'done'], 'todo'), date: date(s.date), note: str(s.note, 400) }),
     estimates: list(input.estimates, e => str(e.title, 140) && { title: str(e.title, 140), ...money(e), status: pick(e.status, ['draft', 'sent', 'approved', 'declined'], 'sent'), note: str(e.note, 400), url: url(e.url), file: e.file ? fileName(e.file) : '' }),
     invoices: list(input.invoices, i => str(i.number, 40) && { number: str(i.number, 40), title: str(i.title, 140), ...money(i), status: pick(i.status, ['unpaid', 'paid', 'overdue', 'cancelled'], 'unpaid'), due: date(i.due), url: url(i.url), file: i.file ? fileName(i.file) : '' }),
-    files: list(input.files, f => str(f.title, 140) && (url(f.url) || f.file) && { title: str(f.title, 140), kind: pick(f.kind, ['design', 'build', 'document', 'link'], 'link'), note: str(f.note, 400), date: date(f.date), url: url(f.url), file: f.file ? fileName(f.file) : '' }, 200),
+    files: list(input.files, f => str(f.title, 140) && (url(f.url) || f.file) && { title: str(f.title, 140), kind: pick(f.kind, ['design', 'build', 'document', 'link', 'client'], 'link'), note: str(f.note, 400), date: date(f.date), url: url(f.url), file: f.file ? fileName(f.file) : '', ...(f.byClient ? { byClient: true } : {}) }, 200),
     messages: prev.messages || [],
     created: prev.created || now(),
     updated: now(),
@@ -420,10 +423,38 @@ async function clientHandler(req, res) {
       summary: text + (budget ? '\n\nБюджет: ' + budget : ''),
       stages: [{ title: 'Обсуждение задачи', state: 'active' }, { title: 'Смета и договор', state: 'todo' }, { title: 'Работа над проектом', state: 'todo' }, { title: 'Запуск', state: 'todo' }] });
     project.messages = [{ id: id(), from: 'client', text: '[' + topic + '] ' + text + (budget ? '\nБюджет: ' + budget : ''), at: now(), readByStudio: false }];
+    logHistory(project, 'client', 'Заявка отправлена: ' + topic);
     db.projects.push(project);
     await saveDb();
     void telegramLogin.notifyOwner?.(`Новая заявка из кабинета\n${me.client.name}${me.client.company ? ' · ' + me.client.company : ''}\n${topic}: ${text.slice(0, 500)}${budget ? '\nБюджет: ' + budget : ''}`, ownerChatId());
     return send(res, 200, { project: projectView(project) });
+  }
+  const cup = path.match(/^\/upload\/([a-f0-9]+)$/);
+  if (cup && req.method === 'PUT') {
+    sameOrigin(req);
+    if (!me) throw new HttpError(401, 'Войдите в кабинет.');
+    if (me.session.via === 'admin') throw new HttpError(403, 'В режиме просмотра загрузка отключена.');
+    const p = db.projects.find(x => x.id === cup[1] && x.clientId === me.client.id);
+    if (!p) throw new HttpError(404, 'Проект не найден.');
+    if (p.files.filter(f => f.byClient).length >= 100) throw new HttpError(429, 'В проекте уже 100 ваших файлов. Удалите старые через команду.');
+    const original = str(u.searchParams.get('name'), 120) || 'file';
+    if (/\.(exe|bat|cmd|sh|js|msi|scr|com|ps1|vbs|jar|app|dmg)$/i.test(original)) throw new HttpError(415, 'Этот тип файла нельзя загрузить. Упакуйте его в ZIP.');
+    const limit = 25 * 1024 * 1024;
+    if (Number(req.headers['content-length']) > limit) throw new HttpError(413, 'Файл больше 25 МБ.');
+    await mkdir(join(filesDir, p.id), { recursive: true });
+    const chunks = []; let size = 0;
+    for await (const c of req) { size += c.length; if (size > limit) throw new HttpError(413, 'Файл больше 25 МБ.'); chunks.push(c); }
+    if (!size) throw new HttpError(422, 'Пустой файл.');
+    const stamp = new Date().toISOString().slice(0, 10);
+    let name = fileName(original);
+    if (projectHasFile(p, name)) name = fileName(stamp + '-' + id().slice(0, 4) + '-' + original);
+    await writeFile(join(filesDir, p.id, name), Buffer.concat(chunks));
+    const f = { title: original, kind: 'client', note: 'Загружено клиентом · ' + Math.max(1, Math.round(size / 1024)) + ' КБ', date: stamp, url: '', file: name, byClient: true };
+    p.files.push(f); p.updated = now();
+    logHistory(p, 'client', 'Загружен файл «' + original + '»');
+    await saveDb();
+    void telegramLogin.notifyOwner?.(`${me.client.name} · ${p.title}\nЗагружен файл «${original}»`, ownerChatId());
+    return send(res, 200, { project: projectView(p) });
   }
   const est = path.match(/^\/api\/projects\/([a-f0-9]+)\/estimates\/(\d{1,3})$/);
   if (est && req.method === 'POST') {
@@ -442,6 +473,7 @@ async function clientHandler(req, res) {
     const text = `Смета «${e.title}» ${decision === 'approved' ? 'согласована' : 'отклонена'}${comment ? '. Комментарий: ' + comment : ''}`;
     p.messages.push({ id: id(), from: 'client', text, at: now(), readByStudio: false });
     p.updated = now();
+    logHistory(p, 'client', text);
     await saveDb();
     void telegramLogin.notifyOwner?.(`${me.client.name} · ${p.title}\n${text}`, ownerChatId());
     return send(res, 200, { project: projectView(p) });
@@ -468,6 +500,7 @@ async function clientHandler(req, res) {
     if (last && Date.now() - Date.parse(last.at) < 3000) throw new HttpError(429, 'Подождите пару секунд.');
     const m = { id: id(), from: 'client', text, at: now(), readByStudio: false };
     p.messages.push(m); p.updated = now();
+    logHistory(p, 'client', 'Сообщение клиента');
     await saveDb();
     void telegramLogin.notifyOwner?.(`Сообщение от клиента\n${me.client.name} · ${p.title}\n\n${text.slice(0, 800)}`, ownerChatId());
     return send(res, 200, { message: { id: m.id, from: m.from, text: m.text, at: m.at } });
@@ -555,7 +588,12 @@ async function adminHandler(req, res) {
     const project = cleanProject(b, prev);
     if (prev) Object.assign(prev, project); else db.projects.push(project);
     await saveDb();
-    tellClient(project.clientId, projectChanges(before, project));
+    const changes = projectChanges(before, project);
+    const target = prev || db.projects.find(x => x.id === project.id);
+    if (!before) logHistory(target, 'studio', 'Проект создан');
+    (changes.length ? changes : before ? ['Команда обновила данные проекта'] : []).forEach(t => logHistory(target, 'studio', t));
+    await saveDb();
+    tellClient(project.clientId, changes);
     return send(res, 200, project);
   }
   const proj = path.match(/^\/api\/projects\/([a-f0-9]+)(?:\/(messages|read))?$/);
@@ -572,6 +610,7 @@ async function adminHandler(req, res) {
       const text = str((await readJson(req, 16 * 1024)).text, 4000);
       if (!text) throw new HttpError(422, 'Напишите ответ.');
       p.messages.push({ id: id(), from: 'studio', text, at: now(), readByClient: false });
+      logHistory(p, 'studio', 'Ответ команды в переписке');
       tellClient(p.clientId, [`💬 <b>${escHtml(p.title)}</b>: новый ответ команды\n\n${escHtml(text.slice(0, 600))}`]);
       p.messages.forEach(m => { if (m.from === 'client') m.readByStudio = true; });
       p.updated = now();
