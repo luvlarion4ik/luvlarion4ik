@@ -38,7 +38,7 @@ test('portal profile login, requests and Telegram menu', async t => {
   const bot = createServer(async (req, res) => {
     let raw = '';
     for await (const chunk of req) raw += chunk;
-    const body = JSON.parse(raw || '{}');
+    const body = /multipart/.test(req.headers['content-type'] || '') ? { multipart: true } : JSON.parse(raw || '{}');
     const method = req.url.split('/').at(-1);
     let result;
     if (method === 'getMe') result = { username: 'fixture_bot' };
@@ -46,6 +46,7 @@ test('portal profile login, requests and Telegram menu', async t => {
     if (method === 'getUpdates') { await delay(20); result = updates.splice(0); }
     if (method === 'sendMessage' || method === 'editMessageText') { messages.push({ ...body, method }); result = { message_id: messages.length }; }
     if (method === 'answerCallbackQuery' || method === 'setMyCommands') result = true;
+    if (method === 'sendPhoto') { messages.push({ method, photo: true }); result = { message_id: messages.length }; }
     res.writeHead(result ? 200 : 400, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ ok: Boolean(result), result }));
   });
