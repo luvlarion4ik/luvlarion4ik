@@ -3,7 +3,7 @@
 // цены железа — по запросу (поставка под заказ через партнёров).
 import { esc } from './site.mjs';
 import { packageStartingPrice } from './pricing.mjs';
-import { parts } from './segments.mjs';
+import { parts, segments as segmentPages } from './segments.mjs';
 import { pageArt } from './page-art.mjs';
 import { renderShop, hardware, deviceArt } from './shop.mjs';
 
@@ -75,12 +75,12 @@ function grid(items, icons, ctx) {
 }
 
 function steps(items) {
-  return `<ol class="bundle-flow">${items.map(([t, d], i) => `<li style="--i:${i}"><span class="bundle-node">${i + 1}</span><strong>${esc(t)}</strong><span>${esc(d)}</span></li>`).join('')}</ol>`;
+  return `<ol class="bundle-flow" style="--n:${items.length}">${items.map(([t, d], i) => `<li style="--i:${i}"><span class="bundle-node">${i + 1}</span><strong>${esc(t)}</strong><span>${esc(d)}</span></li>`).join('')}</ol>`;
 }
 
 function links(lang, ctx, routes) {
   return `<div class="audience-related audience-cross">${routes.map(route => {
-    const page = enterprisePages.find(p => p.route === route);
+    const page = enterprisePages.find(p => p.route === route) ?? segmentPages.find(p => p.route === route);
     const label = page ? page[lang].label : route;
     const text = page ? page[lang].card : '';
     return `<a href="${ctx.home}${route}"><strong>${esc(label)} <span aria-hidden="true">→</span></strong><span>${esc(text)}</span></a>`;
@@ -462,6 +462,18 @@ export const enterprisePages = [
     faq: [['Only from China?', 'No. China is common, but we choose the country and supplier for the task and deadline.'], ['Can I order a single unit?', 'Yes, but logistics per unit costs more. We will suggest how to combine orders.'], ['Who handles warranty?', 'Warranty terms are fixed in the contract: we handle some cases with the supplier, others follow the manufacturer’s terms.'], ['How long does it take?', 'From a few weeks, depending on the goods and country. The exact date is in the quote.']],
   }),
 
+  page('services/', 'layers', ['landing'], {
+    eyebrow: 'Карта услуг', label: 'Все услуги', card: 'Все разделы и страницы студии на одной карте.',
+    title: 'Все услуги Devlarion на одной карте',
+    description: 'Пять направлений, внутри — конкретные услуги. Раскройте ветку или найдите нужное поиском.',
+    faq: [['Не нашли свою задачу?', 'Напишите в Telegram: если задача про сайты, ботов, ИИ или технику, мы её возьмём или подскажем, кто сделает лучше.']],
+  }, {
+    eyebrow: 'Service map', label: 'All services', card: 'Every section and page on one map.',
+    title: 'All Devlarion services on one map',
+    description: 'Five directions with specific services inside. Open a branch or search.',
+    faq: [['Can’t find your task?', 'Message us on Telegram: if it is about websites, bots, AI or hardware, we will take it on or point you to someone better.']],
+  }),
+
   page('shop/', 'layers', ['landing', 'automation'], {
     eyebrow: 'Магазин цифровых услуг',
     label: 'Магазин услуг',
@@ -479,6 +491,112 @@ export const enterprisePages = [
   }),
 ];
 
+
+function rack3d(lang) {
+  const trays = n => Array.from({ length: n }, (_, i) => `<i style="--i:${i}"><b></b><b></b><b></b><em></em></i>`).join('');
+  const face = (cls, inner = '') => `<div class="r3-face ${cls}">${inner}</div>`;
+  return `<div class="rack3d" data-rack3d>
+    <div class="r3-stage" role="img" aria-label="${pick(lang, 'Трёхмерная стойка DGX: тяните, чтобы вращать', 'A 3D DGX rack: drag to rotate')}">
+      <div class="r3-glow" aria-hidden="true"></div>
+      <div class="r3-rack">
+        ${face('front', `<div class="r3-trays">${trays(14)}</div><span class="r3-badge">DGX</span>`)}
+        ${face('back', `<div class="r3-fans">${Array.from({ length: 12 }, () => '<i></i>').join('')}</div>`)}
+        ${face('left', '<div class="r3-side"></div>')}${face('right', '<div class="r3-side"></div>')}
+        ${face('top')}${face('bottom')}
+      </div>
+      <div class="r3-floor" aria-hidden="true"></div>
+    </div>
+    <div class="r3-bar"><span>${pick(lang, 'Тяните мышью или пальцем', 'Drag to rotate')}</span><button type="button" data-r3-toggle aria-pressed="false">${pick(lang, 'Пауза', 'Pause')}</button></div>
+  </div>`;
+}
+
+function calculator(lang) {
+  const models = [['7', 'Qwen 7B / Llama 8B'], ['14', 'Qwen 14B'], ['32', 'Qwen 32B'], ['70', 'Llama 3.3 70B / Qwen 72B'], ['120', 'gpt-oss-120B'], ['235', 'Qwen3 235B (MoE)'], ['405', 'Llama 3.1 405B'], ['671', 'DeepSeek V3 / R1 671B']];
+  return `<section class="section wrap audience-section gpu-calc" data-gpucalc data-lang="${lang}"><h2>${pick(lang, 'Калькулятор: какое железо нужно под модель', 'Calculator: what hardware a model needs')}</h2>
+    <p class="loss-lead">${pick(lang, 'Выберите модель, квантизацию, длину контекста и число одновременных пользователей. Ниже — из чего складывается память и сколько стоит каждый вариант железа.', 'Choose a model, quantisation, context length and concurrent users. Below: how memory adds up and what each hardware option costs.')}</p>
+    <form class="calc-grid" onsubmit="return false">
+      <label><span>${pick(lang, 'Модель', 'Model')}</span><select name="m">${models.map(([p, t], i) => `<option value="${p}"${i === 3 ? ' selected' : ''}>${t}</option>`).join('')}</select></label>
+      <label><span>${pick(lang, 'Квантизация весов', 'Weight quantisation')}</span><select name="q"><option value="2">${pick(lang, "FP16 / BF16 — без потерь", "FP16 / BF16 — lossless")}</option><option value="1" selected>${pick(lang, "FP8 / INT8 — почти без потерь", "FP8 / INT8 — near lossless")}</option><option value="0.55">${pick(lang, "4 бит (AWQ, GPTQ, FP4) — экономно", "4-bit (AWQ, GPTQ, FP4) — compact")}</option></select></label>
+      <label><span>${pick(lang, 'Длина контекста', 'Context length')}</span><select name="c"><option value="4096">${pick(lang, "4 тыс. токенов", "4k tokens")}</option><option value="8192" selected>8k</option><option value="32768">32k</option><option value="131072">128k</option></select></label>
+      <label><span>${pick(lang, 'Одновременных пользователей', 'Concurrent users')}: <b data-u>10</b></span><input type="range" name="u" min="1" max="200" value="10"></label>
+    </form>
+    <div class="calc-result" aria-live="polite">
+      <div class="calc-total"><small>${pick(lang, 'Нужно видеопамяти', 'GPU memory needed')}</small><b data-mem>—</b><div class="calc-bars"><i data-bar="w"></i><i data-bar="k"></i><i data-bar="o"></i></div><p class="calc-why" data-why></p></div>
+      <div class="calc-matrix"><small>${pick(lang, 'Та же модель при разной квантизации', 'The same model at other quantisations')}</small><div data-matrix></div></div>
+    </div>
+    <div class="calc-options"><h3>${pick(lang, 'Варианты железа', 'Hardware options')}</h3><div class="calc-table" data-options role="table"></div>
+    <p class="audience-note-line">${pick(lang, 'Расчёт приблизительный: веса = параметры × байты на параметр; кэш контекста ≈ 0,035 ГБ на миллиард параметров на пользователя при 8 тыс. токенов; плюс 10% запаса. Точную конфигурацию подбираем на пилоте.', 'An estimate: weights = parameters × bytes per parameter; context cache ≈ 0.035 GB per billion parameters per user at 8k tokens; plus a 10% margin. We size precisely during a pilot.')}</p>
+    <a class="button" data-calc-link href="#">${pick(lang, 'Обсудить расчёт в Telegram', 'Discuss this on Telegram')}</a></div>
+  </section>`;
+}
+function cloudCompare(lang) {
+  const head = lang === 'ru' ? ['', 'Зарубежный ИИ-сервис', 'Корпоративный контур Devlarion'] : ['', 'Foreign AI service', 'Devlarion private perimeter'];
+  const rows = lang === 'ru' ? [
+    ['Где обрабатываются данные', 'За рубежом, по правилам провайдера', 'В российском ЦОД, по вашему договору'],
+    ['Подтверждение обработки', 'Нет журнала по запросам', 'Журнал: ID, время, модель, узел'],
+    ['Обучение на ваших данных', 'Зависит от тарифа', 'Исключено конфигурацией'],
+    ['Персональные данные клиентов', 'Риск трансграничной передачи', 'Остаются в вашем контуре'],
+    ['Цена одного утечки (13.11 КоАП)', 'На вас: от 3 до 15 млн ₽ и выше', 'Риск снижен, ответственность — по договору'],
+    ['Скорость старта', 'Минуты', 'Недели (пилот)'],
+  ] : [
+    ['Where data is processed', 'Abroad, under the provider’s rules', 'In a Russian data centre, under your contract'],
+    ['Evidence of processing', 'No per-request log', 'Log: ID, time, model, node'],
+    ['Training on your data', 'Depends on plan', 'Excluded by configuration'],
+    ['Customers’ personal data', 'Cross-border transfer risk', 'Stays in your perimeter'],
+    ['Cost of one leak (Art. 13.11)', 'On you: RUB 3–15m and up', 'Risk reduced, liability by contract'],
+    ['Speed to start', 'Minutes', 'Weeks (pilot)'],
+  ];
+  return `<section class="section wrap audience-section"><h2>${pick(lang, 'Зарубежный ИИ-сервис или наш контур', 'A foreign AI service or our perimeter')}</h2><div class="bundle-table cmp3" role="table"><div role="row" class="bundle-row bundle-head">${head.map(x => `<span role="columnheader">${esc(x)}</span>`).join('')}</div>${rows.map(r => `<div role="row" class="bundle-row">${r.map((x, i) => `<span role="${i ? 'cell' : 'rowheader'}"${i ? ` data-label="${esc(head[i])}"` : ''}>${esc(x)}</span>`).join('')}</div>`).join('')}</div><p class="audience-note-line">${pick(lang, 'Сравнение общее и не заменяет юридическую оценку вашего случая.', 'A general comparison; it does not replace a legal assessment of your case.')}</p></section>`;
+}
+
+
+const TREE = [
+  ['who', ['Для кого', 'Who it is for'], ['Начните отсюда, если не знаете, что выбрать', 'Start here if you are unsure'], [
+    ['self-employed/', ['Самозанятым и ИП', 'Self-employed'], ['Сайт или бот, чтобы клиенты писали напрямую', 'A site or bot so customers write to you']],
+    ['business/', ['Малому и среднему бизнесу', 'Small and medium business'], ['Сайт, CRM, бот и кабинет', 'Website, CRM, bot and portal']],
+    ['enterprise/', ['Крупным компаниям', 'Large companies'], ['Пилот, интеграции, NDA', 'Pilot, integrations, NDA']],
+  ]],
+  ['web', ['Сайты и боты', 'Websites and bots'], ['Каналы, через которые приходят заявки', 'Channels that bring enquiries'], [
+    ['website/', ['Сайт под ключ', 'Website'], ['От лендинга до сайта с каталогом', 'From a landing page to a catalogue site']],
+    ['telegram-bot/', ['Бот и мини-приложение', 'Bot and mini app'], ['Telegram, MAX, VK', 'Telegram, MAX, VK']],
+    ['solutions/', ['Готовые модули', 'Ready-made modules'], ['Быстрее и дешевле разработки с нуля', 'Faster and cheaper than from scratch']],
+    ['bundle/', ['Пакетом выгоднее', 'Better as a bundle'], ['Сайт + SEO + GEO + бот + поддержка', 'Site + SEO + GEO + bot + support']],
+  ]],
+  ['ai', ['ИИ для бизнеса', 'AI for business'], ['От ассистента до закрытого контура', 'From an assistant to a private perimeter'], [
+    ['ai-assistant/', ['ИИ-ассистент', 'AI assistant'], ['Отвечает и передаёт заявки в CRM', 'Answers and passes enquiries to CRM']],
+    ['private-ai/', ['Корпоративный ИИ в РФ', 'Private AI in Russia'], ['LLM, RAG, документы и речь в вашем контуре', 'LLMs, RAG, documents and speech in your perimeter']],
+    ['industries/clinics/', ['Клиники', 'Clinics'], ['Врачебная тайна внутри', 'Medical confidentiality stays inside']],
+    ['industries/legal/', ['Юристы', 'Law firms'], ['Договоры и архив без утечек', 'Contracts and archives without leaks']],
+    ['industries/finance/', ['Банки и страхование', 'Banking and insurance'], ['Заявления и поддержка', 'Claims and support']],
+    ['industries/operations/', ['Производство и логистика', 'Manufacturing and logistics'], ['Документы, закупки, склад', 'Documents, procurement, warehouse']],
+    ['industries/contact-centers/', ['Контакт-центры', 'Contact centres'], ['Расшифровка и качество', 'Transcription and quality']],
+    ['fintech/', ['FinTech-продукты', 'FinTech products'], ['Сервисы для финансовых компаний', 'Services for financial firms']],
+    ['edtech/', ['EdTech-продукты', 'EdTech products'], ['Платформы и ИИ для обучения', 'Learning platforms and AI']],
+  ]],
+  ['hw', ['Железо и вычисления', 'Hardware and compute'], ['Купить, арендовать, привезти', 'Buy, rent, import'], [
+    ['compute/', ['Купить или арендовать', 'Buy or rent'], ['3D-модели, калькулятор, сравнение', '3D models, calculator, comparison']],
+    ['hardware/', ['GPU-серверы и DGX', 'GPU servers and DGX'], ['Модели, цены, фото', 'Models, prices, photos']],
+    ['import/', ['Техника под заказ', 'Equipment to order'], ['Любая рабочая техника, в том числе из Китая', 'Any working equipment, including from China']],
+    ['shop/', ['Магазин', 'Shop'], ['Услуги и железо с корзиной', 'Services and hardware with a basket']],
+  ]],
+  ['grow', ['Рост и сопровождение', 'Growth and support'], ['Чтобы проект приносил заявки и дальше', 'So the project keeps bringing enquiries'], [
+    ['why-website/', ['Зачем бизнесу сайт', 'Why a website'], ['Что вы теряете без него', 'What you lose without one']],
+    ['seo/', ['SEO', 'SEO'], ['Яндекс, Google, карты', 'Yandex, Google, maps']],
+    ['geo/', ['GEO', 'GEO'], ['Видимость в ответах ИИ', 'Visibility in AI answers']],
+    ['support/', ['Сопровождение', 'Support'], ['Правки, мониторинг, обновления', 'Edits, monitoring, updates']],
+  ]],
+];
+function serviceTree(lang, ctx) {
+  const i = lang === 'ru' ? 0 : 1;
+  return `<section class="section wrap audience-section svc" data-svc>
+    <label class="shop-search svc-search"><span class="sr-only">${pick(lang, 'Поиск по услугам', 'Search services')}</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input type="search" data-svc-search placeholder="${pick(lang, 'Например: бот, SEO, клиника, DGX…', 'For example: bot, SEO, clinic, DGX…')}"></label>
+    <div class="svc-root"><span class="svc-root-dot" aria-hidden="true"></span><strong>Devlarion</strong></div>
+    <ul class="svc-tree">${TREE.map(([id, name, sub, leaves], n) => `<li class="svc-branch" style="--b:${n}"><details${n < 2 ? ' open' : ''}><summary><span class="svc-num">${String(n + 1).padStart(2, '0')}</span><span class="svc-name">${esc(name[i])}</span><small>${esc(sub[i])}</small><em>${leaves.length}</em></summary>
+      <ul class="svc-leaves">${leaves.map(([route, t, d], k) => `<li style="--k:${k}"><a href="${ctx.home}${route}"><strong>${esc(t[i])}</strong><span>${esc(d[i])}</span></a></li>`).join('')}</ul></details></li>`).join('')}</ul>
+    <p class="shop-none" data-svc-none hidden>${pick(lang, 'Ничего не нашлось. Напишите нам — подскажем.', 'Nothing found. Write to us and we will help.')}</p>
+  </section>`;
+}
+
 // ---------- Рендеры ----------
 export function renderEnterprisePage(lang, route, ctx) {
   const p = enterprisePages.find(x => x.route === route);
@@ -495,7 +613,7 @@ export function renderEnterprisePage(lang, route, ctx) {
       <section class="section wrap audience-section evidence"><h2>${esc(c.evidence.title)}</h2><div class="evidence-card"><div class="evidence-top"><span class="evidence-dot" aria-hidden="true"></span><strong>RU Processing Report</strong><small>DEMO</small></div><dl>${c.evidence.rows.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl></div><p class="audience-note-line">${esc(c.evidence.note)}</p></section>
       ${section(c.servicesTitle, cards(lang, ctx, c.services, { label }))}
       <aside class="wrap audience-note"><p>${esc(c.legal)}</p></aside>
-      ${section(pick(lang, 'Для каких отраслей', 'Industries'), links(lang, ctx, industries))}
+      ${section(pick(lang, 'Для каких отраслей', 'Industries'), links(lang, ctx, industries).replace('audience-related audience-cross', 'audience-related audience-cross cols5'))}
       ${renderCapacity(lang, p, ctx)}
       ${renderFAQ(lang, p, ctx)}
       ${section(pick(lang, 'Что логично сделать дальше', 'What to do next'), links(lang, ctx, ['hardware/', 'shop/', 'enterprise/']), 'audience-next')}
@@ -504,24 +622,31 @@ export function renderEnterprisePage(lang, route, ctx) {
     body = `${trustStrip(lang)}
       ${section(c.optionsTitle, cards(lang, ctx, c.options, { label, cls: 'two-up' }))}
       ${section(c.includedTitle, grid(c.included), 'audience-loss')}
-      ${section(pick(lang, 'Как это выглядит', 'What it looks like'), `<div class="photo-grid"><figure><img src="${ctx.asset}photos/nvidia-dgx-spark-desk.jpg" alt="${pick(lang, 'NVIDIA DGX Spark на рабочем столе рядом с ноутбуком', 'NVIDIA DGX Spark on a desk next to a laptop')}" width="1600" height="900" loading="lazy"><figcaption>${pick(lang, 'DGX Spark на рабочем столе. Фото: NVIDIA', 'DGX Spark on a desk. Photo: NVIDIA')}</figcaption></figure><figure><img src="${ctx.asset}photos/nvidia-gb200-nvl72.jpg" alt="${pick(lang, 'Стойки NVIDIA GB200 NVL72', 'NVIDIA GB200 NVL72 racks')}" width="1600" height="900" loading="lazy"><figcaption>${pick(lang, 'Стойка уровня GB200 NVL72. Фото: NVIDIA', 'A GB200 NVL72-class rack. Photo: NVIDIA')}</figcaption></figure><figure><img src="${ctx.asset}photos/frame-4-park.jpg" alt="${pick(lang, 'Ряды серверных стоек в тёмном зале', 'Rows of server racks in a dark hall')}" width="1672" height="941" loading="lazy"><figcaption>${pick(lang, 'Парк серверных стоек. Визуализация', 'A fleet of server racks. Visualisation')}</figcaption></figure></div><p class="audience-note-line">${pick(lang, 'Фото NVIDIA — из официального пресс-центра компании. Кадры с пометкой «Визуализация» созданы нами, у студии нет собственного парка: оборудование поставляется под заказ.', 'NVIDIA photos are from the company’s official newsroom. Images marked “Visualisation” are made by us; the studio has no fleet of its own, hardware is supplied to order.')}</p>`)}
+      ${section(pick(lang, 'Как это выглядит', 'What it looks like'), `<div class="photo-grid"><figure><img src="${ctx.asset}photos/nvidia-dgx-spark-desk.jpg" alt="${pick(lang, 'NVIDIA DGX Spark на рабочем столе рядом с ноутбуком', 'NVIDIA DGX Spark on a desk next to a laptop')}" width="1600" height="900" loading="lazy"><figcaption>${pick(lang, 'DGX Spark на рабочем столе. Фото: NVIDIA', 'DGX Spark on a desk. Photo: NVIDIA')}</figcaption></figure><figure><img src="${ctx.asset}photos/nvidia-gb200-nvl72.jpg" alt="${pick(lang, 'Стойки NVIDIA GB200 NVL72', 'NVIDIA GB200 NVL72 racks')}" width="1600" height="900" loading="lazy"><figcaption>${pick(lang, 'Стойка уровня GB200 NVL72. Фото: NVIDIA', 'A GB200 NVL72-class rack. Photo: NVIDIA')}</figcaption></figure><figure><img src="${ctx.asset}photos/frame-4-park.jpg" data-theme-frame="frame-4-park" alt="${pick(lang, 'Ряды серверных стоек в тёмном зале', 'Rows of server racks in a dark hall')}" width="1672" height="941" loading="lazy"><figcaption>${pick(lang, 'Парк серверных стоек. Визуализация', 'A fleet of server racks. Visualisation')}</figcaption></figure></div><p class="audience-note-line">${pick(lang, 'Фото NVIDIA — из официального пресс-центра компании. Кадры с пометкой «Визуализация» созданы нами, у студии нет собственного парка: оборудование поставляется под заказ.', 'NVIDIA photos are from the company’s official newsroom. Images marked “Visualisation” are made by us; the studio has no fleet of its own, hardware is supplied to order.')}</p>`)}
       ${section(pick(lang, 'Модели в каталоге', 'Models in the catalogue'), `<div class="hw-lineup">${hardware.map(h => `<a class="hw-pick" href="${ctx.home}shop/#${h.id}">${deviceArt(h.art)}<strong>${esc(h[lang][0])}</strong><span>${h.rub == null ? pick(lang, 'По запросу', 'On request') : priceMarkup(lang, h.rub, h.unit === 'hour' ? pick(lang, ' / час', ' / hour') : '')}</span></a>`).join('')}</div><p class="audience-note-line">${esc(c.lineupNote)}</p>`)}
       ${renderCapacity(lang, p, ctx)}
       ${renderFAQ(lang, p, ctx)}
       ${section(pick(lang, 'Что логично сделать дальше', 'What to do next'), links(lang, ctx, ['import/', 'compute/', 'shop/']), 'audience-next')}
       ${close(lang, p, ctx, c.closeTitle, c.closeText)}`;
   } else if (route === 'compute/') {
-    const ph = n => `${ctx.asset}photos/${n}`;
-    const frames = ['frame-1-spark', 'frame-2-server', 'frame-3-rack', 'frame-4-park'];
-    body = `${trustStrip(lang)}
-      <section class="story" data-story aria-label="${esc(c.title)}">
-        <div class="story-stage"><div class="story-frames">${frames.map((f, i) => `<picture class="story-frame" data-frame="${i}"><source srcset="${ph(f + '-960.jpg')} 960w, ${ph(f + '.jpg')} 1672w" sizes="(max-width:860px) 100vw, 55vw"><img src="${ph(f + '.jpg')}" alt="${esc(c.story[i][1])}" width="1672" height="941" loading="${i ? 'lazy' : 'eager'}"></picture>`).join('')}</div>
-          <div class="story-bar" aria-hidden="true"><i></i></div><span class="story-tag">${pick(lang, 'Визуализация', 'Visualisation')}</span><div class="story-count" aria-hidden="true"><b data-story-n>01</b> / 04</div></div>
-        <div class="story-steps">${c.story.map(([n, t, d, pts], i) => `<article class="story-step" data-step="${i}"><span class="story-n">${n}</span><h2>${esc(t)}</h2><p>${esc(d)}</p><ul class="package-includes">${pts.map(x => `<li><span aria-hidden="true">✓</span>${esc(x)}</li>`).join('')}</ul></article>`).join('')}</div>
+    const v = n => `${ctx.asset}video/${n}`;
+    const picks = [['spark', 'DGX Spark', pick(lang, 'Персональный ИИ-компьютер: 128 ГБ памяти, 1,2 кг.', 'A personal AI computer: 128 GB memory, 1.2 kg.')], ['workstation', pick(lang, 'Рабочая станция', 'Workstation'), pick(lang, 'Станция с RTX PRO 6000 или RTX 5090 для офиса.', 'An RTX PRO 6000 or RTX 5090 workstation for the office.')], ['gpu-server', pick(lang, 'GPU-сервер 4U', '4U GPU server'), pick(lang, 'Четыре GPU в стоечном корпусе: отдел или компания.', 'Four GPUs in a rack chassis: a department or company.')], ['hgx', 'HGX 8 GPU', pick(lang, 'Восемь GPU с NVLink: обучение и тяжёлый inference.', 'Eight NVLink GPUs: training and heavy inference.')], ['rack', pick(lang, 'Стойка 42U', '42U rack'), pick(lang, 'Целая стойка: основа собственного ИИ-парка.', 'A whole rack: the base of your own AI fleet.')]];
+    body = `
+      <section class="cine" aria-label="${esc(c.title)}">
+        <div class="cine-bg" aria-hidden="true"><video autoplay muted loop playsinline preload="metadata" poster="${ctx.asset}photos/frame-1-spark-960.jpg"><source src="${v('compute-loop-sm.mp4')}" media="(max-width: 860px)" type="video/mp4"><source src="${v('compute-loop.mp4')}" type="video/mp4"></video><div class="cine-shade"></div><span class="cine-tag">${pick(lang, 'Визуализация', 'Visualisation')}</span></div>
+        <div class="cine-panels">${c.story.map(([n, t, d, pts], i) => `<article class="cine-panel ${i % 2 ? 'is-right' : 'is-left'}"><span class="story-n">${n}</span><h2>${esc(t)}</h2><p>${esc(d)}</p><ul class="package-includes">${pts.map(x => `<li><span aria-hidden="true">✓</span>${esc(x)}</li>`).join('')}</ul></article>`).join('')}</div>
       </section>
+      ${trustStrip(lang)}
+      <section class="section wrap audience-section v3d"><h2>${pick(lang, 'Покрутите технику со всех сторон', 'Turn the hardware around')}</h2>
+        <div class="v3d-picks" role="group" aria-label="${pick(lang, 'Модель', 'Model')}">${picks.map(([id, name, cap], i) => `<button type="button" data-model-pick="${id}" data-caption="${esc(cap)}" aria-pressed="${i ? 'false' : 'true'}">${esc(name)}</button>`).join('')}</div>
+        <div class="v3d-box" data-model3d="spark"><div class="v3d-canvas"></div><p class="v3d-hint">${pick(lang, 'Тяните, чтобы вращать · колесо — приблизить · модель схематичная', 'Drag to rotate · scroll to zoom · schematic model')}</p></div>
+        <p class="v3d-caption" data-model-caption>${esc(picks[0][2])}</p>
+      </section>
+      ${calculator(lang)}
+      ${cloudCompare(lang)}
       ${section(c.compareTitle, `<div class="bundle-table" role="table"><div role="row" class="bundle-row bundle-head">${c.compareHead.map(x => `<span role="columnheader">${esc(x)}</span>`).join('')}</div>${c.compare.map(r => `<div role="row" class="bundle-row">${r.map((x, i) => `<span role="${i ? 'cell' : 'rowheader'}"${i ? ` data-label="${esc(c.compareHead[i])}"` : ''}>${esc(x)}</span>`).join('')}</div>`).join('')}</div>`)}
       ${section(c.fairTitle, grid(c.fair), 'audience-loss')}
-      ${section(pick(lang, 'Модели и аренда в каталоге', 'Models and rental in the catalogue'), links(lang, ctx, ['hardware/', 'shop/', 'private-ai/']), 'audience-next')}
+      ${section(pick(lang, 'Модели и аренда в каталоге', 'Models and rental in the catalogue'), links(lang, ctx, ['hardware/', 'shop/', 'import/']), 'audience-next')}
       ${renderCapacity(lang, p, ctx)}
       ${renderFAQ(lang, p, ctx)}
       ${close(lang, p, ctx, c.closeTitle, c.closeText)}`;
@@ -535,6 +660,8 @@ export function renderEnterprisePage(lang, route, ctx) {
       ${renderFAQ(lang, p, ctx)}
       ${section(pick(lang, 'Что логично сделать дальше', 'What to do next'), links(lang, ctx, ['hardware/', 'shop/', 'enterprise/']), 'audience-next')}
       ${close(lang, p, ctx, c.closeTitle, c.closeText)}`;
+  } else if (route === 'services/') {
+    body = `${serviceTree(lang, ctx)}${renderFAQ(lang, p, ctx)}${close(lang, p, ctx, pick(lang, 'Не уверены, что выбрать?', 'Not sure what to choose?'), pick(lang, 'Опишите задачу своими словами — подскажем, какой раздел ваш, в течение дня.', 'Describe your task in your own words and we will point you to the right section within a day.'))}`;
   } else if (route === 'shop/') {
     body = `${trustStrip(lang)}${renderShop(lang, ctx)}${renderFAQ(lang, p, ctx)}
       ${section(pick(lang, 'Не нашли нужное?', 'Can’t find it?'), links(lang, ctx, ['private-ai/', 'hardware/']), 'audience-next')}`;
@@ -554,7 +681,8 @@ export function renderEnterprisePage(lang, route, ctx) {
       ${section(pick(lang, 'Другие отрасли', 'Other industries'), links(lang, ctx, industries.filter(r => r !== route).slice(0, 3)), 'audience-next')}
       ${close(lang, p, ctx, pick(lang, 'Обсудим пилот для вашей компании', 'Let’s discuss a pilot for your company'), pick(lang, 'Начинаем с бесплатной диагностики одного процесса. Решение о пилоте принимаете после.', 'We start with a free discovery of one process. You decide on a pilot afterwards.'))}`;
   }
-  return `<article class="audience-page enterprise-page">${hero(lang, p, ctx, false)}${body}</article>`;
+  const dc = ['hardware/', 'compute/', 'private-ai/'].includes(route);
+  return `<article class="audience-page enterprise-page${dc ? ' dc-page' : ''}">${hero(lang, p, ctx, false)}${body}</article>`;
 }
 
 export { pageArt };

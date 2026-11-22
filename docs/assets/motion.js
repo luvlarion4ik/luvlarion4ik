@@ -312,7 +312,7 @@
       pill.type = "button";
       pill.className = "dl-eggs";
       pill.addEventListener("click", () => store.length >= NEED ? reward() : note(ru ? `Найдено секретов: ${store.length} из ${EGGS.length}. За ${NEED} — подарок.` : `Secrets found: ${store.length} of ${EGGS.length}. ${NEED} unlock a gift.`, null, 3600));
-      document.body.append(pill);
+      (document.querySelector("body > footer .fine") || document.body).append(pill);
     }
     pill.textContent = (ru ? "Секреты " : "Secrets ") + store.length + "/" + EGGS.length;
     pill.toggleAttribute("data-ready", store.length >= NEED);
@@ -591,4 +591,29 @@
     mark.tabIndex = 0;
     mark.setAttribute("aria-label", "Devlarion");
   }
+})();
+
+/* Карта услуг: поиск раскрывает нужные ветки. Кадры с пометкой data-theme-frame подстраиваются под тему. */
+(() => {
+  const tree = document.querySelector('[data-svc]');
+  if (tree) {
+    const input = tree.querySelector('[data-svc-search]'), none = tree.querySelector('[data-svc-none]');
+    input.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase();
+      let total = 0;
+      tree.querySelectorAll('.svc-branch').forEach(b => {
+        let shown = 0;
+        b.querySelectorAll('.svc-leaves li').forEach(li => { const ok = !q || li.textContent.toLowerCase().includes(q) || b.querySelector('summary').textContent.toLowerCase().includes(q); li.hidden = !ok; if (ok) shown++; });
+        b.hidden = !shown; total += shown;
+        if (q) b.querySelector('details').open = shown > 0;
+      });
+      none.hidden = total > 0;
+    });
+  }
+  const frames = document.querySelectorAll('img[data-theme-frame]');
+  if (!frames.length) return;
+  const themeOf = () => { const t = document.documentElement.dataset.theme; if (t === 'copper') return 'copper-light'; if (['midnight', 'sage', 'bordeaux'].includes(t)) return t; return matchMedia('(prefers-color-scheme: dark)').matches ? 'midnight' : 'copper-light'; };
+  const apply = () => frames.forEach(img => { const base = img.src.replace(/\/photos\/.*$/, '/photos/'); img.src = base + 'themes/' + themeOf() + '/' + img.dataset.themeFrame + '.jpg'; });
+  apply();
+  new MutationObserver(apply).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 })();

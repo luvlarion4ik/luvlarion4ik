@@ -143,6 +143,19 @@
   $('[data-shop-clear]').addEventListener('click', () => { state = {}; save(); render(); });
   addEventListener('keydown', e => { if (e.key === 'Escape' && !cart.hidden) open(false); });
   send.addEventListener('click', e => { if (!qty()) e.preventDefault(); });
+  const saveBtn = $('[data-shop-save]'), status = $('[data-shop-status]');
+  saveBtn.addEventListener('click', async () => {
+    if (!qty()) { status.textContent = t.empty; return; }
+    const lines = Object.keys(state).map(id => '• ' + byId[id].dataset.title + (state[id] > 1 ? ' × ' + state[id] : '')).join('\n');
+    saveBtn.disabled = true; status.textContent = '';
+    try {
+      const r = await fetch('/account/api/requests', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic: 'Заказ из магазина', text: 'Состав заказа:\n' + lines }) });
+      if (r.status === 401) { status.innerHTML = ''; const a = document.createElement('a'); a.href = '/account/'; a.textContent = t.open; status.append(t.login + ' ', a); return; }
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(data.error || '');
+      status.textContent = t.saved; state = {}; save(); render();
+    } catch (err) { status.textContent = err.message || t.login; } finally { saveBtn.disabled = false; }
+  });
 
   // Переход по ссылке #id подсвечивает товар.
   const target = location.hash && byId[decodeURIComponent(location.hash.slice(1))];
@@ -173,4 +186,117 @@
     for (const e of entries) if (e.isIntersecting) show(+e.target.dataset.step);
   }, { rootMargin: '-45% 0px -45% 0px' });
   steps.forEach(s => io.observe(s));
+})();
+
+// Калькулятор: память модели с учётом квантизации, контекста и пользователей; варианты железа с количеством и ценой.
+(() => {
+  const box = document.querySelector('[data-gpucalc]');
+  if (!box) return;
+  const ru = box.dataset.lang === 'ru';
+  const f = n => Math.round(n).toLocaleString(ru ? 'ru-RU' : 'en-GB');
+  const gb = n => (n < 10 ? n.toFixed(1) : f(n)) + (ru ? ' ГБ' : ' GB');
+  // name, memory per unit (GB), price per unit, max units in one system, unit word, kind
+  const options = [
+    [ru ? 'ИИ-станция RTX 5090' : 'RTX 5090 workstation', 32, 1490000, 1, 'buy'],
+    ['DGX Spark', 128, 939000, 2, 'buy'],
+    [ru ? 'Станция RTX PRO 6000' : 'RTX PRO 6000 workstation', 96, 3150000, 1, 'buy'],
+    [ru ? 'Сервер 4× RTX PRO 6000' : '4× RTX PRO 6000 server', 384, 12300000, 4, 'buy'],
+    ['HGX 8× H200', 1128, 68900000, 4, 'buy'],
+    [ru ? 'Аренда H100 80 ГБ' : 'Rent H100 80 GB', 80, 640 * 720, 16, 'rent'],
+    [ru ? 'Аренда H200 141 ГБ' : 'Rent H200 141 GB', 141, 770 * 720, 16, 'rent'],
+  ];
+  const form = box.querySelector('form');
+  const $ = s => box.querySelector(s);
+  function need(p, q, ctx, users) {
+    const w = p * q;
+    const k = users * (ctx / 8192) * 0.035 * p * Math.min(1, q);
+    const o = (w + k) * 0.1;
+    return { w, k, o, total: w + k + o };
+  }
+  function calc() {
+    const d = new FormData(form);
+    const p = +d.get('m'), q = +d.get('q'), ctx = +d.get('c'), users = +d.get('u');
+    const r = need(p, q, ctx, users);
+    $('[data-u]').textContent = users;
+    $('[data-mem]').textContent = gb(r.total);
+    const sum = r.total || 1;
+    box.querySelector('[data-bar="w"]').style.flexBasis = (r.w / sum * 100) + '%';
+    box.querySelector('[data-bar="k"]').style.flexBasis = (r.k / sum * 100) + '%';
+    box.querySelector('[data-bar="o"]').style.flexBasis = (r.o / sum * 100) + '%';
+    $('[data-why]').textContent = ru
+      ? `Веса: ${gb(r.w)} (${p} млрд × ${q} байт) · кэш контекста: ${gb(r.k)} · запас: ${gb(r.o)}`
+      : `Weights: ${gb(r.w)} (${p}B × ${q} bytes) · context cache: ${gb(r.k)} · margin: ${gb(r.o)}`;
+    $('[data-matrix]').replaceChildren(...[[2, 'FP16'], [1, 'FP8'], [0.55, '4 bit']].map(([qq, label]) => {
+      const el = document.createElement('div');
+      el.className = 'calc-cell' + (qq === q ? ' is-on' : '');
+      el.innerHTML = '<span></span><b></b>';
+      el.firstChild.textContent = label; el.lastChild.textContent = gb(need(p, qq, ctx, users).total);
+      return el;
+    }));
+    let best = null;
+    const rows = options.map(([name, mem, price, max, kind]) => {
+      const units = Math.ceil(r.total / (mem * 0.9));
+      const ok = units <= max;
+      const cost = units * price;
+      if (ok && kind === 'buy' && (!best || cost < best.cost)) best = { name, cost };
+      return { name, mem, units, ok, cost, kind };
+    });
+    $('[data-options]').replaceChildren(...[{ head: true }, ...rows].map(o => {
+      const row = document.createElement('div');
+      row.className = 'calc-row' + (o.head ? ' calc-head' : '') + (!o.head && !o.ok ? ' is-no' : '') + (!o.head && best && o.name === best.name ? ' is-best' : '');
+      row.setAttribute('role', 'row');
+      const cells = o.head ? (ru ? ['Вариант', 'Память', 'Сколько нужно', 'Стоимость'] : ['Option', 'Memory', 'Units needed', 'Cost'])
+        : [o.name, gb(o.mem) + (ru ? ' на единицу' : ' each'), o.ok ? o.units + (ru ? ' шт.' : ' unit' + (o.units > 1 ? 's' : '')) : (ru ? 'не хватит, нужен кластер' : 'not enough, needs a cluster'),
+           o.ok ? (o.kind === 'rent' ? (ru ? 'от ' : 'from ') + f(o.cost) + (ru ? ' ₽/мес.' : ' RUB/month') : (ru ? 'от ' : 'from ') + f(o.cost) + ' ₽') : '—'];
+      cells.forEach((c, i) => { const s = document.createElement('span'); s.setAttribute('role', o.head ? 'columnheader' : i ? 'cell' : 'rowheader'); s.textContent = c; row.append(s); });
+      return row;
+    }));
+    const tg = document.querySelector('a[href*="t.me/"]')?.href.split('?')[0] || '#';
+    const model = form.m.selectedOptions[0].textContent, quant = form.q.selectedOptions[0].textContent.split(' — ')[0];
+    $('[data-calc-link]').href = tg + '?text=' + encodeURIComponent((ru ? 'Здравствуйте! Посчитал: ' : 'Hello! I sized: ') + model + ', ' + quant + ', ' + users + (ru ? ' польз., ~' : ' users, ~') + gb(r.total) + (best ? (ru ? '. Подходит: ' : '. Fits: ') + best.name : '') + '.');
+  }
+  form.addEventListener('input', calc);
+  form.addEventListener('change', calc);
+  calc();
+})();
+
+// Кинематографичный блок: панели текста выезжают слева и справа поверх видео.
+(() => {
+  const panels = document.querySelectorAll('.cine-panel');
+  if (!panels.length || !('IntersectionObserver' in window)) { panels.forEach(p => p.classList.add('is-in')); return; }
+  const io = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('is-in', e.isIntersecting)), { rootMargin: '-15% 0px -15% 0px' });
+  panels.forEach(p => io.observe(p));
+  const video = document.querySelector('.cine video');
+  if (video && matchMedia('(prefers-reduced-motion: reduce)').matches) { video.removeAttribute('autoplay'); video.pause(); }
+})();
+
+// Кадры «Вычислений» подстраиваются под выбранную тему сайта.
+(() => {
+  const story = document.querySelector('[data-story]');
+  if (!story) return;
+  const names = ['spark', 'server', 'rack', 'park'];
+  const base = story.querySelector('.story-frame img').src.replace(/\/photos\/.*$/, '/photos/');
+  const themeOf = () => {
+    const t = document.documentElement.dataset.theme;
+    if (t === 'copper') return 'copper-light';
+    if (t === 'midnight' || t === 'sage' || t === 'bordeaux') return t;
+    return matchMedia('(prefers-color-scheme: dark)').matches ? 'midnight' : 'copper-light';
+  };
+  const probe = new Map();
+  async function apply() {
+    const theme = themeOf();
+    const first = base + 'themes/' + theme + '/frame-1-spark.jpg';
+    if (!probe.has(theme)) probe.set(theme, await fetch(first, { method: 'HEAD' }).then(r => r.ok, () => false));
+    const ok = probe.get(theme);
+    story.querySelectorAll('.story-frame').forEach((f, i) => {
+      const img = f.querySelector('img'), src = f.querySelector('source');
+      const name = ['frame-1-spark', 'frame-2-server', 'frame-3-rack', 'frame-4-park'][i];
+      const dir = ok ? 'themes/' + theme + '/' : '';
+      img.src = base + dir + name + '.jpg';
+      if (src) src.srcset = `${base}${dir}${name}-960.jpg 960w, ${base}${dir}${name}.jpg 1672w`;
+    });
+  }
+  apply();
+  new MutationObserver(apply).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', apply);
 })();

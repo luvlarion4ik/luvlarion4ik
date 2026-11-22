@@ -105,6 +105,7 @@ const mesh = (x, y, w, h, gold) => {
   return s;
 };
 
+const MODEL3D = { 'dgx-spark': 'spark', 'gb10-oem': 'spark', 'spark-cluster': 'spark', 'rtx5090-ws': 'workstation', 'rtx-pro-ws': 'workstation', 'rtx-pro-server': 'gpu-server', 'hgx-h200': 'hgx', 'dgx-b200': 'hgx', 'amd-mi300x': 'hgx', 'oem-servers': 'gpu-server' };
 const PHOTO = { 'dgx-spark': 'cut-spark', 'gb10-oem': 'cut-spark', 'rtx5090-ws': 'cut-workstation', 'rtx-pro-ws': 'cut-workstation', 'rtx-pro-server': 'cut-hgx', 'hgx-h200': 'cut-hgx', 'dgx-b200': 'cut-rack', 'oem-servers': 'cut-hgx', 'amd-mi300x': 'cut-hgx' };
 
 export function deviceArt(kind) {
@@ -128,13 +129,13 @@ export function renderShop(lang, ctx) {
   const i = lang === 'ru' ? 0 : 1;
   const priceOf = p => typeof p === 'number' ? p : p ? packageStartingPrice(p, ctx.pricing) : null;
   const unitLabel = u => u === 'hour' ? pick(lang, ' / час', ' / hour') : u === 'month' ? pick(lang, ' / мес.', ' / month') : '';
-  const card = ({ id, cat, title, text, rub, unit, art, specs, market, kind, more }) => {
+  const card = ({ id, cat, title, text, rub, unit, art, specs, market, kind, more, model }) => {
     const price = rub == null ? `<p class="audience-price">${pick(lang, 'По запросу', 'On request')}</p>`
       : `<p class="audience-price" data-region-price-row>${priceMarkup(lang, rub, unitLabel(unit))}</p>`;
     const marketLine = market ? `<p class="shop-market">${pick(lang, 'Рынок', 'Market')}: ${market[0].toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-GB')}–${market[1].toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-GB')} ₽${unitLabel(unit)}</p>` : '';
     return `<article class="shop-item${kind === 'hw' ? ' shop-hw' : ''}" data-cat="${cat}" data-id="${id}" data-title="${esc(title)}" data-rub="${rub ?? ''}" data-unit="${unit ?? ''}">
       ${art}
-      <div class="shop-body"><h3>${esc(title)}</h3><p class="shop-text">${esc(text)}</p>
+      <div class="shop-body"><h3>${esc(title)}</h3>${model ? `<button type="button" class="shop-3d" data-open3d="${model}" data-title="${esc(title)}">${pick(lang, 'Покрутить в 3D', 'Rotate in 3D')}</button>` : ''}<p class="shop-text">${esc(text)}</p>
       ${specs ? `<ul class="shop-specs">${specs.map(s => `<li>${esc(s)}</li>`).join('')}</ul>` : ''}
       ${more ? `<details class="shop-more"><summary>${pick(lang, 'Подробнее', 'Details')}</summary><dl>${more.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl></details>` : ''}
       <div class="shop-foot">${price}${marketLine}
@@ -145,7 +146,7 @@ export function renderShop(lang, ctx) {
     id, cat, title: title[i], text: text[i], rub: priceOf(p), unit, art: iconArt(ctx.icons, icon),
   }))).join('');
   const hwCards = hardware.map(h => card({
-    id: h.id, cat: 'hw-' + h.mode, kind: 'hw', title: h[lang][0], text: h[lang][1], specs: h[lang][2], rub: h.rub, unit: h.unit, market: h.market, more: h.more?.[lang], art: `<div class="shop-art${PHOTO[h.id] ? ' shop-art-photo' : ''}">${PHOTO[h.id] ? `<img src="${ctx.asset}photos/${PHOTO[h.id]}.png" alt="${esc(h[lang][0])}" width="1448" height="1086" loading="lazy">` : deviceArt(h.art)}${h.mode === 'rent' ? `<span class="shop-tag">${pick(lang, 'Аренда', 'Rental')}</span>` : `<span class="shop-tag">${pick(lang, 'Под заказ', 'To order')}</span>`}</div>`,
+    id: h.id, cat: 'hw-' + h.mode, kind: 'hw', title: h[lang][0], text: h[lang][1], specs: h[lang][2], rub: h.rub, unit: h.unit, market: h.market, more: h.more?.[lang], model: MODEL3D[h.id], art: `<div class="shop-art${PHOTO[h.id] ? ' shop-art-photo' : ''}">${PHOTO[h.id] ? `<img src="${ctx.asset}photos/${PHOTO[h.id]}.png" alt="${esc(h[lang][0])}" width="1448" height="1086" loading="lazy">` : deviceArt(h.art)}${h.mode === 'rent' ? `<span class="shop-tag">${pick(lang, 'Аренда', 'Rental')}</span>` : `<span class="shop-tag">${pick(lang, 'Под заказ', 'To order')}</span>`}</div>`,
   })).join('');
   const chips = [['all', pick(lang, 'Все', 'All')], ...services.map(([id, names]) => [id, names[i]]), ['hw-buy', pick(lang, 'Железо: купить', 'Hardware: buy')], ['hw-rent', pick(lang, 'Железо: аренда', 'Hardware: rent')]];
   const labels = JSON.stringify({
@@ -153,7 +154,7 @@ export function renderShop(lang, ctx) {
     total: pick(lang, 'Итого от', 'Total from'), monthly: pick(lang, 'Ежемесячно от', 'Monthly from'), hourly: pick(lang, 'Аренда, в час от', 'Rental, per hour from'),
     onRequest: pick(lang, 'Позиции по запросу оценим отдельно', 'Items on request are quoted separately'),
     greeting: pick(lang, 'Здравствуйте! Хочу обсудить заказ:', 'Hello! I would like to discuss an order:'),
-    remove: pick(lang, 'Убрать', 'Remove'), added: pick(lang, 'В корзине', 'In basket'), from: pick(lang, 'от', 'from'), request: pick(lang, 'по запросу', 'on request'),
+    remove: pick(lang, 'Убрать', 'Remove'), saved: pick(lang, 'Заказ сохранён в кабинете.', 'Order saved in your account.'), login: pick(lang, 'Войдите в кабинет, чтобы сохранить заказ.', 'Sign in to your account to save the order.'), open: pick(lang, 'Открыть кабинет', 'Open account'), added: pick(lang, 'В корзине', 'In basket'), from: pick(lang, 'от', 'from'), request: pick(lang, 'по запросу', 'on request'),
     hour: pick(lang, '/ час', '/ hour'), month: pick(lang, '/ мес.', '/ month'), none: pick(lang, 'Ничего не нашлось. Попробуйте другое слово.', 'Nothing found. Try another word.'), lang,
   });
   return `<section class="section wrap audience-section shop" data-shop data-tg="${esc(ctx.tg)}" data-labels="${esc(labels)}">
@@ -176,6 +177,8 @@ export function renderShop(lang, ctx) {
     <ul class="shop-list" data-shop-list></ul>
     <div class="shop-total" data-shop-total></div>
     <a class="button shop-send" data-shop-send href="${esc(ctx.tg)}">${pick(lang, 'Отправить заявку в Telegram', 'Send enquiry on Telegram')}</a>
+    <button type="button" class="shop-save" data-shop-save>${pick(lang, 'Сохранить заказ в кабинете', 'Save the order in my account')}</button>
+    <p class="shop-save-status" data-shop-status role="status"></p>
     <button type="button" class="shop-clear" data-shop-clear>${pick(lang, 'Очистить корзину', 'Clear basket')}</button>
     <p class="audience-note-line">${pick(lang, 'Это заявка, а не оплата. Итоговую цену, сроки поставки и условия фиксируем в коммерческом предложении и договоре.', 'This is an enquiry, not a payment. Final price, lead time and terms are fixed in the quote and contract.')}</p>
   </aside>`;
