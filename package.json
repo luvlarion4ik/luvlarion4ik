@@ -6,6 +6,7 @@
     "check": "node scripts/build.mjs --check",
     "admin": "node scripts/admin.mjs",
     "referrals": "node scripts/referrals.mjs",
-    "rates": "node scripts/update-exchange.mjs && node scripts/build.mjs"
+    "rates": "node scripts/update-exchange.mjs && node scripts/build.mjs",
+    "test:gm": "node --test scripts/test-growth-map.mjs"
   }
 }
