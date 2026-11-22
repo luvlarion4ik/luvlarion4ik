@@ -1,0 +1,23 @@
+[Unit]
+Description=Devlarion site admin (content editor, rebuilds the classic site)
+After=network.target
+
+[Service]
+User=devlarion
+Group=devlarion
+WorkingDirectory=/opt/devlarion/classic
+Environment=DEVLARION_SITE_URL=https://devlarion.ru/
+Environment=DEVLARION_MOTION_URL=https://motion.devlarion.ru/
+Environment=DEVLARION_STUDIO_URL=https://studio.devlarion.ru/
+Environment=DEVLARION_ADMIN_ORIGIN=https://devlarion.ru
+Environment=DEVLARION_ADMIN_PORT=4174
+ExecStart=/usr/local/bin/node scripts/admin.mjs
+Restart=on-failure
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/devlarion/classic
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

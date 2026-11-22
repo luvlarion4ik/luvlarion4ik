@@ -14,6 +14,10 @@ const port = Number(process.env.DEVLARION_ADMIN_PORT || 4174);
 if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('Укажите порт в диапазоне 1–65535.');
 const authority = host + ':' + port;
 const origin = 'http://' + authority;
+// За обратным прокси (nginx с паролем) админка открывается с публичного адреса,
+// например https://devlarion.ru. Прокси передаёт Host 127.0.0.1:<порт>.
+const publicOrigin = process.env.DEVLARION_ADMIN_ORIGIN ? new URL(process.env.DEVLARION_ADMIN_ORIGIN).origin : null;
+const allowedOrigins = new Set([origin, publicOrigin].filter(Boolean));
 const configPath = new URL('../content/site.json', import.meta.url);
 const template = await readFile(new URL('./admin.html', import.meta.url), 'utf8');
 const buildSite = () => promisify(execFile)(process.execPath, [fileURLToPath(new URL('./build.mjs', import.meta.url))], {
@@ -148,7 +152,7 @@ const server = createServer(async (request, response) => {
       return;
     }
     if (request.url === '/api/config' && request.method === 'POST') {
-      if (request.headers.origin !== origin) throw new HttpError(403, 'Запрос должен исходить из локальной админки.');
+      if (!allowedOrigins.has(request.headers.origin)) throw new HttpError(403, 'Запрос должен исходить из админки.');
       json(response, 200, await save(request));
       return;
     }

@@ -1,12 +1,29 @@
 {
-  "exchange": { "date": "2026-11-20", "BYN": 27.3617, "KZT": 18.4458, "USD": 81.9290, "EUR": 89.8597 },
-  "legal": { "name": "", "inn": "", "ogrnip": "" },
+  "exchange": {
+    "date": "2026-11-20",
+    "BYN": 27.3617,
+    "KZT": 18.4458,
+    "USD": 81.929,
+    "EUR": 89.8597
+  },
+  "legal": {
+    "name": "",
+    "inn": "",
+    "ogrnip": ""
+  },
   "pricing": {},
   "ready": {},
   "caseOverrides": {},
   "founderPhoto": "",
   "team": [],
   "achievements": [],
-  "referral": { "percent": 5, "days": 90, "cap": 15 },
-  "portal": { "status": "soon", "url": "" }
+  "referral": {
+    "percent": 5,
+    "days": 90,
+    "cap": 15
+  },
+  "portal": {
+    "status": "open",
+    "url": "https://devlarion.ru/account/"
+  }
 }
