@@ -785,3 +785,5 @@
 .photo-grid figcaption {padding:.7rem .9rem;font-size:.85rem;color:var(--sub)}
 .photo-grid figure {overflow:hidden}
 @media (max-width:860px) {.photo-grid {grid-template-columns:1fr}}
+.cat-grid {grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:860px) {.cat-grid {grid-template-columns:1fr}}

@@ -390,6 +390,78 @@ export const enterprisePages = [
     faq: [['Where to start?', 'A pilot on one process: rented capacity or a single Spark. Decide on buying after the results.'], ['Can rented capacity be bought out later?', 'That is agreed individually and depends on the provider and configuration.']],
   }),
 
+  page('import/', 'layers', ['custom'], {
+    eyebrow: 'Техника под заказ',
+    label: 'Техника под заказ',
+    card: 'Привозим любую рабочую технику под заказ, в том числе из Китая.',
+    title: 'Любая рабочая техника под заказ, в том числе из Китая',
+    description: 'Серверы, рабочие станции, сетевое и торговое оборудование, станки и комплектующие. Подбираем поставщика, проверяем, везём, оформляем и запускаем.',
+    catsTitle: 'Что привозим',
+    cats: [
+      ['Серверы и GPU', 'DGX, HGX, GPU-серверы, станции на RTX, СХД и сетевые карты.'],
+      ['Сеть и ЦОД', 'Коммутаторы, маршрутизаторы, межсетевые экраны, ИБП, стойки.'],
+      ['Рабочие станции и ноутбуки', 'Для проектирования, монтажа видео, разработки и офиса.'],
+      ['Торговое и офисное оборудование', 'Кассы, терминалы, принтеры, дисплеи, камеры и терминалы доступа.'],
+      ['Промышленное оборудование', 'Станки, контроллеры, датчики, 3D-принтеры и ЧПУ.'],
+      ['Комплектующие и запчасти', 'Платы, блоки питания, накопители, модули памяти.'],
+    ],
+    stepsTitle: 'Как это работает',
+    steps: [
+      ['Заявка', 'Вы описываете, что нужно: модель или задачу, количество, срок.'],
+      ['Подбор и КП', 'Находим поставщиков, сравниваем и присылаем коммерческое предложение с ценой и сроком.'],
+      ['Договор', 'Фиксируем состав, цену, этапы оплаты и ответственность.'],
+      ['Закупка и проверка', 'Заказываем, проверяем комплектность и работоспособность перед отправкой.'],
+      ['Доставка и оформление', 'Везём из Китая или другой страны, оформляем ввоз через партнёров-таможенных брокеров.'],
+      ['Запуск', 'Устанавливаем и настраиваем: для серверов и ИИ — вместе с моделью.'],
+    ],
+    whyTitle: 'Что вы получаете',
+    why: [
+      ['Одна точка ответственности', 'Не нужно искать поставщика, логиста и брокера отдельно: за цепочку отвечаем мы.'],
+      ['Работающая техника', 'Проверяем перед отправкой и после получения, а не просто пересылаем коробку.'],
+      ['Документы для бухгалтерии', 'Договор, счёт, закрывающие документы. Подробности по оплате и ввозу согласуем до заказа.'],
+      ['Настройка и сопровождение', 'Для серверов и ИИ — установка, модели, мониторинг. Для остального — запуск и инструкции.'],
+    ],
+    notice: 'Сроки и стоимость зависят от поставщика, страны отправки, курса и таможенного оформления, поэтому цену называем в коммерческом предложении. Ввоз выполняем в рамках законодательства РФ и ограничений на конкретные товары: что ввозить нельзя или требует разрешений, скажем сразу.',
+    closeTitle: 'Напишите, что нужно привезти',
+    closeText: 'Модель или задача, количество и желаемый срок. Ответим в течение дня и предложим вариант.',
+    faq: [['Привозите только из Китая?', 'Нет. Китай — частый вариант, но подбираем страну и поставщика под задачу и сроки.'], ['Можно ли заказать одну единицу?', 'Да, но стоимость логистики на одну единицу выше. Мы подскажем, как объединить заказ.'], ['Кто отвечает за гарантию?', 'Гарантийные условия фиксируем в договоре: часть случаев ведём мы с поставщиком, часть — по условиям производителя.'], ['Сколько это занимает?', 'От нескольких недель, зависит от товара и страны. Точный срок — в коммерческом предложении.']],
+  }, {
+    eyebrow: 'Equipment to order',
+    label: 'Equipment to order',
+    card: 'We bring in any working equipment to order, including from China.',
+    title: 'Any working equipment to order, including from China',
+    description: 'Servers, workstations, network and retail equipment, machine tools and components. We find the supplier, check, ship, clear and commission.',
+    catsTitle: 'What we bring in',
+    cats: [
+      ['Servers and GPUs', 'DGX, HGX, GPU servers, RTX workstations, storage and network cards.'],
+      ['Network and data centre', 'Switches, routers, firewalls, UPS units, racks.'],
+      ['Workstations and laptops', 'For design, video editing, development and the office.'],
+      ['Retail and office equipment', 'Tills, terminals, printers, displays, cameras and access terminals.'],
+      ['Industrial equipment', 'Machine tools, controllers, sensors, 3D printers and CNC.'],
+      ['Components and spares', 'Boards, power supplies, drives, memory modules.'],
+    ],
+    stepsTitle: 'How it works',
+    steps: [
+      ['Enquiry', 'Tell us what you need: model or task, quantity, deadline.'],
+      ['Sourcing and quote', 'We find suppliers, compare and send a quote with price and lead time.'],
+      ['Contract', 'We fix scope, price, payment stages and liability.'],
+      ['Purchase and check', 'We order and check completeness and operation before shipping.'],
+      ['Delivery and clearance', 'We ship from China or elsewhere and clear import through partner customs brokers.'],
+      ['Commissioning', 'We install and set up; for servers and AI, together with the model.'],
+    ],
+    whyTitle: 'What you get',
+    why: [
+      ['One point of responsibility', 'No need to find a supplier, forwarder and broker separately: we own the chain.'],
+      ['Equipment that works', 'We check before shipping and after arrival, not just forward a box.'],
+      ['Documents for accounting', 'Contract, invoice and closing documents. Payment and import details are agreed before ordering.'],
+      ['Set-up and support', 'For servers and AI: installation, models and monitoring. For the rest: commissioning and guides.'],
+    ],
+    notice: 'Lead times and cost depend on the supplier, country of origin, exchange rates and customs clearance, so we state the price in a quote. Import is carried out within Russian law and restrictions on specific goods; we say upfront what cannot be imported or needs permits.',
+    closeTitle: 'Tell us what you need brought in',
+    closeText: 'Model or task, quantity and desired date. We reply within a day with an option.',
+    faq: [['Only from China?', 'No. China is common, but we choose the country and supplier for the task and deadline.'], ['Can I order a single unit?', 'Yes, but logistics per unit costs more. We will suggest how to combine orders.'], ['Who handles warranty?', 'Warranty terms are fixed in the contract: we handle some cases with the supplier, others follow the manufacturer’s terms.'], ['How long does it take?', 'From a few weeks, depending on the goods and country. The exact date is in the quote.']],
+  }),
+
   page('shop/', 'layers', ['landing', 'automation'], {
     eyebrow: 'Магазин цифровых услуг',
     label: 'Магазин услуг',
@@ -436,7 +508,7 @@ export function renderEnterprisePage(lang, route, ctx) {
       ${section(pick(lang, 'Модели в каталоге', 'Models in the catalogue'), `<div class="hw-lineup">${hardware.map(h => `<a class="hw-pick" href="${ctx.home}shop/#${h.id}">${deviceArt(h.art)}<strong>${esc(h[lang][0])}</strong><span>${h.rub == null ? pick(lang, 'По запросу', 'On request') : priceMarkup(lang, h.rub, h.unit === 'hour' ? pick(lang, ' / час', ' / hour') : '')}</span></a>`).join('')}</div><p class="audience-note-line">${esc(c.lineupNote)}</p>`)}
       ${renderCapacity(lang, p, ctx)}
       ${renderFAQ(lang, p, ctx)}
-      ${section(pick(lang, 'Что логично сделать дальше', 'What to do next'), links(lang, ctx, ['private-ai/', 'shop/', 'industries/clinics/']), 'audience-next')}
+      ${section(pick(lang, 'Что логично сделать дальше', 'What to do next'), links(lang, ctx, ['import/', 'compute/', 'shop/']), 'audience-next')}
       ${close(lang, p, ctx, c.closeTitle, c.closeText)}`;
   } else if (route === 'compute/') {
     const ph = n => `${ctx.asset}photos/${n}`;
@@ -452,6 +524,16 @@ export function renderEnterprisePage(lang, route, ctx) {
       ${section(pick(lang, 'Модели и аренда в каталоге', 'Models and rental in the catalogue'), links(lang, ctx, ['hardware/', 'shop/', 'private-ai/']), 'audience-next')}
       ${renderCapacity(lang, p, ctx)}
       ${renderFAQ(lang, p, ctx)}
+      ${close(lang, p, ctx, c.closeTitle, c.closeText)}`;
+  } else if (route === 'import/') {
+    body = `${trustStrip(lang)}
+      ${section(c.catsTitle, `<div class="loss-grid cat-grid">${c.cats.map(([t, d], i) => `<article><span class="loss-index" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span><h3>${esc(t)}</h3><p>${esc(d)}</p></article>`).join('')}</div>`, 'audience-loss')}
+      ${section(c.stepsTitle, steps(c.steps), 'audience-flow')}
+      ${section(c.whyTitle, grid(c.why), 'audience-loss')}
+      <aside class="wrap audience-note"><p>${esc(c.notice)}</p></aside>
+      ${renderCapacity(lang, p, ctx)}
+      ${renderFAQ(lang, p, ctx)}
+      ${section(pick(lang, 'Что логично сделать дальше', 'What to do next'), links(lang, ctx, ['hardware/', 'shop/', 'enterprise/']), 'audience-next')}
       ${close(lang, p, ctx, c.closeTitle, c.closeText)}`;
   } else if (route === 'shop/') {
     body = `${trustStrip(lang)}${renderShop(lang, ctx)}${renderFAQ(lang, p, ctx)}

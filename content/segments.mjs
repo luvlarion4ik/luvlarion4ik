@@ -148,6 +148,7 @@ export const segments = [
       directions: [
         ['Корпоративный ИИ в российском контуре', 'private-ai/'],
         ['GPU-серверы и DGX', 'hardware/'],
+        ['Техника под заказ, в том числе из Китая', 'import/'],
         ['Клиники', 'industries/clinics/'],
         ['Юристы', 'industries/legal/'],
         ['Банки и страхование', 'industries/finance/'],
@@ -186,6 +187,7 @@ export const segments = [
       directions: [
         ['Private AI inside Russia', 'private-ai/'],
         ['GPU servers and DGX', 'hardware/'],
+        ['Equipment to order, including from China', 'import/'],
         ['Clinics', 'industries/clinics/'],
         ['Law firms', 'industries/legal/'],
         ['Banking and insurance', 'industries/finance/'],

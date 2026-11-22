@@ -35,6 +35,9 @@ const services = [
     ['audit', ['Аудит данных и 152-ФЗ', 'Data and 152-FZ audit'], ['security', 'small'], ['Карта потоков ПДн и план мер', 'Personal-data flow map and plan'], 'support'],
     ['private', ['Выделенный ИИ-контур', 'Dedicated AI perimeter'], null, ['Изолированные GPU, сеть и журнал', 'Isolated GPUs, network and log'], 'server'],
   ]],
+  ['order', ['Техника под заказ', 'Equipment to order'], [
+    ['import-any', ['Любая рабочая техника под заказ, в том числе из Китая', 'Any working equipment to order, including from China'], null, ['Серверы, станции, сеть, торговое и промышленное оборудование: подбор, проверка, доставка, ввоз, запуск', 'Servers, workstations, network, retail and industrial equipment: sourcing, checking, delivery, import, commissioning'], 'layers'],
+  ]],
   ['care', ['Сопровождение', 'Support'], [
     ['care-site', ['Сопровождение сайта', 'Website support'], ['support', 'small'], ['Правки, мониторинг, обновления', 'Edits, monitoring, updates'], 'support', 'month'],
     ['care-ai', ['Сопровождение ИИ-сервиса', 'AI service support'], 30000, ['Обновления моделей и мониторинг', 'Model updates and monitoring'], 'support', 'month'],

@@ -88,6 +88,7 @@ for(const lang of ["ru","en"]){
        ["private-ai/",l("Корпоративный ИИ","Private AI")],
        ["hardware/",l("GPU-серверы и DGX","GPU servers and DGX")],
        ["compute/",l("Купить или арендовать мощности","Buy or rent compute")],
+       ["import/",l("Техника под заказ","Equipment to order")],
        ["industries/clinics/",l("Клиники","Clinics")],
        ["industries/legal/",l("Юристы","Law firms")],
        ["industries/finance/",l("Банки и страхование","Banking and insurance")],

@@ -553,18 +553,6 @@
     btn.addEventListener("pointerleave", () => { btn.style.transform = ""; });
   }
 
-  // Объёмный наклон кейсов и карточек сегментов.
-  for (const card of document.querySelectorAll(".featured-case, .exhibit-featured, .segment-card, .loss-grid > article, .bundle-plans > article")) {
-    card.classList.add("dl-tilt");
-    card.addEventListener("pointermove", event => {
-      const box = card.getBoundingClientRect();
-      const x = (event.clientX - box.left) / box.width - 0.5;
-      const y = (event.clientY - box.top) / box.height - 0.5;
-      card.style.setProperty("--rx", (-y * 5).toFixed(2) + "deg");
-      card.style.setProperty("--ry", (x * 6).toFixed(2) + "deg");
-    });
-    card.addEventListener("pointerleave", () => { card.style.setProperty("--rx", "0deg"); card.style.setProperty("--ry", "0deg"); });
-  }
 })();
 
 /* Мега-меню по наведению, плавающие кнопки не заезжают на подвал, знак в подвале раскрывается в слово. */
