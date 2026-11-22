@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Growth Map icon library · Devlarion</title>
+  <link rel="icon" type="image/svg+xml" href="../../../docs/assets/brand/favicon.svg">
+  <link rel="stylesheet" href="../../../docs/assets/brand/fonts.css">
+  <style>
+    :root {
+      color-scheme: dark;
+      background: #10141d;
+      color: #f2ece4;
+      font: 15px/1.5 "Golos Text", system-ui, sans-serif;
+    }
+    body {
+      width: min(1060px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 35px 0 44px;
+    }
+    h1 {
+      margin: 0 0 22px;
+      font: 500 clamp(1.8rem, 4vw, 2.6rem)/1.1 "Source Serif 4", Georgia, serif;
+    }
+    ul {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(94px, 1fr));
+      gap: 7px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+    li {
+      display: grid;
+      justify-items: center;
+      gap: 6px;
+      padding: 9px 4px 7px;
+      border: 1px solid #373337;
+      border-radius: 10px;
+      background: #1b202a;
+      color: #e8ac8c;
+    }
+    code {
+      color: #ded7cf;
+      font: 11px/1.5 ui-monospace, monospace;
+    }
+  </style>
+  <script src="../../../docs/assets/growth-map/gm-icons.js" defer></script>
+  <script>
+    addEventListener('DOMContentLoaded', () => {
+      const library = document.querySelector('ul');
+      for (const [key, svg] of Object.entries(window.DevlarionGM.icons).sort(([a], [b]) => a.localeCompare(b))) {
+        const item = document.createElement('li');
+        item.insertAdjacentHTML('afterbegin', svg);
+        const label = document.createElement('code');
+        label.textContent = key;
+        item.append(label);
+        library.append(item);
+      }
+    });
+  </script>
+</head>
+<body>
+  <main>
+    <h1>Growth Map icon library</h1>
+    <ul></ul>
+  </main>
+</body>
+</html>
