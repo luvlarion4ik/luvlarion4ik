@@ -348,6 +348,48 @@ export const enterprisePages = [
     faq: [['Does it work with Russian speech?', 'Yes, we use recognition models that handle Russian well and run locally.'], ['Can we add an AI agent?', 'Yes, starting with simple scenarios and handing complex ones to people.']],
   }),
 
+  page('compute/', 'server', ['private-ai'], {
+    eyebrow: 'Вычисления для бизнеса',
+    label: 'Купить или арендовать мощности',
+    card: 'Пять причин владеть вычислениями и пять — арендовать у честного провайдера.',
+    title: 'Свои вычислительные мощности или честная аренда',
+    description: 'Листайте вниз: от компактного DGX Spark до целого парка. Что выгоднее, когда данные нельзя отдавать, а нагрузка растёт.',
+    story: [
+      ['01', 'Начинается с одного устройства', 'DGX Spark размером с книгу запускает модели до ~200 млрд параметров. Для пилота и небольшого отдела этого хватает.', ['Свой ИИ без облака', 'Работает от обычной розетки', 'Окупается быстрее аренды при ежедневной нагрузке'], 'spark'],
+      ['02', 'Потом — сервер под отдел', 'Стоечный сервер с несколькими GPU держит десятки пользователей и несколько моделей одновременно.', ['До 384 ГБ видеопамяти', 'Резервное питание и мониторинг', 'Данные остаются в вашем контуре'], 'server'],
+      ['03', 'Затем — стойка для компании', 'Платформа уровня DGX: единая система, где обучение и inference не конкурируют за ресурсы.', ['NVLink между картами', 'Планировщик задач', 'Своя инфраструктура под NDA'], 'rack'],
+      ['04', 'А иногда лучше не покупать', 'Если нагрузка скачет или нужен быстрый старт, арендуйте у честного провайдера: платите за факт, договор и размещение в РФ, настройка наша.', ['Без капитальных затрат', 'Масштабирование по месяцам', 'Размещение и документы в России'], 'park'],
+    ],
+    compareTitle: 'Купить или арендовать',
+    compare: [['Стартовые затраты', 'Высокие', 'Низкие'], ['Если нагрузка стабильная', 'Дешевле через 1–2 года', 'Дороже со временем'], ['Если нагрузка скачет', 'Часть мощности простаивает', 'Платите за факт'], ['Данные', 'Полностью у вас', 'В ЦОД партнёра в РФ по договору'], ['Скорость старта', 'Поставка под заказ', 'Дни'], ['Обновление железа', 'На вас', 'На провайдере']],
+    compareHead: ['', 'Своё железо', 'Аренда'],
+    fairTitle: 'Что такое честный провайдер',
+    fair: [['Прозрачный договор', 'Цена, объём, SLA и ответственность записаны, без скрытых платежей.'], ['Размещение в РФ с документами', 'Договор с площадкой и описание контура: то, что спрашивает служба безопасности.'], ['Вы можете уйти', 'Данные и конфигурации выгружаются, привязки нет.'], ['Настройка не продаётся отдельно как загадка', 'Что включено в цену, указано заранее.']],
+    closeTitle: 'Посчитаем под вашу нагрузку',
+    closeText: 'Расскажите, какие модели и сколько пользователей. Сравним покупку и аренду в цифрах и предложим вариант.',
+    faq: [['С чего начать?', 'С пилота на одном процессе: арендованная мощность или один Spark. Решение о покупке — после результатов.'], ['Можно ли потом выкупить арендованное?', 'Это обсуждается индивидуально, зависит от провайдера и конфигурации.']],
+  }, {
+    eyebrow: 'Compute for business',
+    label: 'Buy or rent capacity',
+    card: 'Five reasons to own compute and five to rent from a fair provider.',
+    title: 'Your own compute or fair rental',
+    description: 'Scroll down: from a compact DGX Spark to a whole fleet. What pays off when data cannot leave and load grows.',
+    story: [
+      ['01', 'It starts with one device', 'A book-sized DGX Spark runs models up to ~200B parameters. Enough for a pilot or a small team.', ['Your own AI without the cloud', 'Runs from a normal socket', 'Pays back faster than rental at daily load'], 'spark'],
+      ['02', 'Then a server for the department', 'A rack server with several GPUs serves dozens of users and several models at once.', ['Up to 384 GB of GPU memory', 'Redundant power and monitoring', 'Data stays in your perimeter'], 'server'],
+      ['03', 'Then a rack for the company', 'A DGX-class platform: one system where training and inference do not fight over resources.', ['NVLink between cards', 'Job scheduler', 'Your own infrastructure under NDA'], 'rack'],
+      ['04', 'And sometimes it is better not to buy', 'If load swings or you need a fast start, rent from a fair provider: pay for what you use, with a contract and hosting in Russia. The set-up is ours.', ['No capital outlay', 'Scale month by month', 'Hosting and documents in Russia'], 'park'],
+    ],
+    compareTitle: 'Buy or rent',
+    compare: [['Upfront cost', 'High', 'Low'], ['Steady load', 'Cheaper after 1–2 years', 'More expensive over time'], ['Spiky load', 'Some capacity sits idle', 'Pay for use'], ['Data', 'Entirely yours', 'In a partner data centre in Russia, by contract'], ['Speed to start', 'Supplied to order', 'Days'], ['Hardware refresh', 'On you', 'On the provider']],
+    compareHead: ['', 'Own hardware', 'Rental'],
+    fairTitle: 'What a fair provider is',
+    fair: [['A transparent contract', 'Price, scope, SLA and liability in writing, no hidden fees.'], ['Hosting in Russia with documents', 'A site contract and a perimeter description, the things security teams ask for.'], ['You can leave', 'Data and configurations can be exported; no lock-in.'], ['Set-up is not a mystery add-on', 'What is included in the price is stated upfront.']],
+    closeTitle: 'Let’s size it for your load',
+    closeText: 'Tell us which models and how many users. We will compare buying and renting in numbers and propose an option.',
+    faq: [['Where to start?', 'A pilot on one process: rented capacity or a single Spark. Decide on buying after the results.'], ['Can rented capacity be bought out later?', 'That is agreed individually and depends on the provider and configuration.']],
+  }),
+
   page('shop/', 'layers', ['landing', 'automation'], {
     eyebrow: 'Магазин цифровых услуг',
     label: 'Магазин услуг',
@@ -390,10 +432,26 @@ export function renderEnterprisePage(lang, route, ctx) {
     body = `${trustStrip(lang)}
       ${section(c.optionsTitle, cards(lang, ctx, c.options, { label, cls: 'two-up' }))}
       ${section(c.includedTitle, grid(c.included), 'audience-loss')}
+      ${section(pick(lang, 'Как это выглядит', 'What it looks like'), `<div class="photo-grid"><figure><img src="${ctx.asset}photos/nvidia-dgx-spark-desk.jpg" alt="${pick(lang, 'NVIDIA DGX Spark на рабочем столе рядом с ноутбуком', 'NVIDIA DGX Spark on a desk next to a laptop')}" width="1600" height="900" loading="lazy"><figcaption>${pick(lang, 'DGX Spark на рабочем столе. Фото: NVIDIA', 'DGX Spark on a desk. Photo: NVIDIA')}</figcaption></figure><figure><img src="${ctx.asset}photos/nvidia-gb200-nvl72.jpg" alt="${pick(lang, 'Стойки NVIDIA GB200 NVL72', 'NVIDIA GB200 NVL72 racks')}" width="1600" height="900" loading="lazy"><figcaption>${pick(lang, 'Стойка уровня GB200 NVL72. Фото: NVIDIA', 'A GB200 NVL72-class rack. Photo: NVIDIA')}</figcaption></figure><figure><img src="${ctx.asset}photos/frame-4-park.jpg" alt="${pick(lang, 'Ряды серверных стоек в тёмном зале', 'Rows of server racks in a dark hall')}" width="1672" height="941" loading="lazy"><figcaption>${pick(lang, 'Парк серверных стоек. Визуализация', 'A fleet of server racks. Visualisation')}</figcaption></figure></div><p class="audience-note-line">${pick(lang, 'Фото NVIDIA — из официального пресс-центра компании. Кадры с пометкой «Визуализация» созданы нами, у студии нет собственного парка: оборудование поставляется под заказ.', 'NVIDIA photos are from the company’s official newsroom. Images marked “Visualisation” are made by us; the studio has no fleet of its own, hardware is supplied to order.')}</p>`)}
       ${section(pick(lang, 'Модели в каталоге', 'Models in the catalogue'), `<div class="hw-lineup">${hardware.map(h => `<a class="hw-pick" href="${ctx.home}shop/#${h.id}">${deviceArt(h.art)}<strong>${esc(h[lang][0])}</strong><span>${h.rub == null ? pick(lang, 'По запросу', 'On request') : priceMarkup(lang, h.rub, h.unit === 'hour' ? pick(lang, ' / час', ' / hour') : '')}</span></a>`).join('')}</div><p class="audience-note-line">${esc(c.lineupNote)}</p>`)}
       ${renderCapacity(lang, p, ctx)}
       ${renderFAQ(lang, p, ctx)}
       ${section(pick(lang, 'Что логично сделать дальше', 'What to do next'), links(lang, ctx, ['private-ai/', 'shop/', 'industries/clinics/']), 'audience-next')}
+      ${close(lang, p, ctx, c.closeTitle, c.closeText)}`;
+  } else if (route === 'compute/') {
+    const ph = n => `${ctx.asset}photos/${n}`;
+    const frames = ['frame-1-spark', 'frame-2-server', 'frame-3-rack', 'frame-4-park'];
+    body = `${trustStrip(lang)}
+      <section class="story" data-story aria-label="${esc(c.title)}">
+        <div class="story-stage"><div class="story-frames">${frames.map((f, i) => `<picture class="story-frame" data-frame="${i}"><source srcset="${ph(f + '-960.jpg')} 960w, ${ph(f + '.jpg')} 1672w" sizes="(max-width:860px) 100vw, 55vw"><img src="${ph(f + '.jpg')}" alt="${esc(c.story[i][1])}" width="1672" height="941" loading="${i ? 'lazy' : 'eager'}"></picture>`).join('')}</div>
+          <div class="story-bar" aria-hidden="true"><i></i></div><span class="story-tag">${pick(lang, 'Визуализация', 'Visualisation')}</span><div class="story-count" aria-hidden="true"><b data-story-n>01</b> / 04</div></div>
+        <div class="story-steps">${c.story.map(([n, t, d, pts], i) => `<article class="story-step" data-step="${i}"><span class="story-n">${n}</span><h2>${esc(t)}</h2><p>${esc(d)}</p><ul class="package-includes">${pts.map(x => `<li><span aria-hidden="true">✓</span>${esc(x)}</li>`).join('')}</ul></article>`).join('')}</div>
+      </section>
+      ${section(c.compareTitle, `<div class="bundle-table" role="table"><div role="row" class="bundle-row bundle-head">${c.compareHead.map(x => `<span role="columnheader">${esc(x)}</span>`).join('')}</div>${c.compare.map(r => `<div role="row" class="bundle-row">${r.map((x, i) => `<span role="${i ? 'cell' : 'rowheader'}"${i ? ` data-label="${esc(c.compareHead[i])}"` : ''}>${esc(x)}</span>`).join('')}</div>`).join('')}</div>`)}
+      ${section(c.fairTitle, grid(c.fair), 'audience-loss')}
+      ${section(pick(lang, 'Модели и аренда в каталоге', 'Models and rental in the catalogue'), links(lang, ctx, ['hardware/', 'shop/', 'private-ai/']), 'audience-next')}
+      ${renderCapacity(lang, p, ctx)}
+      ${renderFAQ(lang, p, ctx)}
       ${close(lang, p, ctx, c.closeTitle, c.closeText)}`;
   } else if (route === 'shop/') {
     body = `${trustStrip(lang)}${renderShop(lang, ctx)}${renderFAQ(lang, p, ctx)}

@@ -61,7 +61,7 @@ class TelegramError extends Error {
 const STATUS = { brief: 'Обсуждение задачи', design: 'Дизайн', development: 'Разработка', review: 'Проверка и правки', launched: 'Запущен', support: 'Поддержка', paused: 'На паузе' };
 const money = (amount, currency = 'RUB') => new Intl.NumberFormat('ru-RU', { style: 'currency', currency, maximumFractionDigits: 0 }).format(amount || 0);
 
-export function createTelegramLogin({ token, username, apiBase, accountUrl, shopUrl = '', supportUrl = '', ownerChat = '', emoji = {}, account = () => null }) {
+export function createTelegramLogin({ token, username, apiBase, accountUrl, shopUrl = '', supportUrl = '', ownerChat = '', emoji = {}, account = () => null, banner = '', certificate = async () => null }) {
   // Премиум-эмодзи: ID задаются в PORTAL_TG_EMOJI ({"folder":"…","card":"…"}), иначе обычные эмодзи.
   const E = (name, unicode) => [typeof emoji[name] === 'string' && /^\d{5,25}$/.test(emoji[name]) ? emoji[name] : null, unicode];
   const ICON = {
@@ -158,6 +158,21 @@ export function createTelegramLogin({ token, username, apiBase, accountUrl, shop
   }
 
 
+  async function sendPhoto(chatId, file, caption, buttons) {
+    const { readFile } = await import('node:fs/promises');
+    const data = await readFile(file);
+    const form = new FormData();
+    form.append('chat_id', String(chatId));
+    form.append('caption', caption);
+    form.append('parse_mode', 'HTML');
+    if (buttons) form.append('reply_markup', JSON.stringify({ inline_keyboard: buttons }));
+    form.append('photo', new Blob([data]), file.endsWith('.png') ? 'image.png' : 'image.jpg');
+    const response = await fetch(`${apiBase.replace(/\/+$/, '')}/bot${token}/sendPhoto`, { method: 'POST', body: form, redirect: 'error', signal: AbortSignal.timeout(20_000) });
+    const payload = await response.json().catch(() => null);
+    if (!response.ok || payload?.ok !== true) throw new TelegramError(payload?.error_code ?? response.status);
+    return payload.result;
+  }
+
   function menuButtons() {
     const rows = [
       [{ text: '📂 Мои проекты', callback_data: 'projects' }, { text: '🧾 Счета', callback_data: 'invoices' }],
@@ -184,7 +199,11 @@ export function createTelegramLogin({ token, username, apiBase, accountUrl, shop
       + `Логин для входа: ${login}\n\nЧто посмотреть?`;
   }
 
-  async function showMenu(from, editId) {
+  async function showMenu(from, editId, withBanner = false) {
+    if (withBanner && banner) {
+      const { stat } = await import('node:fs/promises');
+      if (await stat(banner).then(() => true, () => false)) await sendPhoto(from.id, banner, '<b>Devlarion</b> · сайты, боты и корпоративный ИИ').catch(() => {});
+    }
     const acc = account(from.id);
     const buttons = acc ? menuButtons() : [[{ text: '✨ Зарегистрироваться', url: accountUrl + '?mode=register' }], [{ text: '🔐 Войти', url: accountUrl }], ...(shopUrl ? [[{ text: '🛍 Магазин услуг', url: shopUrl }]] : [])];
     await sendMessage(from.id, ICON.hello, menuText(from), buttons, editId);
@@ -247,7 +266,16 @@ export function createTelegramLogin({ token, username, apiBase, accountUrl, shop
       return;
     }
     if (command === 'projects') return showProjects(from);
-    if (command === 'menu' || command === 'help' || (command === 'start' && !payload)) return showMenu(from);
+    if (command === 'start' && payload?.startsWith('cert_')) {
+      const cert = await certificate(payload.slice(5));
+      if (!cert) return sendMessage(from.id, ICON.card, 'Сертификат не найден или уже выдан. Сгенерируйте его заново на сайте.', [[{ text: 'Открыть сайт', url: shopUrl || accountUrl }]]);
+      await sendPhoto(from.id, cert.file, `<b>Сертификат исследователя Devlarion</b>\n${escapeHtml(cert.name)}${cert.code ? `\n\nКод подарка: <code>${escapeHtml(cert.code)}</code>\nСкидка 5% на первый проект и бесплатный аудит — по согласованию.` : ''}`,
+        supportUrl ? [[{ text: '💬 Обсудить проект с кодом', url: supportUrl }]] : undefined);
+      await cert.done();
+      return;
+    }
+    if (command === 'start' && !payload) return showMenu(from, undefined, true);
+    if (command === 'menu' || command === 'help') return showMenu(from);
     if (command !== 'start') return;
     const login = LOGIN_PAYLOAD.exec(payload);
     if (!login) return;

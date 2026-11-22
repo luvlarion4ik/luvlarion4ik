@@ -4,7 +4,7 @@
 //   PORTAL_ADMIN_PORT (4176) — управление, nginx отдаёт его по /account/admin/ только с паролем.
 import { randomBytes, randomUUID } from 'node:crypto';
 import { createReadStream } from 'node:fs';
-import { mkdir, readFile, rename, rm, stat, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, rename, rm, stat, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { basename, extname, join } from 'node:path';
 import { createTelegramLogin } from './telegram-login.mjs';
@@ -22,6 +22,7 @@ const SUPPORT = env.PORTAL_SUPPORT || 'https://t.me/LuvLarion4ik';
 const DATA_DIR = env.PORTAL_DATA || new URL('./data/', import.meta.url).pathname;
 const BOT_TOKEN = (env.TELEGRAM_BOT_TOKEN || '').trim();
 const BOT_NAME = (env.TELEGRAM_BOT_USERNAME || '').trim().replace(/^@/, '');
+const certHits = new Map();
 const SHOP = env.PORTAL_SHOP || new URL('/ru/shop/', ORIGIN).href;
 const telegramLogin = createTelegramLogin({
   token: BOT_TOKEN,
@@ -32,6 +33,14 @@ const telegramLogin = createTelegramLogin({
   supportUrl: SUPPORT,
   ownerChat: env.PORTAL_OWNER_TG || '',
   emoji: (() => { try { return JSON.parse(env.PORTAL_TG_EMOJI || '{}'); } catch { return {}; } })(),
+  banner: new URL('./banner.jpg', import.meta.url).pathname,
+  certificate: async token => {
+    if (!/^[A-Za-z0-9_-]{16}$/.test(token)) return null;
+    const file = join(DATA_DIR, 'certs', token + '.png');
+    try { await stat(file); } catch { return null; }
+    const meta = JSON.parse(await readFile(file + '.json', 'utf8').catch(() => '{}'));
+    return { file, name: meta.name || '', code: meta.code || '', done: () => Promise.all([rm(file, { force: true }), rm(file + '.json', { force: true })]) };
+  },
   account: tgId => {
     const client = db.clients.find(c => c.tgId && String(c.tgId) === String(tgId));
     return client ? { client, projects: db.projects.filter(p => p.clientId === client.id) } : null;
@@ -292,6 +301,31 @@ async function clientHandler(req, res) {
   if (req.method === 'GET' && path === '/auth') {
     res.writeHead(303, { Location: BASE, 'Cache-Control': 'no-store' });
     return res.end();
+  }
+  if (path === '/api/certificate' && req.method === 'POST') {
+    sameOrigin(req);
+    const ip = String(req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
+    const nowMs = Date.now();
+    const hits = (certHits.get(ip) || []).filter(t => nowMs - t < 3600_000);
+    if (hits.length >= 6) throw new HttpError(429, 'Слишком много сертификатов за час. Попробуйте позже.');
+    certHits.set(ip, [...hits, nowMs]);
+    if (!BOT_NAME) throw new HttpError(503, 'Бот сейчас недоступен.');
+    const body = await readJson(req, 3 * 1024 * 1024);
+    const name = str(body.name, 80), code = str(body.code, 40);
+    const m = /^data:image\/png;base64,([A-Za-z0-9+/=]+)$/.exec(String(body.png || ''));
+    if (!name || !m) throw new HttpError(422, 'Нужны имя и изображение сертификата.');
+    const png = Buffer.from(m[1], 'base64');
+    if (png.length > 2.5 * 1024 * 1024 || png.subarray(0, 8).toString('hex') !== '89504e470d0a1a0a') throw new HttpError(422, 'Некорректное изображение.');
+    const dir = join(DATA_DIR, 'certs');
+    await mkdir(dir, { recursive: true });
+    for (const f of await readdir(dir).catch(() => [])) {
+      const st = await stat(join(dir, f)).catch(() => null);
+      if (st && nowMs - st.mtimeMs > 2 * 86400_000) await rm(join(dir, f), { force: true });
+    }
+    const token = randomBytes(12).toString('base64url');
+    await writeFile(join(dir, token + '.png'), png);
+    await writeFile(join(dir, token + '.png.json'), JSON.stringify({ name, code, at: now() }));
+    return send(res, 200, { bot: 'https://t.me/' + encodeURIComponent(BOT_NAME) + '?start=cert_' + token });
   }
   const auth = path.match(/^\/api\/login\/(verify|register|reset|password)$/);
   if (req.method === 'POST' && auth) return authenticate(req, res, auth[1]);

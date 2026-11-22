@@ -44,25 +44,30 @@ const services = [
 // ---------- Железо ----------
 // market — диапазон цен российских поставщиков (ноябрь 2026), rub — наша цена с настройкой.
 export const hardware = [
-  { id: 'dgx-spark', mode: 'buy', art: 'spark', rub: 849000, market: [710000, 950000],
+  { id: 'dgx-spark', mode: 'buy', art: 'spark', rub: 939000, market: [710000, 950000],
+    more: { ru: [['Для кого', 'Разработчик, аналитик или небольшой отдел, которому нужен свой ИИ без облака.'], ['Какие модели потянет', 'Llama, Qwen, DeepSeek до ~200 млрд параметров в формате FP4; дообучение моделей до ~70 млрд.'], ['Размер и питание', '150 × 150 × 50,5 мм, 1,2 кг, до 240 Вт — работает от обычной розетки.'], ['Что делаем мы', 'Поставка, настройка DGX OS, развёртывание модели и API, подключение к вашим системам, гарантия на нашу работу.']], en: [['Who it is for', 'A developer, analyst or small team that wants its own AI without the cloud.'], ['Models it runs', 'Llama, Qwen, DeepSeek up to ~200B parameters in FP4; fine-tuning up to ~70B.'], ['Size and power', '150 × 150 × 50.5 mm, 1.2 kg, up to 240 W from a normal socket.'], ['What we do', 'Supply, DGX OS set-up, model and API deployment, integration, warranty on our work.']] },
     ru: ['NVIDIA DGX Spark', 'Персональный ИИ-суперкомпьютер размером с книгу. Запускает модели до ~200 млрд параметров локально.', ['Grace Blackwell GB10', '128 ГБ единой памяти', 'SSD 4 ТБ', 'До 1 PFLOP FP4']],
     en: ['NVIDIA DGX Spark', 'A personal AI supercomputer the size of a book. Runs models up to ~200B parameters locally.', ['Grace Blackwell GB10', '128 GB unified memory', '4 TB SSD', 'Up to 1 PFLOP FP4']] },
-  { id: 'gb10-oem', mode: 'buy', art: 'spark-dark', rub: 699000, market: [660000, 720000],
+  { id: 'gb10-oem', mode: 'buy', art: 'spark-dark', rub: 715000, market: [660000, 720000],
     ru: ['GB10 от партнёров NVIDIA', 'Тот же чип GB10 в корпусах ASUS, Gigabyte и других производителей — дешевле оригинала.', ['Grace Blackwell GB10', '128 ГБ единой памяти', 'SSD 1–4 ТБ', 'Совместим с DGX OS']],
     en: ['GB10 from NVIDIA partners', 'The same GB10 chip in ASUS, Gigabyte and other cases, cheaper than the original.', ['Grace Blackwell GB10', '128 GB unified memory', '1–4 TB SSD', 'DGX OS compatible']] },
-  { id: 'spark-cluster', mode: 'buy', art: 'spark-duo', rub: 1990000, market: [1900000, 1960000],
+  { id: 'spark-cluster', mode: 'buy', art: 'spark-duo', rub: 1955000, market: [1900000, 1960000],
+    more: { ru: [['Для кого', 'Отдел, которому мало одного Spark: большие модели или несколько пользователей.'], ['Какие модели потянет', 'До ~405 млрд параметров в FP4 при распределённом inference.'], ['Связка', 'Два устройства соединяются напрямую через ConnectX-7 (200 Гбит/с).'], ['Что делаем мы', 'Сборка кластера, распределённый inference, балансировка, мониторинг.']], en: [['Who it is for', 'A team that outgrows one Spark: large models or several users.'], ['Models it runs', 'Up to ~405B parameters in FP4 with distributed inference.'], ['Link', 'The two units connect directly over ConnectX-7 (200 Gb/s).'], ['What we do', 'Cluster assembly, distributed inference, load balancing, monitoring.']] },
     ru: ['Кластер из двух DGX Spark', 'Два Spark, связанные 200-гигабитной сетью: модели до ~400 млрд параметров.', ['2× GB10', '256 ГБ памяти суммарно', 'Связка ConnectX-7', 'Настроенный распределённый inference']],
     en: ['Two-unit DGX Spark cluster', 'Two Sparks linked over 200 Gb networking: models up to ~400B parameters.', ['2× GB10', '256 GB memory in total', 'ConnectX-7 link', 'Distributed inference set up']] },
-  { id: 'rtx-pro-ws', mode: 'buy', art: 'workstation', rub: 2990000, market: [2500000, 3200000],
+  { id: 'rtx-pro-ws', mode: 'buy', art: 'workstation', rub: 3150000, market: [2500000, 3200000],
+    more: { ru: [['Для кого', 'Компания, которой нужна быстрая модель для RAG, генерации и дообучения у себя в офисе.'], ['Какие модели потянет', 'До ~70 млрд параметров в 8 бит на одной карте с 96 ГБ; быстрая генерация изображений и видео.'], ['Охлаждение и шум', 'Подбираем корпус и охлаждение под офис, а не под серверную.'], ['Что делаем мы', 'Сборка, тест под нагрузкой, драйверы, vLLM, API, гарантия на сборку и работу.']], en: [['Who it is for', 'A company that needs a fast model for RAG, generation and fine-tuning on site.'], ['Models it runs', 'Up to ~70B parameters in 8-bit on one 96 GB card; fast image and video generation.'], ['Cooling and noise', 'Case and cooling chosen for an office, not a server room.'], ['What we do', 'Build, load test, drivers, vLLM, API, warranty on the build and our work.']] },
     ru: ['Рабочая станция с RTX PRO 6000 Blackwell', 'Самая мощная видеокарта для рабочих станций: 96 ГБ памяти на одной карте.', ['RTX PRO 6000 96 ГБ GDDR7', 'Процессор и ОЗУ под задачу', 'Тихое охлаждение', 'Для RAG, дообучения и генерации']],
     en: ['RTX PRO 6000 Blackwell workstation', 'The most powerful workstation GPU: 96 GB on a single card.', ['RTX PRO 6000 96 GB GDDR7', 'CPU and RAM sized to the task', 'Quiet cooling', 'For RAG, fine-tuning and generation']] },
-  { id: 'rtx5090-ws', mode: 'buy', art: 'workstation', rub: 1190000, market: [1030000, 1550000],
+  { id: 'rtx5090-ws', mode: 'buy', art: 'workstation', rub: 1490000, market: [1030000, 1550000],
     ru: ['ИИ-станция на RTX 5090 32 ГБ', 'Доступный вход в локальный ИИ: модели до ~30 млрд параметров, генерация изображений, эксперименты.', ['GeForce RTX 5090 32 ГБ', 'Ryzen 9 / 64–128 ГБ ОЗУ', 'NVMe 2–4 ТБ', 'Настроенная среда для моделей']],
     en: ['RTX 5090 32 GB AI workstation', 'An affordable start in local AI: models up to ~30B parameters, image generation, experiments.', ['GeForce RTX 5090 32 GB', 'Ryzen 9 / 64–128 GB RAM', '2–4 TB NVMe', 'Model environment set up']] },
-  { id: 'rtx-pro-server', mode: 'buy', art: 'rack4', rub: 11900000, market: [10500000, 12500000],
+  { id: 'rtx-pro-server', mode: 'buy', art: 'rack4', rub: 12300000, market: [10500000, 12500000],
+    more: { ru: [['Для кого', 'Отдел или компания: несколько моделей и десятки пользователей одновременно.'], ['Какие модели потянет', 'Модели до ~200 млрд параметров или несколько моделей поменьше параллельно.'], ['Размещение', 'Ваша серверная или ЦОД партнёра в России; резервное питание.'], ['Что делаем мы', 'Подбор платформы, поставка, монтаж в стойку, настройка, мониторинг, SLA.']], en: [['Who it is for', 'A department or company: several models and dozens of users at once.'], ['Models it runs', 'Models up to ~200B parameters or several smaller ones in parallel.'], ['Hosting', 'Your server room or a partner data centre in Russia; redundant power.'], ['What we do', 'Platform choice, supply, rack mounting, set-up, monitoring, SLA.']] },
     ru: ['Сервер 4× RTX PRO 6000 Server Edition', 'Стоечный сервер для отдела или всей компании: 384 ГБ видеопамяти.', ['4× RTX PRO 6000 96 ГБ', '2U/4U, стойка 19″', 'Резервные блоки питания', 'Несколько моделей одновременно']],
     en: ['4× RTX PRO 6000 Server Edition', 'A rack server for a department or company: 384 GB of GPU memory.', ['4× RTX PRO 6000 96 GB', '2U/4U, 19″ rack', 'Redundant power', 'Several models at once']] },
-  { id: 'hgx-h200', mode: 'buy', art: 'hgx', rub: 36900000, market: [34000000, 72000000],
+  { id: 'hgx-h200', mode: 'buy', art: 'hgx', rub: 68900000, market: [34000000, 72000000],
+    more: { ru: [['Для кого', 'Крупная компания: обучение своих моделей и высокая нагрузка на inference.'], ['Какие модели потянет', 'Обучение и дообучение крупных моделей; inference моделей на сотни миллиардов параметров.'], ['Требования', 'Стойка, питание порядка 10 кВт и охлаждение ЦОД — проверим площадку заранее.'], ['Что делаем мы', 'Подбор вендора, поставка, монтаж, сеть, планировщик задач, сопровождение по SLA.']], en: [['Who it is for', 'A large company: training its own models and heavy inference load.'], ['Models it runs', 'Training and fine-tuning large models; inference for models with hundreds of billions of parameters.'], ['Requirements', 'A rack, around 10 kW of power and data-centre cooling — we check the site first.'], ['What we do', 'Vendor choice, supply, mounting, networking, job scheduler, SLA support.']] },
     ru: ['Сервер HGX 8× H200', 'Флагман для обучения и тяжёлого inference: 1,1 ТБ памяти HBM3e.', ['8× H200 SXM 141 ГБ', 'NVLink между GPU', '2× AMD EPYC или Intel Xeon', 'Сеть 400G по запросу']],
     en: ['HGX 8× H200 server', 'The flagship for training and heavy inference: 1.1 TB of HBM3e.', ['8× H200 SXM 141 GB', 'NVLink between GPUs', '2× AMD EPYC or Intel Xeon', '400G networking on request']] },
   { id: 'dgx-b200', mode: 'buy', art: 'hgx', rub: null, market: null,
@@ -74,13 +79,13 @@ export const hardware = [
   { id: 'amd-mi300x', mode: 'buy', art: 'hgx', rub: null, market: null,
     ru: ['Сервер 8× AMD Instinct MI300X', 'Альтернатива NVIDIA с 192 ГБ памяти на ускоритель — для больших моделей и inference.', ['8× MI300X 192 ГБ', '1,5 ТБ HBM3 суммарно', 'ROCm и vLLM', 'Поставка и цена по запросу']],
     en: ['8× AMD Instinct MI300X server', 'An NVIDIA alternative with 192 GB per accelerator, for large models and inference.', ['8× MI300X 192 GB', '1.5 TB HBM3 in total', 'ROCm and vLLM', 'Supply and price on request']] },
-  { id: 'rent-h100', mode: 'rent', art: 'cloud', rub: 690, unit: 'hour', market: [340, 650],
+  { id: 'rent-h100', mode: 'rent', art: 'cloud', rub: 640, unit: 'hour', market: [340, 650],
     ru: ['Аренда 1× H100 80 ГБ', 'Выделенный GPU в российском ЦОД, модель развёрнута и отвечает по API.', ['H100 80 ГБ', 'Модель и API настроены', 'Изолированная сеть', 'Помесячно со скидкой']],
     en: ['Rent 1× H100 80 GB', 'A dedicated GPU in a Russian data centre with the model deployed and served by API.', ['H100 80 GB', 'Model and API set up', 'Isolated network', 'Monthly discount']] },
-  { id: 'rent-h200', mode: 'rent', art: 'cloud', rub: 790, unit: 'hour', market: [420, 780],
+  { id: 'rent-h200', mode: 'rent', art: 'cloud', rub: 770, unit: 'hour', market: [420, 780],
     ru: ['Аренда 1× H200 141 ГБ', 'Больше памяти — больше модель без разбиения на несколько карт.', ['H200 141 ГБ', 'Модель и API настроены', 'Мониторинг нагрузки', 'Помесячно со скидкой']],
     en: ['Rent 1× H200 141 GB', 'More memory, larger models without splitting across cards.', ['H200 141 GB', 'Model and API set up', 'Load monitoring', 'Monthly discount']] },
-  { id: 'rent-8h200', mode: 'rent', art: 'cloud8', rub: 5490, unit: 'hour', market: [3200, 5400],
+  { id: 'rent-8h200', mode: 'rent', art: 'cloud8', rub: 5350, unit: 'hour', market: [3200, 5400],
     ru: ['Аренда сервера 8× H200', 'Целый сервер под вашу компанию: обучение, дообучение и высокая нагрузка.', ['8× H200, NVLink', 'Выделенный сервер', 'Резервное копирование в РФ', 'SLA в договоре']],
     en: ['Rent an 8× H200 server', 'A whole server for your company: training, fine-tuning and heavy load.', ['8× H200, NVLink', 'Dedicated server', 'Backups in Russia', 'SLA in the contract']] },
   { id: 'provider-pick', mode: 'rent', art: 'cloud', rub: null, market: null,
@@ -96,6 +101,8 @@ const mesh = (x, y, w, h, gold) => {
   for (let i = 0; i < Math.floor(w / 9); i++) for (let j = 0; j < Math.floor(h / 9); j++) s += `<circle cx="${x + 5 + i * 9 + (j % 2) * 4.5}" cy="${y + 5 + j * 9}" r="2.4" class="${gold ? 'hw-mesh-gold' : 'hw-mesh'}"/>`;
   return s;
 };
+
+const PHOTO = { 'dgx-spark': 'cut-spark', 'gb10-oem': 'cut-spark', 'rtx5090-ws': 'cut-workstation', 'rtx-pro-ws': 'cut-workstation', 'rtx-pro-server': 'cut-hgx', 'hgx-h200': 'cut-hgx', 'dgx-b200': 'cut-rack', 'oem-servers': 'cut-hgx', 'amd-mi300x': 'cut-hgx' };
 
 export function deviceArt(kind) {
   const box = inner => `<svg class="hw-art" viewBox="0 0 240 150" aria-hidden="true">${inner}</svg>`;
@@ -118,7 +125,7 @@ export function renderShop(lang, ctx) {
   const i = lang === 'ru' ? 0 : 1;
   const priceOf = p => typeof p === 'number' ? p : p ? packageStartingPrice(p, ctx.pricing) : null;
   const unitLabel = u => u === 'hour' ? pick(lang, ' / час', ' / hour') : u === 'month' ? pick(lang, ' / мес.', ' / month') : '';
-  const card = ({ id, cat, title, text, rub, unit, art, specs, market, kind }) => {
+  const card = ({ id, cat, title, text, rub, unit, art, specs, market, kind, more }) => {
     const price = rub == null ? `<p class="audience-price">${pick(lang, 'По запросу', 'On request')}</p>`
       : `<p class="audience-price" data-region-price-row>${priceMarkup(lang, rub, unitLabel(unit))}</p>`;
     const marketLine = market ? `<p class="shop-market">${pick(lang, 'Рынок', 'Market')}: ${market[0].toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-GB')}–${market[1].toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-GB')} ₽${unitLabel(unit)}</p>` : '';
@@ -126,6 +133,7 @@ export function renderShop(lang, ctx) {
       ${art}
       <div class="shop-body"><h3>${esc(title)}</h3><p class="shop-text">${esc(text)}</p>
       ${specs ? `<ul class="shop-specs">${specs.map(s => `<li>${esc(s)}</li>`).join('')}</ul>` : ''}
+      ${more ? `<details class="shop-more"><summary>${pick(lang, 'Подробнее', 'Details')}</summary><dl>${more.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl></details>` : ''}
       <div class="shop-foot">${price}${marketLine}
       <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="${pick(lang, 'Меньше', 'Fewer')}">−</button><output data-count>1</output><button type="button" data-inc aria-label="${pick(lang, 'Больше', 'More')}">+</button></div>
       <button type="button" class="btn shop-add" data-add="${id}"><span class="shop-add-label">${pick(lang, 'В корзину', 'Add to basket')}</span></button></div></div></article>`;
@@ -134,7 +142,7 @@ export function renderShop(lang, ctx) {
     id, cat, title: title[i], text: text[i], rub: priceOf(p), unit, art: iconArt(ctx.icons, icon),
   }))).join('');
   const hwCards = hardware.map(h => card({
-    id: h.id, cat: 'hw-' + h.mode, kind: 'hw', title: h[lang][0], text: h[lang][1], specs: h[lang][2], rub: h.rub, unit: h.unit, market: h.market, art: `<div class="shop-art">${deviceArt(h.art)}${h.mode === 'rent' ? `<span class="shop-tag">${pick(lang, 'Аренда', 'Rental')}</span>` : `<span class="shop-tag">${pick(lang, 'Под заказ', 'To order')}</span>`}</div>`,
+    id: h.id, cat: 'hw-' + h.mode, kind: 'hw', title: h[lang][0], text: h[lang][1], specs: h[lang][2], rub: h.rub, unit: h.unit, market: h.market, more: h.more?.[lang], art: `<div class="shop-art${PHOTO[h.id] ? ' shop-art-photo' : ''}">${PHOTO[h.id] ? `<img src="${ctx.asset}photos/${PHOTO[h.id]}.png" alt="${esc(h[lang][0])}" width="1448" height="1086" loading="lazy">` : deviceArt(h.art)}${h.mode === 'rent' ? `<span class="shop-tag">${pick(lang, 'Аренда', 'Rental')}</span>` : `<span class="shop-tag">${pick(lang, 'Под заказ', 'To order')}</span>`}</div>`,
   })).join('');
   const chips = [['all', pick(lang, 'Все', 'All')], ...services.map(([id, names]) => [id, names[i]]), ['hw-buy', pick(lang, 'Железо: купить', 'Hardware: buy')], ['hw-rent', pick(lang, 'Железо: аренда', 'Hardware: rent')]];
   const labels = JSON.stringify({
@@ -172,20 +180,22 @@ export function renderShop(lang, ctx) {
 
 function renderWhyPrice(lang) {
   const items = lang === 'ru' ? [
-    ['Вы покупаете работающую модель, а не коробку', 'В цену входят подбор конфигурации, установка ОС и драйверов, развёртывание модели (vLLM), API и проверка под вашей нагрузкой.'],
+    ['Всё от покупки до запуска — в наших руках', 'Подбор, поставка, монтаж, установка ОС и драйверов, развёртывание модели (vLLM), API и проверка под вашей нагрузкой. Вы получаете работающую систему, а не коробку.'],
+    ['Гарантия', 'Даём гарантию на нашу работу и сами ведём гарантийные случаи с поставщиком: вам не нужно разбираться с вендором.'],
     ['Одна команда отвечает за всё', 'Если модель тормозит или падает, не нужно выяснять, виноваты железо, драйверы или софт. Отвечаем мы.'],
     ['Документы для службы безопасности', 'Даём документы о размещении и описание архитектуры — то, что обычно спрашивают при проверке.'],
     ['Поддержка после запуска', 'Первые два месяца исправления входят в проект, дальше — сопровождение по договору.'],
-    ['Честный ориентир', 'Рядом с ценой показываем диапазон у других поставщиков. Наша выше на стоимость настройки — не на «воздух».'],
+    ['Честный ориентир', 'Рядом с ценой показываем диапазон у других поставщиков. Мы у верхней границы, потому что в цену входят настройка, гарантия и сопровождение.'],
   ] : [
-    ['You buy a working model, not a box', 'The price covers sizing, OS and driver set-up, model deployment (vLLM), an API and a load test.'],
+    ['From purchase to launch, it is on us', 'Sizing, supply, mounting, OS and drivers, model deployment (vLLM), an API and a load test. You get a working system, not a box.'],
+    ['Warranty', 'We guarantee our work and handle warranty claims with the supplier for you.'],
     ['One team owns it all', 'If the model is slow or crashes, you do not have to work out whether hardware, drivers or software are at fault.'],
     ['Documents for your security team', 'Hosting documents and an architecture description, the things usually asked for in a review.'],
     ['Support after launch', 'Two months of fixes are included, then a support contract.'],
-    ['An honest reference', 'Next to each price we show what other suppliers charge. Ours is higher by the cost of set-up.'],
+    ['An honest reference', 'Next to each price we show what other suppliers charge. We sit near the top because set-up, warranty and support are included.'],
   ];
   return `<section class="section wrap audience-section why-price"><p class="loss-badge">${pick(lang, 'Про цены', 'About pricing')}</p>
-    <h2>${pick(lang, 'Почему наше железо чуть дороже рынка', 'Why our hardware costs a little more than the market')}</h2>
+    <h2>${pick(lang, 'Почему наша цена у верхней границы рынка', 'Why our price sits near the top of the market')}</h2>
     <div class="loss-grid">${items.map(([t, d], n) => `<article><span class="loss-index" aria-hidden="true">${String(n + 1).padStart(2, '0')}</span><h3>${esc(t)}</h3><p>${esc(d)}</p></article>`).join('')}</div>
     <p class="audience-note-line">${pick(lang, 'Рыночные диапазоны — открытые цены российских поставщиков на ноябрь 2026 года. Железо поставляем под заказ через партнёров: цена зависит от курса и конфигурации, итог фиксируем в КП.', 'Market ranges are public prices of Russian suppliers as of November 2026. Hardware is supplied to order through partners; the price depends on exchange rates and configuration and is fixed in the quote.')}</p>
   </section>`;

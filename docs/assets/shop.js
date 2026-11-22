@@ -154,3 +154,23 @@
   render();
   apply();
 })();
+
+// Сторителлинг: кадры меняются, пока листаете шаги.
+(() => {
+  const story = document.querySelector('[data-story]');
+  if (!story) return;
+  const frames = [...story.querySelectorAll('.story-frame')], steps = [...story.querySelectorAll('.story-step')];
+  const num = story.querySelector('[data-story-n]'), stage = story.querySelector('.story-stage');
+  function show(i) {
+    frames.forEach((f, n) => f.classList.toggle('is-on', n === i));
+    steps.forEach((s, n) => s.classList.toggle('is-on', n === i));
+    stage.style.setProperty('--p', (i + 1) / steps.length);
+    if (num) num.textContent = String(i + 1).padStart(2, '0');
+  }
+  show(0);
+  if (!('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver(entries => {
+    for (const e of entries) if (e.isIntersecting) show(+e.target.dataset.step);
+  }, { rootMargin: '-45% 0px -45% 0px' });
+  steps.forEach(s => io.observe(s));
+})();

@@ -1095,6 +1095,69 @@ footer{padding:2rem 0}.fine{margin-top:1.5rem;flex-wrap:wrap}.sub{padding:4rem 0
 .shop-clear {border:0;background:transparent;color:var(--sub);text-decoration:underline;cursor:pointer;font:inherit;justify-self:start}
 @media (max-width:860px) { .shop-grid,.shop-grid-hw {grid-template-columns:1fr} .shop-cart {width:100vw} }
 
+/* Мега-меню «Услуги»: раскрывается по наведению, 4 колонки */
+@media (min-width:861px) {
+  .bar .services-nav-links {grid-template-columns:repeat(4,minmax(0,1fr));gap:1.4rem;width:min(60rem,94vw);left:var(--menu-x,-.8rem);padding:1.3rem 1.4rem;border-radius:16px;box-shadow:0 30px 70px -30px rgba(0,0,0,.55)}
+  .bar .services-nav[open] .services-nav-links {animation:menu-in .28s cubic-bezier(.2,.9,.3,1)}
+  .bar .services-col strong {display:block;padding-bottom:.45rem;border-bottom:1px solid var(--rule);color:var(--accent);letter-spacing:.02em}
+  .bar .services-col li {opacity:0;transform:translateY(4px);animation:menu-item .3s ease-out forwards;animation-delay:calc(var(--c) * 40ms + var(--r) * 25ms + 60ms)}
+  .bar .services-col a {padding:.32rem .4rem;margin-inline:-.4rem;border-radius:8px;transition:background .15s,color .15s,transform .15s}
+  .bar .services-col a:hover {background:var(--surface);color:var(--accent);transform:translateX(3px)}
+}
+@keyframes menu-in {from {opacity:0;transform:translateY(-6px)}}
+@keyframes menu-item {to {opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce) { .bar .services-col li {opacity:1;transform:none;animation:none} }
+.shop-more {border-top:1px dashed var(--rule);padding-top:.4rem}
+.shop-more summary {cursor:pointer;color:var(--accent);font-weight:650;list-style:none}
+.shop-more summary::-webkit-details-marker {display:none}
+.shop-more summary::after {content:" +";}
+.shop-more[open] summary::after {content:" −";}
+.shop-more dl {margin:.6rem 0 0;display:grid;gap:.55rem;animation:menu-in .25s ease-out}
+.shop-more dt {font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--sub)}
+.shop-more dd {margin:.15rem 0 0;font-size:.9rem;line-height:1.45}
+.shop-hide {opacity:0!important;transform:translateY(16px) scale(.96)!important;pointer-events:none!important}
+.shop-fab,.dl-top {transition:opacity .3s,transform .35s cubic-bezier(.3,1.2,.5,1)}
+
+/* ===== Сторителлинг: кадры меняются при прокрутке ===== */
+.story {display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(1.5rem,4vw,4rem);align-items:start;max-width:var(--wrap,78rem);margin-inline:auto;padding:2rem var(--edge,1.5rem)}
+.story-stage {position:sticky;top:5.5rem;align-self:start;height:min(70vh,640px);border-radius:22px;overflow:hidden;border:1px solid var(--rule);background:#0f1216;box-shadow:0 40px 80px -40px rgba(0,0,0,.6)}
+.story-frames,.story-frame {position:absolute;inset:0}
+.story-frame {opacity:0;transform:scale(1.06);transition:opacity .9s ease,transform 1.6s cubic-bezier(.2,.7,.2,1)}
+.story-frame img {width:100%;height:100%;object-fit:cover;display:block}
+.story-frame.is-on {opacity:1;transform:scale(1)}
+.story-bar {position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.12)}
+.story-bar i {display:block;height:100%;background:var(--accent);transform-origin:left;transform:scaleX(var(--p,.25));transition:transform .5s cubic-bezier(.3,.8,.3,1)}
+.story-tag {position:absolute;top:.8rem;left:.8rem;padding:.2rem .6rem;border-radius:99px;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;background:rgba(15,18,22,.7);color:#d6dde3;backdrop-filter:blur(6px)}
+.story-count {position:absolute;right:1rem;bottom:1rem;color:#d6dde3;font:.9rem/1 ui-monospace,Menlo,monospace}
+.story-count b {color:var(--accent);font-size:1.4rem}
+.story-steps {display:grid;gap:0}
+.story-step {display:flex;flex-direction:column;justify-content:center;gap:.7rem;min-height:70vh;padding-block:2rem;opacity:.35;transition:opacity .4s}
+.story-step.is-on {opacity:1}
+.story-n {font:400 3.6rem/1 Georgia,serif;color:var(--accent)}
+.story-step h2 {margin:0;font-size:clamp(1.7rem,3vw,2.4rem)}
+.story-step p {margin:0;color:var(--sub);font-size:1.08rem;line-height:1.55}
+@media (max-width:860px) {
+  .story {grid-template-columns:1fr;gap:1rem}
+  .story-stage {top:4.4rem;height:38vh;z-index:3}
+  .story-step {min-height:60vh}
+}
+@media (prefers-reduced-motion:reduce) {
+  .story-stage {position:relative;top:0;height:auto;aspect-ratio:16/9}
+  .story-frame {transition:none}
+  .story-step {min-height:0;opacity:1}
+}
+
+.shop-art-photo img {display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:contain;padding:.6rem;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.shop-item:hover .shop-art-photo img {transform:scale(1.06) translateY(-3px)}
+.shop-art-photo {background:radial-gradient(90% 70% at 30% 20%,color-mix(in srgb,var(--accent) 22%,transparent),transparent 70%),linear-gradient(180deg,#161c24,#0f1216)}
+.photo-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.photo-grid figure {margin:0;border:1px solid var(--rule);border-radius:16px;overflow:hidden;background:var(--surface)}
+.photo-grid img {display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.photo-grid figure:hover img {transform:scale(1.04)}
+.photo-grid figcaption {padding:.7rem .9rem;font-size:.85rem;color:var(--sub)}
+.photo-grid figure {overflow:hidden}
+@media (max-width:860px) {.photo-grid {grid-template-columns:1fr}}
+
 /* Страница «Личный кабинет»: демо клиентского портала в стиле сайта */
 .portal-page { --pt-radius: 14px; }
 .pt-hero { padding-top: clamp(2.5rem, 6vw, 5rem); padding-bottom: clamp(1.5rem, 3vw, 2.5rem); }
@@ -1542,3 +1605,51 @@ header .wordmark {
   :is(article, a):hover > .service-mark, :is(article, a):hover .service-mark { transform: translateY(-2px) rotate(-4deg); }
 }
 @keyframes dl-icon-draw { to { stroke-dashoffset: 0; } }
+
+/* Знак в подвале: при наведении «D» раскрывается в слово Devlarion */
+.dl-footer-mark { align-items: center; gap: 0; cursor: default; outline-offset: 6px; }
+.dl-footer-word { display: inline-flex; overflow: hidden; max-width: 0; font: 400 2.6rem/1 "Source Serif 4", Georgia, serif; letter-spacing: -.02em; color: var(--accent);
+  transition: max-width .7s cubic-bezier(.2,.8,.2,1), margin .5s; }
+.dl-footer-word span { display: inline-block; opacity: 0; transform: translateY(.4em) rotate(8deg); transition: opacity .35s, transform .45s cubic-bezier(.3,1.3,.5,1); transition-delay: calc(var(--i) * 35ms); }
+.dl-footer-mark:is(:hover, :focus-visible) .dl-footer-word { max-width: 9em; margin-left: .35rem; }
+.dl-footer-mark:is(:hover, :focus-visible) .dl-footer-word span { opacity: 1; transform: none; }
+.dl-footer-mark devlarion-logo { transition: transform .5s cubic-bezier(.3,1.3,.5,1); }
+.dl-footer-mark:is(:hover, :focus-visible) devlarion-logo { transform: rotate(-8deg) scale(.92); }
+@media (prefers-reduced-motion: reduce) { .dl-footer-word, .dl-footer-word span, .dl-footer-mark devlarion-logo { transition: none; } }
+
+/* Секреты: счётчик, распродажа-шутка, чип, награда */
+.dl-eggs { position: fixed; left: 1rem; bottom: 1rem; z-index: 86; padding: .45rem .8rem; border: 1px solid var(--rule); border-radius: 99px; background: var(--paper); color: var(--sub);
+  font: 600 .78rem/1 system-ui, sans-serif; letter-spacing: .04em; cursor: pointer; box-shadow: 0 10px 30px -18px rgba(0,0,0,.6); }
+.dl-eggs[data-ready] { border-color: var(--accent); color: var(--accent); }
+.dl-eggs[data-ready]::after { content: " · подарок"; }
+:root[lang="en"] .dl-eggs[data-ready]::after { content: " · gift"; }
+@media (max-width: 860px) { .dl-eggs { bottom: 5.4rem; } }
+.dl-sale { position: fixed; inset: 0; z-index: 85; display: grid; place-items: center; pointer-events: none; }
+.dl-sale span { padding: 1rem 2.4rem; border: 3px dashed var(--accent); border-radius: 18px; color: var(--accent); background: var(--paper); font: 700 clamp(3rem, 9vw, 7rem)/1 Georgia, serif;
+  animation: dl-sale 2.6s cubic-bezier(.3,1.4,.5,1) forwards; }
+@keyframes dl-sale { 0% { transform: scale(.2) rotate(-25deg); opacity: 0; } 20% { transform: scale(1.05) rotate(-6deg); opacity: 1; } 70% { transform: scale(1) rotate(-6deg); opacity: 1; } 100% { transform: scale(.9) rotate(-6deg) translateY(20px); opacity: 0; } }
+.dl-chip { width: 18px; height: 18px; padding: 0; border: 0; background: none; color: var(--sub); opacity: .35; cursor: pointer; transition: opacity .2s, color .2s; }
+.dl-chip:hover, .dl-chip:focus-visible { opacity: 1; color: var(--accent); }
+.dl-chip svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
+.dl-reward { width: min(620px, calc(100vw - 1.5rem)); max-height: calc(100vh - 1.5rem); padding: 0; border: 1px solid var(--accent); border-radius: 22px; background: var(--paper); color: var(--ink); box-shadow: 0 40px 100px -30px rgba(0,0,0,.7); }
+.dl-reward::backdrop { background: rgba(8,10,12,.6); backdrop-filter: blur(4px); }
+.dl-reward[open] { animation: dl-note-in .45s cubic-bezier(.2,.9,.3,1.1); }
+.dl-reward-card { position: relative; display: grid; gap: .8rem; padding: clamp(1.3rem, 4vw, 2rem); }
+.dl-reward-art { width: 72px; height: 72px; }
+.dl-reward-art circle { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 330; stroke-dashoffset: 330; animation: dl-icon-draw 1.2s ease-out forwards; }
+.dl-reward-art path { fill: var(--accent); }
+.dl-reward-art .cut { fill: none; stroke: var(--paper); stroke-width: 6; }
+.dl-reward-eyebrow { margin: 0; color: var(--accent); font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; }
+.dl-reward h2 { margin: 0; font: 400 clamp(1.7rem, 4vw, 2.3rem)/1.1 Georgia, serif; }
+.dl-reward ul { margin: 0; padding-left: 1.1rem; display: grid; gap: .3rem; }
+.dl-reward-code { margin: 0; padding: .6rem .9rem; border: 1px dashed var(--accent); border-radius: 10px; }
+.dl-reward-code b { color: var(--accent); letter-spacing: .05em; }
+.dl-reward-name { display: grid; gap: .35rem; }
+.dl-reward-name input { padding: .7rem .9rem; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); color: var(--ink); font: inherit; }
+.dl-reward-preview img { width: 100%; border-radius: 10px; border: 1px solid var(--rule); animation: dl-note-in .3s ease-out; }
+.dl-reward-actions { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; }
+.dl-reward-actions button { padding: .7rem 1.1rem; border: 1px solid var(--accent); border-radius: 10px; background: var(--accent); color: var(--paper); font: 650 .95rem/1 system-ui, sans-serif; cursor: pointer; }
+.dl-reward-actions button + button { background: transparent; color: var(--accent); }
+.dl-reward-actions a { color: var(--accent); }
+.dl-reward-status { margin: 0; min-height: 1.2em; color: var(--sub); font-size: .9rem; }
+.dl-reward-close { position: absolute; top: .9rem; right: .9rem; width: 2.2rem; height: 2.2rem; border: 1px solid var(--rule); border-radius: 50%; background: transparent; color: var(--ink); font-size: 1.2rem; cursor: pointer; }

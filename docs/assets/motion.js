@@ -120,13 +120,15 @@
     if (event.target.closest?.("input, textarea, select, [contenteditable]") || event.metaKey || event.ctrlKey || event.altKey) return;
     const k = ({ "и": "b", "ф": "a" })[event.key.toLowerCase()] ?? event.key.toLowerCase();
     combo = [...combo, k].slice(-10);
-    if (combo.join() === konami.join()) { combo = []; inspector(); return; }
+    if (combo.join() === konami.join()) { combo = []; inspector(); found("konami"); return; }
     if (event.key === "Escape" && root.classList.contains("dl-devmode")) { inspector(false); return; }
     if (event.key.length !== 1) return;
     typed = (typed + event.key.toLowerCase()).slice(-12);
-    if (typed.endsWith("devlarion")) { typed = ""; sparks(); }
-    else if (typed.endsWith("dgx") || typed.endsWith("gpu")) { typed = ""; flyServer(); }
-    else if (typed.endsWith("привет") || typed.endsWith("hello")) { typed = ""; wave(); }
+    if (typed.endsWith("devlarion")) { typed = ""; sparks(); found("devlarion"); }
+    else if (typed.endsWith("dgx") || typed.endsWith("gpu")) { typed = ""; flyServer(); found("dgx"); }
+    else if (typed.endsWith("привет") || typed.endsWith("hello")) { typed = ""; wave(); found("hello"); }
+    else if (/(скидк|акци|sale|discount)$/.test(typed)) { typed = ""; sale(); found("sale"); }
+    else if (typed.endsWith("152")) { typed = ""; fine152(); found("152"); }
   });
 
   // Короткая записка внизу экрана: текст и, если нужно, ссылка.
@@ -250,6 +252,7 @@
     clickTimer = setTimeout(() => { clicks = 0; }, 2500);
     if (++clicks < 7) { if (!reduced) logo.animate([{ transform: "scale(1)" }, { transform: "scale(" + (1 + clicks * .02) + ")" }, { transform: "scale(1)" }], { duration: 220 }); return; }
     clicks = 0;
+    found("logo");
     note(ru ? "Всё, всё, я понял. Можно просто написать." : "Alright, I get it. You can just write to me.", tgLink ? [ru ? "Написать" : "Write", tgLink] : null, 4000);
     if (reduced) return;
     logo.animate([{ transform: "rotate(0)" }, { transform: "rotate(720deg)" }], { duration: 1100, easing: "cubic-bezier(.3,1.3,.5,1)" });
@@ -261,14 +264,185 @@
     const hour = new Date().getHours();
     if (hour < 5 && !sessionStorage.getItem("dl-night")) {
       sessionStorage.setItem("dl-night", "1");
+      setTimeout(() => found("night"), 0);
       setTimeout(() => note(ru ? "Поздно, а вы всё ещё выбираете подрядчика. Оставьте заявку — утром ответим первым делом." : "It’s late and you’re still choosing a contractor. Leave an enquiry and we’ll reply first thing.", null, 7000), 9000);
     }
   } catch {}
 
+  // ---------- Новые пасхалки ----------
+  function sale() {
+    note(ru ? "Акции? Только по согласованию. Но раз уж вы так настойчиво печатаете — найдите ещё пару секретов на сайте." : "Discounts? Only by agreement. But since you typed it so insistently, find a couple more secrets on the site.", null, 5600);
+    if (reduced) return;
+    const tag = document.createElement("div");
+    tag.className = "dl-sale";
+    tag.setAttribute("aria-hidden", "true");
+    tag.innerHTML = '<span>−0%</span>';
+    document.body.append(tag);
+    setTimeout(() => tag.remove(), 2600);
+  }
+  function fine152() {
+    note(ru ? "152-ФЗ: утечка данных 10–100 тыс. человек — штраф 5–10 млн ₽, повторная — до 3% выручки." : "152-FZ: a leak of 10–100k people’s data means a RUB 5–10m fine; a repeat one, up to 3% of revenue.",
+      [ru ? "Как этого избежать" : "How to avoid it", home + "private-ai/"], 6400);
+  }
+  // Потерянный GPU: крошечный чип в подвале.
+  const fineRow = document.querySelector("body > footer .fine");
+  if (fineRow) {
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "dl-chip";
+    chip.setAttribute("aria-label", ru ? "Что это?" : "What is this?");
+    chip.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 6V3m3 3V3m3 3V3M9 21v-3m3 3v-3m3 3v-3M6 9H3m3 3H3m3 3H3m18-6h-3m3 3h-3m3 3h-3"/></svg>';
+    chip.addEventListener("click", () => {
+      found("chip");
+      note(ru ? "Вы нашли потерянный GPU. В этом году они ценнее золота." : "You found a lost GPU. This year they are worth more than gold.", [ru ? "Ещё в магазине" : "More in the shop", home + "shop/#dgx-spark"], 4800);
+      if (!reduced) chip.animate([{ transform: "rotate(0) scale(1)" }, { transform: "rotate(360deg) scale(1.6)" }, { transform: "rotate(360deg) scale(1)" }], { duration: 800, easing: "cubic-bezier(.3,1.3,.5,1)" });
+    });
+    fineRow.append(chip);
+  }
+
+  // ---------- Коллекция секретов и награда ----------
+  const EGGS = ["devlarion", "konami", "dgx", "hello", "logo", "night", "sale", "152", "chip"];
+  const NEED = 4;
+  const store = (() => { try { return JSON.parse(localStorage.getItem("dl-eggs") || "[]"); } catch { return []; } })();
+  let pill = null;
+  function renderPill() {
+    if (!store.length) return;
+    if (!pill) {
+      pill = document.createElement("button");
+      pill.type = "button";
+      pill.className = "dl-eggs";
+      pill.addEventListener("click", () => store.length >= NEED ? reward() : note(ru ? `Найдено секретов: ${store.length} из ${EGGS.length}. За ${NEED} — подарок.` : `Secrets found: ${store.length} of ${EGGS.length}. ${NEED} unlock a gift.`, null, 3600));
+      document.body.append(pill);
+    }
+    pill.textContent = (ru ? "Секреты " : "Secrets ") + store.length + "/" + EGGS.length;
+    pill.toggleAttribute("data-ready", store.length >= NEED);
+  }
+  function found(id) {
+    if (store.includes(id)) return;
+    store.push(id);
+    try { localStorage.setItem("dl-eggs", JSON.stringify(store)); } catch {}
+    renderPill();
+    if (!reduced && pill) pill.animate([{ transform: "scale(1)" }, { transform: "scale(1.18)" }, { transform: "scale(1)" }], { duration: 420, easing: "cubic-bezier(.3,1.4,.5,1)" });
+    if (store.length === NEED) setTimeout(reward, 1600);
+  }
+  renderPill();
+
+  function reward() {
+    document.querySelector(".dl-reward")?.remove();
+    const code = "DL-SECRET-" + (store.slice().sort().join("").length * 37 % 900 + 100);
+    const box = document.createElement("dialog");
+    box.className = "dl-reward";
+    box.innerHTML = `<form method="dialog" class="dl-reward-card">
+      <svg class="dl-reward-art" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52"/><path d="M38 34h22c18 0 30 11 30 26S78 86 60 86H38z"/><path class="cut" d="M52 46v26h18"/></svg>
+      <p class="dl-reward-eyebrow">${ru ? "Вы нашли " + store.length + " секретов" : "You found " + store.length + " secrets"}</p>
+      <h2>${ru ? "Это заслуживает подарка" : "That deserves a gift"}</h2>
+      <ul>
+        <li>${ru ? "Скидка 5% на первый проект — по согласованию" : "5% off your first project, by agreement"}</li>
+        <li>${ru ? "Бесплатный аудит сайта или данных — по согласованию" : "A free website or data audit, by agreement"}</li>
+        <li>${ru ? "Именной сертификат исследователя" : "A personal explorer certificate"}</li>
+      </ul>
+      <p class="dl-reward-code">${ru ? "Код" : "Code"}: <b>${code}</b></p>
+      <label class="dl-reward-name"><span>${ru ? "Имя и фамилия для сертификата" : "Name for the certificate"}</span><input name="name" maxlength="80" autocomplete="name" placeholder="${ru ? "Анна Смирнова" : "Anna Smith"}"></label>
+      <div class="dl-reward-preview"><img alt="" hidden></div>
+      <div class="dl-reward-actions">
+        <button type="button" data-cert-download>${ru ? "Скачать сертификат" : "Download certificate"}</button>
+        <button type="button" data-cert-tg>${ru ? "Получить в Telegram" : "Get it on Telegram"}</button>
+        ${tgLink ? `<a href="${tgLink}?text=${encodeURIComponent((ru ? "Здравствуйте! У меня код " : "Hello! My code is ") + code)}">${ru ? "Написать с кодом" : "Write with the code"}</a>` : ""}
+      </div>
+      <p class="dl-reward-status" role="status"></p>
+      <button class="dl-reward-close" value="close" aria-label="${ru ? "Закрыть" : "Close"}">×</button>
+    </form>`;
+    document.body.append(box);
+    box.showModal();
+    const input = box.querySelector("input"), img = box.querySelector(".dl-reward-preview img"), status = box.querySelector(".dl-reward-status");
+    let blobUrl = null, latest = null;
+    const refresh = async () => {
+      const name = input.value.trim();
+      if (!name) { img.hidden = true; latest = null; return; }
+      latest = await certificate(name, code);
+      if (blobUrl) URL.revokeObjectURL(blobUrl);
+      blobUrl = URL.createObjectURL(latest);
+      img.src = blobUrl; img.hidden = false;
+    };
+    let t; input.addEventListener("input", () => { clearTimeout(t); t = setTimeout(refresh, 250); });
+    box.querySelector("[data-cert-download]").addEventListener("click", async () => {
+      if (!input.value.trim()) { status.textContent = ru ? "Впишите имя — оно появится на сертификате." : "Enter a name for the certificate."; input.focus(); return; }
+      await refresh();
+      const a = document.createElement("a");
+      a.href = blobUrl; a.download = "devlarion-certificate.png"; a.click();
+      status.textContent = ru ? "Сертификат скачан." : "Certificate downloaded.";
+    });
+    box.querySelector("[data-cert-tg]").addEventListener("click", async () => {
+      if (!input.value.trim()) { status.textContent = ru ? "Впишите имя — оно появится на сертификате." : "Enter a name for the certificate."; input.focus(); return; }
+      status.textContent = ru ? "Готовим сертификат…" : "Preparing…";
+      try {
+        await refresh();
+        const data = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(latest); });
+        const res = await fetch("/account/api/certificate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: input.value.trim(), code, png: data }) });
+        const out = await res.json();
+        if (!res.ok) throw new Error(out.error || "error");
+        status.textContent = ru ? "Откройте бота и нажмите «Запустить» — сертификат придёт в чат." : "Open the bot and press Start — the certificate will arrive in the chat.";
+        open(out.bot, "_blank", "noopener");
+      } catch (e) { status.textContent = (ru ? "Не получилось отправить. Скачайте файл и сохраните его. " : "Could not send it. Please download the file. ") + (e.message === "error" ? "" : e.message); }
+    });
+    box.addEventListener("close", () => { if (blobUrl) URL.revokeObjectURL(blobUrl); box.remove(); });
+  }
+
+  // Сертификат рисуется в браузере: SVG → canvas → PNG. Имя любой длины подгоняется по ширине.
+  async function certificate(name, code) {
+    const W = 1600, H = 1131;
+    const canvas = document.createElement("canvas");
+    canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext("2d");
+    const serif = 'Georgia, "Times New Roman", serif', sans = 'system-ui, -apple-system, "Segoe UI", sans-serif';
+    const fit = (text, max, start, min) => { let size = start; ctx.font = `${size}px ${serif}`; while (ctx.measureText(text).width > max && size > min) { size -= 2; ctx.font = `${size}px ${serif}`; } return size; };
+    let lines = [name];
+    let size = fit(name, 1240, 104, 56);
+    ctx.font = `${size}px ${serif}`;
+    if (ctx.measureText(name).width > 1240) {
+      const words = name.split(/\s+/);
+      let best = [name, ""], diff = Infinity;
+      for (let i = 1; i < words.length; i++) { const a = words.slice(0, i).join(" "), b = words.slice(i).join(" "); const d = Math.abs(a.length - b.length); if (d < diff) { diff = d; best = [a, b]; } }
+      if (!best[1]) { const mid = Math.ceil(name.length / 2); best = [name.slice(0, mid) + "-", name.slice(mid)]; }
+      lines = best;
+      size = Math.min(fit(lines[0], 1240, 84, 34), fit(lines[1], 1240, 84, 34));
+    }
+    ctx.fillStyle = "#121820"; ctx.fillRect(0, 0, W, H);
+    const g = ctx.createRadialGradient(W * .2, H * .15, 40, W * .2, H * .15, W * .9);
+    g.addColorStop(0, "rgba(232,172,140,.22)"); g.addColorStop(1, "rgba(232,172,140,0)");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = "#e8ac8c"; ctx.lineWidth = 3; ctx.strokeRect(48, 48, W - 96, H - 96);
+    ctx.strokeStyle = "rgba(232,172,140,.35)"; ctx.lineWidth = 1; ctx.strokeRect(66, 66, W - 132, H - 132);
+    // знак D
+    ctx.save(); ctx.translate(W / 2 - 40, 120); ctx.scale(1.25, 1.25);
+    ctx.fillStyle = "#e8ac8c"; ctx.beginPath(); ctx.moveTo(8, 6); ctx.lineTo(28, 6); ctx.bezierCurveTo(46, 6, 58, 16, 58, 32); ctx.bezierCurveTo(58, 48, 46, 58, 28, 58); ctx.lineTo(8, 58); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = "#121820"; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(24.5, 16); ctx.lineTo(24.5, 43.5); ctx.lineTo(42, 43.5); ctx.stroke(); ctx.restore();
+    ctx.textAlign = "center"; ctx.fillStyle = "#e8ac8c";
+    ctx.font = `600 26px ${sans}`; ctx.fillText((ru ? "СЕРТИФИКАТ ИССЛЕДОВАТЕЛЯ" : "EXPLORER CERTIFICATE").split("").join(String.fromCharCode(8202)), W / 2, 270);
+    ctx.fillStyle = "#c4c8cd"; ctx.font = `30px ${sans}`;
+    ctx.fillText(ru ? "Настоящим подтверждается, что" : "This certifies that", W / 2, 360);
+    ctx.fillStyle = "#f3ede2";
+    ctx.font = `${size}px ${serif}`;
+    if (lines.length === 1) ctx.fillText(lines[0], W / 2, 500);
+    else { ctx.fillText(lines[0], W / 2, 470); ctx.fillText(lines[1], W / 2, 470 + size * 1.08); }
+    ctx.fillStyle = "#e8ac8c"; ctx.fillRect(W / 2 - 160, 580, 320, 3);
+    ctx.fillStyle = "#c4c8cd"; ctx.font = `30px ${sans}`;
+    ctx.fillText(ru ? `нашёл(ла) ${store.length} секретов на сайте Devlarion` : `found ${store.length} secrets on the Devlarion website`, W / 2, 660);
+    ctx.fillText(ru ? "и получает скидку 5% на первый проект и бесплатный аудит — по согласованию" : "and receives 5% off a first project and a free audit, by agreement", W / 2, 710);
+    ctx.textAlign = "left"; ctx.fillStyle = "#aeb4ba"; ctx.font = `24px ${sans}`;
+    ctx.fillText((ru ? "Дата: " : "Date: ") + new Date().toLocaleDateString(ru ? "ru-RU" : "en-GB"), 130, H - 150);
+    ctx.fillText((ru ? "Код: " : "Code: ") + code, 130, H - 112);
+    ctx.textAlign = "right";
+    ctx.fillStyle = "#f3ede2"; ctx.font = `italic 40px ${serif}`; ctx.fillText(ru ? "Илья Ларионов" : "Ilia Larionov", W - 130, H - 150);
+    ctx.fillStyle = "#aeb4ba"; ctx.font = `24px ${sans}`; ctx.fillText(ru ? "основатель Devlarion · devlarion.ru" : "founder of Devlarion · devlarion.ru", W - 130, H - 112);
+    return new Promise(r => canvas.toBlob(r, "image/png"));
+  }
+  window.devlarionCertificate = certificate;
+
   // Послание тем, кто открыл консоль.
   try {
     console.log("%cDevlarion", "font:700 28px Georgia,serif;color:#e8ac8c");
-    console.log(ru ? "Сайт без фреймворков: статический генератор на Node, чистый CSS и немного JS. Пасхалки: devlarion, dgx, привет, Konami-код и 7 кликов по логотипу на главной." : "No frameworks: a Node static generator, plain CSS and a little JS. Easter eggs: devlarion, dgx, hello, the Konami code and 7 logo clicks on the home page.");
+    console.log(ru ? "Сайт без фреймворков: статический генератор на Node, чистый CSS и немного JS. Секретов на сайте девять. Подсказка: попробуйте что-нибудь напечатать." : "No frameworks: a Node static generator, plain CSS and a little JS. There are nine secrets on the site. Hint: try typing something.");
     if (tgLink) console.log((ru ? "Связаться: " : "Contact: ") + tgLink);
   } catch {}
 
@@ -390,5 +564,43 @@
       card.style.setProperty("--ry", (x * 6).toFixed(2) + "deg");
     });
     card.addEventListener("pointerleave", () => { card.style.setProperty("--rx", "0deg"); card.style.setProperty("--ry", "0deg"); });
+  }
+})();
+
+/* Мега-меню по наведению, плавающие кнопки не заезжают на подвал, знак в подвале раскрывается в слово. */
+(() => {
+  const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const nav = document.querySelector(".bar .services-nav");
+  if (nav && fine) {
+    let timer;
+    const place = () => {
+      const panel = nav.querySelector(".services-nav-links");
+      nav.style.setProperty("--menu-x", "-.8rem");
+      const r = panel.getBoundingClientRect();
+      const over = r.right - (innerWidth - 16);
+      if (over > 0) nav.style.setProperty("--menu-x", `calc(-.8rem - ${Math.ceil(over)}px)`);
+    };
+    nav.addEventListener("mouseenter", () => { clearTimeout(timer); if (!nav.open) { nav.open = true; place(); } });
+    nav.addEventListener("mouseleave", () => { timer = setTimeout(() => { nav.open = false; }, 220); });
+    nav.addEventListener("toggle", () => { if (nav.open) place(); });
+  }
+
+  const footer = document.querySelector("body > footer");
+  if (footer && "IntersectionObserver" in window) {
+    const floating = () => document.querySelectorAll(".shop-fab, .dl-top");
+    new IntersectionObserver(([entry]) => {
+      for (const el of floating()) el.classList.toggle("shop-hide", entry.isIntersecting);
+    }, { rootMargin: "0px 0px -40px 0px" }).observe(footer);
+  }
+
+  const mark = document.querySelector(".dl-footer-mark");
+  if (mark && !mark.querySelector(".dl-footer-word")) {
+    const word = document.createElement("span");
+    word.className = "dl-footer-word";
+    word.setAttribute("aria-hidden", "true");
+    [..."evlarion"].forEach((ch, i) => { const s = document.createElement("span"); s.textContent = ch; s.style.setProperty("--i", i); word.append(s); });
+    mark.append(word);
+    mark.tabIndex = 0;
+    mark.setAttribute("aria-label", "Devlarion");
   }
 })();
