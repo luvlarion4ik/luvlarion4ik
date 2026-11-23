@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ru" data-theme="midnight">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Холст «Карты роста» · Devlarion</title>
+  <link rel="icon" type="image/svg+xml" href="../../../docs/assets/brand/favicon.svg">
+  <link rel="stylesheet" href="../../../docs/assets/brand/fonts.css">
+  <link rel="stylesheet" href="../../../docs/assets/portfolio.css">
+  <link rel="stylesheet" href="../../../docs/assets/growth-map/growth-map.css">
+  <style>
+    body { padding: 20px; }
+    h1 { font-size: 2.2rem; }
+    .gm-test-toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin: .8rem 0; }
+    .gm-test-toolbar button { padding: .35rem .7rem; border: 1px solid var(--rule); border-radius: 5px; }
+    .gm-test-toolbar button[aria-pressed="true"] { border-color: var(--accent); }
+    .gm-stage { height: 75dvh; min-height: 280px; border: 1px solid var(--rule); border-radius: 12px; }
+  </style>
+  <script src="../../../docs/assets/growth-map/gm-copy.js" defer></script>
+  <script src="../../../docs/assets/growth-map/gm-catalog.js" defer></script>
+  <script src="../../../docs/assets/growth-map/gm-icons.js" defer></script>
+  <script src="../../../docs/assets/growth-map/gm-engine.js" defer></script>
+  <script src="../../../docs/assets/growth-map/gm-canvas.js" defer></script>
+  <script>
+    addEventListener('DOMContentLoaded', async () => {
+      const response = await fetch('./barber.json');
+      const brief = await response.json();
+      const { catalog, engine, createCanvas, t: translate } = window.DevlarionGM;
+      const t = (key, params) => translate(key, 'ru', params);
+      const variants = engine.buildAll(brief, catalog);
+      const stage = document.querySelector('.gm-stage');
+      const toolbar = document.querySelector('.gm-test-toolbar');
+      const canvas = createCanvas(stage, { lang: 'ru', catalog, t });
+      let active = 'boost';
+      let volume = false;
+      let list = false;
+      const render = () => canvas.render(variants[active], {
+        brief, existing: variants.now.nodes.map(node => node.block),
+        economy: engine.economy(brief, variants[active], catalog)
+      });
+      function action(key, activate, pressed) {
+        const button = document.createElement('button');
+        button.textContent = t(key);
+        button.type = 'button';
+        if (pressed != null) button.setAttribute('aria-pressed', String(pressed));
+        button.addEventListener('click', activate);
+        toolbar.append(button);
+        return button;
+      }
+      const choices = [];
+      for (const key of ['now', 'base', 'boost', 'auto']) {
+        const button = action('v.' + key, () => {
+          active = key;
+          for (const choice of choices) choice.setAttribute('aria-pressed', String(choice === button));
+          render();
+        }, active === key);
+        choices.push(button);
+      }
+      action('tb.fit', () => canvas.fit());
+      const volumeButton = action('tb.3d', () => canvas.setVolume(!volume), false);
+      const listButton = action('tb.list', () => {
+        list = !list;
+        canvas.setList(list);
+        listButton.setAttribute('aria-pressed', String(list));
+      }, false);
+      document.addEventListener('gm:volume', ({ detail }) => {
+        volume = detail.enabled;
+        volumeButton.setAttribute('aria-pressed', String(volume));
+        volumeButton.textContent = t(volume ? 'tb.3d.exit' : 'tb.3d');
+      });
+      document.addEventListener('gm:change', ({ detail }) => {
+        variants[active] = { ...variants[active], ...detail };
+        render();
+      });
+      document.addEventListener('gm:delete', ({ detail }) => {
+        const removed = new Set(detail.ids);
+        const { nodes, edges } = variants[active];
+        variants[active] = { ...variants[active],
+          nodes: nodes.filter(node => !removed.has(node.id)),
+          edges: edges.filter(edge => !removed.has(edge.from) && !removed.has(edge.to)) };
+        render();
+      });
+      render();
+    });
+  </script>
+</head>
+<body class="gm-page">
+  <main>
+    <h1>Барбершоп Борода</h1>
+    <div class="gm-test-toolbar"></div>
+    <div class="gm-stage" data-gm-stage aria-label="Карта роста барбершопа"></div>
+  </main>
+</body>
+</html>

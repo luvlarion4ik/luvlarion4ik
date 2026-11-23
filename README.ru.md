@@ -4,7 +4,7 @@
 
 Помогаю бизнесу принимать заявки и сокращать ручную работу. Разрабатываю сайты с каталогом, ботов для записи и сервисы, которые связывают данные компании.
 
-[Смотреть кейсы](https://luvlarion4ik.github.io/luvlarion4ik/ru/#work) · [Рассчитать проект](https://luvlarion4ik.github.io/luvlarion4ik/ru/#quiz) · [Обсудить проект](https://t.me/LuvLarion4ik) · [Threads](https://www.threads.com/@luvlarion4ik) · [English](README.md)
+[Смотреть кейсы](https://luvlarion4ik.github.io/luvlarion4ik/ru/#work) · [Рассчитать проект](https://luvlarion4ik.github.io/luvlarion4ik/ru/#quiz) · [Карта роста](https://luvlarion4ik.github.io/luvlarion4ik/ru/growth-map/) · [Обсудить проект](https://t.me/LuvLarion4ik) · [Threads](https://www.threads.com/@luvlarion4ik) · [English](README.md)
 
 ## Стоимость разработки
 

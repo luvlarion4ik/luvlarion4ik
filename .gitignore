@@ -1,3 +1,5 @@
 .DS_Store
 /review/
 /.devlarion-referrals.json*
+/server/growth-map/.env
+/server/growth-map/.wrangler/

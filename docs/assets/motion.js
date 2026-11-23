@@ -48,6 +48,7 @@
       ".section > h2", ".section > p", ".service-group > h3", ".product-feature > *",
       ".product-card", ".offer-panel", ".solution-content", ".exhibit", ".work-gallery > *",
       ".notfound > *", ".pt-section > h2", ".pt-steps > *", ".pt-roles > *",
+      ".gm-about > h2", ".gm-about-grid > *", ".gm-how > *", ".gm-cta",
     ];
     const seen = new IntersectionObserver(entries => {
       for (const entry of entries) {
@@ -71,7 +72,7 @@
 
   // 4. Блик за курсором на карточках.
   if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
-    const cards = document.querySelectorAll(".service-grid article, .product-card, .case, .offer-panel, .pt-direction");
+    const cards = document.querySelectorAll(".service-grid article, .product-card, .case, .offer-panel, .pt-direction, .gm-about-grid article");
     for (const card of cards) {
       card.setAttribute("data-glow", "");
       card.addEventListener("pointermove", event => {
