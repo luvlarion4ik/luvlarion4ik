@@ -571,11 +571,29 @@
     goal('handoff');
   }
 
+  const hintBox = find('[data-gm-hint]');
+  const hintKey = 'devlarion-gm-hint';
+  const hintSeen = () => { try { return localStorage.getItem(hintKey) === '1'; } catch { return false; } };
+  let hintTimer = 0;
+  function dismissHint() {
+    clearTimeout(hintTimer);
+    if (hintBox) hintBox.hidden = true;
+    try { localStorage.setItem(hintKey, '1'); } catch {}
+  }
+  new MutationObserver(() => {
+    if (!hintBox) return;
+    if (root.dataset.phase === 'map' && !example && !hintSeen() && hintBox.hidden && !hintBox.dataset.shown) {
+      hintBox.dataset.shown = '1';
+      setTimeout(() => { hintBox.hidden = false; hintTimer = setTimeout(dismissHint, 16000); }, 1800);
+    } else if (root.dataset.phase !== 'map') hintBox.hidden = true;
+  }).observe(root, { attributes: true, attributeFilter: ['data-phase'] });
+
   const toolbarHandlers = {
     undo: () => restoreHistory('undo'),
     redo: () => restoreHistory('redo'),
     layout: () => { commitVariant({ ...engine.layout(doc.variants[doc.active], catalog, { force: true }), edited: true }); canvas.fit(); },
     fit: () => canvas.fit(),
+    hint: () => dismissHint(),
     panel: () => { root.classList.toggle('is-panel-collapsed'); root.querySelector('[data-gm-action="panel"]')?.setAttribute('aria-pressed', String(root.classList.contains('is-panel-collapsed'))); },
     minus: () => canvas.zoomBy(1 / 1.18),
     plus: () => canvas.zoomBy(1.18),

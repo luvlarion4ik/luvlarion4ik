@@ -865,6 +865,38 @@
       else stage.focus({ preventScroll: true });
     });
 
+    // Hover card with the full block name, benefit and effect; names on the map itself are clamped.
+    const tip = html('div', 'gm-tip');
+    tip.hidden = true;
+    tip.setAttribute('aria-hidden', 'true');
+    stage.append(tip);
+    let tipTimer = 0, tipNode = null;
+    const hideTip = () => { clearTimeout(tipTimer); tipNode = null; tip.hidden = true; };
+    stage.addEventListener('pointerover', event => {
+      if (mobile.matches || volume || listing || activePointers.size) return hideTip();
+      const el = event.target.closest?.('.gm-node');
+      if (!el || el === tipNode) return;
+      hideTip();
+      tipNode = el;
+      tipTimer = setTimeout(() => {
+        const view = [...views.values()].find(item => item.el === el);
+        if (!view || activePointers.size) return;
+        const effectText = view.effect?.textContent?.trim();
+        tip.innerHTML = '';
+        tip.append(html('strong', '', view.title.textContent), html('span', '', view.subtitle.textContent));
+        if (effectText) tip.append(html('em', '', effectText));
+        tip.hidden = false;
+        const box = el.getBoundingClientRect(), host = stage.getBoundingClientRect();
+        const below = box.top - host.top < 120;
+        tip.style.left = clamp(box.left - host.left + box.width / 2, 130, host.width - 130) + 'px';
+        tip.style.top = (below ? box.bottom - host.top + 10 : box.top - host.top - 10) + 'px';
+        tip.classList.toggle('is-below', below);
+      }, 380);
+    });
+    stage.addEventListener('pointerleave', hideTip);
+    stage.addEventListener('pointerdown', hideTip);
+    stage.addEventListener('wheel', hideTip, { passive: true });
+
     stage.addEventListener('pointermove', event => {
       if (!activePointers.has(event.pointerId)) {
         if (motion.matches || mobile.matches || volume || listing) return;

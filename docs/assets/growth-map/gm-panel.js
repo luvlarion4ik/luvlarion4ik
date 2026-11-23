@@ -99,7 +99,8 @@
       if (state.phase === 'scan') {
         return '<div class="gm-scan-line" aria-hidden="true"></div><section class="gm-scan-panel" aria-label="' +
           text('brief.analyze') + '"><ol aria-live="polite" aria-relevant="additions text">' + scanList() +
-          '</ol>' + button('gm-secondary', text('scan.skip'), { skip: '' }) + '</section>';
+          '</ol><div class="gm-scan-bar" aria-hidden="true"><i style="--gm-scan:' + ((Math.min(3, state.scanIndex || 0) + 1) * 25) + '%"></i></div>' +
+          button('gm-secondary', text('scan.skip'), { skip: '' }) + '</section>';
       }
       if (state.phase === 'brief' && draft().name) {
         return '<p class="gm-business-badge">' + text('brief.business.badge', { name: draft().name }) + '</p>';
@@ -111,7 +112,8 @@
       const category = catalog.categoryById[state.brief?.category];
       const niche = category?.niches.find(item => item.id === state.brief.niche);
       const position = Math.min(3, Math.max(0, state.scanIndex || 0));
-      return [1, 2, 3, 4].slice(0, position + 1).map((index, offset) => '<li' +
+      return [1, 2, 3, 4].map((index, offset) => '<li data-state="' +
+        (offset < position ? 'done' : offset === position ? 'active' : 'todo') + '"' +
         (offset === position ? ' aria-current="step"' : '') + '>' +
         '<span aria-hidden="true">' + (offset < position ? icon('check') : '') + '</span>' +
         text('scan.' + index, { niche: local(niche?.title ?? category?.title) }) + '</li>').join('');
@@ -133,8 +135,8 @@
       const heading = text('brief.' + name);
       const extra = caption ? '<small>' + escape(caption) + '</small>' : '';
       return (forInput
-        ? '<div class="gm-brief-field"' + (hit ? ' data-detected' : '') + '><label for="' + inputId(id) + '">' + heading + '</label>'
-        : '<fieldset class="gm-brief-field"' + (hit ? ' data-detected' : '') + '><legend>' + heading + '</legend>') +
+        ? '<div class="gm-brief-field" data-field="' + id + '"' + (hit ? ' data-detected' : '') + '><label for="' + inputId(id) + '">' + heading + '</label>'
+        : '<fieldset class="gm-brief-field" data-field="' + id + '"' + (hit ? ' data-detected' : '') + '><legend>' + heading + '</legend>') +
         tip + body + extra + (forInput ? '</div>' : '</fieldset>');
     }
 
@@ -339,7 +341,12 @@
           button('gm-text-button', text('cmp.show'), { variant: key },
             'aria-label="' + text('cmp.show') + ': ' + text('v.' + key) + '"') + '</article>';
       }).join('');
-      const table = '<p class="gm-baseline">' + text('cmp.now', { money: amountText(economies.now.revenue),
+      const top = Math.max(...variants.map(key => economies[key].revenue), 1);
+      const bars = '<div class="gm-bars" role="img" aria-label="' + text('cmp.revenue') + '">' + variants.map(key =>
+        '<div class="gm-bar" data-key="' + key + '"' + (state.variant.key === key ? ' data-active' : '') + '><span>' + text('v.' + key) +
+        '</span><i style="--w:' + Math.max(3, Math.round(economies[key].revenue / top * 100)) + '%"></i><b>' + escape(shortMoney(economies[key].revenue)) +
+        '</b></div>').join('') + '</div>';
+      const table = bars + '<p class="gm-baseline">' + text('cmp.now', { money: amountText(economies.now.revenue),
         leads: numbers.format(Math.round(economies.now.projectedLostLeads)) }) + '</p>' +
         '<div class="gm-vcards" aria-label="' + text('tab.compare') + '">' + cards + '</div>';
       const diff = '<section class="gm-differences"><h3>' + text('cmp.differences') + '</h3>' +
@@ -537,6 +544,7 @@
       } else {
         content.replaceChildren();
       }
+      content.toggleAttribute('data-enter', previous.phase !== state.phase || previous.tab !== tab || previous.step !== state.step);
       if (force || previous.phase === state.phase && previous.tab === tab && previous.step === state.step) {
         const pane = content.querySelector('.gm-pane');
         if (pane) pane.scrollTop = scroll;
@@ -590,6 +598,7 @@
       if (recalc) recalc.disabled = false;
       const error = content.querySelector('.gm-brief-error');
       if (error) error.hidden = true;
+      content.querySelectorAll('[data-invalid]').forEach(node => node.removeAttribute('data-invalid'));
       if (state.phase === 'brief') overlay.innerHTML = overlayHtml();
       if (rerender) renderContent(true);
       emit('brief', { draft: edited });
@@ -650,7 +659,17 @@
         const error = content.querySelector('.gm-brief-error');
         error.textContent = t(step === 4 ? 'brief.source.one' : 'brief.required');
         error.hidden = false;
-        error.scrollIntoView({ block: 'nearest' });
+        const data = draft();
+        const missing = step === 1 ? [!data.category && 'category', !data.models?.length && 'models'] :
+          step === 3 ? [!data.size && 'size'] : step === 4 ? ['sources'] : [];
+        content.querySelectorAll('[data-invalid]').forEach(node => node.removeAttribute('data-invalid'));
+        const targets = missing.filter(Boolean).map(id => content.querySelector('[data-field="' + id + '"]')).filter(Boolean);
+        targets.forEach(node => node.setAttribute('data-invalid', ''));
+        const first = targets[0];
+        if (first) {
+          first.scrollIntoView({ block: 'center', behavior: 'smooth' });
+          first.querySelector('button, input')?.focus({ preventScroll: true });
+        } else error.scrollIntoView({ block: 'nearest' });
         return;
       }
       if (step === 6) emit('analyze', { draft: draft() });

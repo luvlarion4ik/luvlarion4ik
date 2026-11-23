@@ -4,7 +4,8 @@ import { esc } from './site.mjs';
 
 const window = {};
 runInNewContext(readFileSync(new URL('../docs/assets/growth-map/gm-copy.js', import.meta.url), 'utf8'), { window });
-const { copy } = window.DevlarionGM;
+runInNewContext(readFileSync(new URL('../docs/assets/growth-map/gm-icons.js', import.meta.url), 'utf8'), { window });
+const { copy, icons: gmIcons } = window.DevlarionGM;
 export const growthMapText = (lang, key) => copy[lang][key];
 
 export const growthMapAssets = [
@@ -45,6 +46,7 @@ export function renderGrowthMapTeaser(lang, home) {
 
 export function renderGrowthMapPage(lang, { home, tg, icons, estimator, growthMap, region, exchangeRates }) {
   const t = key => esc(growthMapText(lang, key));
+  const gi = name => gmIcons[name];
   const action = (id, label, icon) => `<button type="button" data-gm-action="${id}" title="${t(label)}" aria-label="${t(label)}">${icon ?? t(label)}</button>`;
   const variants = ['now', 'base', 'boost', 'auto'];
   return `<div class="gm-page">
@@ -55,6 +57,10 @@ export function renderGrowthMapPage(lang, { home, tg, icons, estimator, growthMa
       <ol class="gm-intro-steps">
         ${[1, 2, 3].map(index => `<li>${t('intro.step' + index)}</li>`).join('')}
       </ol>
+      <ul class="gm-trust">
+        <li>${gi('check')}${t('trust.free')}</li><li>${gi('lock')}${t('trust.noreg')}</li>
+        <li>${gi('shield')}${t('trust.local')}</li><li>${gi('clock')}${t('trust.time')}</li>
+      </ul>
     </div>
     <div class="wrap gm-app ym-hide-content" data-gm-app data-telegram="${esc(tg)}" data-portal="${home}cabinet/" data-phase="choose" hidden>
       <div class="gm-workbench">
@@ -64,19 +70,19 @@ export function renderGrowthMapPage(lang, { home, tg, icons, estimator, growthMa
               ${variants.map(key => `<button type="button" data-gm-variant="${key}" aria-pressed="false">${t('v.' + key)}${key === 'boost' ? `<small>${t('v.recommended')}</small>` : ''}</button>`).join('')}
             </div>
             <div class="gm-tools">
-              ${action('undo', 'tb.undo', '↶')}
-              ${action('redo', 'tb.redo', '↷')}
-              ${action('layout', 'tb.layout', icons.layers)}
-              ${action('fit', 'tb.fit', '⤢')}
+              ${action('undo', 'tb.undo', gi('undo'))}
+              ${action('redo', 'tb.redo', gi('redo'))}
+              ${action('layout', 'tb.layout', gi('layout'))}
+              ${action('fit', 'tb.fit', gi('fit'))}
               <div class="gm-zoom">
-                ${action('minus', 'tb.zoomOut', '−')}
+                ${action('minus', 'tb.zoomOut', gi('minus'))}
                 <output data-gm-zoom>100%</output>
-                ${action('plus', 'tb.zoomIn', '+')}
+                ${action('plus', 'tb.zoomIn', gi('plus'))}
               </div>
-              ${action('3d', 'tb.3d', icons.mini)}
-              ${action('list', 'tb.list', '☷')}
-              ${action('panel', 'tb.panel', '◨')}
-              <details class="gm-menu"><summary aria-label="${t('tb.more')}">…</summary><div>
+              ${action('3d', 'tb.3d', gi('cube'))}
+              ${action('list', 'tb.list', gi('list'))}
+              ${action('panel', 'tb.panel', gi('sidebar'))}
+              <details class="gm-menu"><summary aria-label="${t('tb.more')}" title="${t('tb.more')}">${gi('more')}</summary><div>
                 ${action('import', 'act.import')}
                 ${action('reset', 'tb.reset')}
               </div></details>
@@ -86,6 +92,14 @@ export function renderGrowthMapPage(lang, { home, tg, icons, estimator, growthMa
             <div class="gm-stage" data-gm-stage tabindex="0" role="application" aria-label="${t('intro.eyebrow')}" aria-describedby="gm-keyboard-help"></div>
             <p class="gm-sr" id="gm-keyboard-help">${t('canvas.keys')}</p>
             <div class="gm-overlay" data-gm-overlay></div>
+            <ul class="gm-legend" aria-hidden="true">
+              <li data-kind="flow">${t('legend.flow')}</li><li data-kind="loss">${t('legend.loss')}</li><li data-kind="loop">${t('legend.loop')}</li>
+            </ul>
+            <aside class="gm-hint" data-gm-hint hidden aria-label="${t('hint.title')}">
+              <strong>${gi('hand')}${t('hint.title')}</strong>
+              <ul><li>${gi('hand')}${t('hint.drag')}</li><li>${gi('route')}${t('hint.link')}</li><li>${gi('plus')}${t('hint.add')}</li><li>${gi('search')}${t('hint.zoom')}</li></ul>
+              <button type="button" class="gm-secondary" data-gm-action="hint">${t('hint.ok')}</button>
+            </aside>
           </div>
           <div class="gm-foot">
             <div class="gm-economy" data-gm-economy></div>
@@ -113,6 +127,23 @@ export function renderGrowthMapPage(lang, { home, tg, icons, estimator, growthMa
       </div>
       <input type="file" data-gm-import accept="application/json,.json" hidden>
     </div>
+    <section class="wrap gm-about" aria-labelledby="gm-about-title">
+      <h2 id="gm-about-title">${t('about.title')}</h2>
+      <div class="gm-about-grid">
+        ${[['route', 1], ['trend', 2], ['download', 3]].map(([icon, n]) => `<article><span class="gm-about-icon">${gi(icon)}</span>
+          <h3>${t('about.' + n + '.title')}</h3><p>${t('about.' + n + '.text')}</p></article>`).join('')}
+      </div>
+      <div class="gm-how">
+        <div><h2>${t('how.title')}</h2><p>${t('how.text')}</p></div>
+        <div class="gm-faq"><h2>${t('faq.title')}</h2>
+          ${[1, 2, 3, 4].map(n => `<details><summary>${t('faq.' + n + '.q')}</summary><p>${t('faq.' + n + '.a')}</p></details>`).join('')}
+        </div>
+      </div>
+      <aside class="gm-cta">
+        <div><h2>${t('cta.title')}</h2><p>${t('cta.text')}</p></div>
+        <a class="button" href="${esc(tg)}" data-goal="growthmap_handoff">${gi('telegram')}${t('act.handoff')}</a>
+      </aside>
+    </section>
     <noscript><section class="wrap gm-no-script">
       <h2>${t('mode.example')}</h2>${renderGrowthMapPreview(lang)}
       <p>${t('act.noScript')}</p>
