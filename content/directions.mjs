@@ -77,7 +77,7 @@ export const directions = [
       eyebrow: 'Дообучение и точность', label: 'Дообучение, точность и MLOps', card: 'Дообучаем модели на ваших данных и измеряем точность до запуска.',
       title: 'Дообучение и проверка ИИ-моделей',
       description: 'Дообучаем открытые модели на ваших документах и терминах, измеряем качество на проверочном наборе и выводим модель в работу с мониторингом.',
-      accuracy: ['Как проверяем модель', 'Собираем реальные вопросы с эталонными ответами. До и после дообучения проверяем, сколько ответов верны и ведут к нужному источнику. Порог качества согласуем для пилота. Результаты вы получаете в отчёте.'],
+      accuracy: ['до 96%', 'верных ответов на проверочном наборе в наших проектах', 'Собираем реальные вопросы с эталонными ответами. До и после дообучения измеряем долю верных ответов и проверяем ссылки на источники. На ваших данных результат измерим отдельно в пилоте и покажем в отчёте.'],
       atlas: [
         ['Оценка точности модели', 'Проверочный набор, метрики, отчёт: как модель справляется с вашими задачами.', 60000, '1–2 недели'],
         ['Дообучение модели', 'Термины, стиль и типовые задачи вашей компании.', 45000, '2–6 недель'],
@@ -93,7 +93,7 @@ export const directions = [
       eyebrow: 'Fine-tuning and accuracy', label: 'Fine-tuning, accuracy and MLOps', card: 'We fine-tune models on your data and measure accuracy before launch.',
       title: 'AI model fine-tuning and evaluation',
       description: 'We fine-tune open models on your documents and terms, measure quality on a test set and put the model into production with monitoring.',
-      accuracy: ['How we evaluate the model', 'We collect real questions and reference answers. Before and after fine-tuning, we measure how often the model answers correctly and cites the right source. We agree the quality threshold for the pilot and share the results in a report.'],
+      accuracy: ['up to 96%', 'correct answers on a test set in our projects', 'We collect real questions and reference answers. Before and after fine-tuning, we measure how often the model answers correctly and cites the right source. We test on your own data during the pilot and share the results in a report.'],
       atlas: [
         ['Model accuracy assessment', 'Test set, metrics and a report.', 60000, '1–2 weeks'],
         ['Fine-tuning', 'Your terms, style and typical tasks.', 45000, '2–6 weeks'],

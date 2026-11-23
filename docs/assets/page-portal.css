@@ -1411,11 +1411,11 @@ footer{padding:2rem 0}.fine{margin-top:1.5rem;flex-wrap:wrap}.sub{padding:4rem 0
 .atlas article p {margin:0}
 .atlas-term {color:var(--sub);font-size:.86rem}
 .atlas .package-action {margin-top:auto}
-.accuracy {display:grid;grid-template-columns:auto 1fr;gap:clamp(1rem,4vw,3rem);align-items:center;padding:clamp(1.4rem,3vw,2.4rem)!important;border:1px solid var(--accent);border-radius:22px;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 14%,var(--surface)),var(--surface))}
-.acc-num {font:400 clamp(3.4rem,9vw,6.4rem)/1 Georgia,serif;color:var(--accent);white-space:nowrap}
-.accuracy h2 {margin:0 0 .6rem;font-size:clamp(1.4rem,2.6vw,2rem)}
-.accuracy p {margin:0;color:var(--sub);line-height:1.6}
-@media (max-width:860px) {.accuracy {grid-template-columns:1fr}}
+.accuracy {display:grid;gap:1.15rem;padding:clamp(1.4rem,3vw,2.4rem);border-block:1px solid var(--rule);border-inline-start:3px solid var(--accent);background:var(--surface)}
+.accuracy h2 {display:flex;flex-wrap:wrap;align-items:baseline;gap:.45rem 1.2rem;margin:0;font-size:clamp(1.3rem,2.6vw,2rem);line-height:1.2}
+.acc-num {font:400 clamp(3.4rem,8vw,5.8rem)/1 "Bureau Serif",Georgia,serif;color:var(--accent);white-space:nowrap}
+.accuracy h2 span {max-width:27ch}
+.accuracy p {max-width:65ch;margin:0;color:var(--sub)}
 .scn-filters {display:grid;gap:.6rem;margin-bottom:1.4rem}
 .scn-tech button {font-size:.85rem;padding:.4rem .8rem}
 .scn-grid {display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
@@ -1913,6 +1913,18 @@ header .wordmark {
 .dl-orbit .ring.dash { stroke-dasharray: 2 7; }
 .dl-orbit .glyph { fill: none; stroke: currentColor; stroke-width: .28; stroke-linejoin: round; stroke-linecap: round; }
 @media (max-width: 760px) { .dl-orbit { opacity: .15; } }
+@media (prefers-reduced-motion: no-preference) {
+  .dl-orbit .glyph {
+    stroke-dasharray: 1;
+    animation: dl-glyph-draw 1.15s cubic-bezier(.3,.65,.25,1) both;
+  }
+  .dl-orbit .glyph-cut { animation-delay: .28s; }
+  .dl-orbit .ring.dash { animation: dl-orbit-settle 2.2s ease-out both; }
+  .case-preview { transition: border-color .18s ease; }
+}
+.case-preview:hover, .case-preview:focus-within { border-color: var(--accent); }
+@keyframes dl-glyph-draw { from { stroke-dashoffset: 1; } }
+@keyframes dl-orbit-settle { from { stroke-dashoffset: 22; opacity: .35; } }
 
 .dl-top {
   position: fixed;

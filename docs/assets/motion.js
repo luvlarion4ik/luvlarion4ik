@@ -3,8 +3,8 @@ document.querySelector(".hero")?.insertAdjacentHTML("afterbegin", `<svg class="d
   <circle class="ring" cx="500" cy="500" r="265"/>
   <circle class="ring dash" cx="500" cy="500" r="420"/>
   <g transform="translate(500 500) scale(4.2) translate(-33 -32)">
-    <path class="glyph" d="M8 6h20c18 0 30 10 30 26S46 58 28 58H8V6Z"/>
-    <path class="glyph" d="M24.5 16V43.5H42"/>
+    <path class="glyph" pathLength="1" d="M8 6h20c18 0 30 10 30 26S46 58 28 58H8V6Z"/>
+    <path class="glyph glyph-cut" pathLength="1" d="M24.5 16V43.5H42"/>
   </g>
 </svg>`);
 

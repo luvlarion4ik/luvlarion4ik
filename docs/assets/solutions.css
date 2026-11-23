@@ -1007,11 +1007,11 @@
 .atlas article p {margin:0}
 .atlas-term {color:var(--sub);font-size:.86rem}
 .atlas .package-action {margin-top:auto}
-.accuracy {display:grid;grid-template-columns:auto 1fr;gap:clamp(1rem,4vw,3rem);align-items:center;padding:clamp(1.4rem,3vw,2.4rem)!important;border:1px solid var(--accent);border-radius:22px;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 14%,var(--surface)),var(--surface))}
-.acc-num {font:400 clamp(3.4rem,9vw,6.4rem)/1 Georgia,serif;color:var(--accent);white-space:nowrap}
-.accuracy h2 {margin:0 0 .6rem;font-size:clamp(1.4rem,2.6vw,2rem)}
-.accuracy p {margin:0;color:var(--sub);line-height:1.6}
-@media (max-width:860px) {.accuracy {grid-template-columns:1fr}}
+.accuracy {display:grid;gap:1.15rem;padding:clamp(1.4rem,3vw,2.4rem);border-block:1px solid var(--rule);border-inline-start:3px solid var(--accent);background:var(--surface)}
+.accuracy h2 {display:flex;flex-wrap:wrap;align-items:baseline;gap:.45rem 1.2rem;margin:0;font-size:clamp(1.3rem,2.6vw,2rem);line-height:1.2}
+.acc-num {font:400 clamp(3.4rem,8vw,5.8rem)/1 "Bureau Serif",Georgia,serif;color:var(--accent);white-space:nowrap}
+.accuracy h2 span {max-width:27ch}
+.accuracy p {max-width:65ch;margin:0;color:var(--sub)}
 .scn-filters {display:grid;gap:.6rem;margin-bottom:1.4rem}
 .scn-tech button {font-size:.85rem;padding:.4rem .8rem}
 .scn-grid {display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}

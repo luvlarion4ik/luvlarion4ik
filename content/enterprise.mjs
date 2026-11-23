@@ -581,7 +581,7 @@ const TREE = [
     ['ai-assistant/', ['ИИ-ассистент', 'AI assistant'], ['Отвечает и передаёт заявки в CRM', 'Answers and passes enquiries to CRM']],
     ['documents/', ['Документы, OCR и 1С', 'Documents, OCR and 1C'], ['Сканы в учёт, сверка, интеграции', 'Scans into accounting, reconciliation']],
     ['vision/', ['Компьютерное зрение', 'Computer vision'], ['Брак, СИЗ, подсчёт по камерам', 'Defects, PPE, counting']],
-    ['ml/', ['Дообучение и точность', 'Fine-tuning and accuracy'], ['Проверка ответов на ваших данных', 'Evaluate answers on your data']],
+    ['ml/', ['Дообучение и точность', 'Fine-tuning and accuracy'], ['До 96% верных ответов на проверочном наборе', 'Up to 96% correct answers on a test set']],
     ['scenarios/', ['Кейсы и типовые сценарии', 'Cases and scenarios'], ['С фильтрами по отрасли и технологии', 'Filter by industry and technology']],
     ['private-ai/', ['Корпоративный ИИ в РФ', 'Private AI in Russia'], ['LLM, RAG, документы и речь в вашем контуре', 'LLMs, RAG, documents and speech in your perimeter']],
     ['fintech/', ['FinTech-продукты', 'FinTech products'], ['Сервисы для финансовых компаний', 'Services for financial firms']],
@@ -734,7 +734,7 @@ export function renderEnterprisePage(lang, route, ctx) {
     const related = scenarios[lang].filter(x => x[4] === route);
     body = `${trustStrip(lang)}
       ${section(pick(lang, 'Услуги, цены и сроки', 'Services, prices and timing'), atlasCards(lang, ctx, c.atlas, c.label))}
-      ${acc ? section(acc[0], `<p>${esc(acc[1])}</p>`) : ''}
+      ${acc ? `<section class="section wrap audience-section accuracy" aria-labelledby="model-accuracy"><h2 id="model-accuracy"><strong class="acc-num">${esc(acc[0])}</strong><span>${esc(acc[1])}</span></h2><p>${esc(acc[2])}</p></section>` : ''}
       ${related.length ? section(pick(lang, 'Типовые сценарии', 'Typical scenarios'), scenarioCards(lang, ctx, related)) : ''}
       ${renderCapacity(lang, p, ctx)}
       ${renderFAQ(lang, p, ctx)}

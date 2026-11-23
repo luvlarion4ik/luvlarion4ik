@@ -1,4 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 320" width="600" height="320" fill="none">
+  <style>
+    @media (prefers-reduced-motion: no-preference) {
+      .flow-trace { stroke-dasharray: .13 1; animation: trace-route 1.6s ease-out both; }
+      @keyframes trace-route {
+        0% { stroke-dashoffset: .13; opacity: 0; }
+        20%, 78% { opacity: .85; }
+        100% { stroke-dashoffset: -1; opacity: 0; }
+      }
+    }
+  </style>
   <defs>
     <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
       <path d="M20 0H0V20" stroke="#adc3cd" stroke-opacity=".075"/>
@@ -35,6 +45,7 @@
   <path d="M113 112h374" stroke="url(#route)" stroke-opacity=".08" stroke-width="24" stroke-linecap="round"/>
   <path d="M113 112h374" stroke="url(#route)" stroke-opacity=".24" stroke-width="8" stroke-linecap="round"/>
   <path d="M113 112h374" stroke="url(#route)" stroke-width="2" stroke-linecap="round"/>
+  <path class="flow-trace" d="M113 112h374" pathLength="1" stroke="#fff1d8" stroke-width="3.5" stroke-linecap="round" opacity="0"/>
   <g fill="#18232c" stroke-width="1.5">
     <circle cx="202" cy="112" r="10" stroke="#a4c3bf"/>
     <circle cx="397" cy="112" r="10" stroke="#c4cfab"/>
