@@ -7,9 +7,7 @@
 .pt-hero .actions { margin-top: 1.7rem; }
 .pt-hero .ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
 .pt-account-help { display: flex; align-items: center; flex-wrap: wrap; gap: .55rem 1.15rem; margin-top: 1.4rem; }
-.pt-status { display: inline-flex; align-items: center; gap: .55rem; font: .8rem/1.3 ui-monospace, Consolas, monospace; color: var(--sub); }
-.pt-status i { width: .55rem; height: .55rem; border-radius: 50%; background: #c69b3f; box-shadow: 0 0 0 4px color-mix(in srgb, #c69b3f 24%, transparent); }
-.pt-status--open i { background: #3f8a5a; box-shadow: 0 0 0 4px color-mix(in srgb, #3f8a5a 24%, transparent); }
+.pt-status { color: var(--sub); }
 .pt-stage { padding-block: clamp(2rem, 4vw, 3.5rem); }
 .pt-stage h2, .pt-section h2 { margin-bottom: .6rem; }
 .pt-lead { color: var(--sub); max-width: 62ch; margin-bottom: 1.6rem; }
@@ -19,7 +17,7 @@
 .pt-topbar { display: flex; align-items: center; gap: .9rem; padding: .7rem 1.1rem; border-bottom: 1px solid var(--rule); background: color-mix(in srgb, var(--paper) 80%, var(--surface)); flex-wrap: wrap; }
 .pt-brand { display: inline-flex; align-items: center; gap: .6rem; color: var(--accent); }
 .pt-brand strong { color: var(--ink); font-size: .92rem; }
-.pt-project-switch { border: 1px solid var(--rule); border-radius: 8px; padding: .3rem .65rem; font-size: .8rem; color: var(--sub); }
+.pt-project-label { font-size: .8rem; color: var(--sub); }
 .pt-demo-badge { margin-left: auto; font: .7rem/1 ui-monospace, Consolas, monospace; color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); padding: .3rem .5rem; border-radius: 4px; }
 .pt-avatar { display: inline-grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; background: var(--ink); color: var(--paper); font: .68rem ui-monospace, Consolas, monospace; flex: none; }
 .pt-body { display: grid; grid-template-columns: 13.5rem minmax(0, 1fr); min-height: 34rem; }
@@ -124,7 +122,6 @@
 .pt-steps li { border-top: 2px solid var(--accent); padding-top: 1rem; } .pt-steps span { font: italic 1.2rem Georgia, serif; color: var(--accent); } .pt-steps h3 { margin: .4rem 0 .5rem; font-size: 1.15rem; } .pt-steps p { color: var(--sub); }
 .pt-roles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1.4rem; }
 .pt-roles article { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--pt-radius); padding: 1.3rem; } .pt-roles h3 { font-size: 1.1rem; margin-bottom: .4rem; } .pt-roles p { color: var(--sub); }
-.pt-cta .actions { margin-top: 1rem; } .pt-cta .ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
 
 @media (max-width: 860px) {
   .pt-body { grid-template-columns: 1fr; }
@@ -135,7 +132,7 @@
   .pt-rail button[aria-selected="true"]::before { display: none; }
   .pt-grid, .pt-grid--support, .pt-roles { grid-template-columns: 1fr; }
   .pt-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .pt-demo-badge { margin-left: 0; } .pt-project-switch { order: 5; width: 100%; }
+  .pt-demo-badge { margin-left: 0; } .pt-project-label { order: 5; width: 100%; }
   .pt-card--action .pt-btn, .pt-version .pt-actions { position: sticky; bottom: .6rem; }
   .pt-card--action .pt-btn { align-self: stretch; padding-block: .8rem; }
 }
@@ -155,15 +152,6 @@
 .pt-mode button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .pt-mode button:focus-visible, .pt-link:focus-visible, .pt-themes button:focus-visible { outline: 3px solid #db9458; outline-offset: 3px; }
 .pt-app { position: relative; }
-
-/* заставка с приветствием */
-.pt-splash { position: absolute; inset: 0; z-index: 5; display: grid; place-content: center; justify-items: center; gap: .8rem; background: var(--night); color: var(--light, #f6efe6); transition: opacity .5s ease, visibility .5s; }
-.pt-splash p { font: 400 1.2rem 'Bureau Serif', Georgia, serif; opacity: 0; animation: pt-rise .6s .5s forwards; }
-.pt-splash i { width: 7rem; height: 2px; background: color-mix(in srgb, currentColor 22%, transparent); position: relative; overflow: hidden; border-radius: 2px; }
-.pt-splash i::after { content: ""; position: absolute; inset: 0; background: var(--accent); transform: translateX(-100%); animation: pt-load 1.3s .2s ease forwards; }
-.pt-splash.is-gone { opacity: 0; visibility: hidden; pointer-events: none; }
-@keyframes pt-rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-@keyframes pt-load { to { transform: none; } }
 
 /* форма заявки */
 .pt-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .9rem; }
@@ -242,9 +230,6 @@
 @keyframes pt-spin { to { transform: rotate(360deg); } }
 .pt-hero-mark { position: absolute; inset: 0; display: grid; place-items: center; color: var(--ink); }
 
-/* логотип в заключительном блоке */
-.pt-cta { display: grid; justify-items: start; gap: .6rem; color: var(--ink); }
-
 @media (max-width: 860px) {
   .pt-hero { grid-template-columns: 1fr; position: relative; isolation: isolate; }
   .pt-hero-art { position: absolute; z-index: -1; inset-block-start: .75rem; inset-inline-end: 0; width: min(44%, 12rem); opacity: .26; pointer-events: none; }
@@ -253,7 +238,6 @@
   .pt-hint-card { flex-direction: column; align-items: flex-start; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .pt-splash { display: none; }
   .pt-art *, .pt-orbits .spin, .pt-empty-mark .ring, .pt-check-art *, .pt-direction:hover .pt-direction-icon svg { animation: none !important; }
   .pt-art .draw, .pt-check-art circle, .pt-check-art path, .pt-art .tick { stroke-dashoffset: 0; } .pt-art .node, .pt-art .tag, .pt-art .bubble { opacity: 1; }
   .pt-direction { transition: none; }

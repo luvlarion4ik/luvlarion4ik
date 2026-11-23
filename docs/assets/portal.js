@@ -7,11 +7,6 @@
   const panels = [...app.querySelectorAll('.pt-panel')];
   const log = app.querySelector('[data-pt-log]');
   const unread = app.querySelector('[data-pt-unread]');
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const safe = {
-    get(key) { try { return sessionStorage.getItem(key); } catch { return null; } },
-    set(key, value) { try { sessionStorage.setItem(key, value); } catch { /* демо работает и без хранилища */ } },
-  };
 
   function initSavedMaps(section) {
     const { labels, categories, stages } = JSON.parse(section.querySelector('[data-pt-maps-config]').textContent);
@@ -146,18 +141,6 @@
   const savedMaps = app.querySelector('[data-pt-maps]');
   if (savedMaps) initSavedMaps(savedMaps);
 
-  // заставка с приветствием: один раз за сессию
-  const splash = app.querySelector('[data-pt-splash]');
-  if (splash) {
-    if (reduced || safe.get('pt-splash')) splash.remove();
-    else {
-      safe.set('pt-splash', '1');
-      const logo = splash.querySelector('devlarion-logo');
-      setTimeout(() => logo?.play?.(), 80);
-      setTimeout(() => splash.classList.add('is-gone'), 1900);
-      setTimeout(() => splash.remove(), 2500);
-    }
-  }
 
   // состояние демо: новый клиент или проект в работе
   const modeButtons = [...document.querySelectorAll('[data-pt-mode]')];
@@ -313,15 +296,13 @@
     if (!value) return;
     bubble('me', value);
     input.value = '';
-    setTimeout(() => bubble('them', t('Это демо. В кабинете ответ куратора приходит сюда и на почту или в Telegram.', 'This is a demo. In the portal your lead’s reply arrives here and by email or Telegram.')), 700);
+    bubble('them', t('В рабочем кабинете здесь появится ответ куратора.', 'In your account, your project lead’s reply appears here.'));
   });
   const rateNote = app.querySelector('[data-pt-rate-note]');
   const rateButtons = [...app.querySelectorAll('[data-pt-rate]')];
   rateButtons.forEach(button => button.addEventListener('click', () => {
     rateButtons.forEach(other => other.setAttribute('aria-pressed', other === button));
-    rateNote.textContent = button.dataset.ptRate === 'up'
-      ? t('Спасибо за оценку. Её увидят менеджеры студии.', 'Thanks for rating. The studio managers will see it.')
-      : t('Спасибо. Менеджер увидит оценку и вернётся к вашему вопросу.', 'Thanks. A manager will see the rating and follow up on your question.');
+    rateNote.textContent = t('Оценка отмечена в демо.', 'Rating selected in the demo.');
   }));
 
   // скидки с общим пределом

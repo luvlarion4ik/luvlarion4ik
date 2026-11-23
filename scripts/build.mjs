@@ -16,12 +16,18 @@ await validateSite(site);
 const root=new URL("../",import.meta.url), files={}, icons={};
 for(const f of await readdir(new URL("docs/assets/icons/",root))) icons[f.slice(0,-4)]=await readFile(new URL("docs/assets/icons/"+f,root),"utf8");
 const base=siteBase(), asset=base+"assets/", brand=asset+"brand/";
-const link=(label,url,style="link",goal="")=>`<a class="${style}" href="${esc(url)}" ${goal?'data-goal="'+goal+'"':''}>${esc(label)} ${icons.diagonal}</a>`;
+const siteRoot = new URL(base);
+const link = (label, url, style = "link", goal = "") => {
+  const target = new URL(url, siteRoot);
+  const external = target.origin !== siteRoot.origin || !target.pathname.startsWith(siteRoot.pathname);
+  return `<a class="${style}" href="${esc(url)}"${goal ? ` data-goal="${esc(goal)}"` : ""}>${esc(label)}${external ? ` ${icons.diagonal}` : ""}</a>`;
+};
 const versionedAssets = await Promise.all([
   "site-version.js", "studio.js", "currency.js", "commercial.js", "devlarion-logo.js", "solutions.js", "quiz.js", "payback.js", "portal.js", "shop.js", "viewer3d.js", "motion.js",
   "brand/favicon.svg", "brand/favicon-32.png", "brand/favicon-48.png", "brand/apple-touch-icon.png",
   "brand/logo-horizontal-copper-light.svg", "brand/logo-horizontal-copper.svg", "brand/og-ru.png", "brand/og-en.png",
   "aurawatch/gallery.js", "aurawatch/orb.js",
+  "products/city-integration.svg", "products/cognivue-attention.svg", "products/axenta-tutor.svg", "growth-map/growth-flow.svg",
   "exchange-rates.json", "growth-map/growth-map.css", ...growthMapAssets,
 ].map(async name => {
   const bytes = await readFile(new URL("docs/assets/" + name, root));
@@ -148,19 +154,15 @@ for(const lang of ["ru","en"]){
  const studioSite=process.env.DEVLARION_STUDIO_URL ? siteBase(process.env.DEVLARION_STUDIO_URL) : "";
  const studioLink=studioSite ? link(l("Конструктор «Сборка»","Sborka site builder"),studioSite,"link","studio") : "";
  const styles=styleCopy[lang];
- const styleChoices=(prompt=false)=>`<button type="button" class="btn" data-site-version="classic">${styles.classic}${prompt?' <span aria-hidden="true">✓</span>':""}</button>
-   <a class="btn" href="${motionSite}" data-site-version="motion">${styles.motion} <span aria-hidden="true">→</span></a>`;
- const stylePrompt=`<aside class="version-prompt" aria-label="${styles.label}" data-version-prompt hidden>
-   <p>${styles.prompt}</p><div class="version-prompt-actions">${styleChoices(true)}</div>
-   <button type="button" class="version-dismiss" aria-label="${styles.dismiss}" data-site-version="dismissed">×</button>
- </aside>`;
+ const styleChoices = `<button type="button" class="btn" data-site-version="classic">${styles.classic}</button>
+   <a class="btn" href="${motionSite}" data-site-version="motion">${styles.motion}</a>`;
  const themeNames=l(["Авто","Медь","Тёмно-синяя","Шалфей"],["Auto","Copper","Midnight","Sage"]);
  const themeLabel=l("Цветовая тема","Colour theme");
  const themes=`<div class="theme-picker" hidden>
    <button type="button" id="theme" aria-label="${themeLabel}" title="${themeLabel}" aria-expanded="false" aria-controls="theme-choices">
      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><g class="theme-sun"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"></path></g><path class="theme-moon" d="M20.5 14A8.8 8.8 0 0 1 10 3.5 8.8 8.8 0 1 0 20.5 14Z"></path></svg>
    </button>
-   <div id="theme-choices" hidden><fieldset><legend>${themeLabel}</legend>${["auto","copper","midnight","sage"].map((v,i)=>`<label><input type="radio" name="theme-choice" value="${v}"><span>${themeNames[i]}</span></label>`).join("")}</fieldset><fieldset class="version-choices"><legend>${styles.label}</legend>${styleChoices()}</fieldset></div>
+   <div id="theme-choices" hidden><fieldset><legend>${themeLabel}</legend>${["auto","copper","midnight","sage"].map((v,i)=>`<label><input type="radio" name="theme-choice" value="${v}"><span>${themeNames[i]}</span></label>`).join("")}</fieldset><fieldset class="version-choices"><legend>${styles.label}</legend>${styleChoices}</fieldset></div>
  </div>`;
  const foot = route => `<footer class="wrap"><div class="row footer-brand">${footerLogo}${route && route !== "links/" ? social : ""}</div>
    <div class="row fine"><span>© 2026 Devlarion · ${renderLegal(lang)}</span>
@@ -173,40 +175,40 @@ for(const lang of ["ru","en"]){
      <button hidden data-preferences>${l("Настройки аналитики","Analytics preferences")}</button>
      ${shareButton()}
    </div></footer>`;
- const mobileBar=route=>["links/","growth-map/","cabinet/","shop/"].includes(route)?"":`<div class="mobilebar">${route==="aurawatch/"?beta:tg}</div>`;
+ const mobileBar=route=>["links/","growth-map/","cabinet/","shop/","404.html"].includes(route)?"":`<div class="mobilebar">${route==="aurawatch/"?beta:tg}</div>`;
  const section=(key,title,content,cls="")=>`<section id="${key}" class="section wrap ${cls}"><h2>${title}</h2>${content}</section>`;
  const aura = auraCopy[lang];
  const caseAssets = new URL(asset).pathname;
  const portalIntro=l("Заявка, смета, версии работы, счета и поддержка в личном кабинете Devlarion.","Your request, estimate, work versions, invoices and support in the Devlarion client portal.");
  const productPreviews = {
-   city: `<figure class="product-preview systems-preview">
-     <figcaption>${l("Как пользователь получает услугу", "How a user gets the service")}</figcaption>
-     <ol class="system-flow">
-       <li><span aria-hidden="true">${icons.server}</span>${l("Коммерческий сервис", "Commercial service")}</li>
-       <li><span aria-hidden="true">${icons.layers}</span>${l("Государственная платформа", "Public-sector platform")}</li>
-       <li><span aria-hidden="true">${icons.web}</span>${l("Услуга в привычном интерфейсе", "Service in a familiar interface")}</li>
-     </ol>
-   </figure>`,
-   cognivue: `<figure class="product-preview audience-preview">
-     <figcaption>${l("Пример отчёта по макету", "Example design review")}</figcaption>
-     <div class="review-question">${l("Что первым привлекло внимание?", "What caught your eye first?")}</div>
-     <dl class="review-findings">
-       <div><dt>${l("Что заметили", "What stood out")}</dt><dd>${l("Заголовок", "Headline")}</dd></div>
-       <div><dt>${l("Что проверить", "What to test")}</dt><dd>${l("Заметность кнопки", "Button visibility")}</dd></div>
-     </dl>
-   </figure>`,
-   axenta: `<figure class="product-preview tutor-preview">
-     <figcaption>${l("Пример разбора уравнения", "Example equation walkthrough")}</figcaption>
-     <div class="equation">2<var>x</var> + 4 = 10</div>
-     <ol class="tutor-steps">
-       <li><span>${l("Вычитаем 4 из обеих частей", "Subtract 4 from both sides")}</span><strong>2<var>x</var> = 6</strong></li>
-       <li><span>${l("Делим обе части на 2", "Divide both sides by 2")}</span><strong><var>x</var> = 3</strong></li>
-     </ol>
-   </figure>`
+   city: {
+     file: "city-integration.svg",
+     title: l("Интеграция городской услуги", "Connecting a public service"),
+     caption: l("Коммерческий сервис передаёт услугу на государственную платформу.", "A commercial service connects to a public-sector platform."),
+   },
+   cognivue: {
+     file: "cognivue-attention.svg",
+     title: l("Пример карты внимания", "Example attention map"),
+     caption: l("Видно, какие элементы макета замечают первыми.", "See which parts of a design attract attention first."),
+   },
+   axenta: {
+     file: "axenta-tutor.svg",
+     title: l("Разбор задания по фото", "Working through a photographed problem"),
+     caption: l("От записи в тетради к решению уравнения по шагам.", "From a handwritten problem to a step-by-step solution."),
+     alt: l("Уравнение 2x + 4 = 10. После двух шагов x = 3.", "The equation 2x + 4 = 10. The two-step solution gives x = 3."),
+   },
+ };
+ const renderProductPreview = key => {
+   const preview = productPreviews[key];
+   if (!preview) return "";
+   return `<figure class="product-preview product-preview--${key}">
+     <img src="${asset}products/${preview.file}" width="480" height="300" alt="${esc(preview.alt ?? "")}" loading="lazy" decoding="async">
+     <figcaption><strong>${preview.title}</strong><span>${preview.caption}</span></figcaption>
+   </figure>`;
  };
  const productCards = lab.map(product => `<article class="${product.preview ? "product-card" : "product-lead"}">
    <div class="product-copy"><small>${esc(product.status)}</small><h3>${esc(product.name)}</h3><p>${esc(product.summary)}</p></div>
-   ${productPreviews[product.preview] ?? ""}
+   ${renderProductPreview(product.preview)}
    ${renderProductDetails(lang,product.details)}
    ${product.links.length ? `<div class="product-links">${product.links.map(item => link(item.label,item.href)).join("")}</div>` : ""}
  </article>`).join("");
@@ -286,7 +288,6 @@ for(const lang of ["ru","en"]){
  ).join("")}</ol>`);
  const contactPage = `<div class="contact-page">
    <div class="wrap contact-hero">
-     <p class="eyebrow">Devlarion</p>
      <h1>${contactTitle}</h1>
      <p class="intro">${t.close}</p>
      <div class="contact-channels">
@@ -298,7 +299,7 @@ for(const lang of ["ru","en"]){
    </div>
    ${teamSection}
    ${processSection}
-   ${renderGrowthMapTeaser(lang, home)}
+   ${renderGrowthMapTeaser(lang, home, asset)}
    ${section("contact-links", l("С чего начать", "Explore Devlarion"), `<div class="actions">
      ${link(t.estimate, home + "#quiz", "ghost")}
      ${link(t.cases, home + "#work", "ghost")}
@@ -307,31 +308,35 @@ for(const lang of ["ru","en"]){
    </div>`)}
  </div>`;
  const homeHTML=`<section class="hero"><div class="wrap hero-grid"><div class="hero-copy"><p class="eyebrow"><i></i>${t.eyebrow}</p><h1>${t.title}</h1><p class="intro">${t.intro}</p><div class="actions"><a class="button" href="#small-business">${l("Цены для малого бизнеса","Prices for small business")} ↓</a><a class="ghost" href="#companies">${l("Решения для компаний","Company solutions")} ↓</a></div><a class="byline" href="#bureau">${person} · ${t.about}</a></div>${casePreview}</div></section>
- <div class="stack"><div class="wrap stack-rail">${[false,true].map(repeat=>`<div class="stack-track" ${repeat?'aria-hidden="true"':""}>Python <i>/</i> FastAPI <i>/</i> SwiftUI <i>/</i> Next.js <i>/</i> Telegram <i>/</i> On-premise AI <i>/</i></div>`).join("")}</div></div>
+ ${stack}
  <section class="wrap segment-strip" aria-label="${esc(front.audience)}"><h2 class="segment-strip-title">${esc(front.audience)}</h2>${segmentPicker}</section>
- ${stylePrompt}
  <div id="services">${renderOffers(lang,icons,site.ready)}</div>
- ${renderGrowthMapTeaser(lang,home)}
+ ${renderGrowthMapTeaser(lang, home, asset)}
  ${section("service-directions",t.services,`<div id="small-business" class="service-group"><h3>${l("Фиксированные цены: самозанятые, ИП и небольшие команды","Fixed prices: freelancers, sole traders and small teams")}</h3><p>${l("Для самозанятых, ИП и небольших команд. В каждом пакете один сценарий. Если нужны оплата, CRM или дополнительные функции, оценим их отдельно.","For freelancers, sole proprietors and small teams. Each package covers one workflow. We quote payment processing, CRM integrations and extra features separately.")}</p><p><a class="link" href="${home}self-employed/">${l("Все пакеты для самозанятых и ИП →","All packages for freelancers and sole proprietors →")}</a> <a class="link" href="${home}business/">${l("Малому и среднему бизнесу →","Small and medium business →")}</a></p><div class="service-grid">${packages.map(p=>`<article><span class="service-mark">${icons[serviceIcon[p.id]]}</span><h4>${esc(p.title)}</h4><p>${esc(p.description)}</p><div class="rate"><div class="starter-price" data-region-price-row><span class="starter-price-prefix">${l("от", "from")}</span><strong class="starter-price-amount" data-region-price="${p.rub}">${formatStartingPrice(p.rub,lang)}</strong></div></div>${link(l("Обсудить пакет","Discuss this package"),id.telegram+"?text="+encodeURIComponent(l("Хочу обсудить пакет «","I'd like to discuss the “")+p.title+l("».","”.")),"link","telegram")}</article>`).join("")}</div></div>
  <p data-region-note hidden></p>
  <div id="companies" class="service-group"><h3>${l("Крупные задачи: ИИ, интеграции и сервисы под ключ","Larger projects: AI, integrations and bespoke services")}</h3>
    <p>${l("Выберите направление, чтобы посмотреть состав работ, варианты внедрения и ориентир по бюджету.","Choose a service to see the scope, deployment options and starting price.")}</p>
    ${renderCompanySolutions(lang,icons,site.pricing)}<p><a class="link" href="${home}enterprise/">${l("Крупным компаниям: диагностика и пилот →","Large companies: discovery and pilot →")}</a></p></div>
  <aside class="service-support"><div><strong>${l("Два месяца поддержки","Two months of support")}</strong><p>${l("Исправления в согласованном объёме входят в каждый проект.","Every project includes fixes within the agreed scope.")}</p></div>${link(t.estimate,"#quiz")}</aside>`)}
- ${section("why",front.why,`<div class="home-facts">${front.whyFacts.map(([title,body])=>`<article><h3>${esc(title)}</h3><p>${esc(body)}</p></article>`).join("")}</div>${link(front.whyLink,home+"why-website/")}`)}
+ ${section("why", front.why, `<p class="intro">${esc(front.whyText)}</p>${link(front.whyLink, home + "why-website/")}`)}
  ${section("growth",front.growth,`<div class="home-growth">${["seo/","geo/","support/"].map((route,index)=>{
    const [title,body]=front.growthLinks[index];
    return `<a href="${home}${route}"><strong>${esc(title)} <span aria-hidden="true">→</span></strong><span>${esc(body)}</span></a>`;
  }).join("")}</div>`)}
- <aside class="wrap bundle-teaser"><span class="service-mark" aria-hidden="true">${icons.layers}</span><div><h2>${l("Сайт, SEO, GEO и бот лучше брать пакетом","Website, SEO, GEO and bot work best as a bundle")}</h2><p>${l("Одна команда вместо четырёх подрядчиков: части усиливают друг друга, вам не нужно склеивать результаты, а цена ниже, чем по отдельности.","One team instead of four suppliers: the parts reinforce each other, you do not stitch results together, and the price is lower than buying separately.")}</p></div><a class="ghost" href="${home}bundle/">${l("Как работает пакет","How the bundle works")} <span aria-hidden="true">→</span></a></aside>
- ${site.sales?.capacity?.enabled===false?"":`<aside class="wrap capacity"><div class="capacity-pulse" aria-hidden="true"><i></i></div><div><strong>${esc(site.sales?.capacity?.[lang]?.title||l("Мы берём ограниченное число проектов в месяц","We take a limited number of projects each month"))}</strong><p>${esc(site.sales?.capacity?.[lang]?.text||l("Каждый проект я веду лично, поэтому не набираю больше, чем могу сделать хорошо. Хотите запуститься в ближайшие недели — напишите сейчас.","I run every project personally, so I only take on what I can do well. If you want to launch in the next few weeks, write now."))}</p></div>${link(l("Занять место в очереди","Reserve a slot"),id.telegram+"?text="+encodeURIComponent(l("Здравствуйте! Хочу занять место в очереди на проект.","Hello! I’d like to reserve a project slot.")),"button","telegram")}</aside>`}
+ <aside class="wrap bundle-teaser"><div>
+   <h2>${l("Сайт, продвижение и бот","Website, search and bot")}</h2>
+   <p>${l("Если нужны все три, их можно заказать одним проектом.","If you need all three, you can commission them as one project.")}</p>
+ </div>${link(l("Состав пакета","See what is included"), home+"bundle/", "link")}</aside>
+ ${site.sales?.capacity?.enabled !== false && site.sales?.capacity?.[lang]?.text ? `<aside class="wrap capacity"><div>
+   <strong>${esc(site.sales.capacity[lang].title || l("Когда можно начать", "Project start dates"))}</strong>
+   <p>${esc(site.sales.capacity[lang].text)}</p></div>${link(l("Уточнить сроки", "Ask about timing"), id.telegram, "button", "capacity")}</aside>` : ""}
  ${section("work",t.work,caseHTML)}
  ${processSection}
  <section class="product-feature wrap"><div><small>${esc(aura.eyebrow)}</small><h2>AuraWatch</h2><p>${esc(aura.card)}</p>
    <div class="actions">${link(l("Читать кейс","Read the case study"),home+"aurawatch/","button")}${link(betaLabel,betaUrl,"link","beta")}</div></div>
    <a class="product-visual" href="${home}aurawatch/" aria-label="${l("Кейс AuraWatch","AuraWatch case study")}"><img loading="lazy" width="1200" height="630" src="${caseAssets}${auraCover}" alt="${esc(aura.imageAlt)}"></a></section>
  ${section("products",t.products,`<div class="lab product-list">${productCards}</div>`)}
- ${section("about",l("Формат работы и договор","How we work and contract"),`<p class="intro">${l("Devlarion разрабатывает сайты, ботов, мобильные приложения и ИИ-сервисы для бизнеса. Ведём проект от аналитики и дизайна до запуска и поддержки. Работаем по договору с ИП. Состав, смету и этапы согласуем до начала работ.","Devlarion builds websites, bots, mobile apps and AI services for businesses. We cover discovery, design, delivery and support, with the scope, budget and milestones agreed before work begins.")}</p>`)}
+ ${section("about", l("Работа по договору","Working agreement"), `<p class="intro">${l("Договор заключаем с ИП. До начала работ согласуем смету, этапы и критерии приёмки.", "We agree the quote, milestones and acceptance criteria before work starts. The contract is with a sole proprietor.")}</p>`)}
  ${teamSection}
  ${section("faq",t.faq,t.faqs.map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join(""))}
  ${section("quiz",t.estimate,renderQuiz(lang,id.telegram,site.pricing,site.portal)+`<p class="gm-quiz-link"><a class="underlined" href="${home}growth-map/">${esc(growthMapText(lang,"home.quiz.growthMap"))}</a></p>`+renderReferral(lang,id.telegram))}
@@ -358,7 +363,7 @@ for(const lang of ["ru","en"]){
    </ul><p>${l("Названия и знаки сторонних сервисов принадлежат их владельцам.","Third-party names and marks belong to their owners.")}</p>
  </div>`;
  const audienceContext={sales:site.sales,asset,home,tg:id.telegram,icons,pricing:site.pricing,work,segmentPicker,llmsUrl:base+"llms.txt"};
- const otherPages={"growth-map/":renderGrowthMapPage(lang,{home,tg:id.telegram,icons,estimator:growthMapPricing,growthMap:site.growthMap,region:regionControl(lang,asset),exchangeRates:growthMapRates}),"cabinet/":renderPortalPage(lang,{home,tg:id.telegram,icons,portal:site.portal,referral:site.referral}),"licenses/":licencePage,"solutions/":renderReadySolutions(lang,id.telegram,site.ready,home),...casePages,...Object.fromEntries(segments.map(page=>[page.route,renderSegmentPage(lang,page.route,audienceContext)])),...Object.fromEntries(topics.map(page=>[page.route,renderTopicPage(lang,page.route,audienceContext)])),...Object.fromEntries(enterprisePages.map(page=>[page.route,renderEnterprisePage(lang,page.route,audienceContext)])),...Object.fromEntries(Object.keys(offerPages).map(route=>[route,renderOfferPage(lang,route,home,site.pricing)])),"links/":contactPage,"aurawatch/":auBody,"privacy/":`<div class="wrap sub"><h1>${privacy}</h1>${[0,2,4].map(i=>`<h3>${privacyText[i]}</h3><p ${i===4?"data-analytics-policy":""}>${privacyText[i+1]}</p>`).join("")}<div data-operator></div>${link("Email","mailto:"+contacts.email)}</div>`};
+ const otherPages={"growth-map/":renderGrowthMapPage(lang,{home,tg:id.telegram,icons,estimator:growthMapPricing,growthMap:site.growthMap,region:regionControl(lang,asset),exchangeRates:growthMapRates}),"cabinet/":renderPortalPage(lang,{home,tg:id.telegram,icons,portal:site.portal,referral:site.referral}),"licenses/":licencePage,"solutions/":renderReadySolutions(lang,id.telegram,site.ready,home),...casePages,...Object.fromEntries(segments.map(page=>[page.route,renderSegmentPage(lang,page.route,audienceContext)])),...Object.fromEntries(topics.map(page=>[page.route,renderTopicPage(lang,page.route,audienceContext)])),...Object.fromEntries(enterprisePages.map(page=>[page.route,renderEnterprisePage(lang,page.route,audienceContext)])),...Object.fromEntries(Object.keys(offerPages).map(route=>[route,renderOfferPage(lang,route,home,site.pricing)])),"links/":contactPage,"aurawatch/":auBody,"privacy/":`<div class="wrap sub"><h1>${privacy}</h1>${[0,2,4].map(i=>`<h3>${privacyText[i]}</h3><p ${i===4?"data-analytics-policy":""}>${privacyText[i+1]}</p>`).join("")}<div data-operator></div>${link(l("Написать по вопросам данных","Email us about your data"),"mailto:"+contacts.email)}</div>`};
  for(const route of [...routes,"404.html"]){
  const caseProject = work.find(project => caseRoute(project) === route);
  const audience = audiencePages.find(page=>page.route===route);
@@ -369,7 +374,7 @@ for(const lang of ["ru","en"]){
    route === "why-website/" ? "picker" : route === "cabinet/" ? "portal" : "common";
  const mapAssets = isMap ? `<meta name="referrer" content="no-referrer"><link rel="stylesheet" href="${asset}growth-map/growth-map.css">${growthMapAssets.map(src => `<script defer src="${asset}${src}"></script>`).join("")}` : "";
  const dest=url(lang,route),title=isMap?esc(growthMapText(lang, "meta.title")):(caseProject?.name ?? offer?.title ?? (route==="licenses/"?l("Лицензии","Licences"):route==="solutions/"?l("Готовые решения","Ready-made solutions"):route==="cabinet/"?l("Личный кабинет","Client portal"):isAura?"AuraWatch · "+aura.subtitle:route==="privacy/"?privacy:route==="404.html"?"404":route==="links/"?contactTitle:!route?front.title:t.title.replace("<br>"," ")))+" — Devlarion";
- const description = isMap ? growthMapText(lang, "meta.description") : caseProject?.result ?? offer?.description ?? (isAura ? aura.description : route==="cabinet/" ? portalIntro : !route ? front.intro : t.intro);
+ const description = isMap ? growthMapText(lang, "meta.description") : caseProject?.result ?? offer?.description ?? (isAura ? aura.description : route==="cabinet/" ? portalIntro : route==="links/" ? t.close : route==="404.html" ? l("Страница не найдена.","Page not found.") : !route ? front.intro : t.intro);
  const socialImage = isAura ? asset + auraCover : brand + "og-" + lang + ".png";
  const auraScripts = isAura ? `<script defer src="${asset}aurawatch/gallery.js"></script><script defer src="${asset}aurawatch/orb.js"></script>` : "";
  const alternate=url(other,route);
@@ -400,7 +405,7 @@ for(const lang of ["ru","en"]){
    ];
  })() : [];
  const schema={"@context":"https://schema.org","@graph":isMap?[{"@type":"WebApplication",name:mapLabel,url:dest,applicationCategory:"BusinessApplication",offers:{"@type":"Offer",price:0,priceCurrency:"RUB"}}]:route==="aurawatch/"?[{"@type":"SoftwareApplication",name:"AuraWatch",operatingSystem:"iOS, watchOS",applicationCategory:"BusinessApplication"}]:[{"@type":"ProfessionalService",name:id.brand,url:home,logo:brand+"icon-512.png",sameAs:[id.telegram,id.github,id.threads],founder:{"@type":"Person",name:person}},...audienceSchema,...(!route?[{"@type":"FAQPage",mainEntity:t.faqs.map(([q,a])=>({"@type":"Question",name:q,acceptedAnswer:{"@type":"Answer",text:a}}))}]:[])]};
- files["docs/"+(ru?"ru/":"")+route+(route.endsWith(".html")?"":"index.html")]=`<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${navigationMotion}<title>${title}</title><meta name="description" content="${esc(description)}"><link rel="canonical" href="${dest}">${["en","ru","x-default"].map(k=>`<link rel="alternate" hreflang="${k}" href="${url(k==="ru"?"ru":"en",route)}">`).join("")}<meta property="og:title" content="${title}"><meta property="og:description" content="${esc(description)}"><meta property="og:type" content="website"><meta property="og:url" content="${dest}"><meta property="og:locale" content="${ru?"ru_RU":"en_US"}"><meta property="og:image" content="${socialImage}"><meta property="og:image:type" content="${isAura?"image/jpeg":"image/png"}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="${isAura?esc(aura.imageAlt):esc(t.title)+" — Devlarion"}"><meta name="twitter:card" content="summary_large_image"><link rel="icon" type="image/svg+xml" href="${brand}favicon.svg"><link rel="icon" type="image/png" sizes="32x32" href="${brand}favicon-32.png"><link rel="icon" type="image/png" sizes="48x48" href="${brand}favicon-48.png"><link rel="apple-touch-icon" href="${brand}apple-touch-icon.png"><link rel="manifest" href="${brand}site.webmanifest"><script>${themeScript}</script>${(ru?["cyrillic","latin"]:["latin"]).map(subset=>`<link rel="preload" href="${brand}fonts/source-serif-4-${subset}.woff2" as="font" type="font/woff2" crossorigin>`).join("")}${styleLinks[styleGroup]}<script type="application/ld+json">${JSON.stringify(schema).replaceAll("<","\\u003c")}</script><script defer src="${asset}settings.js"></script><script defer src="${asset}site-version.js"></script><script defer src="${asset}studio.js"></script><script defer src="${asset}devlarion-logo.js"></script><script defer src="${asset}currency.js"></script><script defer src="${asset}commercial.js"></script><script defer src="${asset}solutions.js"></script>${audience?.paybackPackages?`<script defer src="${asset}payback.js"></script>`:""}${(route==="shop/"||route==="compute/"||route==="hardware/")?`<script defer src="${asset}shop.js"></script>`:""}${["compute/","shop/","hardware/"].includes(route)?`<script defer src="${asset}viewer3d.js"></script>`:""}${!route?`<script defer src="${asset}quiz.js"></script>`:""}${route==="cabinet/"?`<script defer src="${asset}portal.js"></script>`:""}<script defer src="${asset}motion.js"></script>${mapAssets}${auraScripts}</head><body ${!route?'class="hero-page"':""} data-privacy-url="${home}privacy/" data-motion-url="${motionSite}" ${!route?'data-version-home':""}><a class="skip" href="#main">${l("К содержанию","Skip to content")}</a><header><div class="wrap bar">${headerLogo(!route)}<nav>${servicesMenu()}${navRest}</nav><div class="tools"><button class="menu" data-menu aria-label="${l("Меню","Menu")}">☰</button>${isMap?"":regionControl(lang,asset)}${themes}${shareButton("","header-share",true)}<a href="${alternate}">${ru?"EN":"RU"}</a>${route === "links/" ? "" : tg}</div></div></header><main id="main">${route==="404.html"?`<div class="wrap sub notfound"><devlarion-logo variant="mark" height="72" view aria-hidden="true"></devlarion-logo><h1>404</h1><p>${l("Страница не найдена.","Page not found.")}</p>${link(l("На главную","Back to homepage"),home,"button")}</div>`:otherPages[route]??homeHTML}</main>${foot(route)}${mobileBar(route)}<div id="progress" aria-hidden="true"></div><dialog id="commands" aria-label="${l("Быстрые действия","Quick actions")}"><form method="dialog"><button aria-label="${l("Закрыть","Close")}">×</button></form><nav>${servicesMenu()}${navRest}<a href="${home}#quiz">${t.estimate}</a><a href="${motionSite}" data-site-version="motion">${styles.link}</a>${studioLink}<a href="${alternate}">${ru?"English":"Русский"}</a><button type="button" class="select-theme">${l("Сменить тему","Change theme")}</button>${shareButton()}${tg}</nav></dialog>${shareDialog}</body></html>`;
+ files["docs/"+(ru?"ru/":"")+route+(route.endsWith(".html")?"":"index.html")]=`<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${navigationMotion}<title>${title}</title><meta name="description" content="${esc(description)}"><link rel="canonical" href="${dest}">${["en","ru","x-default"].map(k=>`<link rel="alternate" hreflang="${k}" href="${url(k==="ru"?"ru":"en",route)}">`).join("")}<meta property="og:title" content="${title}"><meta property="og:description" content="${esc(description)}"><meta property="og:type" content="website"><meta property="og:url" content="${dest}"><meta property="og:locale" content="${ru?"ru_RU":"en_US"}"><meta property="og:image" content="${socialImage}"><meta property="og:image:type" content="${isAura?"image/jpeg":"image/png"}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="${isAura?esc(aura.imageAlt):esc(t.title)+" — Devlarion"}"><meta name="twitter:card" content="summary_large_image"><link rel="icon" type="image/svg+xml" href="${brand}favicon.svg"><link rel="icon" type="image/png" sizes="32x32" href="${brand}favicon-32.png"><link rel="icon" type="image/png" sizes="48x48" href="${brand}favicon-48.png"><link rel="apple-touch-icon" href="${brand}apple-touch-icon.png"><link rel="manifest" href="${brand}site.webmanifest"><script>${themeScript}</script>${(ru?["cyrillic","latin"]:["latin"]).map(subset=>`<link rel="preload" href="${brand}fonts/source-serif-4-${subset}.woff2" as="font" type="font/woff2" crossorigin>`).join("")}${styleLinks[styleGroup]}<script type="application/ld+json">${JSON.stringify(schema).replaceAll("<","\\u003c")}</script><script defer src="${asset}settings.js"></script><script defer src="${asset}site-version.js"></script><script defer src="${asset}studio.js"></script><script defer src="${asset}devlarion-logo.js"></script><script defer src="${asset}currency.js"></script><script defer src="${asset}commercial.js"></script><script defer src="${asset}solutions.js"></script>${audience?.paybackPackages?`<script defer src="${asset}payback.js"></script>`:""}${(route==="shop/"||route==="compute/"||route==="hardware/")?`<script defer src="${asset}shop.js"></script>`:""}${["compute/","shop/","hardware/"].includes(route)?`<script defer src="${asset}viewer3d.js"></script>`:""}${!route?`<script defer src="${asset}quiz.js"></script>`:""}${route==="cabinet/"?`<script defer src="${asset}portal.js"></script>`:""}<script defer src="${asset}motion.js"></script>${mapAssets}${auraScripts}</head><body ${!route?'class="hero-page"':""} data-privacy-url="${home}privacy/" data-motion-url="${motionSite}" ><a class="skip" href="#main">${l("К содержанию","Skip to content")}</a><header><div class="wrap bar">${headerLogo(!route)}<nav>${servicesMenu()}${navRest}</nav><div class="tools"><button class="menu" data-menu aria-label="${l("Меню","Menu")}">☰</button>${isMap?"":regionControl(lang,asset)}${themes}${shareButton("","header-share",true)}<a href="${alternate}">${ru?"EN":"RU"}</a>${["links/","404.html"].includes(route) ? "" : tg}</div></div></header><main id="main">${route==="404.html"?`<div class="wrap sub notfound"><p>404</p><h1>${l("Страница не найдена","Page not found")}</h1><p>${l("Возможно, адрес изменился. Вернитесь на главную или откройте каталог услуг.","The address may have changed. Go to the homepage or browse the services.")}</p><div class="actions">${link(l("На главную","Back to homepage"),home,"button")}${link(l("Все услуги","Browse services"),home+"services/","ghost")}</div></div>`:otherPages[route]??homeHTML}</main>${foot(route)}${mobileBar(route)}<div id="progress" aria-hidden="true"></div><dialog id="commands" aria-label="${l("Быстрые действия","Quick actions")}"><form method="dialog"><button aria-label="${l("Закрыть","Close")}">×</button></form><nav>${servicesMenu()}${navRest}<a href="${home}#quiz">${t.estimate}</a><a href="${motionSite}" data-site-version="motion">${styles.link}</a>${studioLink}<a href="${alternate}">${ru?"English":"Русский"}</a><button type="button" class="select-theme">${l("Сменить тему","Change theme")}</button>${shareButton()}${tg}</nav></dialog>${shareDialog}</body></html>`;
  }
  files[ru?"README.ru.md":"README.md"]=`# Devlarion\n\n${t.eyebrow} · ${person}\n\n${t.intro}\n\n[${t.cases}](${home}#work) · [${t.estimate}](${home}#quiz) · [${mapLabel}](${home}growth-map/) · [${t.cta}](${id.telegram}) · [Threads](${id.threads}) · [${ru?"English":"Русский"}](${ru?"README.md":"README.ru.md"})\n\n## ${homeCopy[lang].audience}\n\n${segments.map(page=>`- [${page[lang].label}](${home}${page.route})`).join("\n")}\n\n## ${l("Рост","Growth")}\n\n${topics.map(page=>`- [${page[lang].label}](${home}${page.route})`).join("\n")}\n\n## ${l("Стоимость разработки","Project pricing")}\n\n${packages.map(p=>`- [${p.title}](${home}#small-business) — ${l("от", "from")} ${formatStartingPrice(p.rub,lang)}`).join("\n")}\n\n${l("Для компаний любого размера подбираем условия и возможную скидку индивидуально. Итоговую стоимость сообщим после созвона.","For companies of any size, we tailor the terms and discuss any applicable discount. We send the final quote after our call.")}\n\n## ${t.work}\n\n${work.map(c=>`- [${c.name}](${c.href}) — ${c.result}`).join("\n")}\n\n## ${t.products}\n\n- [AuraWatch](${home}aurawatch/) — ${aura.card}\n${lab.filter(p=>p.name!=="AuraWatch").map(p=>`- **${p.name}** — ${p.summary}`).join("\n")}\n\n${l("Редактирование сайта и учёт рефералов описаны в [инструкции](scripts/README.md).","See the [site maintenance guide](scripts/README.md) for the editor and referral ledger.")}\n`;
 }

@@ -75,9 +75,9 @@ export const directions = [
     route: 'ml/', icon: 'spark', hero: 'private-ai', estimateServices: ['fine-tuning'],
     ru: {
       eyebrow: 'Дообучение и точность', label: 'Дообучение, точность и MLOps', card: 'Дообучаем модели на ваших данных и измеряем точность до запуска.',
-      title: 'Модель, которая знает ваш бизнес — и мы показываем, насколько точно',
+      title: 'Дообучение и проверка ИИ-моделей',
       description: 'Дообучаем открытые модели на ваших документах и терминах, измеряем качество на проверочном наборе и выводим модель в работу с мониторингом.',
-      accuracy: ['до 96%', 'корректных ответов на проверочном наборе в наших проектах', 'Как мы измеряем: собираем с вами 100–300 реальных вопросов с эталонными ответами, прогоняем модель до и после дообучения, считаем долю верных ответов и ответов с правильной ссылкой на источник. Порог качества фиксируем в договоре пилота, а итоговый отчёт вы получаете на руки. Результат на ваших данных может отличаться — поэтому и измеряем.'],
+      accuracy: ['до 96%', 'верных ответов на проверочном наборе в наших проектах', 'Собираем реальные вопросы с эталонными ответами. До и после дообучения измеряем долю верных ответов и проверяем ссылки на источники. На ваших данных результат измерим отдельно в пилоте и покажем в отчёте.'],
       atlas: [
         ['Оценка точности модели', 'Проверочный набор, метрики, отчёт: как модель справляется с вашими задачами.', 60000, '1–2 недели'],
         ['Дообучение модели', 'Термины, стиль и типовые задачи вашей компании.', 45000, '2–6 недель'],
@@ -87,13 +87,13 @@ export const directions = [
         ['MLOps и вывод в продакшн', 'Версии моделей, мониторинг качества, обновления без простоя.', 150000, '4–8 недель'],
         ['Аудит процессов под ИИ', 'Где ИИ даст эффект, а где нет — с расчётом.', 0, '1 неделя'],
       ],
-      faq: [['Что лучше: дообучение или RAG?', 'RAG — когда нужны ответы по документам со ссылкой. Дообучение — когда важны стиль, термины и типовые действия. Часто их совмещают.'], ['Сколько данных нужно для дообучения?', 'От нескольких сотен качественных примеров. Точнее скажем после аудита данных.'], ['Откуда цифра 96%?', 'Это лучший результат на проверочных наборах в наших проектах. На ваших данных измерим до запуска и зафиксируем порог в договоре.']],
+      faq: [['Что лучше: дообучение или RAG?', 'RAG — когда нужны ответы по документам со ссылкой. Дообучение — когда важны стиль, термины и типовые действия. Часто их совмещают.'], ['Сколько данных нужно для дообучения?', 'От нескольких сотен качественных примеров. Точнее скажем после аудита данных.'], ['Что увижу в отчёте?', 'Долю верных ответов, точность ссылок на источники и примеры ошибок на ваших данных.']],
     },
     en: {
       eyebrow: 'Fine-tuning and accuracy', label: 'Fine-tuning, accuracy and MLOps', card: 'We fine-tune models on your data and measure accuracy before launch.',
-      title: 'A model that knows your business, and proof of how accurate it is',
+      title: 'AI model fine-tuning and evaluation',
       description: 'We fine-tune open models on your documents and terms, measure quality on a test set and put the model into production with monitoring.',
-      accuracy: ['up to 96%', 'correct answers on the test set in our projects', 'How we measure: we collect 100–300 real questions with reference answers, run the model before and after fine-tuning, and count correct answers and correct source links. The quality threshold goes into the pilot contract and you get the report. Results on your data may differ, which is why we measure.'],
+      accuracy: ['up to 96%', 'correct answers on a test set in our projects', 'We collect real questions and reference answers. Before and after fine-tuning, we measure how often the model answers correctly and cites the right source. We test on your own data during the pilot and share the results in a report.'],
       atlas: [
         ['Model accuracy assessment', 'Test set, metrics and a report.', 60000, '1–2 weeks'],
         ['Fine-tuning', 'Your terms, style and typical tasks.', 45000, '2–6 weeks'],
@@ -103,7 +103,7 @@ export const directions = [
         ['MLOps', 'Model versions, quality monitoring, zero-downtime updates.', 150000, '4–8 weeks'],
         ['AI process audit', 'Where AI pays off and where it does not.', 0, '1 week'],
       ],
-      faq: [['Fine-tuning or RAG?', 'RAG for answers from documents with sources; fine-tuning for style and terms. Often both.'], ['Where does 96% come from?', 'It is the best result on test sets in our projects. We measure on your data before launch.']],
+      faq: [['Fine-tuning or RAG?', 'RAG for answers from documents with sources; fine-tuning for style and terms. Often both.'], ['What is in the report?', 'The share of correct answers, citation accuracy and examples of errors on your data.']],
     },
   },
   {

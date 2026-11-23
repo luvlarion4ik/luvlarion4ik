@@ -34,26 +34,22 @@ export function renderGrowthMapPreview(lang) {
   </svg>`;
 }
 
-export function renderGrowthMapTeaser(lang, home) {
+export function renderGrowthMapTeaser(lang, home, asset) {
   const t = key => esc(growthMapText(lang, key));
-  const stages = [
-    ['entry', 'chat'],
-    ['process', 'route'],
-    ['pay', 'receipt'],
-  ];
   return `<section id="growth-map-teaser" class="section wrap gm-teaser">
     <div><h2>${t('home.teaser.title')}</h2>
       <p>${t('home.teaser.text')}</p>
       <a class="button" href="${home}growth-map/" data-goal="growthmap_teaser">${t('home.teaser.cta')} ${gmIcons.arrow}</a>
     </div>
-    <div class="gm-teaser-art" role="group" aria-label="${t('intro.eyebrow')}">
-      <ol class="gm-teaser-stages" role="list">
-        ${stages.map(([stage, icon]) => `<li class="gm-teaser-stage gm-teaser-${stage}">
-          <span class="gm-teaser-glyph">${gmIcons[icon]}</span><span>${t(stage)}</span>
-        </li>`).join('')}
-      </ol>
-      <p class="gm-teaser-loss">${gmIcons.clock}${t('legend.loss')}</p>
-    </div>
+    <figure class="gm-teaser-art">
+      <img src="${asset}growth-map/growth-flow.svg" width="600" height="320" alt="" loading="lazy" decoding="async">
+      <figcaption>
+        <ol class="gm-teaser-stages" role="list">
+          ${['entry', 'process', 'pay'].map(stage => `<li>${t(stage)}</li>`).join('')}
+        </ol>
+        <p class="gm-teaser-loss">${t('legend.loss')}</p>
+      </figcaption>
+    </figure>
   </section>`;
 }
 

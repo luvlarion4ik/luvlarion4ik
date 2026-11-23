@@ -4,18 +4,17 @@
 export const shared = {
   ru: {
     trust: [
-      ['Лично Илья', 'Один человек отвечает за проект от первого созвона до запуска.'],
-      ['Смета до старта', 'Объём, цену и сроки фиксируем в договоре до первой строчки кода.'],
+      ['Ведёт Илья', 'Один контакт от первого созвона до сдачи.'],
+      ['Смета до старта', 'Объём, цену и сроки фиксируем в договоре.'],
       ['2 месяца поддержки', 'Исправления в согласованном объёме входят в каждый проект.'],
-      ['Живые кейсы', 'Можно открыть работающие проекты и увидеть результат, а не обещание.'],
+      ['Кейсы и демо', 'Можно посмотреть, как работают проекты.'],
     ],
-    capacityTitle: 'Мы берём ограниченное число проектов в месяц',
-    capacityText: 'Каждый проект я веду лично, поэтому не набираю больше, чем могу сделать хорошо. Если хотите запуститься в ближайшие недели, напишите сейчас: ближайшие слоты разбирают по порядку обращений.',
-    capacityCta: 'Занять место в очереди',
-    lossBadge: 'Цена ожидания',
-    nextTitle: 'Что логично сделать дальше',
-    bundleTitle: 'Почему лучше не по частям, а пакетом',
-    bundleText: 'Сайт, SEO, GEO, бот и сопровождение работают как одна система: сайт собирает заявки, SEO и GEO приводят людей, бот отвечает, поддержка держит всё живым. Когда это делает одна команда, вы не объясняете бизнес четыре раза и не склеиваете результаты сами.',
+    capacityTitle: 'Когда можно начать',
+    capacityText: 'Напишите, к какой дате хотите запуститься. Согласуем дату старта после первого разговора.',
+    capacityCta: 'Уточнить сроки',
+    nextTitle: 'Другие услуги',
+    bundleTitle: 'Сайт, поиск и бот в одном проекте',
+    bundleText: 'Одна команда настраивает сайт, поиск и бота, который передаёт заявки. Сопровождение можно включить в проект.',
     bundleCta: 'Как работает пакет',
     shiftsTitle: 'Что меняется',
     before: 'Сейчас',
@@ -26,15 +25,14 @@ export const shared = {
       ['Ilia, personally', 'One person is accountable from the first call to launch.'],
       ['A quote before we start', 'Scope, price and timing are agreed in the contract before any work begins.'],
       ['Two months of support', 'Fixes within the agreed scope are included in every project.'],
-      ['Live case studies', 'You can open working projects and see a result, not a promise.'],
+      ['Case studies and demos', 'See how the projects work.'],
     ],
-    capacityTitle: 'We take a limited number of projects each month',
-    capacityText: 'I run every project personally, so I only take on what I can do well. If you want to launch within the next few weeks, write now: the nearest slots are filled in the order enquiries arrive.',
-    capacityCta: 'Reserve a slot',
-    lossBadge: 'The cost of waiting',
-    nextTitle: 'What to do next',
-    bundleTitle: 'Why a bundle beats separate purchases',
-    bundleText: 'Website, SEO, GEO, bot and support work as one system: the site collects enquiries, SEO and GEO bring people in, the bot answers, and support keeps it all alive. When one team does it, you explain your business once and do not stitch results together yourself.',
+    capacityTitle: 'Project start dates',
+    capacityText: 'Tell us when you want to launch. We agree a start date after the first call.',
+    capacityCta: 'Ask about timing',
+    nextTitle: 'Related services',
+    bundleTitle: 'Website, search and bot in one project',
+    bundleText: 'One team sets up the website, search visibility and the bot that routes enquiries. You can include ongoing support in the project.',
     bundleCta: 'How the bundle works',
     shiftsTitle: 'What changes',
     before: 'Today',
@@ -45,8 +43,8 @@ export const shared = {
 export const sell = {
   'self-employed/': {
     ru: {
-      lossTitle: 'Сколько вы теряете, пока всё держится на личке',
-      lossLead: 'Это не абстрактные риски. Это конкретные клиенты, которые пришли, не дождались и ушли к тому, кто ответил быстрее.',
+      lossTitle: 'Где теряются заявки',
+      lossLead: 'Если заявки приходят в личные сообщения, их легко пропустить во время работы.',
       losses: [
         ['Клиент выбирает того, кто ответил первым', 'Человек пишет сразу нескольким мастерам и записывается к первому ответившему. Если вы ответили вечером, место уже занято.'],
         ['Комиссия за чужих клиентов', 'Заказ через агрегатор оставляет часть чека площадке, а клиент остаётся её клиентом. Свой сайт и бот делают его вашим.'],
@@ -63,12 +61,12 @@ export const sell = {
         ['geo/', 'Чтобы вас советовали нейросети', 'Всё больше людей спрашивает ИИ, к кому обратиться. GEO учит его находить вас.'],
         ['support/', 'Чтобы сайт не устарел', 'Цены, акции, расписание: вносим изменения за вас.'],
       ],
-      closeTitle: 'Следующая заявка может прийти уже на этой неделе',
-      closeText: 'Опишите, чем занимаетесь. Я отвечу в течение дня и скажу, что именно вам нужно, а что можно не покупать.',
+      closeTitle: 'Обсудим сайт или запись через бота',
+      closeText: 'Расскажите, чем занимаетесь и как сейчас принимаете заявки. Илья предложит подходящий вариант.',
     },
     en: {
-      lossTitle: 'What you lose while everything runs through DMs',
-      lossLead: 'These are not abstract risks. They are real customers who came, did not get an answer in time and went to someone who replied faster.',
+      lossTitle: 'Where enquiries get lost',
+      lossLead: 'It is easy to miss an enquiry in direct messages while you are working.',
       losses: [
         ['The customer picks whoever replied first', 'People message several providers and book with the first one who answers. Reply in the evening and the slot is often gone.'],
         ['Commission on customers who could be yours', 'An order through a platform leaves part of the fee with it, and the customer stays the platform’s. Your own site and bot make them yours.'],
@@ -85,15 +83,15 @@ export const sell = {
         ['geo/', 'Be recommended by AI assistants', 'More people ask AI who to contact. GEO helps it find you.'],
         ['support/', 'Keep the site from going stale', 'Prices, offers, schedule: we update them for you.'],
       ],
-      closeTitle: 'Your next enquiry could arrive this week',
-      closeText: 'Tell me what you do. I will reply within a day and say what you need and what you can skip.',
+      closeTitle: 'Discuss a website or booking bot',
+      closeText: 'Tell us what you do and how you currently take enquiries. Ilia will suggest a starting point.',
     },
   },
 
   'business/': {
     ru: {
       lossTitle: 'Во что обходится «пока и так работает»',
-      lossLead: 'Рутина, слепая реклама и устаревший сайт редко выглядят как потеря. Но каждый из этих пунктов тихо забирает деньги и время команды.',
+      lossLead: 'Проверьте, где сотрудники переносят заявки вручную и какие каналы приводят клиентов.',
       losses: [
         ['Менеджеры тратят часы на копирование', 'Заявки переносят в таблицы вручную, на одни и те же вопросы отвечают снова. Это оплаченное время, которое не приносит продаж.'],
         ['Реклама идёт вслепую', 'Без сквозной аналитики непонятно, какой канал приводит клиентов, а какой просто съедает бюджет.'],
@@ -110,12 +108,12 @@ export const sell = {
         ['geo/', 'Чтобы вас видели в ответах ИИ', 'GEO делает ваши услуги понятными для нейросетей и ИИ-поиска.'],
         ['bundle/', 'Собрать всё в одну систему', 'Сайт, бот, CRM и поиск, которые работают вместе и стоят дешевле, чем по отдельности.'],
       ],
-      closeTitle: 'Давайте начнём с одного сценария и посмотрим на результат',
+      closeTitle: 'Пилот на одном процессе',
       closeText: 'Расскажите, где сейчас теряются заявки. Я предложу первый этап с понятной сметой, без обязательств на весь проект.',
     },
     en: {
       lossTitle: 'What “it works well enough” really costs',
-      lossLead: 'Routine, blind advertising and an outdated site rarely look like losses. Each one quietly drains money and team time.',
+      lossLead: 'Check where staff transfer enquiries by hand and which channels bring in customers.',
       losses: [
         ['Managers lose hours to copying', 'Enquiries are moved into spreadsheets by hand and the same questions are answered again. That is paid time that does not produce sales.'],
         ['Advertising runs blind', 'Without end-to-end analytics you cannot tell which channel brings customers and which one only burns budget.'],
@@ -132,7 +130,7 @@ export const sell = {
         ['geo/', 'Be visible in AI answers', 'GEO makes your services clear to AI assistants and AI search.'],
         ['bundle/', 'Join it all into one system', 'Website, bot, CRM and search working together, for less than buying them separately.'],
       ],
-      closeTitle: 'Let’s start with one workflow and look at the result',
+      closeTitle: 'Pilot one workflow',
       closeText: 'Tell me where enquiries get lost today. I will propose a first stage with a clear quote and no commitment to the whole project.',
     },
   },
@@ -197,7 +195,7 @@ export const sell = {
       shifts: [
         ['Только соцсети', 'Соцсети дают охват, сайт даёт решение о покупке.'],
         ['«Нет времени этим заниматься»', 'Структуру и тексты берём на себя. От вас — один созвон и материалы.'],
-        ['«Это дорого»', 'Стартовый сайт окупается несколькими заявками. Проверьте в калькуляторе окупаемости.'],
+        ['«Это дорого»', 'Калькулятор покажет пример по вашему среднему чеку и доле заявок, которые доходят до оплаты.'],
       ],
       cross: [
         ['seo/', 'Чтобы сайт находили в поиске', 'Без SEO сайт может быть красивым и невидимым.'],
@@ -219,7 +217,7 @@ export const sell = {
       shifts: [
         ['Social media only', 'Social media gives reach, a website closes the decision.'],
         ['“I don’t have time for this”', 'We handle structure and copy. You bring one call and your materials.'],
-        ['“It’s expensive”', 'A starter website pays back with a handful of enquiries. Check it in the payback calculator.'],
+        ['“It’s expensive”', 'Run an example using your average order value and the share of enquiries that become sales.'],
       ],
       cross: [
         ['seo/', 'Be found in search', 'Without SEO a site can be beautiful and invisible.'],
