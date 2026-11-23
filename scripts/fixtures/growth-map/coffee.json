@@ -1,0 +1,12 @@
+{
+  "name": "",
+  "category": "food",
+  "niche": "coffee",
+  "size": "team",
+  "models": ["goods"],
+  "check": 450,
+  "sources": ["src_maps", "src_insta"],
+  "mainSource": "src_maps",
+  "payment": ["terminal"],
+  "pains": ["no_repeat"]
+}

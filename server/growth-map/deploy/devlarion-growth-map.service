@@ -1,0 +1,25 @@
+# systemd unit for the Growth Map AI server.
+# Install: sudo cp devlarion-growth-map.service /etc/systemd/system/ && sudo systemctl daemon-reload
+#          sudo systemctl enable --now devlarion-growth-map
+# Paths assume the repository is cloned to /opt/devlarion. Adjust WorkingDirectory/ExecStart if not.
+[Unit]
+Description=Devlarion Growth Map AI
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=devlarion
+Group=devlarion
+WorkingDirectory=/opt/devlarion/server/growth-map
+ExecStart=/usr/bin/env node /opt/devlarion/server/growth-map/server.mjs
+Restart=always
+RestartSec=3
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadOnlyPaths=/opt/devlarion
+
+[Install]
+WantedBy=multi-user.target

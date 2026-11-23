@@ -1,0 +1,14 @@
+{
+  "name": "Барбершоп Борода",
+  "category": "beauty",
+  "niche": "barber",
+  "size": "team",
+  "models": ["booking"],
+  "check": 1800,
+  "leads": 400,
+  "sources": ["src_maps", "src_insta"],
+  "mainSource": "src_maps",
+  "intake": ["dm"],
+  "payment": ["card"],
+  "pains": ["lose_leads", "no_repeat"]
+}

@@ -25,5 +25,13 @@
   "portal": {
     "status": "open",
     "url": "https://devlarion.ru/account/"
+  },
+  "growthMap": {
+    "ai": "off",
+    "endpoint": "",
+    "turnstileSiteKey": "",
+    "handoffNote": "",
+    "guarantees": [],
+    "reviews": []
   }
 }

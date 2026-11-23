@@ -1,0 +1,14 @@
+{
+  "name": "Кухни на заказ",
+  "category": "repair",
+  "niche": "furniture",
+  "size": "team",
+  "models": ["services", "goods"],
+  "check": 250000,
+  "leads": 12,
+  "sources": ["src_avito", "src_word"],
+  "mainSource": "src_avito",
+  "intake": ["table"],
+  "payment": ["card"],
+  "pains": ["manual"]
+}

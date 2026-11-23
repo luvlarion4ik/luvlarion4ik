@@ -1,0 +1,13 @@
+{
+  "name": "Онлайн-курс",
+  "category": "education",
+  "niche": "online_school",
+  "size": "solo",
+  "models": ["digital"],
+  "check": 15000,
+  "revenueBand": 1,
+  "sources": ["src_tg"],
+  "mainSource": "src_tg",
+  "payment": ["card"],
+  "wishes": ["app"]
+}

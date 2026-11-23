@@ -13,6 +13,139 @@
     set(key, value) { try { sessionStorage.setItem(key, value); } catch { /* демо работает и без хранилища */ } },
   };
 
+  function initSavedMaps(section) {
+    const { labels, categories, stages } = JSON.parse(section.querySelector('[data-pt-maps-config]').textContent);
+    const list = section.querySelector('[data-pt-maps-list]');
+    const empty = section.querySelector('[data-pt-maps-empty]');
+    const error = section.querySelector('[data-pt-maps-error]');
+    const importButton = section.querySelector('[data-pt-maps-import-button]');
+    const importInput = section.querySelector('[data-pt-maps-import]');
+    const rootUrl = section.dataset.mapUrl;
+    const mapsKey = 'devlarion-growth-maps';
+    const activeKey = 'devlarion-growth-map-active';
+    const format = 'devlarion.growthmap';
+    const fileLimit = 400000;
+    const dateFormat = new Intl.DateTimeFormat(ru ? 'ru-RU' : 'en', { dateStyle: 'medium' });
+    const stageNames = { src: 'traffic', ent: 'entry', cap: 'capture', proc: 'process', pay: 'pay', del: 'deliver', ret: 'retain' };
+
+    function feedback(key) {
+      error.hidden = !key;
+      error.textContent = key ? labels[key] : '';
+    }
+
+    function documents() {
+      const raw = localStorage.getItem(mapsKey);
+      try {
+        const maps = JSON.parse(raw);
+        return Array.isArray(maps) ? maps : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function create(tag, css, text) {
+      const node = document.createElement(tag);
+      if (css) node.className = css;
+      if (text) node.textContent = text;
+      return node;
+    }
+
+    function mapRow(map) {
+      const { brief, active, variants } = map;
+      const name = typeof brief.name === 'string' && brief.name.trim() ? brief.name.trim().slice(0, 60) : labels['intro.eyebrow'];
+      const row = create('li', 'pt-maps-row');
+      const description = create('div', 'pt-maps-description');
+      const meta = create('p', 'pt-maps-meta');
+      const timestamp = new Date(map.updatedAt);
+      const when = Number.isFinite(timestamp.getTime()) ? labels['cab.saved'].replace('{date}', dateFormat.format(timestamp)) : '';
+      const industry = Object.hasOwn(categories, brief.category) ? categories[brief.category] : categories.other;
+      meta.textContent = [industry, labels['v.' + active], when].filter(Boolean).join(' · ');
+      description.append(create('strong', '', name), meta);
+
+      const preview = create('span', 'pt-maps-preview');
+      preview.setAttribute('aria-hidden', 'true');
+      const nodes = variants?.[active]?.nodes;
+      const occupied = new Set(Array.isArray(nodes) ? nodes
+        .filter(node => typeof node?.block === 'string').map(node => stageNames[node.block.split('_', 1)[0]]) : []);
+      for (const [stage, color] of stages) {
+        const dot = create('i', occupied.has(stage) ? 'is-filled' : '');
+        dot.style.setProperty('--dot-color', color);
+        preview.append(dot);
+      }
+
+      const actions = create('div', 'pt-maps-controls');
+      const open = create('a', 'pt-btn', labels['cab.open']);
+      open.href = rootUrl + '#open=' + map.id;
+      open.setAttribute('aria-label', labels['cab.open'] + ' ' + name);
+      const remove = create('button', 'pt-btn pt-maps-remove', labels['cab.delete']);
+      remove.type = 'button';
+      remove.setAttribute('aria-label', labels['cab.delete'] + ' ' + name);
+      remove.addEventListener('click', () => {
+        if (!window.confirm(labels['cab.delete.ask'].replace('{name}', () => name))) return;
+        try {
+          const maps = documents().filter(item => item?.id !== map.id);
+          localStorage.setItem(mapsKey, JSON.stringify(maps));
+          if (localStorage.getItem(activeKey) === map.id) localStorage.removeItem(activeKey);
+          feedback();
+          render();
+          (list.querySelector('a') ?? empty.querySelector('a')).focus();
+        } catch {
+          feedback('act.storage.off');
+        }
+      });
+      actions.append(open, remove);
+      row.append(preview, description, actions);
+      return row;
+    }
+
+    function render() {
+      let maps = [];
+      try {
+        maps = documents().filter(map => map?.saved === true && map.format === format &&
+          typeof map.id === 'string' && /^[\w-]{1,100}$/.test(map.id) && map.brief &&
+          ['now', 'base', 'boost', 'auto'].includes(map.active)).slice(0, 10);
+      } catch {
+        feedback('act.storage.off');
+      }
+      list.replaceChildren(...maps.map(mapRow));
+      list.hidden = !maps.length;
+      empty.hidden = !!maps.length;
+    }
+
+    importButton.addEventListener('click', () => importInput.click());
+    importInput.addEventListener('change', async () => {
+      const file = importInput.files[0];
+      importInput.value = '';
+      if (!file) return;
+      feedback();
+      try {
+        if (file.size > fileLimit) throw new Error('invalid');
+        const raw = await file.text();
+        const map = JSON.parse(raw);
+        if (map?.format !== format || !map.brief) throw new Error('invalid');
+        if (map.version > 1) throw new Error('newer');
+        const bytes = new TextEncoder().encode(raw);
+        let binary = '';
+        for (let offset = 0; offset < bytes.length; offset += 8192) {
+          binary += String.fromCharCode(...bytes.subarray(offset, offset + 8192));
+        }
+        const encoded = btoa(binary).replaceAll('+', '-').replaceAll('/', '_').replace(/=+$/, '');
+        location.assign(rootUrl + '#map=u.' + encoded);
+      } catch (problem) {
+        feedback(problem.message === 'newer' ? 'act.newer' : 'act.import.bad');
+      }
+    });
+
+    window.addEventListener('storage', event => {
+      if (event.key === mapsKey || event.key === null) render();
+    });
+    window.addEventListener('pageshow', event => { if (event.persisted) render(); });
+    render();
+  }
+
+  const savedMaps = app.querySelector('[data-pt-maps]');
+  if (savedMaps) initSavedMaps(savedMaps);
+
   // заставка с приветствием: один раз за сессию
   const splash = app.querySelector('[data-pt-splash]');
   if (splash) {

@@ -37,11 +37,15 @@ if (/^[1-9]\d+$/.test(counter)) {
     document.querySelector('[data-operator]').append((ru?'Оператор — ':'Operator — ')+settings.privacyOperator+' · ',contact);
   }
   const choiceKey='devlarion-analytics';
+  const privateMap = document.body.hasAttribute('data-local-growth-maps');
   function load(){
     window.ym=window.ym || function(){(window.ym.a=window.ym.a || []).push(arguments);};
     window.ym.l=Date.now();
     const script=document.createElement('script');script.async=true;script.src='https://mc.yandex.ru/metrika/tag.js';document.head.append(script);
-    window.ym(Number(counter),'init',{webvisor:true,clickmap:true,trackLinks:true,accurateTrackBounce:true});
+    window.ym(Number(counter),'init',privateMap
+      ? {defer:true,webvisor:false,clickmap:false,trackLinks:false,trackHash:false,accurateTrackBounce:false}
+      : {webvisor:true,clickmap:true,trackLinks:true,accurateTrackBounce:true});
+    if(privateMap)window.ym(Number(counter),'hit',location.origin+location.pathname);
     const goal=name=>window.ym(Number(counter),'reachGoal',name);
     document.addEventListener('click',event=>{const a=event.target.closest('[data-goal],[data-brief]');if(a)goal(a.dataset.goal || 'telegram');});
     document.addEventListener('bureau-goal',event=>goal(event.detail));
@@ -51,7 +55,9 @@ if (/^[1-9]\d+$/.test(counter)) {
   function promptConsent(){
     document.querySelector('[data-consent]')?.remove();
     const box=document.createElement('div');box.dataset.consent='';box.className='notice';box.setAttribute('role','region');
-    box.textContent=ru?'Разрешить Яндекс Метрику и запись сеанса Вебвизором? ':'Allow Yandex Metrica analytics and Webvisor session recording? ';
+    box.textContent=privateMap
+      ? (ru?'Разрешить Яндекс Метрику? ':'Allow Yandex Metrica analytics? ')
+      : (ru?'Разрешить Яндекс Метрику и запись сеанса Вебвизором? ':'Allow Yandex Metrica analytics and Webvisor session recording? ');
     const policy=document.createElement('a');policy.href=document.body.dataset.privacyUrl;policy.textContent=ru?'Подробнее':'Privacy';box.append(policy);
     for(const [value,label] of [['yes',ru?'Разрешить':'Allow'],['no',ru?'Отклонить':'Decline']]){
       const button=document.createElement('button');button.textContent=label;button.onclick=()=>{try{localStorage.setItem(choiceKey,value);}catch{}box.remove();if(value==='yes' && saved!=='yes')load();if(value==='no' && saved==='yes')location.reload();saved=value;};box.append(button);

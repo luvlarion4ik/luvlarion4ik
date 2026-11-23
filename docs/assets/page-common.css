@@ -81,6 +81,8 @@ footer{padding:2rem 0}.fine{margin-top:1.5rem;flex-wrap:wrap}.sub{padding:4rem 0
 .exhibit-foot{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem 1rem;justify-content:space-between;border-top:1px solid var(--rule);padding-top:.75rem;margin-top:auto}.exhibit-foot .link{font-weight:600}
 @media(prefers-reduced-motion:no-preference){.case-window,.service-mark svg{transition:transform .22s ease-out}.case-cover:is(:hover,:focus-visible) .case-window{transform:translateY(-2px)}.service-grid article:hover .service-mark svg{transform:translateY(-1px)}}
 @media(max-width:740px){.work-gallery{grid-template-columns:1fr;gap:2.3rem}}
+.bar nav a,.tools .button{white-space:nowrap}
+@media(min-width:951px) and (max-width:1180px){.bar{gap:.9rem}.bar nav{gap:.95rem;flex-wrap:nowrap;font-size:.82rem}.tools{gap:.6rem;flex-shrink:0}.tools .button{padding-inline:.8rem;font-size:.82rem}}
 
 .underlined { text-decoration: underline; text-underline-offset: .22em; }
 .region-control { position: relative; }

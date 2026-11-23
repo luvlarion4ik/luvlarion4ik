@@ -81,6 +81,8 @@ footer{padding:2rem 0}.fine{margin-top:1.5rem;flex-wrap:wrap}.sub{padding:4rem 0
 .exhibit-foot{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem 1rem;justify-content:space-between;border-top:1px solid var(--rule);padding-top:.75rem;margin-top:auto}.exhibit-foot .link{font-weight:600}
 @media(prefers-reduced-motion:no-preference){.case-window,.service-mark svg{transition:transform .22s ease-out}.case-cover:is(:hover,:focus-visible) .case-window{transform:translateY(-2px)}.service-grid article:hover .service-mark svg{transform:translateY(-1px)}}
 @media(max-width:740px){.work-gallery{grid-template-columns:1fr;gap:2.3rem}}
+.bar nav a,.tools .button{white-space:nowrap}
+@media(min-width:951px) and (max-width:1180px){.bar{gap:.9rem}.bar nav{gap:.95rem;flex-wrap:nowrap;font-size:.82rem}.tools{gap:.6rem;flex-shrink:0}.tools .button{padding-inline:.8rem;font-size:.82rem}}
 
 .underlined { text-decoration: underline; text-underline-offset: .22em; }
 .region-control { position: relative; }
@@ -1684,6 +1686,29 @@ footer{padding:2rem 0}.fine{margin-top:1.5rem;flex-wrap:wrap}.sub{padding:4rem 0
 @media (min-width:1000px) {
   #work > .work-gallery {grid-template-columns:repeat(3,minmax(0,1fr))}
 }
+
+.gm-teaser {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  align-items: center;
+  gap: clamp(1.25rem, 5vw, 4rem);
+}
+.gm-teaser p { max-width: 52ch; }
+.gm-teaser-art {
+  display: grid;
+  place-items: center;
+  min-height: 154px;
+  padding: clamp(.55rem, 2vw, 1.5rem);
+  border: 1px solid var(--rule);
+  border-radius: .75rem;
+  background: radial-gradient(ellipse at 50% 0, color-mix(in oklab, var(--night) 88%, var(--accent)), var(--night));
+}
+.gm-teaser .gm-preview-art { display: block; width: 100%; height: auto; }
+.gm-teaser .gm-preview-art text { font-size: 10px; }
+.gm-teaser .gm-preview-flow { animation: gm-teaser-flow 2.4s linear infinite; }
+@keyframes gm-teaser-flow { to { stroke-dashoffset: -36; } }
+@media (max-width: 680px) { .gm-teaser { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .gm-teaser .gm-preview-flow { animation: none; } }
 
 .wordmark {
   --logo-height: 33px;
