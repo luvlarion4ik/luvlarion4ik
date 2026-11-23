@@ -1,21 +1,161 @@
 {
-  "_note": "Официальные изображения производителей (подпись «Фото: …» через CREDIT в content/shop.mjs) и кадры, сгенерированные через Codex CLI по референсам. Скачано 22.11.2026.",
-  "mac-mini-1.jpg": { "credit": "Apple", "page_url": "https://www.apple.com/newsroom/2026/08/apple-unveils-a-more-powerful-mac-mini-featuring-the-all-new-m6-and-m5-pro/", "image_url": "https://www.apple.com/newsroom/images/2026/08/apple-unveils-a-more-powerful-mac-mini-featuring-the-all-new-m6-and-m5-pro/article/Apple-Mac-mini-hero-260825.zip" },
-  "mac-mini-2.jpg": { "credit": "Apple", "page_url": "https://www.apple.com/newsroom/2026/08/apple-unveils-a-more-powerful-mac-mini-featuring-the-all-new-m6-and-m5-pro/", "image_url": "https://www.apple.com/newsroom/images/2026/08/apple-unveils-a-more-powerful-mac-mini-featuring-the-all-new-m6-and-m5-pro/article/Apple-Mac-mini-agentic-AI-260825.zip" },
-  "mac-mini-3.jpg": { "credit": "Apple", "page_url": "https://www.apple.com/newsroom/2026/08/apple-unveils-a-more-powerful-mac-mini-featuring-the-all-new-m6-and-m5-pro/", "image_url": "https://www.apple.com/newsroom/images/2026/08/apple-unveils-a-more-powerful-mac-mini-featuring-the-all-new-m6-and-m5-pro/article/Apple-Mac-mini-rear-ports-260825.zip" },
-  "mac-mini-4.jpg": { "credit": null, "generated": "Codex CLI, референсы: Apple-Mac-mini-hero-260825, MikroTik 1825_lg" },
-  "mac-mini-5.jpg": { "credit": null, "generated": "Codex CLI, референс: Apple-Mac-mini-hero-260825" },
-  "mac-studio-1.jpg": { "credit": "Apple", "page_url": "https://www.apple.com/newsroom/2026/08/apple-introduces-new-mac-studio-with-m5-max-and-m5-ultra/", "image_url": "https://www.apple.com/newsroom/images/2026/08/apple-introduces-new-mac-studio-with-m5-max-and-m5-ultra/article/Apple-Mac-Studio-hero-260825.zip" },
-  "mac-studio-2.jpg": { "credit": "Apple", "page_url": "https://www.apple.com/newsroom/2026/08/apple-introduces-new-mac-studio-with-m5-max-and-m5-ultra/", "image_url": "https://www.apple.com/newsroom/images/2026/08/apple-introduces-new-mac-studio-with-m5-max-and-m5-ultra/article/Apple-Mac-Studio-LM-Studio-and-MATLAB-260825.zip" },
-  "mac-studio-3.jpg": { "credit": "Apple", "page_url": "https://www.apple.com/newsroom/2026/08/apple-introduces-new-mac-studio-with-m5-max-and-m5-ultra/", "image_url": "https://www.apple.com/newsroom/images/2026/08/apple-introduces-new-mac-studio-with-m5-max-and-m5-ultra/article/Apple-Mac-Studio-rear-ports-260825.zip" },
-  "mac-studio-4.jpg": { "credit": null, "generated": "Codex CLI, референсы: Apple-Mac-Studio-hero-260825, Synology DS925+, MikroTik 1825_lg" },
-  "ds925-1.jpg": { "credit": "Synology", "page_url": "https://www.synology.com/en-global/products/DS925+", "image_url": "https://www.synology.com/api/products/getPhoto?product=DS925%2B&type=img&sort=2" },
-  "ds925-2.jpg": { "credit": "Synology", "page_url": "https://www.synology.com/en-global/products/DS925+", "image_url": "https://www.synology.com/api/products/getPhoto?product=DS925%2B&type=img&sort=1" },
-  "ds925-3.jpg": { "credit": "Synology", "page_url": "https://www.synology.com/en-global/products/DS925+", "image_url": "https://www.synology.com/api/products/getPhoto?product=DS925%2B&type=img&sort=4" },
-  "ds925-4.jpg": { "credit": null, "generated": "Codex CLI, референс: Synology DS925+ (sort=2)" },
-  "crs312-1.jpg": { "credit": "MikroTik", "page_url": "https://mikrotik.com/product/crs312_4c_8xg_rm", "image_url": "https://cdn.mikrotik.com/web-assets/rb_images/1825_lg.webp" },
-  "../pages/mac-mini.jpg": { "credit": "Apple", "from": "mac-mini-1 (кадрирование 4:3)" },
-  "../pages/mac-studio.jpg": { "credit": "Apple", "from": "mac-studio-1 (кадрирование 4:3)" },
-  "../pages/ds925.jpg": { "credit": "Synology", "from": "ds925-1" },
-  "../pages/crs312.jpg": { "credit": "MikroTik", "from": "crs312-1" }
+ "_note": "Официальные изображения производителей (подпись «Фото: …» через CREDIT в content/shop.mjs) и кадры, сгенерированные через Codex CLI по референсам. Скачано 22.11.2026.",
+ "mac-mini-1.jpg": {
+  "credit": "Apple",
+  "page_url": "https://www.apple.com/newsroom/2026/08/apple-unveils-a-more-powerful-mac-mini-featuring-the-all-new-m6-and-m5-pro/",
+  "image_url": "https://www.apple.com/newsroom/images/2026/08/apple-unveils-a-more-powerful-mac-mini-featuring-the-all-new-m6-and-m5-pro/article/Apple-Mac-mini-hero-260825.zip"
+ },
+ "mac-mini-2.jpg": {
+  "credit": "Apple",
+  "page_url": "https://www.apple.com/newsroom/2026/08/apple-unveils-a-more-powerful-mac-mini-featuring-the-all-new-m6-and-m5-pro/",
+  "image_url": "https://www.apple.com/newsroom/images/2026/08/apple-unveils-a-more-powerful-mac-mini-featuring-the-all-new-m6-and-m5-pro/article/Apple-Mac-mini-agentic-AI-260825.zip"
+ },
+ "mac-mini-3.jpg": {
+  "credit": "Apple",
+  "page_url": "https://www.apple.com/newsroom/2026/08/apple-unveils-a-more-powerful-mac-mini-featuring-the-all-new-m6-and-m5-pro/",
+  "image_url": "https://www.apple.com/newsroom/images/2026/08/apple-unveils-a-more-powerful-mac-mini-featuring-the-all-new-m6-and-m5-pro/article/Apple-Mac-mini-rear-ports-260825.zip"
+ },
+ "mac-mini-4.jpg": {
+  "credit": null,
+  "generated": "Codex CLI, референсы: Apple-Mac-mini-hero-260825, MikroTik 1825_lg"
+ },
+ "mac-mini-5.jpg": {
+  "credit": null,
+  "generated": "Codex CLI, референс: Apple-Mac-mini-hero-260825"
+ },
+ "mac-studio-1.jpg": {
+  "credit": "Apple",
+  "page_url": "https://www.apple.com/newsroom/2026/08/apple-introduces-new-mac-studio-with-m5-max-and-m5-ultra/",
+  "image_url": "https://www.apple.com/newsroom/images/2026/08/apple-introduces-new-mac-studio-with-m5-max-and-m5-ultra/article/Apple-Mac-Studio-hero-260825.zip"
+ },
+ "mac-studio-2.jpg": {
+  "credit": "Apple",
+  "page_url": "https://www.apple.com/newsroom/2026/08/apple-introduces-new-mac-studio-with-m5-max-and-m5-ultra/",
+  "image_url": "https://www.apple.com/newsroom/images/2026/08/apple-introduces-new-mac-studio-with-m5-max-and-m5-ultra/article/Apple-Mac-Studio-LM-Studio-and-MATLAB-260825.zip"
+ },
+ "mac-studio-3.jpg": {
+  "credit": "Apple",
+  "page_url": "https://www.apple.com/newsroom/2026/08/apple-introduces-new-mac-studio-with-m5-max-and-m5-ultra/",
+  "image_url": "https://www.apple.com/newsroom/images/2026/08/apple-introduces-new-mac-studio-with-m5-max-and-m5-ultra/article/Apple-Mac-Studio-rear-ports-260825.zip"
+ },
+ "mac-studio-4.jpg": {
+  "credit": null,
+  "generated": "Codex CLI, референсы: Apple-Mac-Studio-hero-260825, Synology DS925+, MikroTik 1825_lg"
+ },
+ "ds925-1.jpg": {
+  "credit": "Synology",
+  "page_url": "https://www.synology.com/en-global/products/DS925+",
+  "image_url": "https://www.synology.com/api/products/getPhoto?product=DS925%2B&type=img&sort=2"
+ },
+ "ds925-2.jpg": {
+  "credit": "Synology",
+  "page_url": "https://www.synology.com/en-global/products/DS925+",
+  "image_url": "https://www.synology.com/api/products/getPhoto?product=DS925%2B&type=img&sort=1"
+ },
+ "ds925-3.jpg": {
+  "credit": "Synology",
+  "page_url": "https://www.synology.com/en-global/products/DS925+",
+  "image_url": "https://www.synology.com/api/products/getPhoto?product=DS925%2B&type=img&sort=4"
+ },
+ "ds925-4.jpg": {
+  "credit": null,
+  "generated": "Codex CLI, референс: Synology DS925+ (sort=2)"
+ },
+ "crs312-1.jpg": {
+  "credit": "MikroTik",
+  "page_url": "https://mikrotik.com/product/crs312_4c_8xg_rm",
+  "image_url": "https://cdn.mikrotik.com/web-assets/rb_images/1825_lg.webp"
+ },
+ "../pages/mac-mini.jpg": {
+  "credit": "Apple",
+  "from": "mac-mini-1 (кадрирование 4:3)"
+ },
+ "../pages/mac-studio.jpg": {
+  "credit": "Apple",
+  "from": "mac-studio-1 (кадрирование 4:3)"
+ },
+ "../pages/ds925.jpg": {
+  "credit": "Synology",
+  "from": "ds925-1"
+ },
+ "../pages/crs312.jpg": {
+  "credit": "MikroTik",
+  "from": "crs312-1"
+ },
+ "macbook-air-1.jpg": {
+  "credit": "Apple",
+  "page_url": "https://www.apple.com/newsroom/2026/03/apple-introduces-the-new-macbook-air-with-m5/",
+  "image": "Apple-MacBook-Air-13-inch-and-15-inch-260303",
+  "downloaded": "2026-11-23"
+ },
+ "macbook-air-2.jpg": {
+  "credit": "Apple",
+  "page_url": "https://www.apple.com/newsroom/2026/03/apple-introduces-the-new-macbook-air-with-m5/",
+  "image": "Apple-MacBook-Air-Desk-View-260303",
+  "downloaded": "2026-11-23"
+ },
+ "macbook-air-3.jpg": {
+  "credit": "Apple",
+  "page_url": "https://www.apple.com/newsroom/2026/03/apple-introduces-the-new-macbook-air-with-m5/",
+  "image": "Apple-MacBook-Air-Liquid-Retina-display-260303",
+  "downloaded": "2026-11-23"
+ },
+ "macbook-pro-1.jpg": {
+  "credit": "Apple",
+  "page_url": "https://www.apple.com/newsroom/2026/10/apple-unveils-groundbreaking-macbook-pro-with-proled-xdr-display/",
+  "image": "Apple-MacBook-Pro-with-PROLED-XDR-Display-Cinema-4D-261028",
+  "downloaded": "2026-11-23"
+ },
+ "macbook-pro-2.jpg": {
+  "credit": "Apple",
+  "page_url": "https://www.apple.com/newsroom/2026/10/apple-unveils-groundbreaking-macbook-pro-with-proled-xdr-display/",
+  "image": "Apple-MacBook-Pro-with-PROLED-XDR-Display-Adobe-Photoshop-261028",
+  "downloaded": "2026-11-23"
+ },
+ "macbook-pro-3.jpg": {
+  "credit": "Apple",
+  "page_url": "https://www.apple.com/newsroom/2026/10/apple-unveils-groundbreaking-macbook-pro-with-proled-xdr-display/",
+  "image": "Apple-MacBook-Pro-with-PROLED-XDR-Display-Dynamic-Island-Keynote-and-Siri-AI-261028",
+  "downloaded": "2026-11-23"
+ },
+ "macbook-air-gen.jpg": {
+  "credit": null,
+  "generated": "Codex CLI, 23.11.2026, по сгенерированной обложке и официальным референсам"
+ },
+ "macbook-pro-gen.jpg": {
+  "credit": null,
+  "generated": "Codex CLI, 23.11.2026, по сгенерированной обложке и официальным референсам"
+ },
+ "mac-studio-gen.jpg": {
+  "credit": null,
+  "generated": "Codex CLI, 23.11.2026, по сгенерированной обложке и официальным референсам"
+ },
+ "crs312-gen.jpg": {
+  "credit": null,
+  "generated": "Codex CLI, 23.11.2026, по сгенерированной обложке и официальным референсам"
+ },
+ "../pages/mac-mini-cover.jpg": {
+  "credit": null,
+  "generated": "Codex CLI, 23.11.2026, обложка в стиле сайта по официальным фото производителя"
+ },
+ "../pages/mac-studio-cover.jpg": {
+  "credit": null,
+  "generated": "Codex CLI, 23.11.2026, обложка в стиле сайта по официальным фото производителя"
+ },
+ "../pages/macbook-air-cover.jpg": {
+  "credit": null,
+  "generated": "Codex CLI, 23.11.2026, обложка в стиле сайта по официальным фото производителя"
+ },
+ "../pages/macbook-pro-cover.jpg": {
+  "credit": null,
+  "generated": "Codex CLI, 23.11.2026, обложка в стиле сайта по официальным фото производителя"
+ },
+ "../pages/ds925-cover.jpg": {
+  "credit": null,
+  "generated": "Codex CLI, 23.11.2026, обложка в стиле сайта по официальным фото производителя"
+ },
+ "../pages/crs312-cover.jpg": {
+  "credit": null,
+  "generated": "Codex CLI, 23.11.2026, обложка в стиле сайта по официальным фото производителя"
+ }
 }

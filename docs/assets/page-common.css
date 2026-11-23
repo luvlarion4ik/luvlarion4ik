@@ -1441,6 +1441,80 @@ footer{padding:2rem 0}.fine{margin-top:1.5rem;flex-wrap:wrap}.sub{padding:4rem 0
 .hw-pick-img.is-cut img {object-fit:contain;padding:.5rem}
 .hw-pick:hover .hw-pick-img img {transform:scale(1.05)}
 
+/* ---------- Магазин v2: спокойный каталог корпоративного уровня ---------- */
+.shop .shop-toolbar {position:sticky;top:var(--header-h,73px);z-index:30;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.8rem 1.5rem;margin:0 0 2rem;padding:.75rem 0;background:color-mix(in srgb,var(--paper) 94%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+.shop .shop-filters {display:flex;flex-wrap:nowrap;gap:1.4rem;margin:0;overflow-x:auto;scrollbar-width:none}
+.shop .shop-filters::-webkit-scrollbar {display:none}
+.shop .shop-filters button {flex:none;padding:.45rem 0;border:0;border-bottom:2px solid transparent;border-radius:0;background:none;color:var(--sub);font-weight:600;font-size:.95rem;white-space:nowrap}
+.shop .shop-filters button:hover {color:var(--ink);border-color:var(--rule)}
+.shop .shop-filters button[aria-pressed=true] {background:none;color:var(--ink);border-color:var(--accent)}
+.shop .shop-filters button[aria-pressed=true]:hover {color:var(--ink)}
+.shop-tools {display:flex;gap:.6rem;align-items:center;flex:0 1 420px}
+.shop .shop-search {flex:1 1 220px}
+.shop .shop-search input {min-height:42px;border-radius:10px;background:var(--surface)}
+.shop .shop-sort select {min-height:42px;border-radius:10px;padding:.45rem .8rem}
+.shop-section {margin:0 0 3.5rem}
+.shop-section[hidden] {display:none}
+.shop-section-head {margin:0 0 1.6rem;max-width:46rem}
+.shop-kicker {margin:0 0 .4rem;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.shop-section-head h2 {margin:0;font-size:clamp(1.6rem,2.8vw,2.3rem);line-height:1.15}
+.shop-group {margin:0 0 2.6rem}
+.shop-group[hidden] {display:none}
+.shop-group-head {display:flex;flex-wrap:wrap;align-items:baseline;gap:.3rem 1.2rem;margin:0 0 1rem;padding-bottom:.7rem;border-bottom:1px solid var(--rule)}
+.shop-group:has(.shop-list-rows) .shop-group-head {margin-bottom:0}
+.shop-group-head h3 {margin:0;font-size:1.3rem}
+.shop-group-head p {margin:0;color:var(--sub);font-size:.92rem}
+.shop .shop-grid-hw {grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:1.2rem}
+/* Карточка техники */
+.shop .shop-hw {padding:0;gap:0;overflow:hidden;border-radius:14px;background:var(--paper);border:1px solid var(--rule);box-shadow:none}
+.shop .shop-hw:hover {transform:none;border-color:color-mix(in srgb,var(--ink) 28%,var(--rule));box-shadow:0 20px 44px -30px rgba(0,0,0,.45)}
+.shop .shop-hw .shop-art {margin:0;border-radius:0;border-bottom:1px solid var(--rule)}
+.shop .shop-hw .shop-art-photo img.is-full {aspect-ratio:4/3;object-fit:cover}
+.shop .shop-item:hover .shop-art-photo img {transform:scale(1.03)}
+.shop .shop-tag {top:.7rem;left:.7rem;border-radius:6px;font-size:.66rem;background:rgba(10,13,18,.62);color:#e9edf1;border:0;backdrop-filter:blur(6px)}
+.shop .shop-hw .shop-body {padding:1.1rem 1.2rem 1.25rem;gap:.55rem}
+.shop-vendor {margin:0;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sub)}
+.shop .shop-hw h3 {font-size:1.22rem;line-height:1.25}
+.shop .shop-hw .shop-text {font-size:.9rem}
+.shop .shop-hw .shop-specs {display:grid;grid-template-columns:1fr 1fr;gap:0 1rem;margin:.2rem 0 .1rem}
+.shop .shop-hw .shop-specs li {padding:.42rem 0;border:0;border-top:1px solid var(--rule);border-radius:0;background:none;font-size:.8rem;line-height:1.35;color:var(--ink)}
+.shop .shop-seg button {border-radius:8px;background:transparent}
+.shop .shop-seg button[aria-pressed=true] {background:var(--ink);border-color:var(--ink);color:var(--paper);font-weight:600}
+.shop .shop-chip-note {padding:.5rem .65rem;border-left:2px solid var(--accent);background:var(--surface);border-radius:0 8px 8px 0}
+.shop .shop-3d {border-radius:8px}
+.shop .shop-hw .shop-foot {gap:.45rem;padding-top:.9rem;border-top:1px solid var(--rule)}
+.shop .shop-hw .shop-foot .audience-price {font-size:1.45rem;font-weight:700}
+.shop .shop-quote {border-radius:6px;background:var(--surface)}
+.shop .shop-add {min-height:44px;border-radius:10px;background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.shop .shop-add:hover {background:var(--accent);border-color:var(--accent)}
+.shop .shop-qty {border-radius:10px}
+/* Прайс-лист услуг */
+.shop-list-rows {}
+.shop-list-rows[hidden] {display:none}
+.shop .shop-row {padding:1rem .2rem;border:0;border-bottom:1px solid var(--rule);border-radius:0;background:none;box-shadow:none}
+.shop .shop-row:hover {transform:none;box-shadow:none;background:color-mix(in srgb,var(--surface) 60%,transparent)}
+.shop .shop-row[data-in-cart] {border-color:var(--rule);background:color-mix(in srgb,var(--accent) 7%,transparent)}
+.shop .shop-row .shop-body {display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:2rem;row-gap:.2rem;align-items:center}
+.shop .shop-row .shop-body > * {grid-column:1}
+.shop .shop-row h3 {font-size:1.02rem}
+.shop .shop-row .shop-text {font-size:.88rem}
+.shop .shop-row .shop-foot {grid-column:2;grid-row:1 / span 2;display:grid;grid-template-columns:9.5rem 9rem;align-items:center;gap:1rem;margin:0;padding:0;border:0}
+.shop .shop-row .shop-foot .audience-price {font-size:1.02rem;font-weight:700;text-align:right}
+.shop .shop-row .shop-add {min-height:40px;background:transparent;color:var(--ink);border:1px solid var(--rule)}
+.shop .shop-row .shop-add:hover {border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.shop .shop-row .shop-qty {min-height:40px}
+.shop .shop-row .shop-qty button {min-height:38px}
+@media (max-width:860px) {
+  .shop .shop-toolbar {position:static}
+  .shop-tools {flex:1 1 100%}
+  .shop .shop-hw .shop-specs {grid-template-columns:1fr}
+  .shop .shop-row .shop-body {grid-template-columns:1fr}
+  .shop .shop-row .shop-foot {grid-column:1;grid-row:auto;grid-template-columns:1fr auto;margin-top:.5rem}
+  .shop .shop-row .shop-foot .audience-price {text-align:left}
+}
+.shop .shop-more {border-top:1px solid var(--rule)}
+@media (max-width:860px) { .shop .shop-sort {flex:0 0 auto} .shop .shop-sort select {max-width:9.5rem} }
+
 .wordmark {
   --logo-height: 33px;
   --logo-color: #964c32;

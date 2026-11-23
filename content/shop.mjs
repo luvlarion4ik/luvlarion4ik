@@ -85,12 +85,18 @@ export const hardware = [
       { k: 'm4-16-256', chip: 'M4', ru: '16 ГБ · SSD 256 ГБ', en: '16 GB · 256 GB SSD', rub: 89900, market: [63990, 99990] },
       { k: 'm4-16-512', chip: 'M4', ru: '16 ГБ · SSD 512 ГБ', en: '16 GB · 512 GB SSD', rub: 99900, market: [77090, 92990] },
       { k: 'm4-24-512', chip: 'M4', ru: '24 ГБ · SSD 512 ГБ', en: '24 GB · 512 GB SSD', rub: 124900, market: [84990, 137990] },
+      { k: 'm4-24-1t', chip: 'M4', ru: '24 ГБ · SSD 1 ТБ', en: '24 GB · 1 TB SSD', rub: null, market: null },
+      { k: 'm4-32-2t', chip: 'M4', ru: '32 ГБ · SSD 2 ТБ', en: '32 GB · 2 TB SSD', rub: null, market: null },
       { k: 'm6-16-256', chip: 'M6', ru: '16 ГБ · SSD 256 ГБ', en: '16 GB · 256 GB SSD', rub: 134900, market: [77890, 141999] },
       { k: 'm6-16-512', chip: 'M6', ru: '16 ГБ · SSD 512 ГБ', en: '16 GB · 512 GB SSD', rub: 164900, market: [154990, 170999] },
       { k: 'm6-24-512', chip: 'M6', ru: '24 ГБ · SSD 512 ГБ', en: '24 GB · 512 GB SSD', rub: 189900, market: [158779, 199999] },
+      { k: 'm6-24-1t', chip: 'M6', ru: '24 ГБ · SSD 1 ТБ', en: '24 GB · 1 TB SSD', rub: null, market: null },
+      { k: 'm6-32-2t', chip: 'M6', ru: '32 ГБ · SSD 2 ТБ', en: '32 GB · 2 TB SSD', rub: null, market: null },
       { k: 'm5p-24-512', chip: 'M5 Pro', ru: '24 ГБ · SSD 512 ГБ', en: '24 GB · 512 GB SSD', rub: 244900, market: [158552, 249990] },
       { k: 'm5p-48-512', chip: 'M5 Pro', ru: '48 ГБ · SSD 512 ГБ', en: '48 GB · 512 GB SSD', rub: 259900, market: [254507, 255739] },
       { k: 'm5p-64-1t', chip: 'M5 Pro', ru: '64 ГБ · SSD 1 ТБ · 18/20 ядер', en: '64 GB · 1 TB SSD · 18/20 cores', rub: 384900, market: [340249, 391551] },
+      { k: 'm5p-48-1t', chip: 'M5 Pro', ru: '48 ГБ · SSD 1 ТБ', en: '48 GB · 1 TB SSD', rub: null, market: null },
+      { k: 'm5p-64-2t', chip: 'M5 Pro', ru: '64 ГБ · SSD 2 ТБ', en: '64 GB · 2 TB SSD', rub: null, market: null },
     ],
     more: { ru: [['Для кого', 'Небольшой офис или отдел: ИИ-помощник по документам, расшифровка встреч, поиск по базе знаний — без облака и без серверной.'], ['Какую версию брать', 'M4 — самый доступный вход для одного сотрудника. M6 — для одного-двух сотрудников и моделей до ~14 млрд параметров. M5 Pro с 48–64 ГБ — для команды и моделей уровня 30–70 млрд в 4 бит.'], ['Связка', 'Несколько Mac mini на M5 Pro объединяются через Thunderbolt 5 в кластер; соберём его с 10-гигабитным коммутатором.'], ['Что делаем мы', 'Поставка, настройка macOS, Ollama/LM Studio/MLX, развёртывание модели и OpenAI-совместимого API, подключение к вашим системам, гарантия на нашу работу.']], en: [['Who it is for', 'A small office or team: a document assistant, meeting transcription, knowledge-base search, with no cloud and no server room.'], ['Which version', 'M4 is the cheapest entry for one person. M6 for one or two people and models up to ~14B. M5 Pro with 48–64 GB for a team and 30–70B models in 4-bit.'], ['Linking', 'Several M5 Pro Mac minis can be clustered over Thunderbolt 5; we set it up with a 10 Gb switch.'], ['What we do', 'Supply, macOS set-up, Ollama/LM Studio/MLX, model and OpenAI-compatible API deployment, integration, warranty on our work.']] },
     ru: ['Apple Mac mini', 'Компактный и тихий компьютер для локальных ИИ-моделей: помощник по документам и базе знаний прямо в офисе.', ['Чип M4, M6 или M5 Pro', 'Единая память 16–64 ГБ', 'Ethernet 2,5 Гбит/с, Wi‑Fi 7', 'Модель и API настроены']],
@@ -155,6 +161,48 @@ export const hardware = [
     ru: ['Сервер 8× AMD Instinct MI300X', 'Альтернатива NVIDIA с 192 ГБ памяти на ускоритель — для больших моделей и inference.', ['8× MI300X 192 ГБ', '1,5 ТБ HBM3 суммарно', 'ROCm и vLLM', 'Поставка и цена по запросу']],
     en: ['8× AMD Instinct MI300X server', 'An NVIDIA alternative with 192 GB per accelerator, for large models and inference.', ['8× MI300X 192 GB', '1.5 TB HBM3 in total', 'ROCm and vLLM', 'Supply and price on request']] },
   // Инфраструктура рядом с ИИ-железом: хранилище и сеть. Цены собраны 22.11.2026.
+  // MacBook — «под запрос»: цену не показываем, только конфигурацию. Линейка на 23.11.2026:
+  // Air — M5, 13,6" и 15,3" (newsroom 03.03.2026, SSD от 512 ГБ до 4 ТБ);
+  // Pro — 14" на M6 (Liquid Retina XDR), 14"/16" на M5 Pro и M5 Max (Liquid Retina XDR или PROLED XDR с Touch, newsroom 28.10.2026).
+  { id: 'macbook-air', mode: 'buy', art: 'spark-dark', rub: null, market: null,
+    sources: { date: '2026-11-23', urls: ['https://www.apple.com/newsroom/2026/03/apple-introduces-the-new-macbook-air-with-m5/'] },
+    opts: {
+      groups: [
+        ['chip', ['Чип', 'Chip'], [['M5', 'M5', 'M5']]],
+        ['size', ['Диагональ', 'Screen'], [['13', '13,6″', '13.6″'], ['15', '15,3″', '15.3″']]],
+        ['mem', ['Память', 'Memory'], [['16', '16 ГБ', '16 GB'], ['24', '24 ГБ', '24 GB'], ['32', '32 ГБ', '32 GB']]],
+        ['ssd', ['SSD', 'SSD'], [['512', '512 ГБ', '512 GB'], ['1t', '1 ТБ', '1 TB'], ['2t', '2 ТБ', '2 TB'], ['4t', '4 ТБ', '4 TB']]],
+      ],
+      allow: {},
+      notes: { M5: { ru: 'M5: 10 ядер CPU, до 10 ядер GPU с нейроускорителями, 153 ГБ/с. Без вентилятора — полная тишина.', en: 'M5: 10-core CPU, up to 10-core GPU with Neural Accelerators, 153 GB/s. Fanless and silent.' } },
+    },
+    more: { ru: [['Для кого', 'Руководитель, менеджер, юрист, аналитик: документы, переписка и ИИ-помощник в дороге.'], ['Как выбрать', '13,6″ — лёгкий и компактный, 15,3″ — больше места для таблиц. 24–32 ГБ памяти — если нужны локальные ИИ-модели.'], ['Что делаем мы', 'Поставка, настройка под вашу компанию: учётные записи, шифрование диска, VPN, офисные программы, локальный ИИ-помощник.']], en: [['Who it is for', 'Executives, managers, lawyers, analysts: documents, mail and an AI assistant on the go.'], ['How to choose', '13.6″ is light and compact, 15.3″ gives more room for spreadsheets. 24–32 GB if you want local AI models.'], ['What we do', 'Supply and company set-up: accounts, disk encryption, VPN, office apps, a local AI assistant.']] },
+    ru: ['Apple MacBook Air', 'Лёгкий и бесшумный ноутбук для работы и ИИ-помощника. Соберём конфигурацию и назовём цену под запрос.', ['Чип M5', 'Экран 13,6″ или 15,3″', 'Память 16–32 ГБ', 'SSD до 4 ТБ']],
+    en: ['Apple MacBook Air', 'A light, silent laptop for work and an AI assistant. We put the configuration together and quote on request.', ['M5 chip', '13.6″ or 15.3″ screen', '16–32 GB memory', 'Up to 4 TB SSD']] },
+  { id: 'macbook-pro', mode: 'buy', art: 'spark-dark', rub: null, market: null,
+    sources: { date: '2026-11-23', urls: ['https://www.apple.com/newsroom/2026/10/apple-unveils-groundbreaking-macbook-pro-with-proled-xdr-display/', 'https://support.apple.com/en-us/126319'] },
+    opts: {
+      groups: [
+        ['chip', ['Чип', 'Chip'], [['M6', 'M6', 'M6'], ['M5 Pro', 'M5 Pro', 'M5 Pro'], ['M5 Max', 'M5 Max', 'M5 Max']]],
+        ['size', ['Диагональ', 'Screen'], [['14', '14,2″', '14.2″'], ['16', '16,2″', '16.2″']]],
+        ['screen', ['Экран', 'Display'], [['xdr', 'Liquid Retina XDR', 'Liquid Retina XDR'], ['proled', 'PROLED XDR, сенсорный', 'PROLED XDR, touch']]],
+        ['mem', ['Память', 'Memory'], [['16', '16 ГБ', '16 GB'], ['24', '24 ГБ', '24 GB'], ['32', '32 ГБ', '32 GB'], ['36', '36 ГБ', '36 GB'], ['48', '48 ГБ', '48 GB'], ['64', '64 ГБ', '64 GB'], ['128', '128 ГБ', '128 GB']]],
+        ['ssd', ['SSD', 'SSD'], [['512', '512 ГБ', '512 GB'], ['1t', '1 ТБ', '1 TB'], ['2t', '2 ТБ', '2 TB'], ['4t', '4 ТБ', '4 TB'], ['8t', '8 ТБ', '8 TB']]],
+      ],
+      allow: {
+        M6: { size: ['14'], screen: ['xdr'], mem: ['16', '24', '32'], ssd: ['512', '1t', '2t', '4t'] },
+        'M5 Pro': { mem: ['24', '48', '64'], ssd: ['512', '1t', '2t', '4t', '8t'] },
+        'M5 Max': { mem: ['36', '48', '64', '128'], ssd: ['1t', '2t', '4t', '8t'] },
+      },
+      notes: {
+        M6: { ru: 'M6: только 14″ с Liquid Retina XDR. Для офисной работы, разработки и моделей до ~14 млрд параметров.', en: 'M6: 14″ with Liquid Retina XDR only. For office work, development and models up to ~14B parameters.' },
+        'M5 Pro': { ru: 'M5 Pro: до 64 ГБ памяти, Thunderbolt 5, до трёх внешних мониторов. Модели уровня 30–70 млрд в 4 бит.', en: 'M5 Pro: up to 64 GB, Thunderbolt 5, up to three external displays. 30–70B models in 4-bit.' },
+        'M5 Max': { ru: 'M5 Max: до 128 ГБ памяти и до четырёх мониторов. Локальные модели до ~120 млрд параметров прямо на ноутбуке.', en: 'M5 Max: up to 128 GB and four displays. Local models up to ~120B parameters right on the laptop.' },
+      },
+    },
+    more: { ru: [['Для кого', 'Разработчики, дизайнеры, аналитики данных и те, кто запускает ИИ-модели локально.'], ['Экран', 'Liquid Retina XDR — проверенный mini-LED. PROLED XDR (с октября 2026) — тандемный OLED с поддержкой касаний, только с M5 Pro и M5 Max.'], ['Что делаем мы', 'Поставка, настройка под компанию, MLX/Ollama и локальная модель с API, подключение к вашим системам.']], en: [['Who it is for', 'Developers, designers, data analysts and anyone running AI models locally.'], ['Display', 'Liquid Retina XDR is the proven mini-LED. PROLED XDR (since October 2026) is tandem OLED with Touch, M5 Pro and M5 Max only.'], ['What we do', 'Supply, company set-up, MLX/Ollama and a local model with an API, integration with your systems.']] },
+    ru: ['Apple MacBook Pro', 'Ноутбук для разработки, дизайна и локальных ИИ-моделей. Соберём конфигурацию и назовём цену под запрос.', ['Чип M6, M5 Pro или M5 Max', 'Экран 14,2″ или 16,2″', 'Память до 128 ГБ', 'SSD до 8 ТБ']],
+    en: ['Apple MacBook Pro', 'A laptop for development, design and local AI models. We put the configuration together and quote on request.', ['M6, M5 Pro or M5 Max chip', '14.2″ or 16.2″ screen', 'Up to 128 GB memory', 'Up to 8 TB SSD']] },
   { id: 'nas-ds925', mode: 'buy', art: 'rack4', rub: 87900, market: [79799, 88410],
     sources: { date: '2026-11-22', urls: [
       'https://www.dns-shop.ru/product/1d7423547737d9cb/setevoe-hranilise-nas-synology-diskstation-ds925/ — 79 799 ₽',
@@ -224,18 +272,21 @@ const GALLERY = {
   'rtx-pro-server': [G('srv4-1'), G('srv4-2')],
   'hgx-h200': [G('hgx-1'), G('hgx-2'), 'frame-2-server.jpg'], 'dgx-b200': [G('rack-1'), G('hgx-2'), 'nvidia-gb200-nvl72.jpg'], 'amd-mi300x': [G('hgx-1'), G('hgx-2')], 'oem-servers': [G('srv4-1'), G('srv4-2'), G('hgx-1')],
   'rent-h100': ['pages/rent-gpu.jpg', G('rack-2')], 'rent-h200': ['pages/rent-gpu.jpg', G('rack-2')], 'rent-8h200': ['pages/rent-server.jpg', G('hgx-2')],
-  'mac-mini': [G('mac-mini-1'), G('mac-mini-2'), G('mac-mini-3'), G('mac-mini-4'), G('mac-mini-5')],
-  'mac-studio': [G('mac-studio-1'), G('mac-studio-2'), G('mac-studio-3'), G('mac-studio-4')],
-  'nas-ds925': [G('ds925-1'), G('ds925-2'), G('ds925-3'), G('ds925-4')],
-  'switch-crs312': [G('crs312-1'), G('mac-mini-4'), G('mac-studio-4')],
+  'mac-mini': ['pages/mac-mini-cover.jpg', G('mac-mini-4'), G('mac-mini-5'), G('mac-mini-1'), G('mac-mini-2'), G('mac-mini-3')],
+  'macbook-air': ['pages/macbook-air-cover.jpg', G('macbook-air-gen'), G('macbook-air-1'), G('macbook-air-2'), G('macbook-air-3')],
+  'macbook-pro': ['pages/macbook-pro-cover.jpg', G('macbook-pro-gen'), G('macbook-pro-1'), G('macbook-pro-2'), G('macbook-pro-3')],
+  'mac-studio': ['pages/mac-studio-cover.jpg', G('mac-studio-gen'), G('mac-studio-4'), G('mac-studio-1'), G('mac-studio-2'), G('mac-studio-3')],
+  'nas-ds925': ['pages/ds925-cover.jpg', G('ds925-4'), G('crs312-gen'), G('ds925-1'), G('ds925-2'), G('ds925-3')],
+  'switch-crs312': ['pages/crs312-cover.jpg', G('crs312-gen'), G('mac-mini-4'), G('crs312-1')],
   'month-h100': ['pages/rent-gpu.jpg', G('rack-2')], 'month-h200': ['pages/rent-gpu.jpg', G('rack-2')], 'month-8h200': ['pages/rent-server.jpg', G('hgx-2')], 'provider-pick': ['pages/rent-cloud.jpg', G('rack-2')],
 };
 // Подписи к официальным фото производителей. Источники — docs/assets/photos/gallery/sources.json.
 const CREDIT = { 'nvidia-dgx-spark-desk.jpg': 'NVIDIA', 'nvidia-gb200-nvl72.jpg': 'NVIDIA', 'partners/asus-ascent-gx10.jpg': 'ASUS',
   ...Object.fromEntries(['mac-mini-1', 'mac-mini-2', 'mac-mini-3', 'mac-studio-1', 'mac-studio-2', 'mac-studio-3'].map(n => [G(n), 'Apple'])),
+  ...Object.fromEntries(['macbook-air-1', 'macbook-air-2', 'macbook-air-3', 'macbook-pro-1', 'macbook-pro-2', 'macbook-pro-3'].map(n => [G(n), 'Apple'])),
   ...Object.fromEntries(['ds925-1', 'ds925-2', 'ds925-3'].map(n => [G(n), 'Synology'])), [G('crs312-1')]: 'MikroTik',
   'pages/mac-mini.jpg': 'Apple', 'pages/mac-studio.jpg': 'Apple', 'pages/ds925.jpg': 'Synology', 'pages/crs312.jpg': 'MikroTik' };
-export const PHOTO = { 'dgx-spark': 'cut-spark.png', 'gb10-oem': 'gallery/gb10-1.jpg', 'spark-cluster': 'pages/cluster-2spark.jpg', 'park-s': 'pages/park-s.jpg', 'park-m': 'pages/park-m.jpg', 'park-l': 'pages/park-l.jpg', 'rtx5090-ws': 'cut-workstation.png', 'rtx-pro-ws': 'cut-workstation.png', 'rtx-pro-server': 'cut-hgx.png', 'hgx-h200': 'cut-hgx.png', 'dgx-b200': 'cut-rack.png', 'oem-servers': 'cut-hgx.png', 'amd-mi300x': 'cut-hgx.png', 'rent-h100': 'pages/rent-gpu.jpg', 'rent-h200': 'pages/rent-gpu.jpg', 'rent-8h200': 'pages/rent-server.jpg', 'month-h100': 'pages/rent-gpu.jpg', 'month-h200': 'pages/rent-gpu.jpg', 'month-8h200': 'pages/rent-server.jpg', 'provider-pick': 'pages/rent-cloud.jpg', 'mac-mini': 'pages/mac-mini.jpg', 'mac-studio': 'pages/mac-studio.jpg', 'nas-ds925': 'pages/ds925.jpg', 'switch-crs312': 'pages/crs312.jpg' };
+export const PHOTO = { 'dgx-spark': 'cut-spark.png', 'gb10-oem': 'gallery/gb10-1.jpg', 'spark-cluster': 'pages/cluster-2spark.jpg', 'park-s': 'pages/park-s.jpg', 'park-m': 'pages/park-m.jpg', 'park-l': 'pages/park-l.jpg', 'rtx5090-ws': 'cut-workstation.png', 'rtx-pro-ws': 'cut-workstation.png', 'rtx-pro-server': 'cut-hgx.png', 'hgx-h200': 'cut-hgx.png', 'dgx-b200': 'cut-rack.png', 'oem-servers': 'cut-hgx.png', 'amd-mi300x': 'cut-hgx.png', 'rent-h100': 'pages/rent-gpu.jpg', 'rent-h200': 'pages/rent-gpu.jpg', 'rent-8h200': 'pages/rent-server.jpg', 'month-h100': 'pages/rent-gpu.jpg', 'month-h200': 'pages/rent-gpu.jpg', 'month-8h200': 'pages/rent-server.jpg', 'provider-pick': 'pages/rent-cloud.jpg', 'mac-mini': 'pages/mac-mini-cover.jpg', 'macbook-air': 'pages/macbook-air-cover.jpg', 'macbook-pro': 'pages/macbook-pro-cover.jpg', 'mac-studio': 'pages/mac-studio-cover.jpg', 'nas-ds925': 'pages/ds925-cover.jpg', 'switch-crs312': 'pages/crs312-cover.jpg' };
 
 export function deviceArt(kind) {
   const box = inner => `<svg class="hw-art" viewBox="0 0 240 150" aria-hidden="true">${inner}</svg>`;
@@ -269,33 +320,52 @@ export function renderShop(lang, ctx) {
       <div class="shop-seg" role="group" aria-label="${pick(lang, 'Память и SSD', 'Memory and SSD')}">${configs.map((c, j) => `<button type="button" data-pick-cfg="${c.k}" aria-pressed="${j ? 'false' : 'true'}"${c.chip === configs[0].chip ? '' : ' hidden'}>${esc(c[lang])}</button>`).join('')}</div>
       ${chips ? `<p class="shop-chip-note" data-chip-note>${esc(chips[configs[0].chip][lang])}</p>` : ''}</div>`;
   };
-  const card = ({ id, cat, title, text, rub, unit, art, specs, market, kind, more, model, gallery, configs, chips }) => {
+  const card = ({ id, cat, title, text, rub, unit, art, specs, market, kind, more, model, gallery, configs, chips, opts, vendor }) => {
     const cfgTitle = c => `${title} ${c.chip} · ${c[lang]}`;
     if (configs) ({ rub, market } = configs[0]);
-    const cfgData = configs ? esc(JSON.stringify(configs.map(c => ({ k: c.k, chip: c.chip, title: cfgTitle(c), rub: c.rub, market: marketText(c.market, unit) })))) : '';
+    const cfgData = configs ? esc(JSON.stringify(configs.map(c => ({ k: c.k, chip: c.chip, title: cfgTitle(c), rub: c.rub, market: c.market ? marketText(c.market, unit) : '' })))) : '';
     const chipData = chips ? esc(JSON.stringify(Object.fromEntries(Object.entries(chips).map(([n, v]) => [n, v[lang]])))) : '';
     const price = rub == null ? `<p class="audience-price">${pick(lang, 'По запросу', 'On request')}</p>`
       : `<p class="audience-price" data-region-price-row>${priceMarkup(lang, rub, unitLabel(unit))}</p>`;
     const marketLine = market ? `<p class="shop-market">${marketText(market, unit)}</p>` : '';
     const quote = kind === 'hw' ? `<p class="shop-quote">${pick(lang, 'Цена по запросу: указанная — ориентир, не финальная. Точную рассчитаем под вашу конфигурацию, курс и сроки поставки.', 'Price on request: the figure shown is a guide, not final. We calculate the exact price for your configuration, exchange rate and lead time.')}</p>` : '';
+    const L = lang === 'ru' ? 1 : 2;
+    const optDef = opts ? { base: title, groups: opts.groups.map(([gid, , vals]) => ({ id: gid, values: vals.map(v => ({ v: v[0], label: v[L] })) })), allow: opts.allow, notes: Object.fromEntries(Object.entries(opts.notes || {}).map(([k, v]) => [k, v[lang]])) } : null;
+    const optSel = opts ? opts.groups.map(([, , vals]) => vals[0][0]).join('|') : '';
+    const optPicker = opts ? `<div class="shop-config">${opts.groups.map(([gid, names, vals], gi) => `<p class="shop-config-label">${esc(names[lang === 'ru' ? 0 : 1])}</p>
+      <div class="shop-seg" role="group" aria-label="${esc(names[lang === 'ru' ? 0 : 1])}">${vals.map((v, j) => `<button type="button" data-opt="${gi}" data-val="${esc(v[0])}" aria-pressed="${j ? 'false' : 'true'}">${esc(v[L])}</button>`).join('')}</div>`).join('')}
+      ${opts.notes ? `<p class="shop-chip-note" data-chip-note>${esc(Object.values(opts.notes)[0][lang])}</p>` : ''}</div>` : '';
     const gal = gallery ? esc(JSON.stringify(gallery.map(f => [ctx.asset + 'photos/' + f, CREDIT[f] || '']))) : '';
-    return `<article class="shop-item${kind === 'hw' ? ' shop-hw' : ''}" data-cat="${cat}" data-id="${id}" data-title="${esc(configs ? cfgTitle(configs[0]) : title)}" data-rub="${rub ?? ''}" data-unit="${unit ?? ''}"${gal ? ` data-gallery="${gal}"` : ''}${configs ? ` data-cfg="${configs[0].k}" data-configs="${cfgData}"` : ''}${chips ? ` data-chips="${chipData}"` : ''}>
+    return `<article class="shop-item${kind === 'hw' ? ' shop-hw' : ' shop-row'}" data-cat="${cat}" data-id="${id}" data-title="${esc(configs ? cfgTitle(configs[0]) : title)}" data-rub="${rub ?? ''}" data-unit="${unit ?? ''}"${gal ? ` data-gallery="${gal}"` : ''}${configs ? ` data-cfg="${configs[0].k}" data-configs="${cfgData}"` : ''}${opts ? ` data-cfg="${esc(optSel)}" data-opts="${esc(JSON.stringify(optDef))}"` : ''}${chips ? ` data-chips="${chipData}"` : ''}>
       ${art}
-      <div class="shop-body"><h3>${gallery ? `<button type="button" class="shop-open" data-open-product>${esc(title)}</button>` : esc(title)}</h3>${model ? `<button type="button" class="shop-3d" data-open3d="${model}" data-title="${esc(title)}">${pick(lang, 'Покрутить в 3D', 'Rotate in 3D')}</button>` : ''}<p class="shop-text">${esc(text)}</p>
+      <div class="shop-body">${vendor ? `<p class="shop-vendor">${esc(vendor)}</p>` : ''}<h3>${gallery ? `<button type="button" class="shop-open" data-open-product>${esc(title)}</button>` : esc(title)}</h3>${model ? `<button type="button" class="shop-3d" data-open3d="${model}" data-title="${esc(title)}">${pick(lang, 'Покрутить в 3D', 'Rotate in 3D')}</button>` : ''}<p class="shop-text">${esc(text)}</p>
       ${specs ? `<ul class="shop-specs">${specs.map(s => `<li>${esc(s)}</li>`).join('')}</ul>` : ''}
-      ${configs ? configPicker(title, configs, chips) : ''}
+      ${configs ? configPicker(title, configs, chips) : ''}${optPicker}
       ${more ? `<details class="shop-more"><summary>${pick(lang, 'Подробнее', 'Details')}</summary><dl>${more.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl></details>` : ''}
       <div class="shop-foot">${price}${marketLine}${quote}
       <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="${pick(lang, 'Меньше', 'Fewer')}">−</button><output data-count>1</output><button type="button" data-inc aria-label="${pick(lang, 'Больше', 'More')}">+</button></div>
       <button type="button" class="btn shop-add" data-add="${id}"><span class="shop-add-label">${pick(lang, 'В корзину', 'Add to basket')}</span></button></div></div></article>`;
   };
-  const serviceCards = services.flatMap(([cat, names, list]) => list.map(([id, title, p, text, icon, unit]) => card({
-    id, cat, title: title[i], text: text[i], rub: priceOf(p), unit, art: iconArt(ctx.icons, icon),
-  }))).join('');
-  const hwCards = hardware.map(h => card({
-    id: h.id, cat: 'hw-' + h.mode, kind: 'hw', title: h[lang][0], text: h[lang][1], specs: h[lang][2], rub: h.rub, unit: h.unit, market: h.market, configs: h.configs, chips: h.chips, more: h.more?.[lang], model: MODEL3D[h.id], gallery: GALLERY[h.id], art: `<div class="shop-art${PHOTO[h.id] ? ' shop-art-photo' : ''}">${PHOTO[h.id] ? `<img src="${ctx.asset}photos/${PHOTO[h.id]}" alt="${esc(h[lang][0])}" width="1200" height="900" loading="lazy"${PHOTO[h.id].endsWith('.png') ? '' : ' class="is-full"'}>${CREDIT[PHOTO[h.id]] ? `<span class="shop-credit">${pick(lang, 'Фото: ', 'Photo: ')}${CREDIT[PHOTO[h.id]]}</span>` : ''}` : deviceArt(h.art)}${h.mode === 'rent' ? `<span class="shop-tag">${pick(lang, 'Аренда', 'Rental')}</span>` : `<span class="shop-tag">${pick(lang, 'Под заказ', 'To order')}</span>`}</div>`,
-  })).join('');
-  const chips = [['all', pick(lang, 'Все', 'All')], ...services.map(([id, names]) => [id, names[i]]), ['hw-buy', pick(lang, 'Железо: купить', 'Hardware: buy')], ['hw-rent', pick(lang, 'Железо: аренда', 'Hardware: rent')]];
+  const serviceCards = services.map(([cat, names, list]) => list.map(([id, title, p, text, icon, unit]) => card({
+    id, cat: 'svc', title: title[i], text: text[i], rub: priceOf(p), unit, art: '',
+  })).join(''));
+  const FAM = { apple: ['mac-mini', 'macbook-air', 'macbook-pro', 'mac-studio'], nvidia: ['dgx-spark', 'gb10-oem', 'spark-cluster', 'park-s', 'park-m', 'park-l', 'hgx-h200', 'dgx-b200'], servers: ['rtx-pro-ws', 'rtx5090-ws', 'rtx-pro-server', 'oem-servers', 'amd-mi300x'], net: ['nas-ds925', 'switch-crs312'] };
+  const famOf = h => h.mode === 'rent' ? 'rent' : Object.keys(FAM).find(f => FAM[f].includes(h.id)) || 'servers';
+  const VENDOR = { apple: 'Apple', nvidia: 'NVIDIA', 'nas-ds925': 'Synology', 'switch-crs312': 'MikroTik', 'amd-mi300x': 'AMD', 'oem-servers': 'Dell · Supermicro · Lenovo · HPE' };
+  const byFam = f => hardware.filter(h => famOf(h) === f).sort((a, b) => (FAM[f]?.indexOf(a.id) ?? 0) - (FAM[f]?.indexOf(b.id) ?? 0));
+  const hwCard = h => card({
+    id: h.id, cat: 'hw-' + famOf(h), vendor: VENDOR[h.id] || (famOf(h) === 'rent' ? pick(lang, 'Аренда GPU', 'GPU rental') : VENDOR[famOf(h)] || 'NVIDIA'), kind: 'hw', title: h[lang][0], text: h[lang][1], specs: h[lang][2], rub: h.rub, unit: h.unit, market: h.market, configs: h.configs, chips: h.chips, opts: h.opts, more: h.more?.[lang], model: MODEL3D[h.id], gallery: GALLERY[h.id], art: `<div class="shop-art${PHOTO[h.id] ? ' shop-art-photo' : ''}">${PHOTO[h.id] ? `<img src="${ctx.asset}photos/${PHOTO[h.id]}" alt="${esc(h[lang][0])}" width="1200" height="900" loading="lazy"${PHOTO[h.id].endsWith('.png') ? '' : ' class="is-full"'}>${CREDIT[PHOTO[h.id]] ? `<span class="shop-credit">${pick(lang, 'Фото: ', 'Photo: ')}${CREDIT[PHOTO[h.id]]}</span>` : ''}` : deviceArt(h.art)}${h.mode === 'rent' ? `<span class="shop-tag">${pick(lang, 'Аренда', 'Rental')}</span>` : `<span class="shop-tag">${pick(lang, 'Под заказ', 'To order')}</span>`}</div>`,
+  });
+  const HW_GROUPS = [['apple', pick(lang, 'Apple для офиса и локального ИИ', 'Apple for the office and local AI'), pick(lang, 'Mac mini, MacBook и Mac Studio: настроим под компанию и развернём локальную модель.', 'Mac mini, MacBook and Mac Studio, set up for your company with a local model.')],
+    ['nvidia', pick(lang, 'NVIDIA DGX и GB10', 'NVIDIA DGX and GB10'), pick(lang, 'Персональные ИИ-суперкомпьютеры и готовые парки под ключ.', 'Personal AI supercomputers and turnkey fleets.')],
+    ['servers', pick(lang, 'Серверы и рабочие станции', 'Servers and workstations'), pick(lang, 'GPU-серверы и станции для обучения и inference.', 'GPU servers and workstations for training and inference.')],
+    ['net', pick(lang, 'Хранение и сеть', 'Storage and networking'), pick(lang, 'Хранилище данных и 10-гигабитная сеть для ИИ-контура.', 'Data storage and 10 Gb networking for the AI stack.')],
+    ['rent', pick(lang, 'Аренда GPU', 'GPU rental'), pick(lang, 'Почасовая и помесячная аренда у партнёров в РФ.', 'Hourly and monthly rental from partners in Russia.')]];
+  const hwGroups = HW_GROUPS.map(([f, title, lead]) => `<div class="shop-group" data-group="hw-${f}"><div class="shop-group-head"><h3>${esc(title)}</h3><p>${esc(lead)}</p></div>
+      <div class="shop-grid shop-grid-hw" data-grid="hw-${f}">${byFam(f).map(hwCard).join('')}</div></div>`).join('');
+  const svcGroups = services.map(([cat, names], n) => `<div class="shop-group" data-group="svc-${cat}"><div class="shop-group-head"><h3>${esc(names[i])}</h3></div>
+      <div class="shop-list-rows" data-grid="svc-${cat}">${serviceCards[n]}</div></div>`).join('');
+  const chips = [['all', pick(lang, 'Весь каталог', 'Everything')], ['hw-apple', 'Apple'], ['hw-nvidia', 'NVIDIA'], ['hw-servers', pick(lang, 'Серверы', 'Servers')], ['hw-net', pick(lang, 'Хранение и сеть', 'Storage & network')], ['hw-rent', pick(lang, 'Аренда GPU', 'GPU rental')], ['svc', pick(lang, 'Услуги', 'Services')]];
   const labels = JSON.stringify({
     empty: pick(lang, 'Корзина пуста. Добавьте услуги или железо из каталога.', 'Your basket is empty. Add services or hardware from the catalogue.'),
     total: pick(lang, 'Итого от', 'Total from'), monthly: pick(lang, 'Ежемесячно от', 'Monthly from'), hourly: pick(lang, 'Аренда, в час от', 'Rental, per hour from'),
@@ -306,14 +376,14 @@ export function renderShop(lang, ctx) {
   });
   return `<section class="section wrap audience-section shop" data-shop data-tg="${esc(ctx.tg)}" data-labels="${esc(labels)}">
     <div class="shop-toolbar">
-      <label class="shop-search"><span class="sr-only">${pick(lang, 'Поиск по каталогу', 'Search the catalogue')}</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input type="search" data-search placeholder="${pick(lang, 'Найти: бот, H200, Mac mini…', 'Search: bot, H200, Mac mini…')}"></label>
-      <label class="shop-sort"><span>${pick(lang, 'Сортировка', 'Sort')}</span><select data-sort><option value="default">${pick(lang, 'По разделам', 'By section')}</option><option value="asc">${pick(lang, 'Сначала дешевле', 'Price: low to high')}</option><option value="desc">${pick(lang, 'Сначала дороже', 'Price: high to low')}</option></select></label>
+      <div class="shop-filters" role="group" aria-label="${pick(lang, 'Разделы каталога', 'Catalogue sections')}">${chips.map(([id, name], n) => `<button type="button" aria-pressed="${n ? 'false' : 'true'}" data-filter="${id}">${esc(name)}</button>`).join('')}</div>
+      <div class="shop-tools">
+        <label class="shop-search"><span class="sr-only">${pick(lang, 'Поиск по каталогу', 'Search the catalogue')}</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input type="search" data-search placeholder="${pick(lang, 'Поиск: Mac mini, H200, бот…', 'Search: Mac mini, H200, bot…')}"></label>
+        <label class="shop-sort"><span class="sr-only">${pick(lang, 'Сортировка', 'Sort')}</span><select data-sort><option value="default">${pick(lang, 'По разделам', 'By section')}</option><option value="asc">${pick(lang, 'Сначала дешевле', 'Price: low to high')}</option><option value="desc">${pick(lang, 'Сначала дороже', 'Price: high to low')}</option></select></label>
+      </div>
     </div>
-    <div class="shop-filters" role="group" aria-label="${pick(lang, 'Категории', 'Categories')}">${chips.map(([id, name], n) => `<button type="button" aria-pressed="${n ? 'false' : 'true'}" data-filter="${id}">${esc(name)}</button>`).join('')}</div>
-    <h2 class="shop-group-title" data-group="services">${pick(lang, 'Цифровые услуги', 'Digital services')}</h2>
-    <div class="shop-grid" data-grid="services">${serviceCards}</div>
-    <h2 class="shop-group-title" data-group="hw">${pick(lang, 'Железо для ИИ: NVIDIA, Apple, хранение и сеть', 'AI hardware: NVIDIA, Apple, storage and networking')}</h2>
-    <div class="shop-grid shop-grid-hw" data-grid="hw">${hwCards}</div>
+    <section class="shop-section" data-section="hw"><div class="shop-section-head"><p class="shop-kicker">${pick(lang, 'Оборудование', 'Hardware')}</p><h2>${pick(lang, 'Техника под ключ: поставка, настройка, гарантия', 'Turnkey hardware: supply, set-up, warranty')}</h2></div>${hwGroups}</section>
+    <section class="shop-section" data-section="svc"><div class="shop-section-head"><p class="shop-kicker">${pick(lang, 'Услуги', 'Services')}</p><h2>${pick(lang, 'Разработка и сопровождение: прайс-лист', 'Development and support: price list')}</h2></div>${svcGroups}</section>
     <p class="shop-none" data-none hidden></p>
   </section>
   ${renderWhyPrice(lang)}

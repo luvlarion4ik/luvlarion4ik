@@ -21,9 +21,36 @@
   // Позиции с конфигурациями (Mac mini, Mac Studio) лежат в корзине под ключом «id:конфигурация».
   const cfgsOf = el => el._cfgs ??= JSON.parse(el.dataset.configs || 'null');
   const keyOf = el => el.dataset.cfg ? el.dataset.id + ':' + el.dataset.cfg : el.dataset.id;
+  // Позиции «под запрос» с несколькими независимыми выборами (MacBook: диагональ, чип, память, SSD).
+  const optsOf = el => el._opts ??= JSON.parse(el.dataset.opts);
+  const optTitle = (el, sel) => {
+    const o = optsOf(el);
+    const labels = o.groups.map((g, i) => g.values.find(v => v.v === sel[i])?.label).filter(Boolean);
+    return labels.length === o.groups.length ? o.base + ' · ' + labels.join(' · ') : null;
+  };
+  function pickOpt(el, group, value) {
+    const o = optsOf(el);
+    const sel = el.dataset.cfg.split('|');
+    sel[group] = value;
+    // Первая группа (чип) задаёт, какие значения остальных групп доступны.
+    const allow = o.allow[sel[0]] || {};
+    o.groups.forEach((g, i) => {
+      if (!i) return;
+      const ok = allow[g.id] || g.values.map(v => v.v);
+      if (!ok.includes(sel[i])) sel[i] = ok[0];
+      for (const b of el.querySelectorAll(`[data-opt="${i}"]`)) b.hidden = !ok.includes(b.dataset.val);
+    });
+    for (const b of el.querySelectorAll('[data-opt]')) b.setAttribute('aria-pressed', String(sel[+b.dataset.opt] === b.dataset.val));
+    el.dataset.cfg = sel.join('|');
+    el.dataset.title = optTitle(el, sel);
+    const note = el.querySelector('[data-chip-note]');
+    if (note && o.notes) note.textContent = o.notes[sel[0]] || '';
+    render();
+  }
   function info(line) {
     const [id, k] = line.split(':'), el = byId[id];
     if (!el) return null;
+    if (el.dataset.opts) return k ? { title: optTitle(el, k.split('|')), rub: 0, unit: el.dataset.unit } : null;
     if (!k) return el.dataset.configs ? null : { title: el.dataset.title, rub: +el.dataset.rub || 0, unit: el.dataset.unit };
     const c = cfgsOf(el)?.find(x => x.k === k);
     return c ? { title: c.title, rub: c.rub, unit: el.dataset.unit } : null;
@@ -111,14 +138,21 @@
     const note = el.querySelector('[data-chip-note]');
     if (note) note.textContent = JSON.parse(el.dataset.chips)[c.chip];
     const market = el.querySelector('.shop-market');
-    if (market) market.textContent = c.market;
-    const span = el.querySelector('.shop-foot [data-region-price]');
-    if (span) {
-      span.dataset.regionPrice = c.rub;
-      const r = window.devlarionRegion;
-      span.textContent = r && r.currency && r.rate && r.currency !== 'RUB'
-        ? '≈ ' + new Intl.NumberFormat(t.lang === 'ru' ? 'ru-RU' : 'en-US', { style: 'currency', currency: r.currency, maximumFractionDigits: 0 }).format(c.rub * r.rate)
-        : fmt(c.rub);
+    if (market) { market.textContent = c.market || ''; market.hidden = !c.market; }
+    const row = el.querySelector('.shop-foot .audience-price');
+    if (row) {
+      // Конфигурации без цены (1–2 ТБ и т. п.) показываем «по запросу», остальные — «от …».
+      row._html ??= row.innerHTML;
+      if (c.rub == null) { row.textContent = t.request.charAt(0).toUpperCase() + t.request.slice(1); delete el.dataset.rub; }
+      else {
+        if (!row.querySelector('[data-region-price]')) row.innerHTML = row._html;
+        const span = row.querySelector('[data-region-price]');
+        span.dataset.regionPrice = c.rub;
+        const r = window.devlarionRegion;
+        span.textContent = r && r.currency && r.rate && r.currency !== 'RUB'
+          ? '≈ ' + new Intl.NumberFormat(t.lang === 'ru' ? 'ru-RU' : 'en-US', { style: 'currency', currency: r.currency, maximumFractionDigits: 0 }).format(c.rub * r.rate)
+          : fmt(c.rub);
+      }
     }
     render();
     if (sort.value !== 'default') apply();
@@ -145,6 +179,7 @@
       g.hidden = !any;
       shop.querySelector(`[data-group="${g.dataset.grid}"]`).hidden = !any;
     }
+    for (const sec of shop.querySelectorAll('[data-section]')) sec.hidden = ![...sec.querySelectorAll('[data-grid]')].some(g => !g.hidden);
     none.hidden = shown > 0;
     none.textContent = t.none;
   }
@@ -154,6 +189,8 @@
     if (event.target.closest('[data-add]')) change(keyOf(item), 1, event.target.closest('[data-add]'));
     else if (event.target.closest('[data-inc]')) change(keyOf(item), 1);
     else if (event.target.closest('[data-dec]')) change(keyOf(item), -1);
+    const opt = event.target.closest('[data-opt]');
+    if (opt && item) pickOpt(item, +opt.dataset.opt, opt.dataset.val);
     const chip = event.target.closest('[data-chip]'), pickCfg = event.target.closest('[data-pick-cfg]');
     if (chip && item) {
       // Новый чип: оставляем ту же память и SSD, если такая есть, иначе первую конфигурацию чипа.
@@ -208,6 +245,7 @@
     target.classList.add('shop-focus');
     setTimeout(() => target.classList.remove('shop-focus'), 2400);
   }
+  for (const el of items) if (el.dataset.opts) pickOpt(el, 0, el.dataset.cfg.split('|')[0]);
   render();
   apply();
 })();
