@@ -1,0 +1,82 @@
+.aura-case {
+  padding-block: clamp(2rem, 4vw, 4.5rem) clamp(3rem, 6vw, 6rem);
+}
+.aura-case > section {
+  border-top: 1px solid var(--rule);
+  margin-top: clamp(2.75rem, 6vw, 5.75rem);
+  padding-top: clamp(1.75rem, 3.6vw, 3.5rem);
+}
+.aura-case > section > h2 { margin-top: 0; }
+.aura-lead {
+  display: grid;
+  grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 5rem);
+}
+.aura-lead > figure { margin: 0; min-width: 0; }
+.aura-lead h1 { margin: .55rem 0 1.1rem; }
+.aura-subtitle {
+  font: 400 clamp(1.45rem, 2.45vw, 2.4rem)/1.12 'Bureau Serif', Georgia, serif;
+  letter-spacing: -.025em;
+  text-wrap: balance;
+}
+.aura-lead .intro {
+  max-width: 43ch;
+  margin: 1rem 0;
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
+}
+.aura-status { color: var(--sub); font-size: .92rem; }
+.aura-lead .actions, .aura-next .actions { margin-top: 1.4rem; flex-wrap: wrap; }
+.aura-lead .actions [data-goal=beta] {
+  background: transparent;
+  border-color: var(--rule);
+  color: var(--ink);
+}
+.aura-brief dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 1.4rem clamp(2rem, 5vw, 5rem);
+  margin: 1.75rem 0;
+}
+.aura-brief dt { font-weight: 600; margin-bottom: .4rem; }
+.aura-brief dd { max-width: 57ch; margin: 0; color: var(--sub); }
+.aura-brief .case-flow {
+  list-style: none;
+  gap: .65rem 1rem;
+  margin: 1.6rem 0 0;
+  padding: 1.05rem 0 0;
+  border-top: 1px solid var(--rule);
+}
+.aura-brief .case-flow li + li::before { content: '→' / ''; color: var(--accent); margin-right: 1rem; }
+.aura-history ol { list-style: none; margin: 1.6rem 0; padding: 0; }
+.aura-history ol > li {
+  display: grid;
+  grid-template-columns: minmax(8rem, .43fr) 1fr;
+  gap: .65rem clamp(1rem, 4vw, 4rem);
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--rule);
+}
+.aura-milestone-date { display: grid; align-content: start; gap: .2rem; color: var(--sub); font-size: .9rem; }
+.aura-milestone-date span { color: var(--accent); }
+.aura-history h3 { margin: 0 0 .3rem; hyphens: auto; overflow-wrap: anywhere; }
+.aura-history p, .aura-next p { color: var(--sub); }
+.aura-history .case-tech { margin-top: 1.1rem; }
+@media (max-width: 760px) {
+  .aura-lead, .aura-brief dl { grid-template-columns: minmax(0,1fr); }
+  .aura-brief .case-flow { display: grid; gap: .5rem; list-style: decimal; padding-left: 1.45rem; }
+  .aura-brief .case-flow li + li::before { content: none; }
+}
+@media (max-width: 700px) {
+  .aura-case { padding-top: 1.35rem; }
+  .aura-lead { gap: 1.25rem; }
+  .aura-lead h1 { margin: .4rem 0 .65rem; }
+  .aura-lead .intro { margin: .65rem 0; }
+  .aura-lead .actions { margin-top: .85rem; }
+  /* The site’s fixed mobile bar carries the beta action at this breakpoint. */
+  .aura-lead .actions [data-goal=beta] { display: none; }
+}
+@media (max-width: 560px) {
+  .bar { flex-wrap: wrap; }
+  .aura-history ol > li { grid-template-columns: minmax(0, 1fr); }
+  .aura-milestone-date { display: flex; flex-wrap: wrap; gap: .65rem; }
+}

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="still" width="120" height="96" viewBox="0 0 120 96" role="img" aria-labelledby="title">
+  <title id="title">Шкала громкости</title>
+  <style>
+  svg:target * { animation: none !important; }
+  @media (prefers-reduced-motion: no-preference) {
+    .tick { animation: tick 2.6s cubic-bezier(.42,0,.30,1) infinite; }
+    @keyframes tick { 0%,70%,100% { opacity:.12 } 23%,46% { opacity:1 } }
+  }
+</style>
+  <path d="M34.00 60.00L27.00 60.00" fill="none" stroke="#494949" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M34.00 60.00L27.00 60.00" fill="none" stroke="#f5f5f5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="tick" style="animation-delay:0.00s" opacity="0.95" />
+  <path d="M34.65 54.21L27.83 52.66" fill="none" stroke="#494949" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M34.65 54.21L27.83 52.66" fill="none" stroke="#f5f5f5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="tick" style="animation-delay:0.08s" opacity="0.95" />
+  <path d="M36.57 48.72L30.27 45.68" fill="none" stroke="#494949" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M36.57 48.72L30.27 45.68" fill="none" stroke="#f5f5f5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="tick" style="animation-delay:0.16s" opacity="0.95" />
+  <path d="M39.67 43.79L34.20 39.42" fill="none" stroke="#494949" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M39.67 43.79L34.20 39.42" fill="none" stroke="#f5f5f5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="tick" style="animation-delay:0.24s" opacity="0.95" />
+  <path d="M43.79 39.67L39.42 34.20" fill="none" stroke="#494949" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M43.79 39.67L39.42 34.20" fill="none" stroke="#f5f5f5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="tick" style="animation-delay:0.32s" opacity="0.95" />
+  <path d="M48.72 36.57L45.68 30.27" fill="none" stroke="#494949" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M48.72 36.57L45.68 30.27" fill="none" stroke="#f5f5f5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="tick" style="animation-delay:0.40s" opacity="0.95" />
+  <path d="M54.21 34.65L52.66 27.83" fill="none" stroke="#494949" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M54.21 34.65L52.66 27.83" fill="none" stroke="#f5f5f5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="tick" style="animation-delay:0.48s" opacity="0.95" />
+  <path d="M60.00 34.00L60.00 27.00" fill="none" stroke="#494949" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M60.00 34.00L60.00 27.00" fill="none" stroke="#f5f5f5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="tick" style="animation-delay:0.56s" opacity="0.95" />
+  <path d="M65.79 34.65L67.34 27.83" fill="none" stroke="#494949" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M65.79 34.65L67.34 27.83" fill="none" stroke="#f5f5f5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="tick" style="animation-delay:0.64s" opacity="0.95" />
+  <path d="M71.28 36.57L74.32 30.27" fill="none" stroke="#494949" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M71.28 36.57L74.32 30.27" fill="none" stroke="#f5f5f5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="tick" style="animation-delay:0.72s" opacity="0.95" />
+  <path d="M76.21 39.67L80.58 34.20" fill="none" stroke="#494949" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M76.21 39.67L80.58 34.20" fill="none" stroke="#f5f5f5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="tick" style="animation-delay:0.80s" opacity="0.16" />
+  <path d="M80.33 43.79L85.80 39.42" fill="none" stroke="#494949" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M80.33 43.79L85.80 39.42" fill="none" stroke="#f5f5f5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="tick" style="animation-delay:0.88s" opacity="0.16" />
+  <path d="M83.43 48.72L89.73 45.68" fill="none" stroke="#494949" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M83.43 48.72L89.73 45.68" fill="none" stroke="#f5f5f5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="tick" style="animation-delay:0.96s" opacity="0.16" />
+  <path d="M85.35 54.21L92.17 52.66" fill="none" stroke="#494949" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M85.35 54.21L92.17 52.66" fill="none" stroke="#f5f5f5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="tick" style="animation-delay:1.04s" opacity="0.16" />
+  <path d="M86.00 60.00L93.00 60.00" fill="none" stroke="#494949" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M86.00 60.00L93.00 60.00" fill="none" stroke="#f5f5f5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="tick" style="animation-delay:1.12s" opacity="0.16" />
+  <path d="M53.8 45v6" fill="none" stroke="#f5f5f5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M56.9 41v14" fill="none" stroke="#f5f5f5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M60 35.5v25" fill="none" stroke="#f5f5f5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M63.1 41v14" fill="none" stroke="#f5f5f5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M66.2 45v6" fill="none" stroke="#f5f5f5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M46 66h28" fill="none" stroke="#767676" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="still" width="120" height="96" viewBox="0 0 120 96" role="img" aria-labelledby="title">
+  <title id="title">Линия превращается в волну</title>
+  <style>
+  svg:target * { animation: none !important; }
+  @media (prefers-reduced-motion: no-preference) {
+    .speech { animation: speech 2.7s cubic-bezier(.42,0,.30,1) infinite; transform-origin: 60px 48px; }
+    @keyframes speech { 0%,12%,100% { transform:scaleY(.07) } 37% { transform:scaleY(1.16) } 59% { transform:scaleY(.51) } 74% { transform:scaleY(.94) } }
+  }
+</style>
+  <path d="M17 48h86" fill="none" stroke="#494949" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+  <g class="speech">
+    <path d="M19 48h13q4 0 7 -5t6 0l5 10q3 6 6 -4l3 -13q3 -14 6 2l4 18q2 10 6 1l3 -8q1 -2 4 -2h18" fill="none" stroke="#f5f5f5" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>

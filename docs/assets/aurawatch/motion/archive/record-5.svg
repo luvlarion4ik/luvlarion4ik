@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="still" width="120" height="96" viewBox="0 0 120 96" role="img" aria-labelledby="title">
+  <title id="title">Отметка синхронизации</title>
+  <style>
+  svg:target * { animation: none !important; }
+  @media (prefers-reduced-motion: no-preference) {
+    .sync { animation: sync 3.5s cubic-bezier(.42,0,.30,1) infinite; transform-origin: 85px 54px; }
+    @keyframes sync { 0%,18%,100% { opacity:0; transform:scale(.72) } 43%,75% { opacity:1; transform:scale(1) } }
+  }
+</style>
+  <g transform="translate(37 48)">
+    <path d="M-6 -12l1 -6h10l1 6 M-6 12l1 6h10l1 -6" fill="none" stroke="#767676" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+    <rect x="-10" y="-13" width="20" height="26" rx="6" fill="#191919" stroke="#f5f5f5" stroke-width="1.7" />
+    <path d="M12 -4v4" fill="none" stroke="#bbbbbb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M-5.4 -1.5v3" fill="none" stroke="#bbbbbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M-2.7 -3.5v7" fill="none" stroke="#bbbbbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M0 -6.5v13" fill="none" stroke="#bbbbbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M2.7 -4v8" fill="none" stroke="#bbbbbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M5.4 -2v4" fill="none" stroke="#bbbbbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+  <path d="M56 43h28" fill="none" stroke="#bbbbbb" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M56 51h16" fill="none" stroke="#bbbbbb" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+  <g class="sync">
+    <circle cx="85" cy="54" r="7" fill="none" stroke="#bbbbbb" stroke-width="1.5" />
+    <path d="M81.8 54l2.1 2.2 4.4-4.3" fill="none" stroke="#f5f5f5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>

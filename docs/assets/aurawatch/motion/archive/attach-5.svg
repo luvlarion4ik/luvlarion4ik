@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="still" width="120" height="96" viewBox="0 0 120 96" role="img" aria-labelledby="title">
+  <title id="title">Соседняя карточка встаёт на место</title>
+  <style>
+    .neighbor { transform:translateX(-29px) }
+  svg:target * { animation: none !important; }
+  @media (prefers-reduced-motion: no-preference) {
+    .removed { animation: removed 3.8s cubic-bezier(.42,0,.30,1) infinite; transform-origin: 60px 48px; }
+    @keyframes removed { 0%,20%,100% { opacity:1; transform:scale(1) } 39%,79% { opacity:0; transform:scale(.82) } }
+    .neighbor { animation: neighbor 3.8s cubic-bezier(.42,0,.30,1) infinite; }
+    @keyframes neighbor { 0%,26%,100% { transform:translateX(0) } 55%,80% { transform:translateX(-29px) } }
+  }
+</style>
+  <rect x="19" y="36" width="24" height="24" rx="4" fill="#191919" stroke="#bbbbbb" stroke-width="1.5" />
+  <circle cx="36.28" cy="43.2" r="2.1" fill="#f5f5f5" />
+  <path d="M23 54l5.76 -7.92l4.08 4.56l2.4 -2.88l5.76 6.24" fill="none" stroke="#bbbbbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+  <g class="removed" opacity="0">
+    <rect x="48" y="36" width="24" height="24" rx="4" fill="#191919" stroke="#767676" stroke-width="1.5" />
+    <path d="M56 44l8 8m0 -8l-8 8" fill="none" stroke="#bbbbbb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+  <g class="neighbor">
+    <rect x="77" y="36" width="24" height="24" rx="4" fill="#191919" stroke="#bbbbbb" stroke-width="1.5" />
+    <path d="M85.6 45.5v5" fill="none" stroke="#bbbbbb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M89 42v12" fill="none" stroke="#bbbbbb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M92.4 44v8" fill="none" stroke="#bbbbbb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>

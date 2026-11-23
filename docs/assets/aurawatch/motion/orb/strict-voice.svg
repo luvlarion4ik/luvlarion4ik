@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="still" width="224" height="224" viewBox="-3.5 -3.5 7 7" fill="#fff" role="img" aria-labelledby="title">
+  <title id="title">Строгая · Голос</title>
+  <style>
+    svg:target circle { animation: none !important; }
+    @media (prefers-reduced-motion: no-preference) {
+      .p1 { animation: p1 2.2s linear infinite; }
+      @keyframes p1 { 0% { opacity: .16; } 45.57% { opacity: .16; } 46.835% { opacity: .95; } 50.633% { opacity: .95; } 51.899% { opacity: .16; } 100% { opacity: .16; } }
+      .p2 { animation: p2 2.2s linear infinite; }
+      @keyframes p2 { 0% { opacity: .16; } 43.038% { opacity: .16; } 44.304% { opacity: .95; } 54.43% { opacity: .95; } 55.696% { opacity: .16; } 100% { opacity: .16; } }
+      .p3 { animation: p3 2.2s linear infinite; }
+      @keyframes p3 { 0% { opacity: .16; } 16.456% { opacity: .16; } 17.722% { opacity: .95; } 24.051% { opacity: .95; } 25.316% { opacity: .16; } 40.506% { opacity: .16; } 41.772% { opacity: .95; } 56.962% { opacity: .95; } 58.228% { opacity: .16; } 100% { opacity: .16; } }
+      .p4 { animation: p4 2.2s linear infinite; }
+      @keyframes p4 { 0% { opacity: .16; } 13.924% { opacity: .16; } 15.19% { opacity: .95; } 26.582% { opacity: .95; } 27.848% { opacity: .16; } 37.975% { opacity: .16; } 39.241% { opacity: .95; } 59.494% { opacity: .95; } 60.759% { opacity: .16; } 100% { opacity: .16; } }
+      .p5 { animation: p5 2.2s linear infinite; }
+      @keyframes p5 { 0% { opacity: .16; } 11.392% { opacity: .16; } 12.658% { opacity: .95; } 29.114% { opacity: .95; } 30.38% { opacity: .16; } 34.177% { opacity: .16; } 35.443% { opacity: .95; } 62.025% { opacity: .95; } 63.291% { opacity: .16; } 100% { opacity: .16; } }
+      .p6 { animation: p6 2.2s linear infinite; }
+      @keyframes p6 { 0% { opacity: .16; } 8.861% { opacity: .16; } 10.127% { opacity: .95; } 65.823% { opacity: .95; } 67.089% { opacity: .16; } 100% { opacity: .16; } }
+      .p7 { animation: p7 2.2s linear infinite; }
+      @keyframes p7 { 0% { opacity: .16; } 2.532% { opacity: .16; } 3.797% { opacity: .95; } 74.684% { opacity: .95; } 75.949% { opacity: .16; } 100% { opacity: .16; } }
+    }
+  </style>
+  <circle cx="-1" cy="-3" r=".31" opacity=".16" class="p1" />
+  <circle cx="0" cy="-3" r=".31" opacity=".16" class="p1" />
+  <circle cx="1" cy="-3" r=".31" opacity=".16" class="p1" />
+  <circle cx="-2" cy="-2" r=".31" opacity=".16" class="p2" />
+  <circle cx="-1" cy="-2" r=".31" opacity=".16" class="p2" />
+  <circle cx="0" cy="-2" r=".31" opacity=".16" class="p2" />
+  <circle cx="1" cy="-2" r=".31" opacity=".16" class="p2" />
+  <circle cx="2" cy="-2" r=".31" opacity=".16" class="p2" />
+  <circle cx="-3" cy="-1" r=".31" opacity=".16" class="p3" />
+  <circle cx="-2" cy="-1" r=".31" opacity=".16" class="p3" />
+  <circle cx="-1" cy="-1" r=".31" opacity=".16" class="p3" />
+  <circle cx="0" cy="-1" r=".31" opacity=".16" class="p3" />
+  <circle cx="1" cy="-1" r=".31" opacity=".16" class="p3" />
+  <circle cx="2" cy="-1" r=".31" opacity=".16" class="p3" />
+  <circle cx="3" cy="-1" r=".31" opacity=".16" class="p3" />
+  <circle cx="-3" cy="0" r=".31" opacity=".95" class="p4" />
+  <circle cx="-2" cy="0" r=".31" opacity=".95" class="p4" />
+  <circle cx="-1" cy="0" r=".31" opacity=".95" class="p4" />
+  <circle cx="0" cy="0" r=".31" opacity=".95" class="p4" />
+  <circle cx="1" cy="0" r=".31" opacity=".95" class="p4" />
+  <circle cx="2" cy="0" r=".31" opacity=".95" class="p4" />
+  <circle cx="3" cy="0" r=".31" opacity=".95" class="p4" />
+  <circle cx="-3" cy="1" r=".31" opacity=".95" class="p5" />
+  <circle cx="-2" cy="1" r=".31" opacity=".95" class="p5" />
+  <circle cx="-1" cy="1" r=".31" opacity=".95" class="p5" />
+  <circle cx="0" cy="1" r=".31" opacity=".95" class="p5" />
+  <circle cx="1" cy="1" r=".31" opacity=".95" class="p5" />
+  <circle cx="2" cy="1" r=".31" opacity=".95" class="p5" />
+  <circle cx="3" cy="1" r=".31" opacity=".95" class="p5" />
+  <circle cx="-2" cy="2" r=".31" opacity=".95" class="p6" />
+  <circle cx="-1" cy="2" r=".31" opacity=".95" class="p6" />
+  <circle cx="0" cy="2" r=".31" opacity=".95" class="p6" />
+  <circle cx="1" cy="2" r=".31" opacity=".95" class="p6" />
+  <circle cx="2" cy="2" r=".31" opacity=".95" class="p6" />
+  <circle cx="-1" cy="3" r=".31" opacity=".95" class="p7" />
+  <circle cx="0" cy="3" r=".31" opacity=".95" class="p7" />
+  <circle cx="1" cy="3" r=".31" opacity=".95" class="p7" />
+</svg>

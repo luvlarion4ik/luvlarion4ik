@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="still" width="224" height="224" viewBox="-3.5 -3.5 7 7" fill="#fff" role="img" aria-labelledby="title">
+  <title id="title">AuraWatch отвечает</title>
+  <style>
+    svg:target circle { animation: none !important; }
+    @media (prefers-reduced-motion: no-preference) {
+      .p1 { animation: p1 1.4s linear infinite; }
+      @keyframes p1 { 0% { opacity: .58; } 10% { opacity: .331; } 16% { opacity: .23; } 24% { opacity: .17; } 36% { opacity: .16; } 48% { opacity: .174; } 56% { opacity: .246; } 62% { opacity: .357; } 76% { opacity: .705; } 82% { opacity: .795; } 86% { opacity: .81; } 90% { opacity: .783; } 94% { opacity: .721; } 100% { opacity: .58; } }
+      .p2 { animation: p2 1.4s linear infinite; }
+      @keyframes p2 { 0% { opacity: .498; } 8% { opacity: .308; } 14% { opacity: .217; } 22% { opacity: .167; } 32% { opacity: .16; } 44% { opacity: .171; } 52% { opacity: .234; } 58% { opacity: .337; } 74% { opacity: .727; } 80% { opacity: .803; } 84% { opacity: .806; } 88% { opacity: .769; } 92% { opacity: .698; } 100% { opacity: .498; } }
+      .p3 { animation: p3 1.4s linear infinite; }
+      @keyframes p3 { 0% { opacity: .414; } 8% { opacity: .252; } 16% { opacity: .176; } 28% { opacity: .16; } 42% { opacity: .176; } 48% { opacity: .225; } 54% { opacity: .322; } 68% { opacity: .669; } 72% { opacity: .749; } 76% { opacity: .798; } 80% { opacity: .809; } 84% { opacity: .779; } 88% { opacity: .713; } 100% { opacity: .414; } }
+      .p4 { animation: p4 1.4s linear infinite; }
+      @keyframes p4 { 0% { opacity: .211; } 6% { opacity: .171; } 12% { opacity: .161; } 26% { opacity: .163; } 34% { opacity: .197; } 42% { opacity: .308; } 60% { opacity: .737; } 64% { opacity: .793; } 68% { opacity: .81; } 72% { opacity: .787; } 76% { opacity: .727; } 92% { opacity: .337; } 100% { opacity: .211; } }
+      .p5 { animation: p5 1.4s linear infinite; }
+      @keyframes p5 { 0% { opacity: .177; } 20% { opacity: .161; } 30% { opacity: .202; } 38% { opacity: .318; } 56% { opacity: .746; } 60% { opacity: .797; } 64% { opacity: .809; } 68% { opacity: .781; } 72% { opacity: .717; } 90% { opacity: .288; } 94% { opacity: .227; } 100% { opacity: .177; } }
+      .p6 { animation: p6 1.4s linear infinite; }
+      @keyframes p6 { 0% { opacity: .16; } 14% { opacity: .172; } 22% { opacity: .237; } 28% { opacity: .343; } 44% { opacity: .732; } 48% { opacity: .79; } 52% { opacity: .81; } 56% { opacity: .79; } 60% { opacity: .732; } 76% { opacity: .344; } 82% { opacity: .238; } 90% { opacity: .172; } 100% { opacity: .16; } }
+      .p7 { animation: p7 1.4s linear infinite; }
+      @keyframes p7 { 0% { opacity: .161; } 8% { opacity: .181; } 16% { opacity: .266; } 22% { opacity: .387; } 36% { opacity: .73; } 40% { opacity: .789; } 44% { opacity: .81; } 48% { opacity: .791; } 52% { opacity: .734; } 68% { opacity: .346; } 76% { opacity: .215; } 84% { opacity: .166; } 100% { opacity: .161; } }
+      .p8 { animation: p8 1.4s linear infinite; }
+      @keyframes p8 { 0% { opacity: .73; } 16% { opacity: .946; } 22% { opacity: .994; } 26% { opacity: .999; } 32% { opacity: .967; } 50% { opacity: .73; } 60% { opacity: .655; } 86% { opacity: .645; } 94% { opacity: .676; } 100% { opacity: .73; } }
+    }
+  </style>
+  <circle cx="-1" cy="-3" r=".31" opacity=".16" class="p1" />
+  <circle cx="0" cy="-3" r=".31" opacity=".16" class="p2" />
+  <circle cx="1" cy="-3" r=".31" opacity=".16" class="p1" />
+  <circle cx="-2" cy="-2" r=".31" opacity=".16" class="p3" />
+  <circle cx="-1" cy="-2" r=".31" opacity=".16" class="p4" />
+  <circle cx="0" cy="-2" r=".31" opacity=".16" class="p5" />
+  <circle cx="1" cy="-2" r=".31" opacity=".16" class="p4" />
+  <circle cx="2" cy="-2" r=".31" opacity=".16" class="p3" />
+  <circle cx="-3" cy="-1" r=".31" opacity=".16" class="p1" />
+  <circle cx="-2" cy="-1" r=".31" opacity=".16" class="p4" />
+  <circle cx="-1" cy="-1" r=".31" opacity=".16" class="p6" />
+  <circle cx="0" cy="-1" r=".31" opacity=".16" class="p7" />
+  <circle cx="1" cy="-1" r=".31" opacity=".16" class="p6" />
+  <circle cx="2" cy="-1" r=".31" opacity=".16" class="p4" />
+  <circle cx="3" cy="-1" r=".31" opacity=".16" class="p1" />
+  <circle cx="-3" cy="0" r=".31" opacity=".85" class="p2" />
+  <circle cx="-2" cy="0" r=".31" opacity=".85" class="p5" />
+  <circle cx="-1" cy="0" r=".31" opacity=".85" class="p7" />
+  <circle cx="0" cy="0" r=".31" opacity=".85" class="p8" />
+  <circle cx="1" cy="0" r=".31" opacity=".85" class="p7" />
+  <circle cx="2" cy="0" r=".31" opacity=".85" class="p5" />
+  <circle cx="3" cy="0" r=".31" opacity=".85" class="p2" />
+  <circle cx="-3" cy="1" r=".31" opacity=".16" class="p1" />
+  <circle cx="-2" cy="1" r=".31" opacity=".16" class="p4" />
+  <circle cx="-1" cy="1" r=".31" opacity=".16" class="p6" />
+  <circle cx="0" cy="1" r=".31" opacity=".16" class="p7" />
+  <circle cx="1" cy="1" r=".31" opacity=".16" class="p6" />
+  <circle cx="2" cy="1" r=".31" opacity=".16" class="p4" />
+  <circle cx="3" cy="1" r=".31" opacity=".16" class="p1" />
+  <circle cx="-2" cy="2" r=".31" opacity=".16" class="p3" />
+  <circle cx="-1" cy="2" r=".31" opacity=".16" class="p4" />
+  <circle cx="0" cy="2" r=".31" opacity=".16" class="p5" />
+  <circle cx="1" cy="2" r=".31" opacity=".16" class="p4" />
+  <circle cx="2" cy="2" r=".31" opacity=".16" class="p3" />
+  <circle cx="-1" cy="3" r=".31" opacity=".16" class="p1" />
+  <circle cx="0" cy="3" r=".31" opacity=".16" class="p2" />
+  <circle cx="1" cy="3" r=".31" opacity=".16" class="p1" />
+</svg>

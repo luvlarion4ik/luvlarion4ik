@@ -37,7 +37,7 @@ For companies of any size, we tailor the terms and discuss any applicable discou
 
 ## Devlarion products
 
-- [AuraWatch](https://luvlarion4ik.github.io/luvlarion4ik/aurawatch/) — An assistant for iPhone and Apple Watch, currently in closed beta. Silent Prompter displays a suggestion on the dimmed watch face.
+- [AuraWatch](https://luvlarion4ik.github.io/luvlarion4ik/aurawatch/) — Voice answers on Apple Watch, prompts during conversations and meeting summaries on iPhone. We’re preparing for private beta.
 - **City Technologies** — We are integrating a commercial service into a public-sector platform to simplify access for users. Project details are covered by a confidentiality agreement.
 - **Larion Keyway** — A keyboard-driven macOS app based on Magerko’s open-source Copilot. We are preparing a licensed commercial release.
 - **Cognivue** — A tool for teams exploring how an audience might respond to an interface or advertising creative before launch.

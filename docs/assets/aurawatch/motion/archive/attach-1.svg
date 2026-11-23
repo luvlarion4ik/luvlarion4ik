@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="still" width="120" height="96" viewBox="0 0 120 96" role="img" aria-labelledby="title">
+  <title id="title">Раскрывающаяся стопка</title>
+  <style>
+    .leftcard { transform:translate(34px,44px) } .rightcard { transform:translate(84px,52px) }
+  svg:target * { animation: none !important; }
+  @media (prefers-reduced-motion: no-preference) {
+    .leftcard { animation: leftcard 4s cubic-bezier(.42,0,.30,1) infinite; }
+    @keyframes leftcard { 0%,16%,100% { transform:translate(53px,45px) } 55%,76% { transform:translate(34px,44px) } }
+    .rightcard { animation: rightcard 4s cubic-bezier(.42,0,.30,1) infinite; }
+    @keyframes rightcard { 0%,16%,100% { transform:translate(65px,50px) } 55%,76% { transform:translate(84px,52px) } }
+  }
+</style>
+  <g class="leftcard">
+    <g transform="rotate(-12)">
+      <rect x="-17" y="-15" width="34" height="30" rx="4" fill="#191919" stroke="#767676" stroke-width="1.5" />
+      <path d="M-11 -7h20" fill="none" stroke="#767676" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M-11 -1h17" fill="none" stroke="#767676" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M-11 5h12" fill="none" stroke="#767676" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+  </g>
+  <g transform="translate(60 46)">
+    <rect x="-17" y="-15" width="34" height="30" rx="4" fill="#191919" stroke="#bbbbbb" stroke-width="1.5" />
+    <path d="M-6 -2v4" fill="none" stroke="#f5f5f5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M-3 -5v10" fill="none" stroke="#f5f5f5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M0 -9v18" fill="none" stroke="#f5f5f5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M3 -6.5v13" fill="none" stroke="#f5f5f5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M6 -3v6" fill="none" stroke="#f5f5f5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+  <g class="rightcard">
+    <g transform="rotate(9)">
+      <rect x="-17" y="-14" width="34" height="28" rx="4" fill="#191919" stroke="#bbbbbb" stroke-width="1.5" />
+      <circle cx="7.48" cy="-5.6" r="2.1" fill="#f5f5f5" />
+      <path d="M-13 8l8.16 -9.24l5.78 5.32l3.4 -3.36l8.16 7.28" fill="none" stroke="#bbbbbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+  </g>
+</svg>

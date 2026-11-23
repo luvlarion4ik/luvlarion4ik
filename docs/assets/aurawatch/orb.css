@@ -1,0 +1,84 @@
+.aura-orb-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, .94fr);
+  align-items: start;
+  gap: clamp(1.5rem, 4vw, 4.5rem);
+}
+
+.aura-orb-stage {
+  margin: 0;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #111113;
+  color: #f4f4f4;
+}
+
+.aura-orb-stage > div {
+  display: grid;
+  min-height: clamp(14rem, 25vw, 22rem);
+  place-items: center;
+}
+
+.aura-orb-stage img {
+  display: block;
+  width: clamp(7.5rem, 14vw, 11rem);
+  height: auto;
+}
+
+.aura-orb-stage figcaption {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: .25rem .75rem;
+  padding: .8rem 1.15rem;
+  border-top: 1px solid #414144;
+}
+
+.aura-orb-stage small { color: #c4c4c8; }
+.aura-orb-stage strong { font-size: .94rem; font-weight: 600; }
+
+.aura-orb-controls { min-width: 0; }
+.aura-orb-controls > p { max-width: 52ch; color: var(--sub); }
+.aura-orb-controls fieldset { min-width: 0; border: 0; padding: 0; margin: 1.25rem 0 .85rem; }
+.aura-orb-controls legend,
+.aura-orb-controls label[for] { display: block; padding: 0; margin-bottom: .4rem; font-weight: 600; }
+.aura-orb-controls fieldset > div { display: flex; flex-wrap: wrap; gap: .35rem; }
+.aura-orb-controls fieldset label { position: relative; cursor: pointer; }
+
+.aura-orb-controls input {
+  position: absolute;
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+}
+
+.aura-orb-controls label span {
+  display: block;
+  padding: .45rem .7rem;
+  font-size: .95rem;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+}
+
+.aura-orb-controls input:checked + span { color: var(--paper); background: var(--ink); border-color: var(--ink); }
+.aura-orb-controls input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 2px; }
+.aura-orb-controls details { margin-top: 1.25rem; }
+.aura-orb-controls details p { color: var(--sub); }
+.aura-orb-controls [data-orb-picker] { margin-top: .9rem; }
+
+.aura-orb-controls select {
+  width: 100%;
+  padding: .6rem;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+}
+
+.aura-orb-controls a { display: inline-block; margin-top: .65rem; text-decoration: underline; text-underline-offset: .2em; }
+
+@media (max-width: 760px) {
+  .aura-orb-layout { grid-template-columns: minmax(0, 1fr); }
+  .aura-orb-stage > div { min-height: 14rem; }
+}

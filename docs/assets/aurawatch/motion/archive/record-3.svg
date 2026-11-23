@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="still" width="120" height="96" viewBox="0 0 120 96" role="img" aria-labelledby="title">
+  <title id="title">Запись встаёт в ленту</title>
+  <style>
+  svg:target * { animation: none !important; }
+  @media (prefers-reduced-motion: no-preference) {
+    .oldrow { animation: oldrow 3.8s cubic-bezier(.42,0,.30,1) infinite; }
+    @keyframes oldrow { 0%,14%,100% { transform:translateY(-24px) } 49%,79% { transform:translateY(0) } }
+    .newrow { animation: newrow 3.8s cubic-bezier(.42,0,.30,1) infinite; }
+    @keyframes newrow { 0%,18%,100% { opacity:0; transform:translateY(-8px) } 49%,79% { opacity:1; transform:translateY(0) } }
+  }
+</style>
+  <rect x="24" y="16" width="72" height="15" rx="5" fill="none" stroke="#494949" stroke-width="1.3" />
+  <path d="M32 23h25" fill="none" stroke="#767676" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+  <g class="oldrow">
+    <rect x="24" y="64" width="72" height="15" rx="5" fill="none" stroke="#494949" stroke-width="1.3" />
+    <path d="M32 71h33" fill="none" stroke="#767676" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+  <g class="newrow">
+    <rect x="24" y="37" width="72" height="21" rx="6" fill="#191919" stroke="#bbbbbb" stroke-width="1.5" />
+    <path d="M33.4 45v5" fill="none" stroke="#f5f5f5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M36 42.5v10" fill="none" stroke="#f5f5f5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M38.6 44.5v6" fill="none" stroke="#f5f5f5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M47 45h32" fill="none" stroke="#bbbbbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M47 50h19" fill="none" stroke="#bbbbbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>

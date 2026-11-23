@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="still" width="224" height="224" viewBox="-3.5 -3.5 7 7" fill="#fff" role="img" aria-labelledby="title">
+  <title id="title">Живая · Покой</title>
+  <style>
+    svg:target circle { animation: none !important; }
+    @media (prefers-reduced-motion: no-preference) {
+      .p1 { animation: p1 4s linear infinite; }
+      @keyframes p1 { 0% { opacity: .252; } 2.778% { opacity: .388; } 9.028% { opacity: .775; } 11.111% { opacity: .863; } 13.194% { opacity: .9; } 14.583% { opacity: .888; } 16.667% { opacity: .822; } 18.75% { opacity: .714; } 25% { opacity: .326; } 27.083% { opacity: .238; } 29.167% { opacity: .2; } 97.222% { opacity: .2; } 100% { opacity: .252; } }
+      .p2 { animation: p2 4s linear infinite; }
+      @keyframes p2 { 0% { opacity: .2; } 4.167% { opacity: .2; } 6.25% { opacity: .238; } 9.028% { opacity: .364; } 15.972% { opacity: .789; } 18.056% { opacity: .871; } 20.139% { opacity: .9; } 21.528% { opacity: .882; } 23.611% { opacity: .809; } 31.944% { opacity: .312; } 34.028% { opacity: .229; } 35.417% { opacity: .203; } 100% { opacity: .2; } }
+      .p3 { animation: p3 4s linear infinite; }
+      @keyframes p3 { 0% { opacity: .2; } 10.417% { opacity: .2; } 12.5% { opacity: .225; } 15.278% { opacity: .341; } 22.917% { opacity: .803; } 25% { opacity: .879; } 26.389% { opacity: .899; } 27.778% { opacity: .89; } 29.861% { opacity: .827; } 31.944% { opacity: .722; } 38.889% { opacity: .299; } 40.972% { opacity: .222; } 42.361% { opacity: .201; } 100% { opacity: .2; } }
+      .p4 { animation: p4 4s linear infinite; }
+      @keyframes p4 { 0% { opacity: .2; } 17.361% { opacity: .2; } 18.75% { opacity: .215; } 20.139% { opacity: .257; } 22.222% { opacity: .356; } 27.778% { opacity: .705; } 29.861% { opacity: .815; } 31.944% { opacity: .885; } 33.333% { opacity: .9; } 34.722% { opacity: .885; } 36.806% { opacity: .815; } 38.889% { opacity: .705; } 45.139% { opacity: .319; } 47.222% { opacity: .233; } 48.611% { opacity: .204; } 100% { opacity: .2; } }
+      .p5 { animation: p5 4s linear infinite; }
+      @keyframes p5 { 0% { opacity: .2; } 25% { opacity: .208; } 26.389% { opacity: .242; } 28.472% { opacity: .333; } 36.111% { opacity: .796; } 38.194% { opacity: .875; } 40.278% { opacity: .899; } 41.667% { opacity: .879; } 43.75% { opacity: .803; } 52.083% { opacity: .305; } 54.167% { opacity: .225; } 55.556% { opacity: .202; } 100% { opacity: .2; } }
+      .p6 { animation: p6 4s linear infinite; }
+      @keyframes p6 { 0% { opacity: .46; } 18.75% { opacity: .471; } 22.222% { opacity: .572; } 29.861% { opacity: .9; } 33.333% { opacity: .96; } 36.806% { opacity: .9; } 45.139% { opacity: .545; } 48.611% { opacity: .463; } 100% { opacity: .46; } }
+      .p7 { animation: p7 4s linear infinite; }
+      @keyframes p7 { 0% { opacity: .2; } 31.944% { opacity: .213; } 33.333% { opacity: .252; } 35.417% { opacity: .348; } 43.056% { opacity: .809; } 45.139% { opacity: .882; } 46.528% { opacity: .9; } 47.917% { opacity: .888; } 50% { opacity: .822; } 52.083% { opacity: .714; } 58.333% { opacity: .326; } 60.417% { opacity: .238; } 61.806% { opacity: .206; } 100% { opacity: .2; } }
+      .p8 { animation: p8 4s linear infinite; }
+      @keyframes p8 { 0% { opacity: .2; } 38.194% { opacity: .206; } 39.583% { opacity: .238; } 41.667% { opacity: .326; } 47.917% { opacity: .714; } 50% { opacity: .822; } 52.083% { opacity: .888; } 53.472% { opacity: .9; } 54.861% { opacity: .882; } 56.944% { opacity: .809; } 64.583% { opacity: .348; } 66.667% { opacity: .252; } 68.056% { opacity: .213; } 100% { opacity: .2; } }
+      .p9 { animation: p9 4s linear infinite; }
+      @keyframes p9 { 0% { opacity: .46; } 25% { opacity: .466; } 28.472% { opacity: .555; } 36.111% { opacity: .886; } 38.194% { opacity: .942; } 40.278% { opacity: .96; } 43.75% { opacity: .89; } 52.083% { opacity: .535; } 55.556% { opacity: .461; } 100% { opacity: .46; } }
+      .p10 { animation: p10 4s linear infinite; }
+      @keyframes p10 { 0% { opacity: .46; } 31.944% { opacity: .469; } 35.417% { opacity: .566; } 43.056% { opacity: .895; } 46.528% { opacity: .96; } 50% { opacity: .904; } 58.333% { opacity: .55; } 61.806% { opacity: .464; } 100% { opacity: .46; } }
+      .p11 { animation: p11 4s linear infinite; }
+      @keyframes p11 { 0% { opacity: .2; } 44.444% { opacity: .202; } 45.833% { opacity: .225; } 47.917% { opacity: .305; } 56.25% { opacity: .803; } 58.333% { opacity: .879; } 59.722% { opacity: .899; } 61.806% { opacity: .875; } 63.889% { opacity: .796; } 71.528% { opacity: .333; } 73.611% { opacity: .242; } 75% { opacity: .208; } 100% { opacity: .2; } }
+      .p12 { animation: p12 4s linear infinite; }
+      @keyframes p12 { 0% { opacity: .2; } 51.389% { opacity: .204; } 52.778% { opacity: .233; } 54.861% { opacity: .319; } 61.111% { opacity: .705; } 63.194% { opacity: .815; } 65.278% { opacity: .885; } 66.667% { opacity: .9; } 68.056% { opacity: .885; } 70.139% { opacity: .815; } 72.222% { opacity: .705; } 77.778% { opacity: .356; } 79.861% { opacity: .257; } 81.25% { opacity: .215; } 82.639% { opacity: .2; } 100% { opacity: .2; } }
+    }
+  </style>
+  <circle cx="-1" cy="-3" r=".31" opacity=".2" class="p1" />
+  <circle cx="0" cy="-3" r=".31" opacity=".421" class="p2" />
+  <circle cx="1" cy="-3" r=".31" opacity=".822" class="p3" />
+  <circle cx="-2" cy="-2" r=".31" opacity=".2" class="p1" />
+  <circle cx="-1" cy="-2" r=".31" opacity=".421" class="p2" />
+  <circle cx="0" cy="-2" r=".31" opacity=".822" class="p3" />
+  <circle cx="1" cy="-2" r=".31" opacity=".822" class="p4" />
+  <circle cx="2" cy="-2" r=".31" opacity=".421" class="p5" />
+  <circle cx="-3" cy="-1" r=".31" opacity=".2" class="p1" />
+  <circle cx="-2" cy="-1" r=".31" opacity=".421" class="p2" />
+  <circle cx="-1" cy="-1" r=".31" opacity=".822" class="p3" />
+  <circle cx="0" cy="-1" r=".31" opacity=".904" class="p6" />
+  <circle cx="1" cy="-1" r=".31" opacity=".421" class="p5" />
+  <circle cx="2" cy="-1" r=".31" opacity=".2" class="p7" />
+  <circle cx="3" cy="-1" r=".31" opacity=".2" class="p8" />
+  <circle cx="-3" cy="0" r=".31" opacity=".421" class="p2" />
+  <circle cx="-2" cy="0" r=".31" opacity=".822" class="p3" />
+  <circle cx="-1" cy="0" r=".31" opacity=".904" class="p6" />
+  <circle cx="0" cy="0" r=".31" opacity=".618" class="p9" />
+  <circle cx="1" cy="0" r=".31" opacity=".46" class="p10" />
+  <circle cx="2" cy="0" r=".31" opacity=".2" class="p8" />
+  <circle cx="3" cy="0" r=".31" opacity=".2" class="p11" />
+  <circle cx="-3" cy="1" r=".31" opacity=".822" class="p3" />
+  <circle cx="-2" cy="1" r=".31" opacity=".822" class="p4" />
+  <circle cx="-1" cy="1" r=".31" opacity=".421" class="p5" />
+  <circle cx="0" cy="1" r=".31" opacity=".46" class="p10" />
+  <circle cx="1" cy="1" r=".31" opacity=".2" class="p8" />
+  <circle cx="2" cy="1" r=".31" opacity=".2" class="p11" />
+  <circle cx="3" cy="1" r=".31" opacity=".2" class="p12" />
+  <circle cx="-2" cy="2" r=".31" opacity=".421" class="p5" />
+  <circle cx="-1" cy="2" r=".31" opacity=".2" class="p7" />
+  <circle cx="0" cy="2" r=".31" opacity=".2" class="p8" />
+  <circle cx="1" cy="2" r=".31" opacity=".2" class="p11" />
+  <circle cx="2" cy="2" r=".31" opacity=".2" class="p12" />
+  <circle cx="-1" cy="3" r=".31" opacity=".2" class="p8" />
+  <circle cx="0" cy="3" r=".31" opacity=".2" class="p11" />
+  <circle cx="1" cy="3" r=".31" opacity=".2" class="p12" />
+</svg>

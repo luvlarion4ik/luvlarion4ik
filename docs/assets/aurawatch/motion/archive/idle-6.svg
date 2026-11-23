@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="still" width="120" height="96" viewBox="0 0 120 96" role="img" aria-labelledby="title">
+  <title id="title">Волна по матрице</title>
+  <style>
+    @media (prefers-reduced-motion: no-preference) {
+      .dot { animation: crest 3.6s ease-in-out infinite; animation-delay: var(--delay); }
+      @keyframes crest {
+        0%, 48%, 100% { transform: translateY(0); opacity: var(--base); }
+        24% { transform: translateY(-2.8px); opacity: .98; }
+      }
+    }
+    svg:target * { animation: none !important; }
+  </style>
+  <g fill="#fff">
+    <circle class="dot" cx="53.2" cy="27.6" r="2.1" opacity="0.220" style="--base: .22; --delay: -3.600s" />
+    <circle class="dot" cx="60.0" cy="27.6" r="2.1" opacity="0.220" style="--base: .22; --delay: -3.413s" />
+    <circle class="dot" cx="66.8" cy="27.6" r="2.1" opacity="0.334" style="--base: .22; --delay: -3.226s" />
+    <circle class="dot" cx="46.4" cy="34.4" r="2.1" opacity="0.220" style="--base: .22; --delay: -3.600s" />
+    <circle class="dot" cx="53.2" cy="34.4" r="2.1" opacity="0.220" style="--base: .22; --delay: -3.413s" />
+    <circle class="dot" cx="60.0" cy="34.4" r="2.1" opacity="0.334" style="--base: .22; --delay: -3.226s" />
+    <circle class="dot" cx="66.8" cy="34.4" r="2.1" opacity="0.638" style="--base: .22; --delay: -3.038s" />
+    <circle class="dot" cx="73.6" cy="34.4" r="2.1" opacity="0.916" style="--base: .22; --delay: -2.851s" />
+    <circle class="dot" cx="39.6" cy="41.2" r="2.1" opacity="0.220" style="--base: .22; --delay: -3.600s" />
+    <circle class="dot" cx="46.4" cy="41.2" r="2.1" opacity="0.220" style="--base: .22; --delay: -3.413s" />
+    <circle class="dot" cx="53.2" cy="41.2" r="2.1" opacity="0.334" style="--base: .22; --delay: -3.226s" />
+    <circle class="dot" cx="60.0" cy="41.2" r="2.1" opacity="0.757" style="--base: .46; --delay: -3.038s" />
+    <circle class="dot" cx="66.8" cy="41.2" r="2.1" opacity="0.916" style="--base: .22; --delay: -2.851s" />
+    <circle class="dot" cx="73.6" cy="41.2" r="2.1" opacity="0.954" style="--base: .22; --delay: -2.664s" />
+    <circle class="dot" cx="80.4" cy="41.2" r="2.1" opacity="0.712" style="--base: .22; --delay: -2.477s" />
+    <circle class="dot" cx="39.6" cy="48.0" r="2.1" opacity="0.220" style="--base: .22; --delay: -3.413s" />
+    <circle class="dot" cx="46.4" cy="48.0" r="2.1" opacity="0.334" style="--base: .22; --delay: -3.226s" />
+    <circle class="dot" cx="53.2" cy="48.0" r="2.1" opacity="0.757" style="--base: .46; --delay: -3.038s" />
+    <circle class="dot" cx="60.0" cy="48.0" r="2.1" opacity="0.955" style="--base: .46; --delay: -2.851s" />
+    <circle class="dot" cx="66.8" cy="48.0" r="2.1" opacity="0.981" style="--base: .46; --delay: -2.664s" />
+    <circle class="dot" cx="73.6" cy="48.0" r="2.1" opacity="0.712" style="--base: .22; --delay: -2.477s" />
+    <circle class="dot" cx="80.4" cy="48.0" r="2.1" opacity="0.395" style="--base: .22; --delay: -2.290s" />
+    <circle class="dot" cx="39.6" cy="54.8" r="2.1" opacity="0.334" style="--base: .22; --delay: -3.226s" />
+    <circle class="dot" cx="46.4" cy="54.8" r="2.1" opacity="0.638" style="--base: .22; --delay: -3.038s" />
+    <circle class="dot" cx="53.2" cy="54.8" r="2.1" opacity="0.916" style="--base: .22; --delay: -2.851s" />
+    <circle class="dot" cx="60.0" cy="54.8" r="2.1" opacity="0.981" style="--base: .46; --delay: -2.664s" />
+    <circle class="dot" cx="66.8" cy="54.8" r="2.1" opacity="0.712" style="--base: .22; --delay: -2.477s" />
+    <circle class="dot" cx="73.6" cy="54.8" r="2.1" opacity="0.395" style="--base: .22; --delay: -2.290s" />
+    <circle class="dot" cx="80.4" cy="54.8" r="2.1" opacity="0.221" style="--base: .22; --delay: -2.102s" />
+    <circle class="dot" cx="46.4" cy="61.6" r="2.1" opacity="0.916" style="--base: .22; --delay: -2.851s" />
+    <circle class="dot" cx="53.2" cy="61.6" r="2.1" opacity="0.954" style="--base: .22; --delay: -2.664s" />
+    <circle class="dot" cx="60.0" cy="61.6" r="2.1" opacity="0.712" style="--base: .22; --delay: -2.477s" />
+    <circle class="dot" cx="66.8" cy="61.6" r="2.1" opacity="0.395" style="--base: .22; --delay: -2.290s" />
+    <circle class="dot" cx="73.6" cy="61.6" r="2.1" opacity="0.221" style="--base: .22; --delay: -2.102s" />
+    <circle class="dot" cx="53.2" cy="68.4" r="2.1" opacity="0.712" style="--base: .22; --delay: -2.477s" />
+    <circle class="dot" cx="60.0" cy="68.4" r="2.1" opacity="0.395" style="--base: .22; --delay: -2.290s" />
+    <circle class="dot" cx="66.8" cy="68.4" r="2.1" opacity="0.221" style="--base: .22; --delay: -2.102s" />
+  </g>
+</svg>

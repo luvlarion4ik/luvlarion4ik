@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="still" width="224" height="224" viewBox="-3.5 -3.5 7 7" fill="#fff" role="img" aria-labelledby="title">
+  <title id="title">Классика · Покой</title>
+  <style>
+    svg:target circle { animation: none !important; }
+    @media (prefers-reduced-motion: no-preference) {
+      .p1 { animation: p1 4s linear infinite; }
+      @keyframes p1 { 0% { opacity: .62; } 13.194% { opacity: .669; } 38.889% { opacity: .885; } 50% { opacity: .92; } 61.111% { opacity: .885; } 86.806% { opacity: .669; } 100% { opacity: .62; } }
+    }
+  </style>
+  <circle cx="-1" cy="-3" r=".31" opacity=".2" />
+  <circle cx="0" cy="-3" r=".31" opacity=".2" />
+  <circle cx="1" cy="-3" r=".31" opacity=".2" />
+  <circle cx="-2" cy="-2" r=".31" opacity=".2" />
+  <circle cx="-1" cy="-2" r=".31" opacity=".2" />
+  <circle cx="0" cy="-2" r=".31" opacity=".2" />
+  <circle cx="1" cy="-2" r=".31" opacity=".2" />
+  <circle cx="2" cy="-2" r=".31" opacity=".2" />
+  <circle cx="-3" cy="-1" r=".31" opacity=".2" />
+  <circle cx="-2" cy="-1" r=".31" opacity=".2" />
+  <circle cx="-1" cy="-1" r=".31" opacity=".2" />
+  <circle cx="0" cy="-1" r=".31" opacity=".92" class="p1" />
+  <circle cx="1" cy="-1" r=".31" opacity=".2" />
+  <circle cx="2" cy="-1" r=".31" opacity=".2" />
+  <circle cx="3" cy="-1" r=".31" opacity=".2" />
+  <circle cx="-3" cy="0" r=".31" opacity=".2" />
+  <circle cx="-2" cy="0" r=".31" opacity=".2" />
+  <circle cx="-1" cy="0" r=".31" opacity=".92" class="p1" />
+  <circle cx="0" cy="0" r=".31" opacity=".92" class="p1" />
+  <circle cx="1" cy="0" r=".31" opacity=".92" class="p1" />
+  <circle cx="2" cy="0" r=".31" opacity=".2" />
+  <circle cx="3" cy="0" r=".31" opacity=".2" />
+  <circle cx="-3" cy="1" r=".31" opacity=".2" />
+  <circle cx="-2" cy="1" r=".31" opacity=".2" />
+  <circle cx="-1" cy="1" r=".31" opacity=".2" />
+  <circle cx="0" cy="1" r=".31" opacity=".92" class="p1" />
+  <circle cx="1" cy="1" r=".31" opacity=".2" />
+  <circle cx="2" cy="1" r=".31" opacity=".2" />
+  <circle cx="3" cy="1" r=".31" opacity=".2" />
+  <circle cx="-2" cy="2" r=".31" opacity=".2" />
+  <circle cx="-1" cy="2" r=".31" opacity=".2" />
+  <circle cx="0" cy="2" r=".31" opacity=".2" />
+  <circle cx="1" cy="2" r=".31" opacity=".2" />
+  <circle cx="2" cy="2" r=".31" opacity=".2" />
+  <circle cx="-1" cy="3" r=".31" opacity=".2" />
+  <circle cx="0" cy="3" r=".31" opacity=".2" />
+  <circle cx="1" cy="3" r=".31" opacity=".2" />
+</svg>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="still" width="224" height="224" viewBox="-3.5 -3.5 7 7" fill="#fff" role="img" aria-labelledby="title">
+  <title id="title">Тихая · Обработка</title>
+  <style>
+    svg:target circle { animation: none !important; }
+    @media (prefers-reduced-motion: no-preference) {
+      .p1 { animation: p1 2.6s linear infinite; }
+      @keyframes p1 { 0% { opacity: .92; } 3.191% { opacity: .9; } 7.447% { opacity: .824; } 21.277% { opacity: .427; } 27.66% { opacity: .311; } 69.149% { opacity: .3; } 72.34% { opacity: .311; } 76.596% { opacity: .377; } 92.553% { opacity: .824; } 96.809% { opacity: .9; } 100% { opacity: .92; } }
+      .p2 { animation: p2 2.6s linear infinite; }
+      @keyframes p2 { 0% { opacity: .346; } 5.319% { opacity: .3; } 46.809% { opacity: .306; } 50% { opacity: .346; } 53.191% { opacity: .413; } 68.085% { opacity: .836; } 72.34% { opacity: .906; } 75.532% { opacity: .919; } 78.723% { opacity: .894; } 82.979% { opacity: .812; } 94.681% { opacity: .47; } 100% { opacity: .346; } }
+      .p3 { animation: p3 2.6s linear infinite; }
+      @keyframes p3 { 0% { opacity: .346; } 4.255% { opacity: .441; } 18.085% { opacity: .836; } 22.34% { opacity: .906; } 25.532% { opacity: .919; } 28.723% { opacity: .894; } 31.915% { opacity: .836; } 46.809% { opacity: .413; } 50% { opacity: .346; } 53.191% { opacity: .306; } 94.681% { opacity: .3; } 100% { opacity: .346; } }
+      .p4 { animation: p4 2.6s linear infinite; }
+      @keyframes p4 { 0% { opacity: .3; } 20.213% { opacity: .3; } 23.404% { opacity: .322; } 28.723% { opacity: .427; } 42.553% { opacity: .824; } 46.809% { opacity: .9; } 50% { opacity: .92; } 53.191% { opacity: .9; } 57.447% { opacity: .824; } 71.277% { opacity: .427; } 76.596% { opacity: .322; } 79.787% { opacity: .3; } 100% { opacity: .3; } }
+    }
+  </style>
+  <circle cx="0" cy="-1" r=".31" opacity=".759" class="p1" />
+  <circle cx="-1" cy="0" r=".31" opacity=".3" class="p2" />
+  <circle cx="0" cy="0" r=".31" opacity=".92" />
+  <circle cx="1" cy="0" r=".31" opacity=".61" class="p3" />
+  <circle cx="0" cy="1" r=".31" opacity=".3" class="p4" />
+</svg>

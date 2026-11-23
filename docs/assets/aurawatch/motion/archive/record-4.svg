@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="still" width="120" height="96" viewBox="0 0 120 96" role="img" aria-labelledby="title">
+  <title id="title">Раскрытие расшифровки</title>
+  <style>
+  svg:target * { animation: none !important; }
+  @media (prefers-reduced-motion: no-preference) {
+    .secondline { animation: secondline 3.8s cubic-bezier(.42,0,.30,1) infinite; transform-origin: 40px 48px; }
+    @keyframes secondline { 0%,15%,100% { opacity:0; transform:translateY(-7px) scaleX(.55) } 50%,80% { opacity:1; transform:translateY(0) scaleX(1) } }
+    .thirdline { animation: thirdline 3.8s cubic-bezier(.42,0,.30,1) infinite; transform-origin: 40px 59px; }
+    @keyframes thirdline { 0%,27%,100% { opacity:0; transform:translateY(-9px) scaleX(.55) } 62%,80% { opacity:1; transform:translateY(0) scaleX(1) } }
+  }
+</style>
+  <path d="M30 30v37" fill="none" stroke="#767676" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="30" cy="36" r="3.4" fill="#f5f5f5" />
+  <g class="firstline">
+    <path d="M40 37h44" fill="none" stroke="#f5f5f5" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+  <g class="secondline">
+    <path d="M40 48h37" fill="none" stroke="#bbbbbb" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+  <g class="thirdline">
+    <path d="M40 59h24" fill="none" stroke="#bbbbbb" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>

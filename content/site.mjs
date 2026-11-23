@@ -115,6 +115,7 @@ export function renderCaseFilter(lang, work) {
 export function renderCaseDetails(lang, project) {
   const l = (ru, en) => localized(lang, ru, en);
   const labels = {
+    apps: l('Приложения', 'Native apps'),
     front: l('Фронтенд', 'Frontend'), back: l('Сервер', 'Backend'), data: l('Данные', 'Data'),
     ai: l('Модели ИИ', 'AI models'), integrations: l('Интеграции', 'Integrations'), hosting: l('Размещение', 'Hosting'),
   };

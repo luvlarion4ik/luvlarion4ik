@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="still" width="120" height="96" viewBox="0 0 120 96" role="img" aria-labelledby="title desc">
+  <title id="title">Обход матрицы</title>
+  <desc id="desc">Светлая точка движется по часовой стрелке. Край матрицы на мгновение светлеет рядом с ней.</desc>
+  <style>
+    .core { fill: #cecece; }
+    .interior, .edge { fill: #797979; }
+    .bearing-0 { fill: #eaeaea; --delay: 0s; }
+    .bearing-1 { --delay: -2.275s; }
+    .bearing-2 { --delay: -1.95s; }
+    .bearing-3 { --delay: -1.625s; }
+    .bearing-4 { --delay: -1.3s; }
+    .bearing-5 { --delay: -.975s; }
+    .bearing-6 { --delay: -.65s; }
+    .bearing-7 { --delay: -.325s; }
+    @media (prefers-reduced-motion: no-preference) {
+      .sweep {
+        transform-origin: 60px 48px;
+        animation: orbit 2.6s linear infinite;
+      }
+      .edge { animation: catch-light 2.6s ease-in-out var(--delay) infinite; }
+      @keyframes orbit {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      @keyframes catch-light {
+        0%, 100% { fill: #eaeaea; }
+        6% { fill: #cdcdcd; }
+        20%, 92% { fill: #797979; }
+      }
+    }
+    svg:target * { animation: none !important; }
+  </style>
+  <g class="edge bearing-0">
+    <circle cx="53.2" cy="27.6" r="1.95"/>
+    <circle cx="60" cy="27.6" r="1.95"/>
+    <circle cx="66.8" cy="27.6" r="1.95"/>
+  </g>
+  <g class="edge bearing-7">
+    <circle cx="46.4" cy="34.4" r="1.95"/>
+  </g>
+  <g class="interior">
+    <circle cx="53.2" cy="34.4" r="1.95"/>
+    <circle cx="60" cy="34.4" r="1.95"/>
+    <circle cx="66.8" cy="34.4" r="1.95"/>
+    <circle cx="46.4" cy="41.2" r="1.95"/>
+    <circle cx="53.2" cy="41.2" r="1.95"/>
+    <circle cx="66.8" cy="41.2" r="1.95"/>
+    <circle cx="73.6" cy="41.2" r="1.95"/>
+    <circle cx="46.4" cy="48" r="1.95"/>
+    <circle cx="73.6" cy="48" r="1.95"/>
+    <circle cx="46.4" cy="54.8" r="1.95"/>
+    <circle cx="53.2" cy="54.8" r="1.95"/>
+    <circle cx="66.8" cy="54.8" r="1.95"/>
+    <circle cx="73.6" cy="54.8" r="1.95"/>
+    <circle cx="53.2" cy="61.6" r="1.95"/>
+    <circle cx="60" cy="61.6" r="1.95"/>
+    <circle cx="66.8" cy="61.6" r="1.95"/>
+  </g>
+  <g class="edge bearing-1">
+    <circle cx="73.6" cy="34.4" r="1.95"/>
+  </g>
+  <g class="edge bearing-6">
+    <circle cx="39.6" cy="41.2" r="1.95"/>
+    <circle cx="39.6" cy="48" r="1.95"/>
+    <circle cx="39.6" cy="54.8" r="1.95"/>
+  </g>
+  <g class="core">
+    <circle cx="60" cy="41.2" r="1.95"/>
+    <circle cx="53.2" cy="48" r="1.95"/>
+    <circle cx="60" cy="48" r="1.95"/>
+    <circle cx="66.8" cy="48" r="1.95"/>
+    <circle cx="60" cy="54.8" r="1.95"/>
+  </g>
+  <g class="edge bearing-2">
+    <circle cx="80.4" cy="41.2" r="1.95"/>
+    <circle cx="80.4" cy="48" r="1.95"/>
+    <circle cx="80.4" cy="54.8" r="1.95"/>
+  </g>
+  <g class="edge bearing-5">
+    <circle cx="46.4" cy="61.6" r="1.95"/>
+  </g>
+  <g class="edge bearing-3">
+    <circle cx="73.6" cy="61.6" r="1.95"/>
+  </g>
+  <g class="edge bearing-4">
+    <circle cx="53.2" cy="68.4" r="1.95"/>
+    <circle cx="60" cy="68.4" r="1.95"/>
+    <circle cx="66.8" cy="68.4" r="1.95"/>
+  </g>
+  <circle cx="60" cy="48" r="30" fill="none" stroke="#454545" stroke-width="1.15"/>
+  <g class="sweep" fill="none" stroke-linecap="round">
+    <path d="M31.468 38.729 A30 30 0 0 1 37.019 28.716" stroke="#626262" stroke-width="1.45"/>
+    <path d="M37.019 28.716 A30 30 0 0 1 43.661 22.84" stroke="#858585" stroke-width="1.7"/>
+    <path d="M43.661 22.84 A30 30 0 0 1 51.229 19.311" stroke="#acacac" stroke-width="1.95"/>
+    <path d="M51.229 19.311 A30 30 0 0 1 60 18" stroke="#dadada" stroke-width="2.15"/>
+    <circle cx="60" cy="18" r="2.5" fill="#fff"/>
+  </g>
+</svg>

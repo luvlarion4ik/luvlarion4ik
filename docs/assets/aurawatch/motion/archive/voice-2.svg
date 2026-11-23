@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="still" width="120" height="96" viewBox="0 0 120 96" role="img" aria-labelledby="title">
+  <title id="title">Столбцы матрицы</title>
+  <style>
+  svg:target * { animation: none !important; }
+  @media (prefers-reduced-motion: no-preference) {
+    .meter { animation: meter 1.55s cubic-bezier(.42,0,.30,1) infinite; transform-origin: 60px 48px; }
+    @keyframes meter { 0%,100% { transform:scaleY(.66); opacity:.68 } 37% { transform:scaleY(.96); opacity:1 } 73% { transform:scaleY(.43); opacity:.84 } }
+  }
+</style>
+  <circle cx="53" cy="27" r="2.15" fill="#494949" />
+  <circle cx="60" cy="27" r="2.15" fill="#494949" />
+  <circle cx="67" cy="27" r="2.15" fill="#494949" />
+  <circle cx="46" cy="34" r="2.15" fill="#494949" />
+  <circle cx="53" cy="34" r="2.15" fill="#494949" />
+  <circle cx="60" cy="34" r="2.15" fill="#494949" />
+  <circle cx="67" cy="34" r="2.15" fill="#494949" />
+  <circle cx="74" cy="34" r="2.15" fill="#494949" />
+  <circle cx="39" cy="41" r="2.15" fill="#494949" />
+  <circle cx="46" cy="41" r="2.15" fill="#494949" />
+  <circle cx="53" cy="41" r="2.15" fill="#494949" />
+  <circle cx="60" cy="41" r="2.15" fill="#494949" />
+  <circle cx="67" cy="41" r="2.15" fill="#494949" />
+  <circle cx="74" cy="41" r="2.15" fill="#494949" />
+  <circle cx="81" cy="41" r="2.15" fill="#494949" />
+  <circle cx="39" cy="48" r="2.15" fill="#494949" />
+  <circle cx="46" cy="48" r="2.15" fill="#494949" />
+  <circle cx="53" cy="48" r="2.15" fill="#494949" />
+  <circle cx="60" cy="48" r="2.15" fill="#494949" />
+  <circle cx="67" cy="48" r="2.15" fill="#494949" />
+  <circle cx="74" cy="48" r="2.15" fill="#494949" />
+  <circle cx="81" cy="48" r="2.15" fill="#494949" />
+  <circle cx="39" cy="55" r="2.15" fill="#494949" />
+  <circle cx="46" cy="55" r="2.15" fill="#494949" />
+  <circle cx="53" cy="55" r="2.15" fill="#494949" />
+  <circle cx="60" cy="55" r="2.15" fill="#494949" />
+  <circle cx="67" cy="55" r="2.15" fill="#494949" />
+  <circle cx="74" cy="55" r="2.15" fill="#494949" />
+  <circle cx="81" cy="55" r="2.15" fill="#494949" />
+  <circle cx="46" cy="62" r="2.15" fill="#494949" />
+  <circle cx="53" cy="62" r="2.15" fill="#494949" />
+  <circle cx="60" cy="62" r="2.15" fill="#494949" />
+  <circle cx="67" cy="62" r="2.15" fill="#494949" />
+  <circle cx="74" cy="62" r="2.15" fill="#494949" />
+  <circle cx="53" cy="69" r="2.15" fill="#494949" />
+  <circle cx="60" cy="69" r="2.15" fill="#494949" />
+  <circle cx="67" cy="69" r="2.15" fill="#494949" />
+  <g class="meter" style="animation-delay:-0.42s">
+    <circle cx="39" cy="41" r="2.15" fill="#f5f5f5" />
+    <circle cx="39" cy="48" r="2.15" fill="#f5f5f5" />
+    <circle cx="39" cy="55" r="2.15" fill="#f5f5f5" />
+  </g>
+  <g class="meter" style="animation-delay:-0.63s">
+    <circle cx="46" cy="34" r="2.15" fill="#f5f5f5" />
+    <circle cx="46" cy="41" r="2.15" fill="#f5f5f5" />
+    <circle cx="46" cy="48" r="2.15" fill="#f5f5f5" />
+    <circle cx="46" cy="55" r="2.15" fill="#f5f5f5" />
+    <circle cx="46" cy="62" r="2.15" fill="#f5f5f5" />
+  </g>
+  <g class="meter" style="animation-delay:-0.84s">
+    <circle cx="53" cy="27" r="2.15" fill="#f5f5f5" />
+    <circle cx="53" cy="34" r="2.15" fill="#f5f5f5" />
+    <circle cx="53" cy="41" r="2.15" fill="#f5f5f5" />
+    <circle cx="53" cy="48" r="2.15" fill="#f5f5f5" />
+    <circle cx="53" cy="55" r="2.15" fill="#f5f5f5" />
+    <circle cx="53" cy="62" r="2.15" fill="#f5f5f5" />
+    <circle cx="53" cy="69" r="2.15" fill="#f5f5f5" />
+  </g>
+  <g class="meter" style="animation-delay:0.0s">
+    <circle cx="60" cy="27" r="2.15" fill="#f5f5f5" />
+    <circle cx="60" cy="34" r="2.15" fill="#f5f5f5" />
+    <circle cx="60" cy="41" r="2.15" fill="#f5f5f5" />
+    <circle cx="60" cy="48" r="2.15" fill="#f5f5f5" />
+    <circle cx="60" cy="55" r="2.15" fill="#f5f5f5" />
+    <circle cx="60" cy="62" r="2.15" fill="#f5f5f5" />
+    <circle cx="60" cy="69" r="2.15" fill="#f5f5f5" />
+  </g>
+  <g class="meter" style="animation-delay:-0.21s">
+    <circle cx="67" cy="34" r="2.15" fill="#f5f5f5" />
+    <circle cx="67" cy="41" r="2.15" fill="#f5f5f5" />
+    <circle cx="67" cy="48" r="2.15" fill="#f5f5f5" />
+    <circle cx="67" cy="55" r="2.15" fill="#f5f5f5" />
+    <circle cx="67" cy="62" r="2.15" fill="#f5f5f5" />
+  </g>
+  <g class="meter" style="animation-delay:-0.42s">
+    <circle cx="74" cy="41" r="2.15" fill="#f5f5f5" />
+    <circle cx="74" cy="48" r="2.15" fill="#f5f5f5" />
+    <circle cx="74" cy="55" r="2.15" fill="#f5f5f5" />
+  </g>
+  <g class="meter" style="animation-delay:-0.63s">
+    <circle cx="81" cy="41" r="2.15" fill="#f5f5f5" />
+    <circle cx="81" cy="48" r="2.15" fill="#f5f5f5" />
+    <circle cx="81" cy="55" r="2.15" fill="#f5f5f5" />
+  </g>
+</svg>

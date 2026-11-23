@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="still" width="224" height="224" viewBox="-3.5 -3.5 7 7" fill="#fff" role="img" aria-labelledby="title">
+  <title id="title">Строгая · Обработка</title>
+  <style>
+    svg:target circle { animation: none !important; }
+    @media (prefers-reduced-motion: no-preference) {
+      .p1 { animation: p1 2.6s steps(1) infinite; }
+      @keyframes p1 { 0% { opacity: .95; } 12.5% { opacity: .55; } 25% { opacity: .32; } 37.5% { opacity: .2; } 50% { opacity: .2; } 62.5% { opacity: .2; } 75% { opacity: .2; } 87.5% { opacity: .2; } 100% { opacity: .95; } }
+      .p2 { animation: p2 2.6s steps(1) infinite; }
+      @keyframes p2 { 0% { opacity: .55; } 12.5% { opacity: .32; } 25% { opacity: .2; } 37.5% { opacity: .2; } 50% { opacity: .2; } 62.5% { opacity: .2; } 75% { opacity: .2; } 87.5% { opacity: .95; } 100% { opacity: .55; } }
+      .p3 { animation: p3 2.6s steps(1) infinite; }
+      @keyframes p3 { 0% { opacity: .2; } 12.5% { opacity: .95; } 25% { opacity: .55; } 37.5% { opacity: .32; } 50% { opacity: .2; } 62.5% { opacity: .2; } 75% { opacity: .2; } 87.5% { opacity: .2; } 100% { opacity: .2; } }
+      .p4 { animation: p4 2.6s steps(1) infinite; }
+      @keyframes p4 { 0% { opacity: .32; } 12.5% { opacity: .2; } 25% { opacity: .2; } 37.5% { opacity: .2; } 50% { opacity: .2; } 62.5% { opacity: .2; } 75% { opacity: .95; } 87.5% { opacity: .55; } 100% { opacity: .32; } }
+      .p5 { animation: p5 2.6s steps(1) infinite; }
+      @keyframes p5 { 0% { opacity: .2; } 12.5% { opacity: .2; } 25% { opacity: .95; } 37.5% { opacity: .55; } 50% { opacity: .32; } 62.5% { opacity: .2; } 75% { opacity: .2; } 87.5% { opacity: .2; } 100% { opacity: .2; } }
+      .p6 { animation: p6 2.6s steps(1) infinite; }
+      @keyframes p6 { 0% { opacity: .2; } 12.5% { opacity: .2; } 25% { opacity: .2; } 37.5% { opacity: .2; } 50% { opacity: .2; } 62.5% { opacity: .95; } 75% { opacity: .55; } 87.5% { opacity: .32; } 100% { opacity: .2; } }
+      .p7 { animation: p7 2.6s steps(1) infinite; }
+      @keyframes p7 { 0% { opacity: .2; } 12.5% { opacity: .2; } 25% { opacity: .2; } 37.5% { opacity: .95; } 50% { opacity: .55; } 62.5% { opacity: .32; } 75% { opacity: .2; } 87.5% { opacity: .2; } 100% { opacity: .2; } }
+      .p8 { animation: p8 2.6s steps(1) infinite; }
+      @keyframes p8 { 0% { opacity: .2; } 12.5% { opacity: .2; } 25% { opacity: .2; } 37.5% { opacity: .2; } 50% { opacity: .95; } 62.5% { opacity: .55; } 75% { opacity: .32; } 87.5% { opacity: .2; } 100% { opacity: .2; } }
+    }
+  </style>
+  <circle cx="-1" cy="-3" r=".31" opacity=".55" class="p1" />
+  <circle cx="0" cy="-3" r=".31" opacity=".55" class="p1" />
+  <circle cx="1" cy="-3" r=".31" opacity=".55" class="p1" />
+  <circle cx="-2" cy="-2" r=".31" opacity=".32" class="p2" />
+  <circle cx="-1" cy="-2" r=".31" opacity=".32" class="p2" />
+  <circle cx="0" cy="-2" r=".31" opacity=".55" class="p1" />
+  <circle cx="1" cy="-2" r=".31" opacity=".95" class="p3" />
+  <circle cx="2" cy="-2" r=".31" opacity=".95" class="p3" />
+  <circle cx="-3" cy="-1" r=".31" opacity=".2" class="p4" />
+  <circle cx="-2" cy="-1" r=".31" opacity=".32" class="p2" />
+  <circle cx="-1" cy="-1" r=".31" opacity=".2" />
+  <circle cx="0" cy="-1" r=".31" opacity=".74" />
+  <circle cx="1" cy="-1" r=".31" opacity=".2" />
+  <circle cx="2" cy="-1" r=".31" opacity=".95" class="p3" />
+  <circle cx="3" cy="-1" r=".31" opacity=".2" class="p5" />
+  <circle cx="-3" cy="0" r=".31" opacity=".2" class="p4" />
+  <circle cx="-2" cy="0" r=".31" opacity=".2" class="p4" />
+  <circle cx="-1" cy="0" r=".31" opacity=".74" />
+  <circle cx="0" cy="0" r=".31" opacity=".74" />
+  <circle cx="1" cy="0" r=".31" opacity=".74" />
+  <circle cx="2" cy="0" r=".31" opacity=".2" class="p5" />
+  <circle cx="3" cy="0" r=".31" opacity=".2" class="p5" />
+  <circle cx="-3" cy="1" r=".31" opacity=".2" class="p4" />
+  <circle cx="-2" cy="1" r=".31" opacity=".2" class="p6" />
+  <circle cx="-1" cy="1" r=".31" opacity=".2" />
+  <circle cx="0" cy="1" r=".31" opacity=".74" />
+  <circle cx="1" cy="1" r=".31" opacity=".2" />
+  <circle cx="2" cy="1" r=".31" opacity=".2" class="p7" />
+  <circle cx="3" cy="1" r=".31" opacity=".2" class="p5" />
+  <circle cx="-2" cy="2" r=".31" opacity=".2" class="p6" />
+  <circle cx="-1" cy="2" r=".31" opacity=".2" class="p6" />
+  <circle cx="0" cy="2" r=".31" opacity=".2" class="p8" />
+  <circle cx="1" cy="2" r=".31" opacity=".2" class="p7" />
+  <circle cx="2" cy="2" r=".31" opacity=".2" class="p7" />
+  <circle cx="-1" cy="3" r=".31" opacity=".2" class="p8" />
+  <circle cx="0" cy="3" r=".31" opacity=".2" class="p8" />
+  <circle cx="1" cy="3" r=".31" opacity=".2" class="p8" />
+</svg>

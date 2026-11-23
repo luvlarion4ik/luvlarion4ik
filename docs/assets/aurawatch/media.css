@@ -1,0 +1,142 @@
+.aura-cover { margin: 0; min-width: 0; }
+.aura-cover-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7%;
+  width: 100%;
+  height: clamp(15rem, 37vw, 34rem);
+  container-type: inline-size;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid #68696b;
+  border-radius: 4px;
+  background: radial-gradient(ellipse at 35% 36%, #656668 0%, #444547 38%, #27282a 75%, #17181a 100%);
+}
+.aura-cover-phone, .aura-cover-case {
+  position: relative;
+  padding: clamp(4px, .8cqw, 10px);
+  border: 1px solid #b5b6b8;
+  background: linear-gradient(125deg, #95969a 0, #252628 12%, #090a0a 45%, #4d4e50 76%, #1b1c1d 100%);
+  box-shadow: inset 0 0 0 1px #1a1a1b, 0 1.2cqw 2.5cqw #0008;
+}
+.aura-cover-phone { height: 85%; border-radius: 15% / 7%; }
+.aura-cover-watch {
+  position: relative;
+  height: 41%;
+  transform: translateY(11%);
+}
+.aura-cover-watch::before {
+  content: "";
+  position: absolute;
+  inset: -29% 16%;
+  border: 1px solid #656568;
+  border-radius: 22% / 8%;
+  background: linear-gradient(90deg, #343538, #4c4d4f 40%, #404143 77%, #292a2c);
+  box-shadow: 0 .9cqw 1.5cqw #0005;
+}
+.aura-cover-watch::after {
+  content: "";
+  position: absolute;
+  top: 24%;
+  right: -3%;
+  width: 6%;
+  height: 17%;
+  border-radius: 35%;
+  background: repeating-linear-gradient(0deg, #5b5c5d 0 1px, #252627 1px 3px);
+  border: 1px solid #888;
+}
+.aura-cover-case { z-index: 1; height: 100%; border-radius: 24% / 21%; }
+.aura-cover-stage img { display: block; width: auto; height: 100%; }
+.aura-cover-phone img { border-radius: 12% / 5.5%; }
+.aura-cover-case img { border-radius: 20% / 17%; }
+.aura-cover figcaption { color: var(--sub); margin-top: .65rem; font-size: .9rem; }
+
+.aura-media { min-width: 0; }
+.aura-gallery-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.aura-gallery-head p, .aura-screen figcaption p, .aura-film p { color: var(--sub); }
+.aura-gallery-head p { max-width: 55ch; }
+.aura-gallery-controls { display: flex; flex-wrap: wrap; gap: .45rem; }
+.aura-gallery-controls button {
+  gap: .45rem;
+  min-height: 44px;
+  padding: .45rem .8rem;
+  font-size: .9rem;
+}
+.aura-gallery-controls button:disabled { opacity: .45; cursor: default; }
+.aura-screens {
+  position: relative;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: clamp(17.5rem, 32%, 23.5rem);
+  align-items: start;
+  gap: clamp(.9rem, 2vw, 1.65rem);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 1.15rem;
+  scrollbar-color: var(--sub) var(--surface);
+  scrollbar-width: thin;
+}
+.aura-screens:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+.aura-screens li { min-width: 0; scroll-snap-align: start; }
+.aura-screen { margin: 0; }
+.aura-screen-stage, .aura-film-stage {
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: var(--surface);
+}
+.aura-screen-stage { height: clamp(24rem, 39vw, 30rem); padding: .85rem; }
+.aura-screen-stage:focus-visible { outline-offset: -4px; }
+.aura-screen-stage img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  min-height: 0;
+  border: 2px solid #414144;
+  box-shadow: 0 3px 9px #0002;
+}
+.aura-screen-stage .aura-screen-watch { border-radius: 17% / 14%; width: min(100%, 14.5rem); }
+.aura-screen-phone { border-radius: 12% / 5.5%; }
+.aura-screen figcaption { margin-top: 1rem; }
+.aura-screen small, .aura-film small { display: block; color: var(--accent); }
+.aura-screen strong {
+  display: block;
+  margin: .25rem 0 .4rem;
+  font-size: clamp(1.2rem, 1.65vw, 1.5rem);
+  letter-spacing: -.025em;
+  line-height: 1.2;
+}
+.aura-film {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(1.5rem, 5vw, 5rem);
+  margin: clamp(2.75rem, 6vw, 5rem) 0 0;
+}
+.aura-film-stage { padding: clamp(1.25rem, 3vw, 2.5rem); }
+.aura-film video { display: block; width: min(100%, 17rem); height: auto; background: #000; }
+.aura-film figcaption h3 { margin: .4rem 0 .85rem; }
+.aura-film figcaption p { max-width: 46ch; }
+@media (prefers-reduced-motion: no-preference) {
+  .aura-screens { scroll-behavior: smooth; }
+}
+@media (max-width: 740px) {
+  .aura-cover-stage { height: auto; aspect-ratio: 1.36; }
+  .aura-screens { grid-auto-columns: min(90%, 22rem); }
+  .aura-screen-stage { height: clamp(23rem, 120vw, 30rem); }
+  .aura-film { grid-template-columns: 1fr; gap: 1.15rem; }
+}

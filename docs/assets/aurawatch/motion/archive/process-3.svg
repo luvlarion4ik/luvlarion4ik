@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="still" width="120" height="96" viewBox="0 0 120 96" role="img" aria-labelledby="title desc">
+  <title id="title">Сборка из трёх групп</title>
+  <desc id="desc">Три сектора по очереди сходятся к центру. Готовая матрица ненадолго задерживается, затем сектора раскрываются.</desc>
+  <style>
+    .sector { fill: #adadad; }
+    .upper-left  { transform: translate(-2.8px,-1.6px); }
+    .upper-right { transform: translate(2.8px,-1.6px); }
+    .lower       { transform: translate(0,3.2px); }
+    @media (prefers-reduced-motion: no-preference) {
+      .sector { animation: 3.4s cubic-bezier(.40,0,.25,1) infinite; }
+      .upper-left  { animation-name: settle-left; }
+      .upper-right { animation-name: settle-right; }
+      .lower       { animation-name: settle-lower; }
+      @keyframes settle-left {
+        0%, 4%, 100% { transform: translate(-7px,-4px); opacity: .72; }
+        34%, 78% { transform: translate(0,0); opacity: 1; }
+      }
+      @keyframes settle-right {
+        0%, 13%, 97%, 100% { transform: translate(7px,-4px); opacity: .72; }
+        43%, 74% { transform: translate(0,0); opacity: 1; }
+      }
+      @keyframes settle-lower {
+        0%, 22%, 94%, 100% { transform: translate(0,8px); opacity: .72; }
+        52%, 71% { transform: translate(0,0); opacity: 1; }
+      }
+    }
+    svg:target * { animation: none !important; }
+  </style>
+  <g class="sector upper-left">
+    <circle cx="53.2" cy="27.6" r="1.95"/>
+    <circle cx="60" cy="27.6" r="1.95"/>
+    <circle cx="46.4" cy="34.4" r="1.95"/>
+    <circle cx="53.2" cy="34.4" r="1.95"/>
+    <circle cx="60" cy="34.4" r="1.95"/>
+    <circle cx="39.6" cy="41.2" r="1.95"/>
+    <circle cx="46.4" cy="41.2" r="1.95"/>
+    <circle cx="53.2" cy="41.2" r="1.95"/>
+    <circle cx="60" cy="41.2" r="1.95" fill="#eeeeee"/>
+    <circle cx="39.6" cy="48" r="1.95"/>
+    <circle cx="46.4" cy="48" r="1.95"/>
+    <circle cx="53.2" cy="48" r="1.95" fill="#eeeeee"/>
+    <circle cx="60" cy="48" r="1.95" fill="#eeeeee"/>
+    <circle cx="39.6" cy="54.8" r="1.95"/>
+    <circle cx="46.4" cy="54.8" r="1.95"/>
+  </g>
+  <g class="sector upper-right">
+    <circle cx="66.8" cy="27.6" r="1.95"/>
+    <circle cx="66.8" cy="34.4" r="1.95"/>
+    <circle cx="73.6" cy="34.4" r="1.95"/>
+    <circle cx="66.8" cy="41.2" r="1.95"/>
+    <circle cx="73.6" cy="41.2" r="1.95"/>
+    <circle cx="80.4" cy="41.2" r="1.95"/>
+    <circle cx="66.8" cy="48" r="1.95" fill="#eeeeee"/>
+    <circle cx="73.6" cy="48" r="1.95"/>
+    <circle cx="80.4" cy="48" r="1.95"/>
+    <circle cx="73.6" cy="54.8" r="1.95"/>
+    <circle cx="80.4" cy="54.8" r="1.95"/>
+  </g>
+  <g class="sector lower">
+    <circle cx="53.2" cy="54.8" r="1.95"/>
+    <circle cx="60" cy="54.8" r="1.95" fill="#eeeeee"/>
+    <circle cx="66.8" cy="54.8" r="1.95"/>
+    <circle cx="46.4" cy="61.6" r="1.95"/>
+    <circle cx="53.2" cy="61.6" r="1.95"/>
+    <circle cx="60" cy="61.6" r="1.95"/>
+    <circle cx="66.8" cy="61.6" r="1.95"/>
+    <circle cx="73.6" cy="61.6" r="1.95"/>
+    <circle cx="53.2" cy="68.4" r="1.95"/>
+    <circle cx="60" cy="68.4" r="1.95"/>
+    <circle cx="66.8" cy="68.4" r="1.95"/>
+  </g>
+</svg>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="still" width="120" height="96" viewBox="0 0 120 96" role="img" aria-labelledby="title">
+  <title id="title">Контур записи</title>
+  <style>
+  svg:target * { animation: none !important; }
+  @media (prefers-reduced-motion: no-preference) {
+    .draw { animation: draw 3.8s cubic-bezier(.42,0,.30,1) infinite; }
+    @keyframes draw { 0%,9% { stroke-dashoffset:96 } 56%,89% { stroke-dashoffset:0 } 100% { stroke-dashoffset:-96 } }
+    .ink { animation: ink 3.8s cubic-bezier(.42,0,.30,1) infinite; }
+    @keyframes ink { 0%,15%,100% { opacity:.22 } 55%,89% { opacity:1 } }
+  }
+</style>
+  <path d="M30 25h60q7 0 7 7v33q0 7 -7 7H30q-7 0-7-7V32q0-7 7-7z" fill="none" stroke="#494949" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M30 25h60q7 0 7 7v33q0 7 -7 7H30q-7 0-7-7V32q0-7 7-7z" fill="none" stroke="#bbbbbb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="draw" pathLength="100" stroke-dasharray="100" />
+  <g class="ink">
+    <path d="M34.8 45v6" fill="none" stroke="#f5f5f5" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M37.9 42v12" fill="none" stroke="#f5f5f5" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M41 37.5v21" fill="none" stroke="#f5f5f5" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M44.1 42.5v11" fill="none" stroke="#f5f5f5" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M47.2 45.5v5" fill="none" stroke="#f5f5f5" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M57 43h26" fill="none" stroke="#bbbbbb" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M57 51h18" fill="none" stroke="#bbbbbb" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>

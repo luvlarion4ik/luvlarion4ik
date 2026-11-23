@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="still" width="224" height="224" viewBox="-3.5 -3.5 7 7" fill="#fff" role="img" aria-labelledby="title">
+  <title id="title">Классика · Голос</title>
+  <style>
+    svg:target circle { animation: none !important; }
+    @media (prefers-reduced-motion: no-preference) {
+      .p1 { animation: p1 2.2s linear infinite; }
+      @keyframes p1 { 0% { opacity: .2; } 17.722% { opacity: .2; } 18.987% { opacity: .316; } 20.253% { opacity: .373; } 21.519% { opacity: .354; } 22.785% { opacity: .262; } 24.051% { opacity: .2; } 40.506% { opacity: .2; } 41.772% { opacity: .246; } 44.304% { opacity: .609; } 45.57% { opacity: .751; } 46.835% { opacity: .856; } 48.101% { opacity: .917; } 49.367% { opacity: .93; } 50.633% { opacity: .896; } 51.899% { opacity: .815; } 53.165% { opacity: .693; } 56.962% { opacity: .2; } 100% { opacity: .2; } }
+      .p2 { animation: p2 2.2s linear infinite; }
+      @keyframes p2 { 0% { opacity: .2; } 15.19% { opacity: .2; } 17.722% { opacity: .493; } 18.987% { opacity: .587; } 20.253% { opacity: .63; } 21.519% { opacity: .616; } 22.785% { opacity: .548; } 25.316% { opacity: .3; } 26.582% { opacity: .2; } 37.975% { opacity: .2; } 39.241% { opacity: .241; } 43.038% { opacity: .677; } 45.57% { opacity: .908; } 46.835% { opacity: .984; } 50.633% { opacity: 1; } 51.899% { opacity: .954; } 53.165% { opacity: .865; } 55.696% { opacity: .615; } 58.228% { opacity: .315; } 59.494% { opacity: .2; } 100% { opacity: .2; } }
+      .p3 { animation: p3 2.2s linear infinite; }
+      @keyframes p3 { 0% { opacity: .2; } 17.722% { opacity: .2; } 20.253% { opacity: .237; } 22.785% { opacity: .2; } 41.772% { opacity: .2; } 45.57% { opacity: .443; } 46.835% { opacity: .5; } 49.367% { opacity: .54; } 51.899% { opacity: .478; } 53.165% { opacity: .411; } 55.696% { opacity: .226; } 56.962% { opacity: .2; } 100% { opacity: .2; } }
+      .p4 { animation: p4 2.2s linear infinite; }
+      @keyframes p4 { 0% { opacity: .2; } 12.658% { opacity: .2; } 13.924% { opacity: .344; } 16.456% { opacity: .801; } 17.722% { opacity: .987; } 22.785% { opacity: 1; } 24.051% { opacity: .912; } 27.848% { opacity: .336; } 29.114% { opacity: .2; } 35.443% { opacity: .2; } 36.709% { opacity: .288; } 37.975% { opacity: .455; } 40.506% { opacity: .845; } 41.772% { opacity: 1; } 55.696% { opacity: 1; } 56.962% { opacity: .953; } 60.759% { opacity: .339; } 62.025% { opacity: .2; } 100% { opacity: .2; } }
+      .p5 { animation: p5 2.2s linear infinite; }
+      @keyframes p5 { 0% { opacity: .2; } 15.19% { opacity: .2; } 16.456% { opacity: .257; } 17.722% { opacity: .383; } 18.987% { opacity: .47; } 20.253% { opacity: .509; } 21.519% { opacity: .496; } 22.785% { opacity: .434; } 25.316% { opacity: .206; } 39.241% { opacity: .2; } 40.506% { opacity: .287; } 43.038% { opacity: .553; } 45.57% { opacity: .765; } 46.835% { opacity: .835; } 48.101% { opacity: .876; } 49.367% { opacity: .886; } 50.633% { opacity: .862; } 51.899% { opacity: .808; } 53.165% { opacity: .725; } 55.696% { opacity: .495; } 58.228% { opacity: .219; } 59.494% { opacity: .2; } 100% { opacity: .2; } }
+      .p6 { animation: p6 2.2s linear infinite; }
+      @keyframes p6 { 0% { opacity: .2; } 44.304% { opacity: .2; } 46.835% { opacity: .298; } 49.367% { opacity: .333; } 50.633% { opacity: .317; } 53.165% { opacity: .223; } 54.43% { opacity: .2; } 100% { opacity: .2; } }
+      .p7 { animation: p7 2.2s linear infinite; }
+      @keyframes p7 { 0% { opacity: .2; } 11.392% { opacity: .2; } 17.722% { opacity: .551; } 20.253% { opacity: .615; } 22.785% { opacity: .577; } 29.114% { opacity: .278; } 31.646% { opacity: .22; } 32.911% { opacity: .219; } 34.177% { opacity: .236; } 36.709% { opacity: .315; } 43.038% { opacity: .636; } 45.57% { opacity: .742; } 48.101% { opacity: .798; } 49.367% { opacity: .803; } 51.899% { opacity: .764; } 54.43% { opacity: .67; } 63.291% { opacity: .214; } 100% { opacity: .2; } }
+      .p8 { animation: p8 2.2s linear infinite; }
+      @keyframes p8 { 0% { opacity: .2; } 7.595% { opacity: .2; } 8.861% { opacity: .268; } 11.392% { opacity: .499; } 15.19% { opacity: .993; } 25.316% { opacity: 1; } 26.582% { opacity: .953; } 29.114% { opacity: .698; } 30.38% { opacity: .616; } 31.646% { opacity: .572; } 32.911% { opacity: .57; } 34.177% { opacity: .606; } 35.443% { opacity: .678; } 39.241% { opacity: 1; } 58.228% { opacity: 1; } 59.494% { opacity: .963; } 62.025% { opacity: .681; } 64.557% { opacity: .451; } 65.823% { opacity: .36; } 68.354% { opacity: .222; } 69.62% { opacity: .2; } 100% { opacity: .2; } }
+      .p9 { animation: p9 2.2s linear infinite; }
+      @keyframes p9 { 0% { opacity: .2; } 8.861% { opacity: .2; } 10.127% { opacity: .253; } 12.658% { opacity: .461; } 16.456% { opacity: .835; } 17.722% { opacity: .936; } 18.987% { opacity: 1; } 21.519% { opacity: 1; } 22.785% { opacity: .977; } 24.051% { opacity: .895; } 27.848% { opacity: .582; } 29.114% { opacity: .496; } 30.38% { opacity: .435; } 31.646% { opacity: .403; } 32.911% { opacity: .401; } 34.177% { opacity: .428; } 36.709% { opacity: .555; } 41.772% { opacity: .968; } 43.038% { opacity: 1; } 55.696% { opacity: 1; } 56.962% { opacity: .917; } 60.759% { opacity: .584; } 63.291% { opacity: .392; } 65.823% { opacity: .245; } 67.089% { opacity: .2; } 100% { opacity: .2; } }
+      .p10 { animation: p10 2.2s linear infinite; }
+      @keyframes p10 { 0% { opacity: .2; } 6.329% { opacity: .213; } 7.595% { opacity: .288; } 8.861% { opacity: .393; } 10.127% { opacity: .532; } 11.392% { opacity: .708; } 12.658% { opacity: .915; } 13.924% { opacity: 1; } 27.848% { opacity: 1; } 29.114% { opacity: .978; } 30.38% { opacity: .866; } 31.646% { opacity: .807; } 32.911% { opacity: .804; } 34.177% { opacity: .854; } 35.443% { opacity: .951; } 36.709% { opacity: 1; } 60.759% { opacity: 1; } 62.025% { opacity: .955; } 64.557% { opacity: .642; } 67.089% { opacity: .415; } 68.354% { opacity: .331; } 70.886% { opacity: .214; } 100% { opacity: .2; } }
+      .p11 { animation: p11 2.2s linear infinite; }
+      @keyframes p11 { 0% { opacity: .2; } 7.595% { opacity: .2; } 8.861% { opacity: .24; } 11.392% { opacity: .453; } 15.19% { opacity: .907; } 16.456% { opacity: 1; } 25.316% { opacity: 1; } 27.848% { opacity: .743; } 29.114% { opacity: .636; } 30.38% { opacity: .56; } 31.646% { opacity: .52; } 32.911% { opacity: .518; } 34.177% { opacity: .552; } 35.443% { opacity: .617; } 36.709% { opacity: .71; } 39.241% { opacity: .951; } 40.506% { opacity: 1; } 58.228% { opacity: 1; } 63.291% { opacity: .507; } 65.823% { opacity: .324; } 68.354% { opacity: .2; } 100% { opacity: .2; } }
+      .p12 { animation: p12 2.2s linear infinite; }
+      @keyframes p12 { 0% { opacity: .2; } 10.127% { opacity: .205; } 12.658% { opacity: .382; } 16.456% { opacity: .701; } 17.722% { opacity: .788; } 18.987% { opacity: .847; } 20.253% { opacity: .874; } 21.519% { opacity: .865; } 22.785% { opacity: .823; } 29.114% { opacity: .412; } 31.646% { opacity: .332; } 32.911% { opacity: .331; } 34.177% { opacity: .354; } 36.709% { opacity: .463; } 44.304% { opacity: .984; } 53.165% { opacity: 1; } 54.43% { opacity: .95; } 55.696% { opacity: .865; } 62.025% { opacity: .401; } 65.823% { opacity: .2; } 100% { opacity: .2; } }
+      .p13 { animation: p13 2.2s linear infinite; }
+      @keyframes p13 { 0% { opacity: .2; } 11.392% { opacity: .2; } 12.658% { opacity: .218; } 17.722% { opacity: .48; } 20.253% { opacity: .536; } 22.785% { opacity: .503; } 27.848% { opacity: .285; } 30.38% { opacity: .204; } 34.177% { opacity: .2; } 36.709% { opacity: .27; } 43.038% { opacity: .555; } 45.57% { opacity: .649; } 49.367% { opacity: .703; } 53.165% { opacity: .632; } 62.025% { opacity: .23; } 63.291% { opacity: .2; } 100% { opacity: .2; } }
+      .p14 { animation: p14 2.2s linear infinite; }
+      @keyframes p14 { 0% { opacity: .8; } 6.329% { opacity: .819; } 8.861% { opacity: .88; } 11.392% { opacity: .986; } 12.658% { opacity: 1; } 63.291% { opacity: 1; } 68.354% { opacity: .859; } 72.152% { opacity: .806; } 100% { opacity: .8; } }
+      .p15 { animation: p15 2.2s linear infinite; }
+      @keyframes p15 { 0% { opacity: .845; } 3.797% { opacity: .873; } 6.329% { opacity: .935; } 7.595% { opacity: .99; } 8.861% { opacity: 1; } 68.354% { opacity: 1; } 72.152% { opacity: .908; } 77.215% { opacity: .854; } 100% { opacity: .845; } }
+      .p16 { animation: p16 2.2s linear infinite; }
+      @keyframes p16 { 0% { opacity: .813; } 5.063% { opacity: .851; } 7.595% { opacity: .92; } 8.861% { opacity: .977; } 10.127% { opacity: 1; } 65.823% { opacity: 1; } 67.089% { opacity: .989; } 70.886% { opacity: .88; } 75.949% { opacity: .824; } 100% { opacity: .813; } }
+      .p17 { animation: p17 2.2s linear infinite; }
+      @keyframes p17 { 0% { opacity: .89; } 3.797% { opacity: .929; } 6.329% { opacity: 1; } 70.886% { opacity: 1; } 74.684% { opacity: .926; } 78.481% { opacity: .895; } 100% { opacity: .89; } }
+      .p18 { animation: p18 2.2s linear infinite; }
+      @keyframes p18 { 0% { opacity: .835; } 5.063% { opacity: .883; } 8.861% { opacity: 1; } 67.089% { opacity: 1; } 68.354% { opacity: .998; } 72.152% { opacity: .893; } 77.215% { opacity: .843; } 100% { opacity: .835; } }
+      .p19 { animation: p19 2.2s linear infinite; }
+      @keyframes p19 { 0% { opacity: .8; } 3.797% { opacity: .817; } 6.329% { opacity: .856; } 10.127% { opacity: 1; } 64.557% { opacity: 1; } 65.823% { opacity: .998; } 68.354% { opacity: .911; } 70.886% { opacity: .856; } 74.684% { opacity: .816; } 100% { opacity: .8; } }
+      .p20 { animation: p20 2.2s linear infinite; }
+      @keyframes p20 { 0% { opacity: .8; } 6.329% { opacity: .808; } 8.861% { opacity: .862; } 12.658% { opacity: 1; } 32.911% { opacity: .985; } 34.177% { opacity: 1; } 62.025% { opacity: 1; } 68.354% { opacity: .843; } 72.152% { opacity: .8; } 100% { opacity: .8; } }
+    }
+  </style>
+  <circle cx="-1" cy="-3" r=".31" opacity=".2" />
+  <circle cx="0" cy="-3" r=".31" opacity=".2" class="p1" />
+  <circle cx="1" cy="-3" r=".31" opacity=".2" />
+  <circle cx="-2" cy="-2" r=".31" opacity=".2" class="p2" />
+  <circle cx="-1" cy="-2" r=".31" opacity=".2" class="p3" />
+  <circle cx="0" cy="-2" r=".31" opacity=".534" class="p4" />
+  <circle cx="1" cy="-2" r=".31" opacity=".2" class="p5" />
+  <circle cx="2" cy="-2" r=".31" opacity=".2" class="p6" />
+  <circle cx="-3" cy="-1" r=".31" opacity=".398" class="p7" />
+  <circle cx="-2" cy="-1" r=".31" opacity=".96" class="p8" />
+  <circle cx="-1" cy="-1" r=".31" opacity=".69" class="p9" />
+  <circle cx="0" cy="-1" r=".31" opacity="1" class="p10" />
+  <circle cx="1" cy="-1" r=".31" opacity=".877" class="p11" />
+  <circle cx="2" cy="-1" r=".31" opacity=".577" class="p12" />
+  <circle cx="3" cy="-1" r=".31" opacity=".344" class="p13" />
+  <circle cx="-3" cy="0" r=".31" opacity="1" class="p14" />
+  <circle cx="-2" cy="0" r=".31" opacity="1" class="p15" />
+  <circle cx="-1" cy="0" r=".31" opacity="1" class="p16" />
+  <circle cx="0" cy="0" r=".31" opacity="1" class="p17" />
+  <circle cx="1" cy="0" r=".31" opacity="1" class="p18" />
+  <circle cx="2" cy="0" r=".31" opacity="1" class="p19" />
+  <circle cx="3" cy="0" r=".31" opacity="1" class="p20" />
+  <circle cx="-3" cy="1" r=".31" opacity=".398" class="p7" />
+  <circle cx="-2" cy="1" r=".31" opacity=".96" class="p8" />
+  <circle cx="-1" cy="1" r=".31" opacity=".69" class="p9" />
+  <circle cx="0" cy="1" r=".31" opacity="1" class="p10" />
+  <circle cx="1" cy="1" r=".31" opacity=".877" class="p11" />
+  <circle cx="2" cy="1" r=".31" opacity=".577" class="p12" />
+  <circle cx="3" cy="1" r=".31" opacity=".344" class="p13" />
+  <circle cx="-2" cy="2" r=".31" opacity=".2" class="p2" />
+  <circle cx="-1" cy="2" r=".31" opacity=".2" class="p3" />
+  <circle cx="0" cy="2" r=".31" opacity=".534" class="p4" />
+  <circle cx="1" cy="2" r=".31" opacity=".2" class="p5" />
+  <circle cx="2" cy="2" r=".31" opacity=".2" class="p6" />
+  <circle cx="-1" cy="3" r=".31" opacity=".2" />
+  <circle cx="0" cy="3" r=".31" opacity=".2" class="p1" />
+  <circle cx="1" cy="3" r=".31" opacity=".2" />
+</svg>
