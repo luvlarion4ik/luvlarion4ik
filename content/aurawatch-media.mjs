@@ -67,7 +67,17 @@ export function renderAuraMedia(lang, asset) {
       <figcaption><small>${watch ? "Apple Watch" : "iPhone"}</small><strong>${title}</strong><p>${caption}</p></figcaption>
     </figure></li>`;
   }).join("");
-  const videoTitle = ru ? "Сеанс суфлёра на часах" : "A prompter session on the watch";
+  const sessionFrames = [
+    ["input", ru ? "Фраза" : "Input",
+      ru ? "Вводим на часах слово «Нагрузка»." : "We enter “Нагрузка” (load) on the watch.",
+      ru ? "Слово «Нагрузка» над клавиатурой Apple Watch" : "The Russian word for load above the Apple Watch keyboard"],
+    ["hint", ru ? "Подсказка" : "Prompt",
+      ru ? "Суфлёр напоминает цифру для ответа — 40 тысяч событий в секунду в Kafka." : "The prompter brings up a figure for the answer — 40,000 Kafka events per second.",
+      ru ? "Первая подсказка на часах с текстом «Kafka, 40k событий/с»" : "The first watch prompt showing Kafka and 40k events per second"],
+    ["summary", ru ? "Итоги встречи" : "Meeting summary",
+      ru ? "После разговора открываем резюме собеседования и список подсказок." : "After the conversation, we open the interview summary and review the prompts.",
+      ru ? "Итоги собеседования с резюме и счётчиком из девяти подсказок" : "Interview summary with notes and a count of nine prompts"],
+  ];
   return `<section id="screens" class="aura-media" aria-labelledby="screens-title">
     <h2 id="screens-title">${ru ? "Приложение в работе" : "The app in action"}</h2>
     <div class="aura-gallery-head">
@@ -79,13 +89,16 @@ export function renderAuraMedia(lang, asset) {
       </div>
     </div>
     <ul id="aura-screens" class="aura-screens" tabindex="0" aria-label="${ru ? "Скриншоты AuraWatch" : "AuraWatch screenshots"}">${cards}</ul>
-    <figure id="session-video" class="aura-film">
-      <div class="aura-film-stage"><video width="416" height="496" controls playsinline preload="metadata" poster="${media}watch-demo-poster.png" aria-labelledby="aura-film-title" aria-describedby="aura-film-description">
-        <source src="${media}watch-demo.mp4" type="video/mp4"><source src="${media}watch-demo.webm" type="video/webm">
-        <a href="${media}watch-demo.mp4">${ru ? "Открыть запись (MP4)" : "Open recording (MP4)"}</a>
-      </video></div>
-      <figcaption><small>Apple Watch · ${ru ? "20 с" : "20 s"}</small><h3 id="aura-film-title">${videoTitle}</h3>
-      <p id="aura-film-description">${ru ? "Вводим «Нагрузка», читаем подсказку о Kafka и открываем итоги разговора. Снято в приложении для watchOS в режиме Demo. Паузы сокращены." : "We enter “Нагрузка” (load), read a prompt about Kafka and open the conversation summary. Recorded in the native watchOS app in Demo mode, with pauses shortened."}</p></figcaption>
-    </figure>
+  </section>
+  <section id="session-video" class="aura-session" aria-labelledby="session">
+    <h2 id="session">${ru ? "Сеанс суфлёра на часах" : "A prompter session on the watch"}</h2>
+    <p>${ru ? "На примере собеседования в режиме Demo." : "From a sample interview in Demo mode."}</p>
+    <ol class="aura-session-frames">${sessionFrames.map(([file, title, caption, alt]) => {
+      const url = media + "session-" + file + ".png";
+      return `<li><figure>
+        <a href="${url}" aria-label="${ru ? "Открыть в полном размере" : "Open full-size image"} — ${alt}"><img src="${url}" width="416" height="496" alt="${alt}" loading="lazy"></a>
+        <figcaption><h3>${title}</h3><p>${caption}</p></figcaption>
+      </figure></li>`;
+    }).join("")}</ol>
   </section>`;
 }
