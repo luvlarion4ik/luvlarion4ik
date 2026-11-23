@@ -4,7 +4,6 @@
 import { esc } from './site.mjs';
 import { packageStartingPrice } from './pricing.mjs';
 import { parts, segments as segmentPages } from './segments.mjs';
-import { pageArt } from './page-art.mjs';
 import { renderShop, hardware, deviceArt, PHOTO } from './shop.mjs';
 import { directions, scenarios, beforeOrder } from './directions.mjs';
 
@@ -776,5 +775,3 @@ export function renderEnterprisePage(lang, route, ctx) {
   const dc = ['hardware/', 'compute/', 'private-ai/'].includes(route);
   return `<article class="audience-page enterprise-page${dc ? ' dc-page' : ''}">${hero(lang, p, ctx)}${body}</article>`;
 }
-
-export { pageArt };

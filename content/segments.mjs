@@ -428,7 +428,7 @@ function hero(lang, page, ctx) {
       <a class="ghost" href="${telegramLink(lang, ctx, label)}">${pick(lang, 'Написать в Telegram', 'Message us on Telegram')}</a>
     </div>
     </div>
-    ${pageArt(lang, page.route, ctx.asset)}
+    ${pageArt(lang, page.route, ctx)}
   </div></section>`;
 }
 

@@ -4,10 +4,10 @@
 export const shared = {
   ru: {
     trust: [
-      ['Лично Илья', 'Один человек отвечает за проект от первого созвона до запуска.'],
-      ['Смета до старта', 'Объём, цену и сроки фиксируем в договоре до первой строчки кода.'],
+      ['Ведёт Илья', 'Один контакт от первого созвона до сдачи.'],
+      ['Смета до старта', 'Объём, цену и сроки фиксируем в договоре.'],
       ['2 месяца поддержки', 'Исправления в согласованном объёме входят в каждый проект.'],
-      ['Живые кейсы', 'Можно открыть работающие проекты и увидеть результат, а не обещание.'],
+      ['Кейсы и демо', 'Можно посмотреть, как работают проекты.'],
     ],
     capacityTitle: 'Когда можно начать',
     capacityText: 'Напишите, к какой дате хотите запуститься. Согласуем дату старта после первого разговора.',
@@ -25,7 +25,7 @@ export const shared = {
       ['Ilia, personally', 'One person is accountable from the first call to launch.'],
       ['A quote before we start', 'Scope, price and timing are agreed in the contract before any work begins.'],
       ['Two months of support', 'Fixes within the agreed scope are included in every project.'],
-      ['Live case studies', 'You can open working projects and see a result, not a promise.'],
+      ['Case studies and demos', 'See how the projects work.'],
     ],
     capacityTitle: 'Project start dates',
     capacityText: 'Tell us when you want to launch. We agree a start date after the first call.',
