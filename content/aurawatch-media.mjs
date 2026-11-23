@@ -46,8 +46,8 @@ export function renderAuraCover(lang, asset) {
   const media = asset + "aurawatch/media/";
   return `<figure class="aura-cover">
     <div class="aura-cover-stage">
-      <div class="aura-cover-phone"><img src="${media}iphone-knowledge.png" width="720" height="1565" alt="${ru ? "База знаний AuraWatch на iPhone" : "The AuraWatch knowledge base on iPhone"}"></div>
-      <div class="aura-cover-watch"><div class="aura-cover-case"><img src="${media}watch-home.png" width="416" height="496" alt="${ru ? "Главный экран Apple Watch с орбом «Матрица»" : "Apple Watch home screen with the Matrix orb"}"></div></div>
+      <div class="aura-cover-phone"><img src="${media}iphone-knowledge.png" width="720" height="1565" draggable="false" alt="${ru ? "База знаний AuraWatch на iPhone" : "The AuraWatch knowledge base on iPhone"}"></div>
+      <div class="aura-cover-watch"><div class="aura-cover-case"><img src="${media}watch-home.png" width="416" height="496" draggable="false" alt="${ru ? "Главный экран Apple Watch с орбом «Матрица»" : "Apple Watch home screen with the Matrix orb"}"></div></div>
     </div>
     <figcaption>${ru ? "Нативные экраны iOS и watchOS · режим Demo" : "Native iOS and watchOS screens · Demo mode"}</figcaption>
   </figure>`;
@@ -61,22 +61,34 @@ export function renderAuraMedia(lang, asset) {
     const [title, caption, alt] = screen[lang];
     const url = media + screen.file + ".png";
     return `<li><figure class="aura-screen">
-      <a class="aura-screen-stage" href="${url}" aria-label="${ru ? "Открыть в полном размере" : "Open full-size image"} — ${alt}">
-        <img src="${url}" width="${watch ? 416 : 720}" height="${watch ? 496 : 1565}" class="${watch ? "aura-screen-watch" : "aura-screen-phone"}" loading="lazy" alt="${alt}">
-      </a>
+      <div class="aura-screen-stage">
+        <img src="${url}" width="${watch ? 416 : 720}" height="${watch ? 496 : 1565}" class="${watch ? "aura-screen-watch" : "aura-screen-phone"}" loading="lazy" draggable="false" alt="${alt}">
+      </div>
       <figcaption><small>${watch ? "Apple Watch" : "iPhone"}</small><strong>${title}</strong><p>${caption}</p></figcaption>
     </figure></li>`;
   }).join("");
   const sessionFrames = [
-    ["input", ru ? "Фраза" : "Input",
-      ru ? "Вводим на часах слово «Нагрузка»." : "We enter “Нагрузка” (load) on the watch.",
-      ru ? "Слово «Нагрузка» над клавиатурой Apple Watch" : "The Russian word for load above the Apple Watch keyboard"],
-    ["hint", ru ? "Подсказка" : "Prompt",
-      ru ? "Суфлёр напоминает цифру для ответа — 40 тысяч событий в секунду в Kafka." : "The prompter brings up a figure for the answer — 40,000 Kafka events per second.",
-      ru ? "Первая подсказка на часах с текстом «Kafka, 40k событий/с»" : "The first watch prompt showing Kafka and 40k events per second"],
-    ["summary", ru ? "Итоги встречи" : "Meeting summary",
-      ru ? "После разговора открываем резюме собеседования и список подсказок." : "After the conversation, we open the interview summary and review the prompts.",
-      ru ? "Итоги собеседования с резюме и счётчиком из девяти подсказок" : "Interview summary with notes and a count of nine prompts"],
+    {
+      id: "input",
+      label: ru ? "Фраза" : "Input",
+      title: ru ? "Одно слово с запястья" : "One word from the wrist",
+      caption: ru ? "На собеседовании спрашивают о нагрузке. Вводим «Нагрузка» прямо на часах." : "The interviewer asks about system load. We enter “Нагрузка” (load) on the watch.",
+      alt: ru ? "Слово «Нагрузка» над клавиатурой Apple Watch" : "The Russian word for load above the Apple Watch keyboard",
+    },
+    {
+      id: "hint",
+      label: ru ? "Подсказка" : "Prompt",
+      title: ru ? "40 000 событий в секунду" : "40,000 events per second",
+      caption: ru ? "В ответ на слово «Нагрузка» суфлёр напоминает, сколько событий обрабатывала Kafka в проекте кандидата." : "In response to “load,” the prompter recalls how many events Kafka handled in the candidate’s project.",
+      alt: ru ? "Первая подсказка на часах с текстом «Kafka, 40k событий/с»" : "The first watch prompt showing Kafka and 40k events per second",
+    },
+    {
+      id: "summary",
+      label: ru ? "Итоги" : "Summary",
+      title: ru ? "Девять подсказок за встречу" : "Nine prompts in one meeting",
+      caption: ru ? "После собеседования открываем итоги. На часах остались темы разговора, подсказки и договорённость о тестовом задании." : "After the interview, we open the summary. The watch shows what we discussed, the prompts and the follow-up assignment.",
+      alt: ru ? "Итоги собеседования с резюме и счётчиком из девяти подсказок" : "Interview summary with notes and a count of nine prompts",
+    },
   ];
   return `<section id="screens" class="aura-media" aria-labelledby="screens-title">
     <h2 id="screens-title">${ru ? "Приложение в работе" : "The app in action"}</h2>
@@ -91,14 +103,25 @@ export function renderAuraMedia(lang, asset) {
     <ul id="aura-screens" class="aura-screens" tabindex="0" aria-label="${ru ? "Скриншоты AuraWatch" : "AuraWatch screenshots"}">${cards}</ul>
   </section>
   <section id="session-video" class="aura-session" aria-labelledby="session">
-    <h2 id="session">${ru ? "Сеанс суфлёра на часах" : "A prompter session on the watch"}</h2>
-    <p>${ru ? "На примере собеседования в режиме Demo." : "From a sample interview in Demo mode."}</p>
-    <ol class="aura-session-frames">${sessionFrames.map(([file, title, caption, alt]) => {
-      const url = media + "session-" + file + ".png";
-      return `<li><figure>
-        <a href="${url}" aria-label="${ru ? "Открыть в полном размере" : "Open full-size image"} — ${alt}"><img src="${url}" width="416" height="496" alt="${alt}" loading="lazy"></a>
-        <figcaption><h3>${title}</h3><p>${caption}</p></figcaption>
-      </figure></li>`;
-    }).join("")}</ol>
+    <div class="aura-session-layout">
+      <div class="aura-session-heading">
+        <small>${ru ? "Собеседование · режим Demo" : "Interview · Demo mode"}</small>
+        <h2 id="session">${ru ? "Суфлёр на запястье" : "A prompter on your wrist"}</h2>
+      </div>
+      <fieldset class="aura-session-picker">
+        <legend class="sr-only">${ru ? "Этап сеанса" : "Session stage"}</legend>
+        ${sessionFrames.map(({id, label}) => `<label>
+          <input type="radio" name="session-stage" value="${id}" aria-controls="session-screen-${id} session-copy-${id}"${id === "hint" ? " checked" : ""}>
+          <span>${label}</span>
+        </label>`).join("")}
+      </fieldset>
+      <div class="aura-session-product">
+        <img class="aura-session-photo" src="${media}session-watch.webp" width="960" height="960" alt="" loading="lazy" draggable="false">
+        ${sessionFrames.map(({id, alt}) => `<img id="session-screen-${id}" class="aura-session-display" data-stage="${id}" src="${media}session-${id}.png" width="416" height="496" alt="${alt}" loading="lazy" draggable="false">`).join("")}
+      </div>
+      <div class="aura-session-notes" aria-live="polite">
+        ${sessionFrames.map(({id, title, caption}) => `<div data-stage="${id}" id="session-copy-${id}"><h3>${title}</h3><p>${caption}</p></div>`).join("")}
+      </div>
+    </div>
   </section>`;
 }
