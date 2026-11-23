@@ -75,6 +75,7 @@ export function renderGrowthMapPage(lang, { home, tg, icons, estimator, growthMa
               </div>
               ${action('3d', 'tb.3d', icons.mini)}
               ${action('list', 'tb.list', '☷')}
+              ${action('panel', 'tb.panel', '◨')}
               <details class="gm-menu"><summary aria-label="${t('tb.more')}">…</summary><div>
                 ${action('import', 'act.import')}
                 ${action('reset', 'tb.reset')}
@@ -86,7 +87,10 @@ export function renderGrowthMapPage(lang, { home, tg, icons, estimator, growthMa
             <p class="gm-sr" id="gm-keyboard-help">${t('canvas.keys')}</p>
             <div class="gm-overlay" data-gm-overlay></div>
           </div>
-          <div class="gm-economy" data-gm-economy></div>
+          <div class="gm-foot">
+            <div class="gm-economy" data-gm-economy></div>
+            <button type="button" class="button gm-toolbar-cta" data-gm-action="handoff">${t('act.handoff')}</button>
+          </div>
         </div>
         <aside class="gm-panel" data-gm-panel aria-label="${t('intro.eyebrow')}">
           <div class="gm-panel-content" data-gm-panel-content></div>

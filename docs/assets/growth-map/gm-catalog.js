@@ -338,14 +338,14 @@
   ];
 
   const stages = [
-    stage("traffic", 0, "#7aa2ff", "target", "Источники", "Sources", "Откуда о вас узнают", "How customers hear about you", ["entry"], {}),
-    stage("entry", 1, "#8b7bff", "web", "Точка входа", "Entry point", "Куда человек попадает", "Where customers land", ["capture"], {}),
-    stage("capture", 2, "#c07bff", "doc", "Заявка", "Enquiry", "Как оставляет контакт", "How customers leave their details", ["process"], {}),
-    stage("process", 3, "#ff7bc0", "route", "Обработка", "Handling", "Кто и как отвечает", "Who answers and how", ["pay"], {}),
-    stage("pay", 4, "#ffae6b", "card", "Оплата", "Payment", "Как платит", "How customers pay", ["deliver"], {}),
-    stage("deliver", 5, "#f5d76b", "package", "Исполнение", "Delivery", "Как получает результат", "How customers get what they bought", ["retain"], {}),
-    stage("retain", 6, "#6be0a8", "heart", "Возврат", "Retention", "Что приводит его снова", "What brings customers back", ["traffic"], {}),
-    stage("insight", 7, "#6bd5e0", "chart", "Аналитика", "Analytics", "Где видны цифры", "Where you see the numbers", ["process", "pay"], {"floating": true})
+    stage("traffic", 0, "#8aaec2", "target", "Источники", "Sources", "Откуда о вас узнают", "How customers hear about you", ["entry"], {}),
+    stage("entry", 1, "#9fa0cf", "web", "Точка входа", "Entry point", "Куда человек попадает", "Where customers land", ["capture"], {}),
+    stage("capture", 2, "#bf95b8", "doc", "Заявка", "Enquiry", "Как оставляет контакт", "How customers leave their details", ["process"], {}),
+    stage("process", 3, "#d99a85", "route", "Обработка", "Handling", "Кто и как отвечает", "Who answers and how", ["pay"], {}),
+    stage("pay", 4, "#dcb273", "card", "Оплата", "Payment", "Как платит", "How customers pay", ["deliver"], {}),
+    stage("deliver", 5, "#b9b77a", "package", "Исполнение", "Delivery", "Как получает результат", "How customers get what they bought", ["retain"], {}),
+    stage("retain", 6, "#86bb9f", "heart", "Возврат", "Retention", "Что приводит его снова", "What brings customers back", ["traffic"], {}),
+    stage("insight", 7, "#86b9bd", "chart", "Аналитика", "Analytics", "Где видны цифры", "Where you see the numbers", ["process", "pay"], {"floating": true})
   ];
 
   const blocks = [

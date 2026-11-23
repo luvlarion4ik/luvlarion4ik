@@ -322,27 +322,26 @@
       const comparison = state.comparison;
       if (!comparison) return '';
       const { economies, differences } = comparison;
-      const cols = variants.map(key => '<th scope="col"' + (state.variant.key === key ? ' data-active' : '') + '>' +
-        text('v.' + key) + '</th>').join('');
       const omitted = text('cmp.noValue');
-      const lines = [
-        ['revenue', row => amountText(row.revenue)],
-        ['growth', row => formatPct(row.growth)],
-        ['yearProfit', row => row.key === 'now' ? omitted : amountText(row.yearProfit)],
-        ['leakLeads', row => numbers.format(Math.round(row.projectedLostLeads))],
-        ['hours', row => row.hours ? '−' + text('eco.hours', { n: numbers.format(row.hours) }) : omitted],
-        ['price', row => row.key === 'now' ? omitted : priceLabel(row)],
-        ['payback', row => row.key === 'now' ? omitted : paybackLabel(row)],
-        ['launch', row => row.weeks.length ? text('cmp.weeks', { from: row.weeks[0], to: row.weeks[1] }) : omitted],
-      ];
-      const table = '<div class="gm-comparison-scroll" tabindex="0" aria-label="' + text('tab.compare') +
-        '"><table class="gm-comparison"><thead><tr><td></td>' + cols + '</tr></thead><tbody>' +
-        lines.map(([id, value]) => '<tr><th scope="row">' + text('cmp.' + id) + '</th>' +
-          variants.map(key => '<td' + (state.variant.key === key ? ' data-active' : '') + '>' +
-            value(economies[key]) + '</td>').join('') + '</tr>').join('') +
-        '<tr><td></td>' + variants.map(key => '<td>' +
+      const metric = (id, value) => '<div><dt>' + text('cmp.' + id) + '</dt><dd>' + value + '</dd></div>';
+      const cards = ['base', 'boost', 'auto'].map(key => {
+        const row = economies[key];
+        return '<article class="gm-vcard" data-key="' + key + '"' + (state.variant.key === key ? ' data-active' : '') + '>' +
+          '<div class="gm-vcard-head"><h3>' + text('v.' + key) + '</h3>' +
+          (key === 'boost' ? '<small>' + text('v.recommended') + '</small>' : '') +
+          '<span class="gm-vcard-growth">' + formatPct(row.growth) + '</span></div>' +
+          '<p class="gm-vcard-revenue"><strong>' + amountText(row.revenue) + '</strong> <span>' + text('cmp.perMonth') + '</span></p>' +
+          '<dl>' + metric('yearProfit', amountText(row.yearProfit)) + metric('price', priceLabel(row)) +
+          metric('payback', paybackLabel(row)) +
+          metric('launch', row.weeks.length ? text('cmp.weeks', { from: row.weeks[0], to: row.weeks[1] }) : omitted) +
+          metric('leakLeads', numbers.format(Math.round(row.projectedLostLeads))) +
+          metric('hours', row.hours ? '−' + text('eco.hours', { n: numbers.format(row.hours) }) : omitted) + '</dl>' +
           button('gm-text-button', text('cmp.show'), { variant: key },
-            'aria-label="' + text('cmp.show') + ': ' + text('v.' + key) + '"') + '</td>').join('') + '</tr></tbody></table></div>';
+            'aria-label="' + text('cmp.show') + ': ' + text('v.' + key) + '"') + '</article>';
+      }).join('');
+      const table = '<p class="gm-baseline">' + text('cmp.now', { money: amountText(economies.now.revenue),
+        leads: numbers.format(Math.round(economies.now.projectedLostLeads)) }) + '</p>' +
+        '<div class="gm-vcards" aria-label="' + text('tab.compare') + '">' + cards + '</div>';
       const diff = '<section class="gm-differences"><h3>' + text('cmp.differences') + '</h3>' +
         differences.map(row => '<article class="gm-difference"><h4>' + escape(row.title) + '</h4><strong>' +
           text('cmp.growth.month', { money: money(row.money) }) + '</strong><p>' + escape(row.text) + '</p>' +

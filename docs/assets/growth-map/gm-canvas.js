@@ -35,7 +35,7 @@
     const stageData = byId(catalog.stages);
     const mainStages = ['traffic', 'entry', 'capture', 'process', 'pay', 'deliver', 'retain'];
     const stages = [...mainStages, 'insight'];
-    const colors = ['#7aa2ff', '#8b7bff', '#c07bff', '#ff7bc0', '#ffae6b', '#f5d76b', '#6be0a8', '#6bd5e0'];
+    const colors = ['#8aaec2', '#9fa0cf', '#bf95b8', '#d99a85', '#dcb273', '#b9b77a', '#86bb9f', '#86b9bd'];
     const shade = key => stageData?.[key]?.color || colors[stages.indexOf(key)] || colors[0];
     const blockOf = node => blocks[node.block];
     const stageOf = node => blockOf(node).stage;
@@ -581,7 +581,8 @@
       world.style.transform = transform;
       background.style.backgroundSize = 24 * scale + 'px ' + 24 * scale + 'px';
       background.style.backgroundPosition = `${x % (24 * scale)}px ${y % (24 * scale)}px`;
-      stage.classList.toggle('is-small', scale < .6);
+      stage.classList.toggle('is-small', scale < .74);
+      stage.style.setProperty('--gm-boost', clamp(.8 / scale, 1, 1.75).toFixed(2));
       updateMinimapWindow();
       if (announce) emit('zoom', { scale });
     }
@@ -618,12 +619,12 @@
       if (!bounds || !stage.clientWidth || !stage.clientHeight) return;
       const width = bounds.right - bounds.left;
       const height = bounds.bottom - bounds.top;
-      const scale = clamp(Math.min((stage.clientWidth - 32) / width, (stage.clientHeight - 32) / height), .35, 1.1);
+      const scale = clamp(Math.min((stage.clientWidth - 24) / width, (stage.clientHeight - 24) / height), stage.clientWidth < 900 ? .46 : .3, 1.1);
       const target = {
         x: (stage.clientWidth - width * scale) / 2 - bounds.left * scale,
         y: (stage.clientHeight - height * scale) / 2 - bounds.top * scale, scale
       };
-      if (stage.clientWidth < 600 && width * scale > stage.clientWidth) target.x = 16 - bounds.left * scale;
+      if (stage.clientWidth < 900 && width * scale > stage.clientWidth) target.x = 16 - bounds.left * scale;
       localFit = true;
       cancelAnimationFrame(cameraAnimation);
       if (immediately || motion.matches) {

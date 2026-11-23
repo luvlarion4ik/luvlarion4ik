@@ -217,9 +217,10 @@
     draft = editableBrief(record.brief);
     detected = [];
     selected = '';
-    volume = list = false;
+    volume = false;
+    list = matchMedia('(max-width: 640px)').matches;
     canvas.setVolume(false);
-    canvas.setList(false);
+    canvas.setList(list);
     historyByVariant = {};
     revise();
     render({ fit: true, animate: true });
@@ -230,8 +231,11 @@
     if (!options.example && !options.shared) scheduleSave();
   }
 
+  const bringIntoView = () => root.scrollIntoView({ block: 'start', behavior: reduced.matches ? 'auto' : 'smooth' });
+
   function chooseMode(mode) {
     if (saveTimer) saveNow();
+    if (mode !== 'restart') bringIntoView();
     notify('');
     if (mode === 'resume' && pending) {
       openMap(pending);
@@ -364,6 +368,7 @@
     node.y = placed.y;
     selected = node.id;
     tab = 'block';
+    root.classList.remove('is-panel-collapsed');
     commitVariant({ nodes, edges: current.edges }, { added: true });
   }
 
@@ -571,6 +576,7 @@
     redo: () => restoreHistory('redo'),
     layout: () => { commitVariant({ ...engine.layout(doc.variants[doc.active], catalog, { force: true }), edited: true }); canvas.fit(); },
     fit: () => canvas.fit(),
+    panel: () => { root.classList.toggle('is-panel-collapsed'); root.querySelector('[data-gm-action="panel"]')?.setAttribute('aria-pressed', String(root.classList.contains('is-panel-collapsed'))); },
     minus: () => canvas.zoomBy(1 / 1.18),
     plus: () => canvas.zoomBy(1.18),
     '3d': () => toggleVolume(),
@@ -647,7 +653,7 @@
   on('select', ({ id }) => {
     if (phase !== 'map') return;
     selected = id ?? '';
-    if (selected) tab = 'block';
+    if (selected) { tab = 'block'; root.classList.remove('is-panel-collapsed'); }
     else if (tab === 'block') tab = 'compare';
     refreshPanel();
   });
