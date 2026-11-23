@@ -10,8 +10,8 @@
   "referral": { "percent": 5, "days": 90, "cap": 15 },
   "portal": { "status": "soon", "url": "" },
   "growthMap": {
-    "ai": "off",
-    "endpoint": "",
+    "ai": "on",
+    "endpoint": "https://devlarion.ru/gm-ai",
     "turnstileSiteKey": "",
     "handoffNote": "",
     "guarantees": [],
