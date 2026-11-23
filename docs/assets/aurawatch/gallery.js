@@ -5,10 +5,17 @@
   const controls = document.querySelector(".aura-gallery-controls");
   const previous = controls.querySelector('[data-step="-1"]');
   const next = controls.querySelector('[data-step="1"]');
+  const range = controls.querySelector("output");
   const cards = Array.from(gallery.children);
   const end = () => gallery.scrollWidth - gallery.clientWidth;
 
   function updateControls() {
+    const stride = cards[1].offsetLeft - cards[0].offsetLeft;
+    const first = 1 + Math.round(gallery.scrollLeft / stride);
+    const visible = Math.round(gallery.clientWidth / stride);
+    const last = Math.min(cards.length, first + visible - 1);
+    const label = (first === last ? first : first + "–" + last) + " / " + cards.length;
+    if (range.value !== label) range.value = label;
     previous.disabled = gallery.scrollLeft <= 1;
     next.disabled = gallery.scrollLeft >= end() - 1;
   }

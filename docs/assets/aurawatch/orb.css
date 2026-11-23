@@ -1,11 +1,14 @@
 .aura-orb-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, .94fr);
+  grid-template-areas: "stage intro" "stage controls";
+  grid-template-rows: auto 1fr;
   align-items: start;
-  gap: clamp(1.5rem, 4vw, 4.5rem);
+  gap: 1rem clamp(1.5rem, 4vw, 4.5rem);
 }
 
 .aura-orb-stage {
+  grid-area: stage;
   margin: 0;
   border-radius: 4px;
   overflow: hidden;
@@ -38,9 +41,9 @@
 .aura-orb-stage small { color: #c4c4c8; }
 .aura-orb-stage strong { font-size: .94rem; font-weight: 600; }
 
-.aura-orb-controls { min-width: 0; }
-.aura-orb-controls > p { max-width: 52ch; color: var(--sub); }
-.aura-orb-controls fieldset { min-width: 0; border: 0; padding: 0; margin: 1.25rem 0 .85rem; }
+.aura-orb-controls { grid-area: controls; min-width: 0; }
+.aura-orb-intro { grid-area: intro; max-width: 52ch; margin: 0; color: var(--sub); }
+.aura-orb-controls fieldset { min-width: 0; border: 0; padding: 0; margin: 0 0 .85rem; }
 .aura-orb-controls legend,
 .aura-orb-controls label[for] { display: block; padding: 0; margin-bottom: .4rem; font-weight: 600; }
 .aura-orb-controls fieldset > div { display: flex; flex-wrap: wrap; gap: .35rem; }
@@ -69,6 +72,7 @@
 
 .aura-orb-controls select {
   width: 100%;
+  min-height: 44px;
   padding: .6rem;
   background: var(--paper);
   color: var(--ink);
@@ -79,6 +83,16 @@
 .aura-orb-controls a { display: inline-block; margin-top: .65rem; text-decoration: underline; text-underline-offset: .2em; }
 
 @media (max-width: 760px) {
-  .aura-orb-layout { grid-template-columns: minmax(0, 1fr); }
-  .aura-orb-stage > div { min-height: 14rem; }
+  .aura-orb-layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "intro" "stage" "controls";
+    grid-template-rows: auto;
+    row-gap: .85rem;
+  }
+  .aura-orb-stage > div { min-height: clamp(8rem, 21svh, 11rem); }
+  .aura-orb-stage img { width: clamp(6rem, 26vw, 7.5rem); }
+  .aura-orb-stage figcaption { padding: .55rem .75rem; }
+  .aura-orb-controls:has(details[open]) [data-orb-states] { display: none; }
+  .aura-orb-controls details { margin-top: .75rem; padding: .65rem 0; }
+  .aura-orb-controls [data-orb-picker] { margin-top: .5rem; }
 }

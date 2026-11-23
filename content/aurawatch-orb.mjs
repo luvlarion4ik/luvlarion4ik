@@ -68,23 +68,23 @@ export function renderAuraOrb(lang, asset) {
   return `<section class="aura-orb" id="orb" aria-labelledby="orb-title" data-motion-base="${esc(base)}">
     <h2 id="orb-title">${l("Орб «Матрица»", "The Matrix orb")}</h2>
     <div class="aura-orb-layout">
+      <p class="aura-orb-intro">${l("На экране часов помещаются 37 точек. По их яркости видно, когда ассистент слушает, обдумывает вопрос или уже отвечает. На часах матрицу рисует SwiftUI.", "On the watch face, 37 dots show what the assistant is doing. Their brightness changes as it listens, processes a question and streams a reply. SwiftUI draws the matrix on the watch.")}</p>
       <figure class="aura-orb-stage">
         <div><img src="${esc(base + initial)}.svg#still" loading="lazy" width="224" height="224" alt=""></div>
         <figcaption><small>${l("Веб-адаптация · SVG", "Web adaptation · SVG")}</small><strong data-orb-caption aria-live="polite">${l("Классика · Обработка", "Classic · Processing")}</strong></figcaption>
       </figure>
       <div class="aura-orb-controls">
-        <p>${l("На экране часов помещаются 37 точек. По их яркости видно, когда ассистент слушает, обдумывает вопрос или уже отвечает. На часах матрицу рисует SwiftUI.", "On the watch face, 37 dots show what the assistant is doing. Their brightness changes as it listens, processes a question and streams a reply. SwiftUI draws the matrix on the watch.")}</p>
         <fieldset hidden data-orb-states><legend>${l("Состояние", "State")}</legend>
           <div>${states.map(([id, ru, en]) => `<label><input type="radio" name="orb-state" value="${id}"${id === "processing" ? " checked" : ""}><span>${l(ru, en)}</span></label>`).join("")}</div>
         </fieldset>
         <button type="button" class="ghost" data-orb-toggle hidden data-play="${l("Запустить анимацию", "Play animation")}" data-stop="${l("Остановить анимацию", "Stop animation")}">${l("Запустить анимацию", "Play animation")}</button>
         <details id="orb-gallery"><summary>${l("SVG-галерея и архив эскизов", "SVG gallery and design archive")}</summary>
-          <p>${l("14 вариантов орба в приложении и 32 ранних эскиза движения, от звуковой волны до раскрытия расшифровки.", "Explore 14 versions of the app’s orb and 32 early motion sketches, from a voice waveform to an expanding transcript.")}</p>
           <div data-orb-picker hidden>
             <label for="orb-file">${l("Вариант для просмотра", "Preview selection")}</label>
             <select id="orb-file">${groups.map(([name, items]) => `<optgroup label="${esc(name)}">${items.map(([file, label]) => `<option value="${file}"${file === initial ? " selected" : ""}>${esc(label)}</option>`).join("")}</optgroup>`).join("")}</select>
             <a data-orb-download href="${esc(base + initial)}.svg" download>${l("Скачать SVG", "Download SVG")}</a>
           </div>
+          <p>${l("14 вариантов орба в приложении и 32 ранних эскиза движения, от звуковой волны до раскрытия расшифровки.", "Explore 14 versions of the app’s orb and 32 early motion sketches, from a voice waveform to an expanding transcript.")}</p>
           <noscript>${groups.map(([name, items]) => `<p><strong>${esc(name)}</strong></p><ul>${items.map(([file, label]) => `<li><a href="${esc(base + file)}.svg">${esc(label)}</a></li>`).join("")}</ul>`).join("")}</noscript>
         </details>
       </div>

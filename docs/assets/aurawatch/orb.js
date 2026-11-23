@@ -2,7 +2,8 @@
   const orb = document.querySelector(".aura-orb");
   if (!orb) return;
 
-  const image = orb.querySelector(".aura-orb-stage img");
+  const stage = orb.querySelector(".aura-orb-stage");
+  const image = stage.querySelector("img");
   const caption = orb.querySelector("[data-orb-caption]");
   const states = orb.querySelector("[data-orb-states]");
   const picker = orb.querySelector("select");
@@ -62,15 +63,25 @@
     renderPlayback();
   }
 
+  function revealPreview() {
+    // The site reserves scroll padding for its sticky header and mobile CTA.
+    stage.scrollIntoView({ block: "nearest", behavior: "instant" });
+  }
+
   states.addEventListener("change", event => {
     const state = event.target.value;
     const shared = state === "streaming" || state === "stealth";
     picker.value = "orb/" + (shared ? state : character + "-" + state);
     selectPreview();
+    revealPreview();
   });
-  picker.addEventListener("change", selectPreview);
+  picker.addEventListener("change", () => {
+    selectPreview();
+    revealPreview();
+  });
   toggle.addEventListener("click", () => {
     playing = !playing;
+    if (playing) revealPreview();
     renderPlayback();
   });
   preference.addEventListener("change", () => {

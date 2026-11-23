@@ -71,20 +71,21 @@ export function renderAuraMedia(lang, asset) {
   return `<section id="screens" class="aura-media" aria-labelledby="screens-title">
     <h2 id="screens-title">${ru ? "Приложение в работе" : "The app in action"}</h2>
     <div class="aura-gallery-head">
-      <p>${ru ? "Восемь экранов из симуляторов Apple Watch и iPhone. В режиме Demo диалоги и документы заполнены примерами." : "Eight screens from the Apple Watch and iPhone simulators. In Demo mode, sample conversations and documents populate the apps."}</p>
+      <p>${ru ? "Снимки из симуляторов Apple Watch и iPhone в режиме Demo." : "Apple Watch and iPhone simulator screens captured in Demo mode."}</p>
       <div class="aura-gallery-controls" hidden>
+        <output class="aura-screen-range" aria-label="${ru ? "Экраны в галерее" : "Screens in view"}"></output>
         <button class="ghost" type="button" data-step="-1" aria-controls="aura-screens"><span aria-hidden="true">←</span> ${ru ? "Назад" : "Previous"}</button>
         <button class="ghost" type="button" data-step="1" aria-controls="aura-screens">${ru ? "Далее" : "Next"} <span aria-hidden="true">→</span></button>
       </div>
     </div>
     <ul id="aura-screens" class="aura-screens" tabindex="0" aria-label="${ru ? "Скриншоты AuraWatch" : "AuraWatch screenshots"}">${cards}</ul>
-    <figure class="aura-film">
-      <div class="aura-film-stage"><video width="416" height="496" controls playsinline preload="none" poster="${media}watch-copilot.png" aria-labelledby="aura-film-title" aria-describedby="aura-film-description">
+    <figure id="session-video" class="aura-film">
+      <div class="aura-film-stage"><video width="416" height="496" controls playsinline preload="metadata" poster="${media}watch-demo-poster.png" aria-labelledby="aura-film-title" aria-describedby="aura-film-description">
         <source src="${media}watch-demo.mp4" type="video/mp4"><source src="${media}watch-demo.webm" type="video/webm">
         <a href="${media}watch-demo.mp4">${ru ? "Открыть запись (MP4)" : "Open recording (MP4)"}</a>
       </video></div>
-      <figcaption><small>Apple Watch · ${ru ? "12 с" : "12 s"}</small><h3 id="aura-film-title">${videoTitle}</h3>
-      <p id="aura-film-description">${ru ? "С главного экрана запускаем суфлёр, завершаем сеанс и открываем итоги. Запись сделана в нативном приложении в режиме Demo. Паузы сокращены." : "From the home screen, we start the prompter, end the session and open the summary. Recorded in the native app in Demo mode, with pauses shortened."}</p></figcaption>
+      <figcaption><small>Apple Watch · ${ru ? "20 с" : "20 s"}</small><h3 id="aura-film-title">${videoTitle}</h3>
+      <p id="aura-film-description">${ru ? "Вводим «Нагрузка», читаем подсказку о Kafka и открываем итоги разговора. Снято в приложении для watchOS в режиме Demo. Паузы сокращены." : "We enter “Нагрузка” (load), read a prompt about Kafka and open the conversation summary. Recorded in the native watchOS app in Demo mode, with pauses shortened."}</p></figcaption>
     </figure>
   </section>`;
 }
