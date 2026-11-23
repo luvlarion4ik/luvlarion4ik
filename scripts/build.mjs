@@ -302,7 +302,7 @@ for(const lang of ["ru","en"]){
  const offer = offerPages[route]?.[lang] ?? audience?.[lang];
  const isMap = route === "growth-map/";
  const mapAssets = isMap ? `<meta name="referrer" content="no-referrer"><link rel="stylesheet" href="${asset}growth-map/growth-map.css">${growthMapAssets.map(src => `<script defer src="${asset}${src}"></script>`).join("")}` : "";
- const dest=url(lang,route),title=isMap?esc(growthMapText(lang, "meta.title"))+" — Devlarion":(caseProject?.name ?? offer?.title ?? (route==="licenses/"?l("Лицензии","Licences"):route==="solutions/"?l("Готовые решения","Ready-made solutions"):route==="cabinet/"?l("Личный кабинет","Client portal"):route==="aurawatch/"?"AuraWatch":route==="privacy/"?privacy:route==="404.html"?"404":route==="links/"?l("Контакты","Links"):!route?front.title:t.title.replace("<br>"," ")))+" — Devlarion";
+ const dest=url(lang,route),title=isMap?esc(growthMapText(lang, "meta.title")):(caseProject?.name ?? offer?.title ?? (route==="licenses/"?l("Лицензии","Licences"):route==="solutions/"?l("Готовые решения","Ready-made solutions"):route==="cabinet/"?l("Личный кабинет","Client portal"):route==="aurawatch/"?"AuraWatch":route==="privacy/"?privacy:route==="404.html"?"404":route==="links/"?l("Контакты","Links"):!route?front.title:t.title.replace("<br>"," ")))+" — Devlarion";
  const alternate=url(other,route);
  const audienceSchema = audience ? (() => {
    const price = packageStartingPrice(audience.starting, site.pricing);
