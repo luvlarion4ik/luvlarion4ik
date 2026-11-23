@@ -135,10 +135,9 @@ export function renderPortalPage(lang, { home, tg, icons, portal, referral }) {
       <button type="button" aria-pressed="false" data-pt-mode="active">${l('Проект в работе', 'Project in progress')}</button>
     </div>
   <div class="pt-app" data-pt-app data-state="new" role="group" aria-label="${l('Демонстрация личного кабинета', 'Client portal demo')}">
-    <div class="pt-splash" data-pt-splash aria-hidden="true"><devlarion-logo variant="full" height="38"></devlarion-logo><p>${l('Здравствуйте, Анна', 'Welcome, Anna')}</p><i></i></div>
     <div class="pt-topbar">
       <div class="pt-brand"><devlarion-logo variant="mark" height="22" aria-hidden="true"></devlarion-logo><strong>${l('Кабинет', 'Portal')}</strong></div>
-      <span class="pt-project-switch"><span data-only="new">${l('Проекта пока нет', 'No project yet')}</span><span data-only="active">${l('Сайт и ИИ-ассистент для заявок', 'Website and enquiry assistant')}</span> <i aria-hidden="true">▾</i></span>
+      <span class="pt-project-label"><span data-only="new">${l('Проекта пока нет', 'No project yet')}</span><span data-only="active">${l('Сайт и ИИ-ассистент для заявок', 'Website and enquiry assistant')}</span></span>
       <span class="pt-demo-badge">${l('Демо-данные', 'Demo data')}</span>
       <span class="pt-avatar" aria-hidden="true">${l('АК', 'AK')}</span>
     </div>
@@ -228,12 +227,12 @@ export function renderPortalPage(lang, { home, tg, icons, portal, referral }) {
         </section>
 
         <section class="pt-panel" role="tabpanel" id="pt-panel-support" aria-labelledby="pt-tab-support" hidden>
-          <header><h3>${l('Поддержка', 'Support')}</h3><p>${l('Напишите нам: вопрос по проекту, предложение или обратная связь. Ответ придёт сюда и на почту.', 'Write to us: a question about the project, a suggestion or feedback. The reply arrives here and by email.')}</p></header>
+          <header><h3>${l('Поддержка', 'Support')}</h3><p>${l('Сообщения и оценки в этом примере видны только вам.', 'Messages and ratings in this demo are visible only to you.')}</p></header>
           <div class="pt-grid pt-grid--support">
             <article class="pt-card pt-chat">
-              <small>${l('Чат со студией', 'Chat with the studio')}</small>
+              <small>${l('Демо-чат', 'Demo chat')}</small>
               <div class="pt-messages" data-pt-messages aria-live="polite">
-                <p class="pt-msg pt-msg--them" data-only="new">${l('Здравствуйте! Если вы только присматриваетесь, задайте вопрос здесь: подскажем, с чего начать.', 'Hello! If you are just exploring, ask your question here and we will suggest where to start.')}</p>
+                <p class="pt-msg pt-msg--them" data-only="new">${l('Здравствуйте! Какие задачи хотите обсудить?', 'Hello! What would you like to work on?')}</p>
                 <p class="pt-msg pt-msg--them" data-only="active">${l('Версия 2 готова. Если что-то нужно уточнить, пишите сюда.', 'Version 2 is ready. If anything needs clarifying, write here.')}</p>
               </div>
               <form class="pt-compose" data-pt-compose novalidate><label><span class="pt-sr">${l('Сообщение', 'Message')}</span><input type="text" maxlength="300" placeholder="${l('Ваше сообщение', 'Your message')}"></label><button class="pt-btn pt-btn--primary" type="submit">${l('Отправить', 'Send')}</button></form>
@@ -246,16 +245,16 @@ export function renderPortalPage(lang, { home, tg, icons, portal, referral }) {
                 <button type="button" class="pt-btn" data-pt-rate="up" aria-pressed="false">${thumb}<span>${l('Да', 'Yes')}</span></button>
                 <button type="button" class="pt-btn" data-pt-rate="down" aria-pressed="false">${thumbDown}<span>${l('Не совсем', 'Not quite')}</span></button>
               </div>
-              <p class="pt-hint" data-pt-rate-note role="status">${l('Оценки видят владелец и менеджеры студии в веб-панели.', 'Ratings are seen by the studio owner and managers in the web panel.')}</p>
+              <p class="pt-hint" data-pt-rate-note role="status"></p>
             </article>
           </div>
         </section>
 
         <section class="pt-panel" role="tabpanel" id="pt-panel-billing" aria-labelledby="pt-tab-billing" hidden>
-          <header><h3>${l('Договоры и счета', 'Contracts and invoices')}</h3><p>${l('К каждому договору прикрепляется счёт, чтобы всё было в одном месте.', 'Every contract comes with its invoice so everything stays in one place.')}</p></header>
+          <header><h3>${l('Договоры и счета', 'Contracts and invoices')}</h3></header>
           <div class="pt-empty" data-only="new">${art.docs}
-            <h4>${l('Здесь пока ничего нет', 'Nothing here yet')}</h4>
-            <p>${l('После подписания договора здесь будут выставлены счета. К каждому договору прикрепляется счёт, а оплаты и остаток видны в одном месте.', 'Once the contract is signed, invoices are issued here. Each contract has its invoice attached, and payments and the balance are visible in one place.')}</p></div>
+            <h4>${l('Счетов пока нет', 'No invoices yet')}</h4>
+            <p>${l('После подписания договора здесь появятся счета и история оплат.', 'Invoices and payment history appear here once the contract is signed.')}</p></div>
           <div data-only="active">
             <div class="pt-table-wrap"><table class="pt-table">
               <thead><tr><th>${l('Договор', 'Contract')}</th><th>${l('Счёт', 'Invoice')}</th><th>${l('Сумма', 'Amount')}</th><th>${l('Статус', 'Status')}</th></tr></thead>
@@ -353,7 +352,7 @@ export function renderPortalPage(lang, { home, tg, icons, portal, referral }) {
   const faqs = [
     [l('Кабинет уже работает?', 'Is the portal live?'), open
       ? l('Да. После регистрации аккаунт доступен сразу. Менеджер отдельно подключит проект после согласования заявки и договора.', 'Yes. You can access your account as soon as you register. Your manager links your project separately after agreeing the brief and contract.')
-      : l('Пока это предпросмотр с демо-данными. Сначала студия проходит две приёмки на тестовых заказчиках, потом открывает регистрацию. Запросите доступ, и мы напишем, когда он появится.', 'This is a preview with demo data for now. The studio first completes two acceptance runs with test clients, then opens registration. Request access and we will let you know.')],
+      : l('Пока доступно демо. Запросите доступ, чтобы узнать об открытии регистрации.', 'You can try the demo now. Request access to hear when registration opens.')],
     ...(open ? [[l('Как восстановить пароль?', 'How do I reset my password?'),
       l(`Откройте <a href="${resetUrl}">восстановление доступа</a>, получите одноразовый код в привязанном Telegram и задайте новый пароль.`,
         `Open <a href="${resetUrl}">account recovery</a>, get a one-time code in your linked Telegram account and set a new password.`)]] : []),
@@ -365,12 +364,11 @@ export function renderPortalPage(lang, { home, tg, icons, portal, referral }) {
   return `<div class="portal-page">
     <section class="wrap pt-hero">
       <div class="pt-hero-copy">
-        <p class="eyebrow"><i></i>${l('Клиентский портал', 'Client portal')}</p>
         <h1>${l('Личный кабинет Devlarion', 'Devlarion client portal')}</h1>
-        <p class="intro">${l('Заявка, смета, версии работы, счета и поддержка в одном месте. Видно, что происходит с проектом и что ждут от вас.', 'Your request, estimate, work versions, invoices and support in one place. See what is happening with the project and what is expected from you.')}</p>
+        <p class="intro">${l('Следите за этапами проекта, согласовывайте версии и проверяйте счета.', 'Track project milestones, approve versions and check invoices.')}</p>
         ${actions}
         <div class="pt-account-help">
-          <p class="pt-status ${open ? 'pt-status--open' : ''}"><i aria-hidden="true"></i>${open ? l('Доступ сразу после регистрации', 'Immediate access after registration') : l('Предпросмотр · регистрация откроется после тестовых приёмок', 'Preview · registration opens after test acceptance runs')}</p>
+          ${open ? '' : `<p class="pt-status">${l('Регистрация пока закрыта.', 'Registration has not opened yet.')}</p>`}
           ${open ? `<a class="pt-link" href="${resetUrl}">${l('Забыли пароль?', 'Forgot your password?')}</a>` : ''}
         </div>
       </div>
@@ -378,7 +376,7 @@ export function renderPortalPage(lang, { home, tg, icons, portal, referral }) {
     </section>
     <section class="wrap pt-stage" aria-labelledby="pt-demo-title">
       <h2 id="pt-demo-title">${l('Как выглядит кабинет', 'What the portal looks like')}</h2>
-      <p class="pt-lead">${l('Переключайте состояние и нажимайте на разделы: так кабинет выглядит у нового клиента и когда проект уже идёт. Все данные условные.', 'Switch the state and click through the sections: this is how the portal looks for a new client and once a project is under way. All data is sample data.')}</p>
+      <p class="pt-lead">${l('В демо можно посмотреть кабинет нового клиента и кабинет с проектом в работе.', 'Preview the portal before a project starts or while work is in progress.')}</p>
       ${mock}
     </section>
     <section class="wrap pt-section"><h2>${l('С чего начинается работа', 'How it starts')}</h2>
@@ -388,6 +386,5 @@ export function renderPortalPage(lang, { home, tg, icons, portal, referral }) {
     <section class="wrap pt-section"><h2>${l('Надёжность', 'Reliability')}</h2>
       <div class="pt-roles">${principles.map(([h, p]) => `<article><h3>${h}</h3><p>${p}</p></article>`).join('')}</div></section>
     <section class="wrap pt-section"><h2>${l('Вопросы о кабинете', 'Portal questions')}</h2>${faqs.map(([q, a]) => `<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</section>
-    <section class="wrap pt-section pt-cta"><devlarion-logo variant="full" height="46" view aria-hidden="true"></devlarion-logo><h2>${l('Начнём с расчёта', 'Start with an estimate')}</h2>${actions}</section>
   </div>`;
 }

@@ -286,8 +286,8 @@ function readyStatusBadge(solution, status, lang) {
 }
 
 export function renderOffers(lang, icons, statusOverrides = {}) {
-  const popular = pick(lang, 'С чего чаще всего начинают', 'Where most projects begin');
-  const ready = pick(lang, 'Готовые модули: быстрее и дешевле', 'Ready-made modules: faster and cheaper');
+  const popular = pick(lang, 'Сайты, боты и ассистенты', 'Websites, bots and assistants');
+  const ready = pick(lang, 'Каталог модулей', 'Modules catalogue');
   const preview = readySolutions.slice(0, 2).map(solution => {
     const [title, description] = solution[lang];
     const status = readyStatusBadge(solution, statusOverrides[solution.id], lang);
@@ -298,7 +298,7 @@ export function renderOffers(lang, icons, statusOverrides = {}) {
     </article>`;
   }).join('');
   return `<section class="section wrap featured-offers" data-featured-offers aria-label="${pick(lang, 'Услуги и решения Devlarion', 'Devlarion services and solutions')}">
-    <nav class="offer-tabs" aria-label="${pick(lang, 'Услуги и готовые решения', 'Services and ready-made solutions')}">
+    <nav class="offer-tabs" aria-label="${pick(lang, 'Услуги и модули', 'Services and modules')}">
       <a id="offer-tab-popular" href="#popular-projects">${popular}</a>
       <a id="offer-tab-ready" href="#ready-solutions">${ready}</a>
     </nav>
@@ -306,7 +306,7 @@ export function renderOffers(lang, icons, statusOverrides = {}) {
       <h2 class="offer-panel-heading">${popular}</h2>
       <div class="service-grid">${primaryOffers.map(offer => offerCard(offer, lang, icons, 'h3')).join('')}</div>
       <h3 class="offer-bundle-title">${pick(lang, 'Проект из нескольких услуг сразу', 'Several services in one project')}</h3>
-      <p>${pick(lang, 'Соберите несколько услуг в одном проекте. Калькулятор учтёт скидку за объём.', 'Combine services in one project. The estimator applies a bundle discount.')}</p>
+      <p>${pick(lang, 'Калькулятор учтёт скидку за несколько услуг.', 'The estimator applies the discount for multiple services.')}</p>
       <div class="service-grid offer-bundles">${bundles.map(offer => offerCard(offer, lang, icons, 'h4')).join('')}</div>
     </div>
     <div class="offer-panel" id="ready-solutions">
@@ -397,7 +397,7 @@ export function renderReadySolutions(lang, telegramUrl, statusOverrides = {}, ho
     </article>`;
   }).join('');
   return `<section class="section wrap ready-solutions" id="ready-solutions" aria-labelledby="ready-solutions-title">
-    <${heading} id="ready-solutions-title">${pick(lang, 'Готовые решения', 'Solutions catalogue')}</${heading}>
+    <${heading} id="ready-solutions-title">${pick(lang, 'Каталог модулей', 'Modules catalogue')}</${heading}>
     <div class="ready-solutions-grid">${cards}</div>
   </section>`;
 }

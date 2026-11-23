@@ -26,7 +26,6 @@ const fines = {
     ],
     head: ['Нарушение', 'Штраф для компании'],
     note: 'Источник: ст. 13.11 КоАП РФ в редакции Федерального закона № 420-ФЗ. Это справочная информация, а не юридическая консультация: точная квалификация зависит от обстоятельств.',
-    compare: 'Закрытый ИИ-контур стоит меньше одного такого штрафа и не требует отправлять данные клиентов внешним сервисам.',
   },
   en: {
     title: 'What a single leak costs',
@@ -42,18 +41,15 @@ const fines = {
     ],
     head: ['Violation', 'Fine for a company'],
     note: 'Source: Article 13.11 of the Russian Code of Administrative Offences as amended by Federal Law No. 420-FZ. For reference only, not legal advice.',
-    compare: 'A private AI perimeter costs less than one such fine and does not require sending customer data to external services.',
   },
 };
 
 function renderFines(lang) {
   const f = fines[lang];
-  return `<section class="section wrap audience-section audience-loss fines">
-    <p class="loss-badge">${pick(lang, 'Риск', 'Risk')}</p>
+  return `<section id="data-protection-fines" class="section wrap audience-section audience-loss fines">
     <h2>${esc(f.title)}</h2><p class="loss-lead">${esc(f.lead)}</p>
     <div class="bundle-table fines-table" role="table"><div role="row" class="bundle-row bundle-head">${f.head.map(c => `<span role="columnheader">${esc(c)}</span>`).join('')}</div>
     ${f.rows.map(([a, b]) => `<div role="row" class="bundle-row"><span role="rowheader">${esc(a)}</span><span role="cell" data-label="${esc(f.head[1])}">${esc(b)}</span></div>`).join('')}</div>
-    <p class="fines-compare">${esc(f.compare)}</p>
     <p class="audience-note-line">${esc(f.note)}</p>
   </section>`;
 }
@@ -71,8 +67,8 @@ function cards(lang, ctx, items, opts = {}) {
   }).join('')}</div>`;
 }
 
-function grid(items, icons, ctx) {
-  return `<div class="loss-grid">${items.map(([title, text], i) => `<article><span class="loss-index" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span><h3>${esc(title)}</h3><p>${esc(text)}</p></article>`).join('')}</div>`;
+function grid(items) {
+  return `<div class="loss-grid">${items.map(([title, text]) => `<article><h3>${esc(title)}</h3><p>${esc(text)}</p></article>`).join('')}</div>`;
 }
 
 function steps(items) {
@@ -99,8 +95,7 @@ const industries = ['industries/legal/', 'industries/clinics/', 'industries/fina
 // ---------- Данные страниц ----------
 const page = (route, icon, estimateServices, ru, en, extra = {}) => ({ route, icon, starting: null, estimateServices, estimateTier: 'medium', related: [], ru, en, ...extra });
 
-const industry = (slug, ru, en) => page('industries/' + slug + '/', 'ai', ['private-ai', 'assistant'],
-  { eyebrow: 'Отрасли · Корпоративный ИИ', ...ru }, { eyebrow: 'Industries · Private AI', ...en }, { industry: true });
+const industry = (slug, ru, en) => page('industries/' + slug + '/', 'ai', ['private-ai', 'assistant'], ru, en, { industry: true });
 
 export const enterprisePages = [
   page('private-ai/', 'server', ['private-ai', 'assistant'], {
@@ -261,41 +256,41 @@ export const enterprisePages = [
 
   industry('legal', {
     label: 'Юридические компании', card: 'Анализ договоров и судебных документов без передачи данных наружу.',
-    title: 'ИИ для юридических компаний без риска для тайны клиента',
+    title: 'ИИ для работы с договорами и архивом',
     description: 'Анализ договоров, поиск по архиву и черновики правок — в изолированном контуре, где документы одного клиента не видны другим.',
     risks: [['Адвокатская и коммерческая тайна', 'Договоры клиентов нельзя загружать в публичные ИИ-сервисы без риска раскрытия.'], ['Смешение данных клиентов', 'Документы разных доверителей должны быть изолированы друг от друга.'], ['Ответственность за ошибку', 'Итоговое решение и формулировки всегда утверждает юрист, а не модель.']],
     uses: [['Анализ договоров', 'Поиск рисков и противоречий между редакциями.'], ['Поиск по архиву', 'Нужные положения в тысячах документов за секунды.'], ['Черновики правок', 'По внутренним шаблонам фирмы.'], ['Сводки по делу', 'Краткое содержание судебных материалов.']].concat([['Проверка договора по чек-листу фирмы', 'Модель сверяет документ с вашими стандартами и подсвечивает отклонения.'], ['Сравнение редакций', 'Что изменил контрагент — построчно и с комментариями.'], ['Подготовка процессуальных документов', 'Черновики исков, отзывов и претензий по шаблонам фирмы.'], ['Due diligence', 'Разбор сотен документов сделки с реестром рисков.'], ['Ответы на запросы клиентов', 'Ассистент готовит первичный ответ по базе знаний фирмы.'], ['Учёт сроков и задач', 'Извлечение дат и обязательств из договоров в календарь.']]),
-    case: { title: 'Корпоративный ИИ для юридической фирмы', client: 'Юридическая фирма, корпоративное право', task: 'Ускорить анализ конфиденциальных договоров.', solution: 'Изолированный RAG-сервис: загрузка договоров, поиск противоречий, выдержки из шаблонов, черновики правок. Данные клиентов разделены, доступ по корпоративным учётным записям, запросы не используются для обучения чужих моделей.', results: ['Первичный анализ типового договора быстрее примерно на 40%', 'Быстрый поиск положений в архиве', 'Доступ по проектам и клиентам', 'Подтверждаемая история обращений к документам'] },
+    example: { title: 'Корпоративный ИИ для юридической фирмы', task: 'Ускорить анализ конфиденциальных договоров.', solution: 'Изолированный RAG-сервис: загрузка договоров, поиск противоречий, выдержки из шаблонов, черновики правок. Данные клиентов разделены, доступ по корпоративным учётным записям, запросы не используются для обучения чужих моделей.', checks: ['Время первичной проверки договора', 'Быстрый поиск положений в архиве', 'Доступ по проектам и клиентам', 'Подтверждаемая история обращений к документам'] },
     product: ['Свой ИИ-сервис для других юристов', 'Ваша экспертиза + модель = продукт: сервис проверки договоров, конструктор документов или ассистент для частнопрактикующих юристов. Мы делаем платформу, вы — методологию. Это новый источник дохода, который масштабируется без найма.', ['Подписка для коллег и клиентов', 'Ваши шаблоны и чек-листы внутри', 'Работает на нашей или вашей инфраструктуре']],
     faqExtra: [['Сколько стоит пилот?', 'Пилот на одном процессе — от 220 000 ₽. Точную смету даём после бесплатной диагностики.'], ['Как обучается модель на наших документах?', 'Обычно хватает RAG — поиска по вашим документам. Если нужен особый стиль или терминология, дообучаем модель отдельно, документы при этом не покидают контур.'], ['Можно ли сделать продукт для других юристов?', 'Да. Строим платформу, вы наполняете её методологией и продаёте доступ. Права на продукт закрепляем в договоре.']],
     faq: [['Увидит ли модель документы других клиентов?', 'Нет. Пространства клиентов изолированы, доступ настраивается по проектам.'], ['Кто отвечает за юридический вывод?', 'Юрист. Модель готовит черновик и находит места, требующие внимания.']],
   }, {
     label: 'Law firms', card: 'Contract and litigation analysis without data leaving your perimeter.',
-    title: 'AI for law firms without risking client confidentiality',
+    title: 'AI for contracts and legal archives',
     description: 'Contract analysis, archive search and draft edits in an isolated environment where one client’s documents are never visible to another.',
     risks: [['Privilege and trade secrets', 'Client contracts cannot go into public AI services without disclosure risk.'], ['Mixing client data', 'Different clients’ documents must stay isolated.'], ['Liability for errors', 'A lawyer always approves the final decision and wording.']],
     uses: [['Contract analysis', 'Risks and contradictions between versions.'], ['Archive search', 'The right clause across thousands of documents.'], ['Draft edits', 'Based on the firm’s own templates.'], ['Case summaries', 'Short summaries of court materials.']],
-    case: { title: 'Private AI for a law firm', client: 'Corporate law firm', task: 'Speed up analysis of confidential contracts.', solution: 'An isolated RAG service for uploading contracts, spotting contradictions, quoting templates and drafting edits. Client data is separated, access uses corporate accounts and requests never train other models.', results: ['First-pass review of a standard contract about 40% faster', 'Fast clause search across the archive', 'Access by project and client', 'Verifiable document access history'] },
+    example: { title: 'Private AI for a law firm', task: 'Speed up analysis of confidential contracts.', solution: 'An isolated RAG service for uploading contracts, spotting contradictions, quoting templates and drafting edits. Client data is separated, access uses corporate accounts and requests never train other models.', checks: ['Time to complete a first-pass contract review', 'Fast clause search across the archive', 'Access by project and client', 'Verifiable document access history'] },
     faq: [['Can the model see other clients’ documents?', 'No. Client spaces are isolated and access is set per project.'], ['Who owns the legal conclusion?', 'The lawyer. The model drafts and flags what needs attention.']],
   }),
 
   industry('clinics', {
     label: 'Клиники и медицина', card: 'Медкарты, документы и ассистенты врачей в закрытом контуре.',
-    title: 'ИИ для клиник: врачебная тайна остаётся внутри',
+    title: 'ИИ для работы с документами клиники',
     description: 'Черновики медицинских записей, поиск по документам и ассистент администраторов — без отправки данных пациентов внешним сервисам.',
     risks: [['Специальная категория данных', 'Данные о здоровье — специальная категория по ст. 10 закона № 152-ФЗ, штраф за их утечку до 15 млн ₽.'], ['Врачебная тайна', 'Медицинская информация защищена ст. 13 закона № 323-ФЗ.'], ['Решение принимает врач', 'ИИ готовит черновик, врач проверяет и утверждает документ.']],
     uses: [['Черновики записей приёма', 'Структурирование жалоб, анамнеза и результатов исследований.'], ['Поиск по МИС', 'Внутренний ассистент по базе знаний клиники.'], ['Контроль качества звонков', 'Расшифровка разговоров администраторов.'], ['Обезличенные отчёты', 'Управленческая аналитика без персональных данных.']].concat([['Расшифровка приёма', 'Разговор врача и пациента превращается в структурированную запись.'], ['Подсказки по стандартам', 'Ассистент напоминает о клинических рекомендациях — решение за врачом.'], ['Обработка обращений', 'Запись, перенос и вопросы пациентов без нагрузки на администраторов.'], ['Анализ качества', 'Обезличенная аналитика по обращениям и жалобам.'], ['Документы для страховых', 'Подготовка пакетов документов по шаблонам.'], ['Обучение персонала', 'Ассистент по внутренним регламентам клиники.']]),
-    case: { title: 'Закрытая ИИ-инфраструктура для сети клиник', client: 'Сеть частных медицинских центров, 7 филиалов', task: 'Автоматизировать работу с документацией, сохранив контроль над данными пациентов.', solution: 'Выделенный LLM-кластер в российском ЦОД, интеграция с МИС через защищённый API. Врачи получают черновики записей приёма, администраторы — RAG-ассистента по базе знаний. Внешние LLM API не используются.', results: ['Подготовка черновика документа с 8 до 4 минут', 'Единое управление доступами', 'Выгрузка технических отчётов о запросах', 'Медданные не уходят внешним поставщикам моделей'] },
+    example: { title: 'Закрытая ИИ-инфраструктура для сети клиник', task: 'Автоматизировать работу с документацией, сохранив контроль над данными пациентов.', solution: 'Выделенный LLM-кластер в российском ЦОД, интеграция с МИС через защищённый API. Врачи получают черновики записей приёма, администраторы — RAG-ассистента по базе знаний. Внешние LLM API не используются.', checks: ['Время подготовки черновика медицинской записи', 'Единое управление доступами', 'Выгрузка технических отчётов о запросах', 'Медданные не уходят внешним поставщикам моделей'] },
     product: ['Свой медицинский ИИ-продукт', 'Сеть клиник может превратить свои протоколы и опыт в сервис для других клиник: ассистента документации, сервис записи или базу знаний. Мы делаем технологию и инфраструктуру с учётом требований к медданным, вы — медицинскую часть.', ['Продажа по подписке другим клиникам', 'Ваши протоколы как ценность', 'Инфраструктура в РФ']],
     faqExtra: [['ИИ заменит врача?', 'Нет. Он экономит время на документации и поиске, медицинские решения принимает врач.'], ['Нужна ли регистрация как медизделия?', 'Зависит от функции. Помощь с документацией обычно не требует, диагностические функции — требуют. Определяем на диагностике вместе с юристами.'], ['Сколько стоит пилот?', 'От 220 000 ₽ за один процесс, точнее — после диагностики.']],
     faq: [['ИИ ставит диагнозы?', 'Нет. Он помогает с документацией и поиском, решения принимает врач.'], ['Нужно ли согласие пациентов?', 'Основания обработки определяет клиника как оператор. Мы помогаем выстроить процесс вместе с юристами.']],
   }, {
     label: 'Clinics and healthcare', card: 'Medical records, documents and clinician assistants in a closed perimeter.',
-    title: 'AI for clinics: medical confidentiality stays inside',
+    title: 'AI for clinical documentation',
     description: 'Draft clinical notes, document search and a front-desk assistant, without sending patient data to external services.',
     risks: [['Special-category data', 'Health data is a special category under Article 10 of Law 152-FZ; a leak can cost up to RUB 15 million.'], ['Medical confidentiality', 'Medical information is protected by Article 13 of Law 323-FZ.'], ['The clinician decides', 'AI drafts, the clinician reviews and approves.']],
     uses: [['Draft visit notes', 'Structuring complaints, history and test results.'], ['Clinical system search', 'An internal assistant over the clinic’s knowledge base.'], ['Call quality control', 'Transcribing front-desk conversations.'], ['Anonymised reports', 'Management analytics without personal data.']],
-    case: { title: 'Private AI infrastructure for a clinic network', client: 'Private medical network, 7 branches', task: 'Automate documentation while keeping control of patient data.', solution: 'A dedicated LLM cluster in a Russian data centre integrated with the clinical system via a secure API. Clinicians get draft notes, staff get a RAG assistant. No external LLM APIs.', results: ['Draft document time down from 8 to 4 minutes', 'Single access management', 'Exportable request reports', 'Medical data never goes to external model providers'] },
+    example: { title: 'Private AI infrastructure for a clinic network', task: 'Automate documentation while keeping control of patient data.', solution: 'A dedicated LLM cluster in a Russian data centre integrated with the clinical system via a secure API. Clinicians get draft notes, staff get a RAG assistant. No external LLM APIs.', checks: ['Time to prepare a draft clinical note', 'Single access management', 'Exportable request reports', 'Medical data never goes to external model providers'] },
     faq: [['Does the AI diagnose?', 'No. It helps with documentation and search; the clinician decides.'], ['Is patient consent needed?', 'The clinic, as operator, sets the legal grounds. We help design the process with lawyers.']],
   }),
 
@@ -305,7 +300,7 @@ export const enterprisePages = [
     description: 'Обработка заявлений, проверка документов и ассистент поддержки в выделенном контуре с журналом каждого запроса для службы безопасности.',
     risks: [['Банковская и страховая тайна', 'Данные клиентов нельзя передавать внешним ИИ-сервисам без серьёзных рисков.'], ['Требования регулятора и ИБ', 'Служба безопасности проверяет договор, архитектуру и потоки данных, а не обещания.'], ['Решения о выплатах — за человеком', 'Модель готовит карточку, уполномоченный сотрудник принимает решение.']],
     uses: [['Обработка заявлений', 'OCR, извлечение реквизитов, проверка комплектности.'], ['Ассистент поддержки', 'Черновики ответов по утверждённой базе знаний.'], ['Внутренний поиск', 'Регламенты и инструкции для сотрудников.'], ['Журнал для ИБ', 'ID, модель, узел и время каждого запроса.']].concat([['Скоринг документов', 'Проверка комплектности и противоречий в заявках.'], ['Антифрод-подсказки', 'Модель подсвечивает подозрительные паттерны для аналитика.'], ['Ответы по продуктам', 'Ассистент для операторов по тарифам и условиям.'], ['Регуляторная отчётность', 'Сбор данных и черновики отчётов по шаблонам.'], ['Анализ звонков', 'Контроль скриптов и выявление жалоб.'], ['Поиск по внутренним регламентам', 'Ответы со ссылкой на пункт документа.']]),
-    case: { title: 'Private AI для страховой компании', client: 'Региональная страховая компания', task: 'Ускорить обработку заявлений и страховых документов.', solution: 'Локальная система обработки документов на OCR, LLM и базе знаний: распознаёт документы, извлекает реквизиты, проверяет комплектность и готовит карточку обращения. Решения принимает сотрудник. Изолированный контур и журнал обработки.', results: ['Первичная подготовка страхового дела быстрее примерно на 35%', 'Автоматический поиск недостающих документов', 'Без зарубежных облачных LLM', 'Отчёты для внутреннего аудита ИБ'] },
+    example: { title: 'Private AI для страховой компании', task: 'Ускорить обработку заявлений и страховых документов.', solution: 'Локальная система обработки документов на OCR, LLM и базе знаний: распознаёт документы, извлекает реквизиты, проверяет комплектность и готовит карточку обращения. Решения принимает сотрудник. Изолированный контур и журнал обработки.', checks: ['Время подготовки страхового дела', 'Автоматический поиск недостающих документов', 'Без зарубежных облачных LLM', 'Отчёты для внутреннего аудита ИБ'] },
     product: ['Свой финтех-продукт на ИИ', 'Банк или страховая может вывести на рынок собственный сервис: проверку документов для брокеров, ассистента для агентов, аналитику для партнёров. Мы строим продукт и защищённую инфраструктуру.', ['Новый канал дохода', 'Данные остаются у вас', 'Готовность к проверкам ИБ']],
     faqExtra: [['Подходит ли это под требования ЦБ?', 'Оцениваем отдельным проектом с вашей службой ИБ и даём документы для оценки.'], ['Можно ли начать без доступа к реальным данным?', 'Да, пилот можно сделать на обезличенных или синтетических данных.'], ['Сколько стоит?', 'Пилот от 220 000 ₽, промышленное внедрение — по смете после пилота.']],
     faq: [['Подходит ли это под требования ЦБ?', 'Требования к финансовым организациям оцениваются отдельным проектом с вашей службой ИБ. Мы даём инфраструктуру и документы для такой оценки.'], ['Можно начать с поддержки клиентов?', 'Да, это частый первый пилот: быстрый результат при понятных рисках.']],
@@ -315,7 +310,7 @@ export const enterprisePages = [
     description: 'Claims processing, document checks and a support assistant in a dedicated perimeter with a per-request log for your security team.',
     risks: [['Banking and insurance secrecy', 'Client data cannot go to external AI services without serious risk.'], ['Regulator and security requirements', 'Security teams check contracts, architecture and data flows, not promises.'], ['Payout decisions stay human', 'The model prepares the file, an authorised employee decides.']],
     uses: [['Claims processing', 'OCR, field extraction, completeness checks.'], ['Support assistant', 'Draft replies from an approved knowledge base.'], ['Internal search', 'Policies and procedures for staff.'], ['Security log', 'ID, model, node and time for each request.']],
-    case: { title: 'Private AI for an insurer', client: 'Regional insurance company', task: 'Speed up processing of claims and documents.', solution: 'Local OCR + LLM + knowledge base: recognises documents, extracts fields, checks completeness and prepares a case file. Staff make decisions. Isolated perimeter with a processing log.', results: ['Initial case preparation about 35% faster', 'Missing documents flagged automatically', 'No foreign cloud LLMs', 'Reports for internal security audit'] },
+    example: { title: 'Private AI for an insurer', task: 'Speed up processing of claims and documents.', solution: 'Local OCR + LLM + knowledge base: recognises documents, extracts fields, checks completeness and prepares a case file. Staff make decisions. Isolated perimeter with a processing log.', checks: ['Time to prepare a claim file', 'Missing documents flagged automatically', 'No foreign cloud LLMs', 'Reports for internal security audit'] },
     faq: [['Does this meet Central Bank requirements?', 'Requirements for financial organisations are assessed as a separate project with your security team. We provide the infrastructure and documents for it.'], ['Can we start with customer support?', 'Yes, it is a common first pilot with fast results and clear risks.']],
   }),
 
@@ -325,7 +320,7 @@ export const enterprisePages = [
     description: 'Обработка накладных и заявок, поиск по регламентам и ассистент поддержки — с данными клиентов и поставщиков внутри вашего контура.',
     risks: [['Коммерческие данные', 'Цены поставщиков, объёмы и маршруты — то, что конкуренты хотели бы знать.'], ['Персональные данные клиентов', 'История заказов и контакты покупателей подпадают под 152-ФЗ.'], ['Ручная рутина', 'Сотрудники тратят часы на перенос данных между системами.']],
     uses: [['Документы и накладные', 'Распознавание и перенос в учётную систему.'], ['Закупки', 'Сравнение предложений поставщиков.'], ['Поддержка клиентов', 'Ответы о статусе заказа и доставки.'], ['База знаний', 'Регламенты и инструкции для смен и складов.']].concat([['Прогноз спроса', 'Подсказки по закупкам на основе истории продаж.'], ['Контроль качества по фото', 'Распознавание дефектов на изображениях с линии.'], ['Обработка заказов', 'Заказы из почты и мессенджеров сразу в учётную систему.'], ['Сверка документов', 'Накладные, акты и счета сверяются автоматически.'], ['Ассистент склада', 'Ответы сменам по регламентам и остаткам.'], ['Аналитика маршрутов', 'Подсказки по оптимизации доставки.']]),
-    case: { title: 'Ассистент для логистической компании', client: 'Логистическая компания (по мотивам нашего проекта Orient Logic)', task: 'Убрать ручной перенос заявок и ответы на однотипные вопросы клиентов.', solution: 'Ассистент принимает заявки, уточняет условия, передаёт их в CRM и отвечает клиентам о статусе. Данные остаются во внутренней инфраструктуре.', results: ['Заявки сразу в CRM', 'Ответы клиентам без ожидания менеджера', 'Личный кабинет клиента', 'Меньше ручной работы у менеджеров'] },
+    example: { title: 'Ассистент для логистической компании', task: 'Убрать ручной перенос заявок и ответы на однотипные вопросы клиентов.', solution: 'Ассистент принимает заявки, уточняет условия, передаёт их в CRM и отвечает клиентам о статусе. Данные остаются во внутренней инфраструктуре.', checks: ['Заявки сразу в CRM', 'Ответы клиентам без ожидания менеджера', 'Личный кабинет клиента', 'Меньше ручной работы у менеджеров'] },
     product: ['Свой отраслевой ИИ-продукт', 'Если вы решили задачу у себя, её можно продать другим: сервис сверки документов для дистрибьюторов, систему контроля качества для похожих производств. Мы превращаем внутреннее решение в продукт.', ['Окупаемость за счёт продаж', 'Ваше ноу-хау защищено', 'Масштабирование без найма']],
     faqExtra: [['Работаете с 1С?', 'Да, интегрируемся после изучения конфигурации и доступов.'], ['Можно ли распознавать брак по камерам?', 'Да, компьютерное зрение под ваши детали и линию — оцениваем на пилоте.'], ['Сколько стоит?', 'Пилот от 220 000 ₽, точнее после диагностики.']],
     faq: [['Интегрируетесь с 1С?', 'Да, после изучения документации и доступов. Готовые CRM подключаем быстрее.'], ['С чего начать?', 'С одного процесса, где больше всего ручной работы. Это и будет пилот.']],
@@ -335,77 +330,76 @@ export const enterprisePages = [
     description: 'Invoice and order processing, policy search and a support assistant, with customer and supplier data kept inside your perimeter.',
     risks: [['Commercial data', 'Supplier prices, volumes and routes are what competitors want.'], ['Customer personal data', 'Order history and contacts fall under 152-FZ.'], ['Manual routine', 'Staff spend hours moving data between systems.']],
     uses: [['Documents and invoices', 'Recognition and transfer to accounting.'], ['Procurement', 'Comparing supplier offers.'], ['Customer support', 'Order and delivery status answers.'], ['Knowledge base', 'Procedures for shifts and warehouses.']],
-    case: { title: 'An assistant for a logistics company', client: 'Logistics company (based on our Orient Logic project)', task: 'Remove manual order entry and repetitive customer questions.', solution: 'The assistant takes orders, clarifies terms, passes them to the CRM and answers status questions. Data stays inside.', results: ['Orders go straight to the CRM', 'Customers get answers without waiting', 'Customer portal', 'Less manual work for managers'] },
+    example: { title: 'An assistant for a logistics company', task: 'Remove manual order entry and repetitive customer questions.', solution: 'The assistant takes orders, clarifies terms, passes them to the CRM and answers status questions. Data stays inside.', checks: ['Orders go straight to the CRM', 'Customers get answers without waiting', 'Customer portal', 'Less manual work for managers'] },
     faq: [['Do you integrate with 1C?', 'Yes, after reviewing documentation and access. Off-the-shelf CRMs are faster.'], ['Where to start?', 'With the one process that has the most manual work. That becomes the pilot.']],
   }),
 
   industry('contact-centers', {
     label: 'Контакт-центры', card: 'Расшифровка звонков, контроль качества и ИИ-операторы локально.',
-    title: 'ИИ для контакт-центров: звонки не уходят наружу',
+    title: 'ИИ для расшифровки и разбора звонков',
     description: 'Локальная расшифровка разговоров, контроль качества и заполнение CRM — записи и тексты обрабатываются в согласованном российском контуре.',
     risks: [['Голос и персональные данные', 'Записи звонков содержат ФИО, телефоны, адреса и иногда платёжные данные.'], ['Объём ручного контроля', 'Прослушать вручную можно лишь малую часть звонков.'], ['Заполнение CRM', 'Операторы тратят время после звонка на карточку клиента.']],
     uses: [['Расшифровка звонков', 'Сразу после завершения разговора.'], ['Контроль качества', 'Проверка скриптов и стандартов по всем звонкам.'], ['Черновик карточки CRM', 'Тема, суть и следующий шаг.'], ['Аналитика обращений', 'Причины звонков без прослушивания вручную.']].concat([['Голосовой ИИ-оператор', 'Принимает типовые звонки и передаёт сложные людям.'], ['Подсказки оператору в реальном времени', 'Ответы по базе знаний прямо во время разговора.'], ['Оценка эмоций и жалоб', 'Автоматическое выявление недовольных клиентов.'], ['Скрипты и обучение', 'Разбор лучших звонков для обучения новичков.'], ['Сводки для руководителя', 'Ежедневная аналитика по темам обращений.'], ['Заполнение CRM', 'Карточка клиента после звонка без ручного ввода.']]),
-    case: { title: 'Локальное распознавание звонков', client: 'Контакт-центр на 120 операторов', task: 'Транскрибация, контроль качества и аналитика обращений.', solution: 'Запись поступает в защищённое хранилище, превращается в текст, модель готовит краткое содержание, тему и черновик карточки CRM. Руководители видят сводную аналитику.', results: ['Расшифровка каждого звонка', 'Меньше ручной работы с CRM', 'Автоматическая классификация обращений', 'Отчёты по качеству обслуживания'] },
+    example: { title: 'Локальное распознавание звонков', task: 'Транскрибация, контроль качества и аналитика обращений.', solution: 'Запись поступает в защищённое хранилище, превращается в текст, модель готовит краткое содержание, тему и черновик карточки CRM. Руководители видят сводную аналитику.', checks: ['Качество расшифровки звонков', 'Меньше ручной работы с CRM', 'Автоматическая классификация обращений', 'Отчёты по качеству обслуживания'] },
     product: ['Свой продукт для контакт-центров', 'Отлаженную систему контроля качества можно продавать другим контакт-центрам по подписке. Мы делаем мультиклиентскую платформу с изоляцией данных.', ['Подписка для других центров', 'Изоляция данных клиентов', 'Работа на русском языке']],
     faqExtra: [['Сколько звонков обрабатывает система?', 'Зависит от железа: на одном сервере — тысячи часов записей в сутки. Считаем под ваш объём.'], ['Нужно ли хранить записи у вас?', 'Нет, всё хранится в вашем контуре или у партнёра в РФ по договору.'], ['Сколько стоит?', 'Пилот от 220 000 ₽.']],
     faq: [['Работает с русской речью?', 'Да, используем модели распознавания, которые хорошо работают с русским языком и запускаются локально.'], ['Можно ли подключить ИИ-оператора?', 'Да, начиная с простых сценариев и с передачей сложных вопросов человеку.']],
   }, {
     label: 'Contact centres', card: 'Call transcription, quality control and AI agents run locally.',
-    title: 'AI for contact centres: calls stay inside',
+    title: 'AI for call transcription and review',
     description: 'Local transcription, quality control and CRM filling, with recordings and text processed in an agreed Russian perimeter.',
     risks: [['Voice and personal data', 'Recordings contain names, phones, addresses and sometimes payment details.'], ['Manual QA volume', 'Only a fraction of calls can be reviewed by hand.'], ['CRM entry', 'Agents spend time after each call on the client record.']],
     uses: [['Call transcription', 'Right after the call ends.'], ['Quality control', 'Script and standard checks on every call.'], ['CRM draft', 'Topic, summary and next step.'], ['Contact analytics', 'Call reasons without manual listening.']],
-    case: { title: 'Local call recognition', client: 'Contact centre with 120 agents', task: 'Transcription, quality control and analytics.', solution: 'Recordings go to secure storage, become text, and the model prepares a summary, topic and CRM draft. Managers get aggregate analytics.', results: ['Every call transcribed', 'Less manual CRM work', 'Automatic call classification', 'Service quality reports'] },
+    example: { title: 'Local call recognition', task: 'Transcription, quality control and analytics.', solution: 'Recordings go to secure storage, become text, and the model prepares a summary, topic and CRM draft. Managers get aggregate analytics.', checks: ['Transcription quality', 'Less manual CRM work', 'Automatic call classification', 'Service quality reports'] },
     faq: [['Does it work with Russian speech?', 'Yes, we use recognition models that handle Russian well and run locally.'], ['Can we add an AI agent?', 'Yes, starting with simple scenarios and handing complex ones to people.']],
   }),
 
   page('compute/', 'server', ['private-ai'], {
     eyebrow: 'Вычисления для бизнеса',
     label: 'Купить или арендовать мощности',
-    card: 'Пять причин владеть вычислениями и пять — арендовать у честного провайдера.',
-    title: 'Свои вычислительные мощности или честная аренда',
-    description: 'Листайте вниз: от компактного DGX Spark до целого парка. Что выгоднее, когда данные нельзя отдавать, а нагрузка растёт.',
+    card: 'Калькулятор видеопамяти и сравнение покупки с арендой.',
+    title: 'Купить или арендовать мощности для ИИ',
+    description: 'Подберите объём памяти под модели и нагрузку, затем сравните покупку и аренду.',
     story: [
-      ['01', 'Начинается с одного устройства', 'DGX Spark размером с книгу запускает модели до ~200 млрд параметров. Для пилота и небольшого отдела этого хватает.', ['Свой ИИ без облака', 'Работает от обычной розетки', 'Окупается быстрее аренды при ежедневной нагрузке'], 'spark'],
+      ['01', 'Начинается с одного устройства', 'DGX Spark размером с книгу запускает модели до ~200 млрд параметров. Для пилота и небольшого отдела этого хватает.', ['Свой ИИ без облака', 'Работает от обычной розетки', 'Стоимость владения зависит от нагрузки'], 'spark'],
       ['02', 'Потом — сервер под отдел', 'Стоечный сервер с несколькими GPU держит десятки пользователей и несколько моделей одновременно.', ['До 384 ГБ видеопамяти', 'Резервное питание и мониторинг', 'Данные остаются в вашем контуре'], 'server'],
       ['03', 'Затем — стойка для компании', 'Платформа уровня DGX: единая система, где обучение и inference не конкурируют за ресурсы.', ['NVLink между картами', 'Планировщик задач', 'Своя инфраструктура под NDA'], 'rack'],
       ['04', 'А иногда лучше не покупать', 'Если нагрузка скачет или нужен быстрый старт, арендуйте у честного провайдера: платите за факт, договор и размещение в РФ, настройка наша.', ['Без капитальных затрат', 'Масштабирование по месяцам', 'Размещение и документы в России'], 'park'],
     ],
     compareTitle: 'Купить или арендовать',
-    compare: [['Стартовые затраты', 'Высокие', 'Низкие'], ['Если нагрузка стабильная', 'Дешевле через 1–2 года', 'Дороже со временем'], ['Если нагрузка скачет', 'Часть мощности простаивает', 'Платите за факт'], ['Данные', 'Полностью у вас', 'В ЦОД партнёра в РФ по договору'], ['Скорость старта', 'Поставка под заказ', 'Дни'], ['Обновление железа', 'На вас', 'На провайдере']],
+    compare: [['Стартовые затраты', 'Высокие', 'Низкие'], ['Если нагрузка стабильная', 'Сравните покупку, питание и обслуживание', 'Сравните ежемесячную плату'], ['Если нагрузка скачет', 'Часть мощности простаивает', 'Платите за факт'], ['Данные', 'Полностью у вас', 'В ЦОД партнёра в РФ по договору'], ['Скорость старта', 'Поставка под заказ', 'Дни'], ['Обновление железа', 'На вас', 'На провайдере']],
     compareHead: ['', 'Своё железо', 'Аренда'],
-    fairTitle: 'Что такое честный провайдер',
-    fair: [['Прозрачный договор', 'Цена, объём, SLA и ответственность записаны, без скрытых платежей.'], ['Размещение в РФ с документами', 'Договор с площадкой и описание контура: то, что спрашивает служба безопасности.'], ['Вы можете уйти', 'Данные и конфигурации выгружаются, привязки нет.'], ['Настройка не продаётся отдельно как загадка', 'Что включено в цену, указано заранее.']],
+    fairTitle: 'Условия аренды',
+    fair: [['Прозрачный договор', 'Цена, объём, SLA и ответственность записаны, без скрытых платежей.'], ['Размещение в РФ с документами', 'Договор с площадкой и описание контура: то, что спрашивает служба безопасности.'], ['Вы можете уйти', 'Данные и конфигурации выгружаются, привязки нет.'], ['Что входит в настройку', 'Что включено в цену, указано заранее.']],
     closeTitle: 'Посчитаем под вашу нагрузку',
     closeText: 'Расскажите, какие модели и сколько пользователей. Сравним покупку и аренду в цифрах и предложим вариант.',
     faq: [['С чего начать?', 'С пилота на одном процессе: арендованная мощность или один Spark. Решение о покупке — после результатов.'], ['Можно ли потом выкупить арендованное?', 'Это обсуждается индивидуально, зависит от провайдера и конфигурации.']],
   }, {
     eyebrow: 'Compute for business',
     label: 'Buy or rent capacity',
-    card: 'Five reasons to own compute and five to rent from a fair provider.',
-    title: 'Your own compute or fair rental',
-    description: 'Scroll down: from a compact DGX Spark to a whole fleet. What pays off when data cannot leave and load grows.',
+    card: 'Estimate GPU memory requirements and compare purchase with rental.',
+    title: 'Buy or rent compute for AI',
+    description: 'Estimate how much memory your models and workloads need, then compare purchase with rental.',
     story: [
-      ['01', 'It starts with one device', 'A book-sized DGX Spark runs models up to ~200B parameters. Enough for a pilot or a small team.', ['Your own AI without the cloud', 'Runs from a normal socket', 'Pays back faster than rental at daily load'], 'spark'],
+      ['01', 'It starts with one device', 'A book-sized DGX Spark runs models up to ~200B parameters. Enough for a pilot or a small team.', ['Your own AI without the cloud', 'Runs from a normal socket', 'Ownership costs depend on workload'], 'spark'],
       ['02', 'Then a server for the department', 'A rack server with several GPUs serves dozens of users and several models at once.', ['Up to 384 GB of GPU memory', 'Redundant power and monitoring', 'Data stays in your perimeter'], 'server'],
       ['03', 'Then a rack for the company', 'A DGX-class platform: one system where training and inference do not fight over resources.', ['NVLink between cards', 'Job scheduler', 'Your own infrastructure under NDA'], 'rack'],
       ['04', 'And sometimes it is better not to buy', 'If load swings or you need a fast start, rent from a fair provider: pay for what you use, with a contract and hosting in Russia. The set-up is ours.', ['No capital outlay', 'Scale month by month', 'Hosting and documents in Russia'], 'park'],
     ],
     compareTitle: 'Buy or rent',
-    compare: [['Upfront cost', 'High', 'Low'], ['Steady load', 'Cheaper after 1–2 years', 'More expensive over time'], ['Spiky load', 'Some capacity sits idle', 'Pay for use'], ['Data', 'Entirely yours', 'In a partner data centre in Russia, by contract'], ['Speed to start', 'Supplied to order', 'Days'], ['Hardware refresh', 'On you', 'On the provider']],
+    compare: [['Upfront cost', 'High', 'Low'], ['Steady load', 'Compare purchase, power and maintenance', 'Compare the monthly rental charge'], ['Spiky load', 'Some capacity sits idle', 'Pay for use'], ['Data', 'Entirely yours', 'In a partner data centre in Russia, by contract'], ['Speed to start', 'Supplied to order', 'Days'], ['Hardware refresh', 'On you', 'On the provider']],
     compareHead: ['', 'Own hardware', 'Rental'],
-    fairTitle: 'What a fair provider is',
-    fair: [['A transparent contract', 'Price, scope, SLA and liability in writing, no hidden fees.'], ['Hosting in Russia with documents', 'A site contract and a perimeter description, the things security teams ask for.'], ['You can leave', 'Data and configurations can be exported; no lock-in.'], ['Set-up is not a mystery add-on', 'What is included in the price is stated upfront.']],
+    fairTitle: 'Rental terms',
+    fair: [['A transparent contract', 'Price, scope, SLA and liability in writing, no hidden fees.'], ['Hosting in Russia with documents', 'A site contract and a perimeter description, the things security teams ask for.'], ['You can leave', 'Data and configurations can be exported; no lock-in.'], ['What setup includes', 'What is included in the price is stated upfront.']],
     closeTitle: 'Let’s size it for your load',
     closeText: 'Tell us which models and how many users. We will compare buying and renting in numbers and propose an option.',
     faq: [['Where to start?', 'A pilot on one process: rented capacity or a single Spark. Decide on buying after the results.'], ['Can rented capacity be bought out later?', 'That is agreed individually and depends on the provider and configuration.']],
   }),
 
   page('import/', 'layers', ['custom'], {
-    eyebrow: 'Техника под заказ',
     label: 'Техника под заказ',
-    card: 'Привозим любую рабочую технику под заказ, в том числе из Китая.',
-    title: 'Любая рабочая техника под заказ, в том числе из Китая',
+    card: 'Подбираем поставщика и привозим технику под заказ.',
+    title: 'Техника под заказ, в том числе из Китая',
     description: 'Серверы, рабочие станции, сетевое и торговое оборудование, станки и комплектующие. Подбираем поставщика, проверяем, везём, оформляем и запускаем.',
     catsTitle: 'Что привозим',
     cats: [
@@ -440,7 +434,7 @@ export const enterprisePages = [
     eyebrow: 'Equipment to order',
     label: 'Equipment to order',
     card: 'We bring in any working equipment to order, including from China.',
-    title: 'Any working equipment to order, including from China',
+    title: 'Equipment to order, including from China',
     description: 'Servers, workstations, network and retail equipment, machine tools and components. We find the supplier, check, ship, clear and commission.',
     catsTitle: 'What we bring in',
     cats: [
@@ -474,12 +468,12 @@ export const enterprisePages = [
   }),
 
   page('services/', 'layers', ['landing'], {
-    eyebrow: 'Карта услуг', label: 'Все услуги', card: 'Все разделы и страницы студии на одной карте.',
+    label: 'Все услуги', card: 'Все разделы и страницы студии на одной карте.',
     title: 'Все услуги Devlarion на одной карте',
     description: 'Пять направлений, внутри — конкретные услуги. Раскройте ветку или найдите нужное поиском.',
     faq: [['Не нашли свою задачу?', 'Напишите в Telegram: если задача про сайты, ботов, ИИ или технику, мы её возьмём или подскажем, кто сделает лучше.']],
   }, {
-    eyebrow: 'Service map', label: 'All services', card: 'Every section and page on one map.',
+    label: 'All services', card: 'Every section and page on one map.',
     title: 'All Devlarion services on one map',
     description: 'Five directions with specific services inside. Open a branch or search.',
     faq: [['Can’t find your task?', 'Message us on Telegram: if it is about websites, bots, AI or hardware, we will take it on or point you to someone better.']],
@@ -487,30 +481,28 @@ export const enterprisePages = [
 
   ...directions.map(d => page(d.route, d.icon, d.estimateServices, { ...d.ru, faq: [...d.ru.faq, ...beforeOrder.ru] }, { ...d.en, faq: [...d.en.faq, ...beforeOrder.en] }, { direction: d })),
   page('scenarios/', 'layers', ['custom'], {
-    eyebrow: 'Кейсы и сценарии', label: 'Кейсы и типовые сценарии', card: 'Наши проекты и задачи, которые мы решаем, с фильтрами по отрасли и технологии.',
+    label: 'Кейсы и типовые сценарии', card: 'Наши проекты и задачи, которые мы решаем, с фильтрами по отрасли и технологии.',
     title: 'Кейсы и типовые сценарии',
-    description: 'Слева — наши реальные проекты, дальше — типовые задачи, которые мы решаем для компаний. Выберите отрасль или технологию.',
+    description: 'Проекты студии и примеры задач. Выберите отрасль или технологию.',
     faq: beforeOrder.ru,
   }, {
-    eyebrow: 'Cases and scenarios', label: 'Cases and typical scenarios', card: 'Our projects and the tasks we solve, filtered by industry and technology.',
+    label: 'Cases and typical scenarios', card: 'Our projects and the tasks we solve, filtered by industry and technology.',
     title: 'Cases and typical scenarios',
-    description: 'Our real projects first, then typical tasks we solve for companies. Pick an industry or technology.',
+    description: 'Studio projects and example workflows. Filter by industry or technology.',
     faq: beforeOrder.en,
   }),
 
   page('shop/', 'layers', ['landing', 'automation'], {
-    eyebrow: 'Магазин цифровых услуг',
     label: 'Магазин услуг',
-    card: 'Соберите проект из готовых услуг и отправьте заявку в один клик.',
-    title: 'Магазин цифровых услуг Devlarion',
-    description: 'Выберите услуги, добавьте их в корзину и отправьте заявку в Telegram. Цены указаны «от» — точную смету фиксируем в договоре до старта.',
+    card: 'Соберите корзину услуг и оборудования для заявки.',
+    title: 'Услуги и оборудование Devlarion',
+    description: 'Добавьте услуги и оборудование в корзину. Из неё можно отправить запрос на смету в Telegram.',
     faq: [['Как оплатить?', 'После заявки уточним детали и пришлём договор и счёт. Онлайн-оплаты на сайте нет.'], ['Корзина — это окончательный заказ?', 'Нет, это заявка. Можно менять состав до подписания договора.']],
   }, {
-    eyebrow: 'Digital service shop',
     label: 'Service shop',
-    card: 'Build a project from ready services and send it in one click.',
-    title: 'Devlarion digital service shop',
-    description: 'Pick services, add them to the basket and send the enquiry on Telegram. Prices are “from”; the final quote is fixed in the contract before work starts.',
+    card: 'Add services and equipment to prepare an enquiry.',
+    title: 'Devlarion services and equipment',
+    description: 'Add services and equipment to the basket, then send a request for a quote on Telegram.',
     faq: [['How do I pay?', 'After the enquiry we confirm details and send a contract and invoice. There is no online payment on the site.'], ['Is the basket a final order?', 'No, it is an enquiry. You can change it before signing.']],
   }),
 ];
@@ -590,7 +582,7 @@ const TREE = [
     ['ai-assistant/', ['ИИ-ассистент', 'AI assistant'], ['Отвечает и передаёт заявки в CRM', 'Answers and passes enquiries to CRM']],
     ['documents/', ['Документы, OCR и 1С', 'Documents, OCR and 1C'], ['Сканы в учёт, сверка, интеграции', 'Scans into accounting, reconciliation']],
     ['vision/', ['Компьютерное зрение', 'Computer vision'], ['Брак, СИЗ, подсчёт по камерам', 'Defects, PPE, counting']],
-    ['ml/', ['Дообучение и точность', 'Fine-tuning and accuracy'], ['До 96% на проверочном наборе', 'Up to 96% on test sets']],
+    ['ml/', ['Дообучение и точность', 'Fine-tuning and accuracy'], ['Проверка ответов на ваших данных', 'Evaluate answers on your data']],
     ['scenarios/', ['Кейсы и типовые сценарии', 'Cases and scenarios'], ['С фильтрами по отрасли и технологии', 'Filter by industry and technology']],
     ['private-ai/', ['Корпоративный ИИ в РФ', 'Private AI in Russia'], ['LLM, RAG, документы и речь в вашем контуре', 'LLMs, RAG, documents and speech in your perimeter']],
     ['fintech/', ['FinTech-продукты', 'FinTech products'], ['Сервисы для финансовых компаний', 'Services for financial firms']],
@@ -692,7 +684,7 @@ export function renderEnterprisePage(lang, route, ctx) {
       ${section(pick(lang, 'Для каких отраслей', 'Industries'), links(lang, ctx, industries).replace('audience-related audience-cross', 'audience-related audience-cross cols5'))}
       ${renderCapacity(lang, p, ctx)}
       ${renderFAQ(lang, p, ctx)}
-      ${section(pick(lang, 'Что логично сделать дальше', 'What to do next'), links(lang, ctx, ['hardware/', 'shop/', 'enterprise/']), 'audience-next')}
+      ${section(pick(lang, 'Другие услуги', 'Related services'), links(lang, ctx, ['hardware/', 'shop/', 'enterprise/']), 'audience-next')}
       ${close(lang, p, ctx, c.closeTitle, c.closeText)}`;
   } else if (route === 'hardware/') {
     body = `${trustStrip(lang)}
@@ -702,7 +694,7 @@ export function renderEnterprisePage(lang, route, ctx) {
       ${section(pick(lang, 'Модели в каталоге', 'Models in the catalogue'), `<div class="hw-lineup">${[...hardware].sort((x, y) => (/^mac/.test(y.id) - /^mac/.test(x.id))).map(h => `<a class="hw-pick" href="${ctx.home}shop/#${h.id}"><span class="hw-pick-img${PHOTO[h.id]?.endsWith('.png') ? ' is-cut' : ''}">${PHOTO[h.id] ? `<img src="${ctx.asset}photos/${PHOTO[h.id]}" alt="" width="1200" height="900" loading="lazy">` : deviceArt(h.art)}</span><strong>${esc(h[lang][0])}</strong><span>${h.rub == null ? pick(lang, 'По запросу', 'On request') : priceMarkup(lang, h.rub, h.unit === 'hour' ? pick(lang, ' / час', ' / hour') : h.unit === 'month' ? pick(lang, ' / мес.', ' / month') : '')}</span></a>`).join('')}</div><p class="audience-note-line">${esc(c.lineupNote)} ${pick(lang, 'Все цены на технику — «от» и по запросу: это ориентир, не финальная цена. Точную рассчитаем под вашу конфигурацию и сроки.', 'All hardware prices are “from” and on request: a guide, not the final price. We calculate the exact figure for your configuration and timing.')}</p>`)}
       ${renderCapacity(lang, p, ctx)}
       ${renderFAQ(lang, p, ctx)}
-      ${section(pick(lang, 'Что логично сделать дальше', 'What to do next'), links(lang, ctx, ['import/', 'compute/', 'shop/']), 'audience-next')}
+      ${section(pick(lang, 'Другие услуги', 'Related services'), links(lang, ctx, ['import/', 'compute/', 'shop/']), 'audience-next')}
       ${close(lang, p, ctx, c.closeTitle, c.closeText)}`;
   } else if (route === 'compute/') {
     const v = n => `${ctx.asset}video/${n}`;
@@ -728,13 +720,13 @@ export function renderEnterprisePage(lang, route, ctx) {
       ${close(lang, p, ctx, c.closeTitle, c.closeText)}`;
   } else if (route === 'import/') {
     body = `${trustStrip(lang)}
-      ${section(c.catsTitle, `<div class="loss-grid cat-grid">${c.cats.map(([t, d], i) => `<article><span class="loss-index" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span><h3>${esc(t)}</h3><p>${esc(d)}</p></article>`).join('')}</div>`, 'audience-loss')}
+      ${section(c.catsTitle, `<div class="loss-grid cat-grid">${c.cats.map(([t, d]) => `<article><h3>${esc(t)}</h3><p>${esc(d)}</p></article>`).join('')}</div>`, 'audience-loss')}
       ${section(c.stepsTitle, steps(c.steps), 'audience-flow')}
       ${section(c.whyTitle, grid(c.why), 'audience-loss')}
       <aside class="wrap audience-note"><p>${esc(c.notice)}</p></aside>
       ${renderCapacity(lang, p, ctx)}
       ${renderFAQ(lang, p, ctx)}
-      ${section(pick(lang, 'Что логично сделать дальше', 'What to do next'), links(lang, ctx, ['hardware/', 'shop/', 'enterprise/']), 'audience-next')}
+      ${section(pick(lang, 'Другие услуги', 'Related services'), links(lang, ctx, ['hardware/', 'shop/', 'enterprise/']), 'audience-next')}
       ${close(lang, p, ctx, c.closeTitle, c.closeText)}`;
   } else if (route === 'services/') {
     body = `${serviceTree(lang, ctx)}${renderFAQ(lang, p, ctx)}${leadForm(lang)}${close(lang, p, ctx, pick(lang, 'Не уверены, что выбрать?', 'Not sure what to choose?'), pick(lang, 'Опишите задачу своими словами — подскажем, какой раздел ваш, в течение дня.', 'Describe your task in your own words and we will point you to the right section within a day.'))}`;
@@ -743,7 +735,7 @@ export function renderEnterprisePage(lang, route, ctx) {
     const related = scenarios[lang].filter(x => x[4] === route);
     body = `${trustStrip(lang)}
       ${section(pick(lang, 'Услуги, цены и сроки', 'Services, prices and timing'), atlasCards(lang, ctx, c.atlas, c.label))}
-      ${acc ? `<section class="section wrap audience-section accuracy"><div class="acc-num">${esc(acc[0])}</div><div><h2>${esc(acc[1])}</h2><p>${esc(acc[2])}</p></div></section>` : ''}
+      ${acc ? section(acc[0], `<p>${esc(acc[1])}</p>`) : ''}
       ${related.length ? section(pick(lang, 'Типовые сценарии', 'Typical scenarios'), scenarioCards(lang, ctx, related)) : ''}
       ${renderCapacity(lang, p, ctx)}
       ${renderFAQ(lang, p, ctx)}
@@ -764,16 +756,17 @@ export function renderEnterprisePage(lang, route, ctx) {
     body = `${trustStrip(lang)}${renderShop(lang, ctx)}${renderFAQ(lang, p, ctx)}
       ${section(pick(lang, 'Не нашли нужное?', 'Can’t find it?'), links(lang, ctx, ['private-ai/', 'hardware/']), 'audience-next')}`;
   } else if (p.industry) {
-    const k = c.case;
+    const k = c.example;
     body = `${trustStrip(lang)}
       ${section(pick(lang, 'Риски отрасли', 'Industry risks'), grid(c.risks), 'audience-loss')}
-      ${renderFines(lang)}
+      <p class="wrap audience-note-line"><a class="underlined" href="${ctx.home}private-ai/#data-protection-fines">${pick(lang, 'Ответственность за утечки персональных данных', 'Liability for personal data breaches')}</a></p>
       ${section(pick(lang, 'Что можно доверить ИИ', 'What AI can take on'), `<div class="service-grid audience-benefits">${c.uses.map(([t, d]) => `<article><h3>${esc(t)}</h3><p>${esc(d)}</p></article>`).join('')}</div>`)}
-      ${c.product ? `<section class="section wrap audience-section own-product"><p class="loss-badge">${pick(lang, 'Огромная возможность', 'A big opportunity')}</p><h2>${esc(c.product[0])}</h2><p class="loss-lead">${esc(c.product[1])}</p><ul class="package-includes">${c.product[2].map(x => `<li><span aria-hidden="true">✓</span>${esc(x)}</li>`).join('')}</ul></section>` : ''}
-      <section class="section wrap audience-section case-sim"><p class="loss-badge">${pick(lang, 'Смоделированный кейс', 'Simulated case')}</p><h2>${esc(k.title)}</h2>
-        <div class="case-sim-grid"><div><small>${pick(lang, 'Клиент', 'Client')}</small><p>${esc(k.client)}</p><small>${pick(lang, 'Задача', 'Task')}</small><p>${esc(k.task)}</p><small>${pick(lang, 'Решение', 'Solution')}</small><p>${esc(k.solution)}</p></div>
-        <div class="case-sim-results"><small>${pick(lang, 'Иллюстративные результаты', 'Illustrative results')}</small><ul class="package-includes">${k.results.map(r => `<li><span aria-hidden="true">✓</span>${esc(r)}</li>`).join('')}</ul></div></div>
-        <p class="audience-note-line">${pick(lang, 'Компания и показатели вымышлены и показывают возможный проект, а не результаты конкретного внедрения.', 'The company and figures are fictional and show a possible project, not results of a specific deployment.')}</p></section>
+      ${c.product ? `<section class="section wrap audience-section own-product"><h2>${esc(c.product[0])}</h2><p class="loss-lead">${esc(c.product[1])}</p><ul class="package-includes">${c.product[2].map(x => `<li><span aria-hidden="true">✓</span>${esc(x)}</li>`).join('')}</ul></section>` : ''}
+      <section class="section wrap audience-section case-sim"><h2>${pick(lang, 'Пример внедрения', 'Example implementation')}: ${esc(k.title)}</h2>
+        <div class="case-sim-grid"><div><small>${pick(lang, 'Задача', 'Task')}</small><p>${esc(k.task)}</p><small>${pick(lang, 'Как это работает', 'How it works')}</small><p>${esc(k.solution)}</p></div>
+        <div class="case-sim-results"><small>${pick(lang, 'Что проверяем на пилоте', 'What we test in a pilot')}</small><ul>${k.checks.map(check => `<li>${esc(check)}</li>`).join('')}</ul></div></div>
+        ${route === 'industries/operations/' ? `<p class="audience-note-line"><a class="underlined" href="${ctx.home}work/orient-logic/">${pick(lang, 'Кейс Orient Logic', 'Orient Logic case study')}</a></p>` : ''}
+      </section>
       ${section(pick(lang, 'Форматы', 'Formats'), cards(lang, ctx, enterprisePages[0][lang].tiers, { label, cls: 'tiers' }))}
       ${renderCapacity(lang, p, ctx)}
       ${renderFAQ(lang, p, ctx)}
@@ -781,7 +774,7 @@ export function renderEnterprisePage(lang, route, ctx) {
       ${close(lang, p, ctx, pick(lang, 'Обсудим пилот для вашей компании', 'Let’s discuss a pilot for your company'), pick(lang, 'Начинаем с бесплатной диагностики одного процесса. Решение о пилоте принимаете после.', 'We start with a free discovery of one process. You decide on a pilot afterwards.'))}`;
   }
   const dc = ['hardware/', 'compute/', 'private-ai/'].includes(route);
-  return `<article class="audience-page enterprise-page${dc ? ' dc-page' : ''}">${hero(lang, p, ctx, false)}${body}</article>`;
+  return `<article class="audience-page enterprise-page${dc ? ' dc-page' : ''}">${hero(lang, p, ctx)}${body}</article>`;
 }
 
 export { pageArt };

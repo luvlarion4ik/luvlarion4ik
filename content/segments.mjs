@@ -16,11 +16,6 @@ export const segments = [
       title: 'Сайт или бот для самозанятых и ИП',
       card: 'Сайт или бот, чтобы клиенты писали вам напрямую.',
       description: 'Клиенты находят вас, видят цены и пишут напрямую — без агрегаторов и комиссий. Запуск за 1–2 недели.',
-      benefits: [
-        ['Заявки теряются в личке', 'Сообщения приходят из разных мессенджеров, на часть не успеваете ответить.'],
-        ['Одни и те же вопросы', '«Сколько стоит», «есть ли время», «где находитесь» по десять раз в день.'],
-        ['Зависимость от площадок', 'Клиенты приходят только через агрегатор, который берёт комиссию и меняет правила.'],
-      ],
       packages: [
         { id: 'landing', title: 'Сайт для заявок', price: ['landing', 'small'], term: '5–7 дней', items: ['Одна страница до 5 блоков', 'Адаптив под телефон', 'Форма заявки', 'Заявки в почту или Telegram', 'Подключение домена'] },
         { id: 'automation', title: 'Telegram- или MAX-бот', price: ['automation', 'small'], term: '5–7 дней', items: ['Меню', 'Один сценарий записи или заявки', 'Уведомление вам в чат', 'Инструкция по управлению'] },
@@ -41,11 +36,6 @@ export const segments = [
       title: 'Websites and bots for sole traders',
       card: 'A website or bot so customers can contact you directly.',
       description: 'Customers find you, see your prices and contact you directly without platform fees. Launch in one to two weeks.',
-      benefits: [
-        ['Enquiries get buried in chats', 'Messages come in through several apps, and some go unanswered.'],
-        ['The same questions come up', 'Customers keep asking about prices, availability and how to find you.'],
-        ['You rely on platforms', 'Customers come through a platform that charges commission and can change its terms.'],
-      ],
       packages: [
         { id: 'landing', title: 'Enquiry website', price: ['landing', 'small'], term: '5–7 days', items: ['One page with up to five sections', 'Mobile-friendly layout', 'Enquiry form', 'Enquiries sent to email or Telegram', 'Domain connection'] },
         { id: 'automation', title: 'Telegram or MAX bot', price: ['automation', 'small'], term: '5–7 days', items: ['Menu', 'One booking or enquiry workflow', 'Chat notification', 'Operating guide'] },
@@ -74,11 +64,6 @@ export const segments = [
       title: 'Сайт, бот и CRM для малого и среднего бизнеса',
       card: 'Сайт с каталогом, CRM, бот и личный кабинет.',
       description: 'Собираем заявки из сайта, мессенджеров и маркетплейсов в одно место и убираем ручные операции у менеджеров.',
-      benefits: [
-        ['Менеджеры тонут в рутине', 'Копируют заявки в таблицы и отвечают на одни и те же вопросы.'],
-        ['Непонятно, откуда клиенты', 'Без аналитики сложно понять, на что тратить рекламный бюджет.'],
-        ['Сайт устарел', 'Неудобно с телефона, сложно обновлять, мало заявок.'],
-      ],
       packages: [
         { id: 'web', title: 'Сайт компании с админкой', price: ['web', 'small'], term: '3–4 недели', items: ['До 10 страниц', 'Каталог услуг', 'Формы', 'Аналитика', 'Управление контентом'] },
         { id: 'shop', title: 'Интернет-магазин', price: ['shop', 'small'], term: '4–6 недель', items: ['Каталог', 'Корзина', 'Оплата', 'Уведомления о заказах'] },
@@ -99,11 +84,6 @@ export const segments = [
       title: 'Websites, bots and CRM for small and medium businesses',
       card: 'A website with a catalogue, CRM, bot and client portal.',
       description: 'Collect enquiries from your website, messaging apps and marketplaces in one place and reduce manual work for your team.',
-      benefits: [
-        ['Routine work takes up the day', 'Staff copy enquiries into spreadsheets and answer the same questions.'],
-        ['Enquiry sources are unclear', 'Without analytics, it is hard to decide where to spend your advertising budget.'],
-        ['Your website is out of date', 'It is awkward on mobile, difficult to update and brings in few enquiries.'],
-      ],
       packages: [
         { id: 'web', title: 'Company website with CMS', price: ['web', 'small'], term: '3–4 weeks', items: ['Up to ten pages', 'Service catalogue', 'Forms', 'Analytics', 'Content management'] },
         { id: 'shop', title: 'Online shop', price: ['shop', 'small'], term: '4–6 weeks', items: ['Catalogue', 'Basket', 'Payments', 'Order notifications'] },
@@ -132,11 +112,6 @@ export const segments = [
       title: 'ИИ, интеграции и сервисы для крупных компаний',
       card: 'ИИ на ваших серверах, агенты, интеграции под NDA.',
       description: 'Начинаем с пилота на одном процессе, работаем под NDA и в вашем контуре. Решение о масштабировании — по измеримым результатам пилота.',
-      benefits: [
-        ['Данные нельзя отдавать наружу', 'Нужен ИИ, который работает на ваших серверах.'],
-        ['Системы не связаны', 'Данные между CRM, ERP и учётом переносят вручную.'],
-        ['Долгие согласования', 'Нужен подрядчик, который понимает требования к безопасности и документации.'],
-      ],
       packages: [
         { id: 'diagnosis', title: 'Диагностика', priceLabel: 'Бесплатно', items: ['Созвон', 'Разбор процесса', 'Оценка эффекта'] },
         { id: 'pilot', title: 'Пилот', price: ['agents', 'medium'], items: ['Один процесс', 'Работа на ваших данных', 'Метрики успеха согласуем заранее'] },
@@ -171,11 +146,6 @@ export const segments = [
       title: 'AI, integrations and services for enterprises',
       card: 'On-premises AI, agents and integrations under NDA.',
       description: 'Start with a pilot for one workflow. We work under NDA and within your infrastructure. Measured pilot results inform the decision to scale.',
-      benefits: [
-        ['Data must stay in-house', 'AI needs to run on servers you control.'],
-        ['Systems are disconnected', 'Staff transfer records between CRM, ERP and accounting systems by hand.'],
-        ['Approvals take time', 'You need a partner who understands security and documentation requirements.'],
-      ],
       packages: [
         { id: 'diagnosis', title: 'Discovery', priceLabel: 'Free', items: ['Call', 'Workflow review', 'Assessment of the potential impact'] },
         { id: 'pilot', title: 'Pilot', price: ['agents', 'medium'], items: ['One workflow', 'Uses your data', 'Success measures agreed up front'] },
@@ -446,11 +416,11 @@ function telegramLink(lang, ctx, audience, pack) {
   return esc(url.href);
 }
 
-function hero(lang, page, ctx, isSegment) {
-  const { label, title, description } = page[lang];
+function hero(lang, page, ctx) {
+  const { label, title, description, eyebrow } = page[lang];
   return `<section class="audience-hero"><div class="wrap audience-hero-grid">
     <div class="audience-hero-copy">
-    <p class="eyebrow"><i></i>${page[lang].eyebrow ? esc(page[lang].eyebrow) : isSegment ? pick(lang, 'Для кого', 'Who we work with') : pick(lang, 'Рост после запуска', 'Growth after launch')}</p>
+    ${eyebrow && eyebrow !== label && eyebrow !== title ? `<p class="eyebrow"><i></i>${esc(eyebrow)}</p>` : ''}
     <h1>${esc(title)}</h1>
     <p class="intro">${esc(description)}</p>
     <div class="actions">
@@ -515,16 +485,24 @@ function renderFAQ(lang, page, ctx) {
 }
 
 function renderRelated(lang, page, ctx) {
-  const related = [...segments.filter(segment => segment !== page).slice(0, 2),
-    ...page.related.map(route => topics.find(topic => topic.route === route))];
-  return section(pick(lang, 'Смотрите также', 'See also'), `<div class="audience-related">${related.map(item => {
-    const { label, card, description } = item[lang];
-    return `<a href="${ctx.home}${item.route}"><span class="service-mark" aria-hidden="true">${ctx.icons[item.icon]}</span><strong>${esc(label)} <span aria-hidden="true">→</span></strong><span>${esc(card ?? description)}</span></a>`;
-  }).join('')}</div>`);
+  const crossLinks = sell[page.route]?.[lang]?.cross ?? [];
+  const catalogueLinks = [
+    ...segments.filter(segment => segment !== page).slice(0, 2),
+    ...page.related.map(route => topics.find(topic => topic.route === route)),
+  ].map(item => [item.route, item[lang].label, item[lang].card ?? item[lang].description]);
+  const routes = new Set();
+  const links = [...crossLinks, ...catalogueLinks].filter(([route]) => {
+    if (routes.has(route)) return false;
+    routes.add(route);
+    return true;
+  });
+  return section(shared[lang].nextTitle, `<div class="audience-related audience-cross">${links.map(([route, title, text]) =>
+    `<a href="${ctx.home}${route}"><strong>${esc(title)}</strong><span>${esc(text)}</span></a>`).join('')}</div>`, 'audience-next');
 }
 
 function renderCases(lang, route, ctx) {
   const relevant = ctx.work.filter(project => project.segments?.includes(route.slice(0, -1))).slice(0, 2);
+  if (!relevant.length) return '';
   return section(pick(lang, 'Кейсы', 'Case studies'), `<div class="service-grid audience-cases">${relevant.map(project =>
     `<article><small>${esc(project.type)}${project.concept ? ' · ' + pick(lang, 'Демо-данные', 'Demo data') : ''}</small>
       <h3><a href="${ctx.home}work/${project.id}/">${esc(project.name)} <span aria-hidden="true">→</span></a></h3><p>${esc(project.result)}</p>
@@ -573,10 +551,9 @@ function renderLoss(lang, route) {
   const copy = sell[route]?.[lang];
   if (!copy) return '';
   return `<section class="section wrap audience-section audience-loss">
-    <p class="loss-badge">${esc(shared[lang].lossBadge)}</p>
     <h2>${esc(copy.lossTitle)}</h2><p class="loss-lead">${esc(copy.lossLead)}</p>
-    <div class="loss-grid">${copy.losses.map(([title, text], index) =>
-      `<article><span class="loss-index" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span><h3>${esc(title)}</h3><p>${esc(text)}</p></article>`).join('')}</div>
+    <div class="loss-grid">${copy.losses.map(([title, text]) =>
+      `<article><h3>${esc(title)}</h3><p>${esc(text)}</p></article>`).join('')}</div>
   </section>`;
 }
 
@@ -592,7 +569,7 @@ function renderCapacity(lang, page, ctx) {
   const o = ctx.sales?.capacity;
   if (o?.enabled === false) return '';
   const t = { ...shared[lang], capacityTitle: o?.[lang]?.title || shared[lang].capacityTitle, capacityText: o?.[lang]?.text || shared[lang].capacityText };
-  return `<aside class="wrap capacity" aria-label="${esc(t.capacityTitle)}"><div class="capacity-pulse" aria-hidden="true"><i></i></div>
+  return `<aside class="wrap capacity" aria-label="${esc(t.capacityTitle)}">
     <div><strong>${esc(t.capacityTitle)}</strong><p>${esc(t.capacityText)}</p></div>
     <a class="button" href="${telegramLink(lang, ctx, page[lang].label, t.capacityCta)}">${esc(t.capacityCta)}</a></aside>`;
 }
@@ -604,12 +581,6 @@ function renderBundleTeaser(lang, ctx) {
     <a class="ghost" href="${ctx.home}bundle/">${esc(t.bundleCta)} <span aria-hidden="true">→</span></a></aside>`;
 }
 
-function renderCross(lang, route, ctx) {
-  const copy = sell[route]?.[lang];
-  if (!copy) return '';
-  return section(shared[lang].nextTitle, `<div class="audience-related audience-cross">${copy.cross.map(([to, title, text]) =>
-    `<a href="${ctx.home}${to}"><strong>${esc(title)} <span aria-hidden="true">→</span></strong><span>${esc(text)}</span></a>`).join('')}</div>`, 'audience-next');
-}
 
 function renderClose(lang, page, ctx) {
   const base = sell[page.route]?.[lang];
@@ -623,13 +594,12 @@ function renderClose(lang, page, ctx) {
 
 export function renderSegmentPage(lang, route, ctx) {
   const page = segments.find(item => item.route === route);
-  const { directions, benefits } = page[lang];
+  const { directions } = page[lang];
   const payment = pick(lang, 'Оплата частями: 50% при старте и 50% после сдачи. Для проектов от 100 000 ₽ — по этапам.',
     'Pay in instalments: 50% at the start and 50% on handover. Projects from RUB 100,000 are billed in stages.');
   return `<article class="audience-page">
-    ${hero(lang, page, ctx, true)}
+    ${hero(lang, page, ctx)}
     ${trustStrip(lang)}
-    ${section(pick(lang, 'Узнаёте себя?', 'Sound familiar?'), renderBenefits(benefits, ctx.icons))}
     ${renderLoss(lang, route)}
     ${renderPackages(lang, page, ctx)}
     <aside class="wrap audience-note"><p>${payment}</p></aside>
@@ -642,7 +612,6 @@ export function renderSegmentPage(lang, route, ctx) {
     ${renderCases(lang, route, ctx)}
     ${renderBundleTeaser(lang, ctx)}
     ${renderFAQ(lang, page, ctx)}
-    ${renderCross(lang, route, ctx)}
     ${renderRelated(lang, page, ctx)}
     ${renderClose(lang, page, ctx)}
   </article>`;
@@ -656,7 +625,7 @@ export function renderTopicPage(lang, route, ctx) {
   const benefitHeading = route === 'geo/' ? pick(lang, 'Как это работает', 'How it works')
     : pick(lang, 'Что это даёт', 'What it gives you');
   return `<article class="audience-page">
-    ${hero(lang, page, ctx, false)}
+    ${hero(lang, page, ctx)}
     ${trustStrip(lang)}
     ${renderLoss(lang, route)}
     ${section(benefitHeading, renderBenefits(benefits, ctx.icons))}
@@ -666,10 +635,9 @@ export function renderTopicPage(lang, route, ctx) {
       `<p>${pick(lang, 'На этом сайте состав услуг, цены и частые вопросы доступны в разметке страниц.', 'This site includes service details, prices and common questions in its structured data.')}</p>
       <a class="link" href="${esc(ctx.llmsUrl)}">llms.txt <span aria-hidden="true">→</span></a>`) : ''}
     ${renderCapacity(lang, page, ctx)}
-    ${route === 'bundle/' ? '' : renderBundleTeaser(lang, ctx)}
+    ${renderBundleTeaser(lang, ctx)}
     ${notice ? `<aside class="wrap audience-note"><p>${esc(notice)}</p></aside>` : ''}
     ${renderFAQ(lang, page, ctx)}
-    ${renderCross(lang, route, ctx)}
     ${renderRelated(lang, page, ctx)}
     ${why ? section(pick(lang, 'Что подходит вашему бизнесу?', 'What fits your business?'), ctx.segmentPicker)
         : renderClose(lang, page, ctx)}
@@ -686,9 +654,9 @@ function renderBundlePage(lang, ctx) {
   const plans = `<div class="service-grid audience-packages bundle-plans">${c.plans.map(([title, text, services, tier]) =>
     `<article><h3>${esc(title)}</h3><p>${esc(text)}</p><div class="package-action">${estimateLink(lang, ctx.home, services.split(' '), tier, pick(lang, 'Рассчитать «' + title + '»', 'Estimate “' + title + '”'))}</div></article>`).join('')}</div><p class="audience-note-line">${esc(c.discountNote)}</p>`;
   return `<article class="audience-page">
-    ${hero(lang, page, ctx, false)}
+    ${hero(lang, page, ctx)}
     ${trustStrip(lang)}
-    ${section(c.whyTitle, `<div class="loss-grid">${c.why.map(([title, text], index) => `<article><span class="loss-index" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span><h3>${esc(title)}</h3><p>${esc(text)}</p></article>`).join('')}</div>`, 'audience-loss')}
+    ${section(c.whyTitle, `<div class="loss-grid">${c.why.map(([title, text]) => `<article><h3>${esc(title)}</h3><p>${esc(text)}</p></article>`).join('')}</div>`, 'audience-loss')}
     ${section(c.flowTitle, flow, 'audience-flow')}
     ${section(c.compareTitle, compare)}
     ${section(c.plansTitle, plans)}

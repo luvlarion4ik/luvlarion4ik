@@ -1,104 +1,16 @@
-/* Devlarion motion: орбиты со знаком на первом экране, появление блоков при прокрутке,
-   логотип в шапке «здоровается» после перехода на страницу, блик за курсором на карточках.
-   При prefers-reduced-motion ничего не запускается: страница остаётся статичной. */
-(() => {
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-  if (reduced.matches) return;
-  const root = document.documentElement;
+/* Знак Devlarion на первом экране. */
+document.querySelector(".hero")?.insertAdjacentHTML("afterbegin", `<svg class="dl-orbit" viewBox="0 0 1000 1000" aria-hidden="true" focusable="false">
+  <circle class="ring" cx="500" cy="500" r="265"/>
+  <circle class="ring dash" cx="500" cy="500" r="420"/>
+  <g transform="translate(500 500) scale(4.2) translate(-33 -32)">
+    <path class="glyph" d="M8 6h20c18 0 30 10 30 26S46 58 28 58H8V6Z"/>
+    <path class="glyph" d="M24.5 16V43.5H42"/>
+  </g>
+</svg>`);
 
-  // 1. Первый экран: большой контурный знак D с вырезом L и вращающиеся орбиты.
-  const hero = document.querySelector(".hero");
-  if (hero && !hero.querySelector(".dl-orbit")) {
-    const ring = (r, cls = "") => `<circle class="ring ${cls}" cx="500" cy="500" r="${r}"/>`;
-    const sat = (r, angle, size) => {
-      const a = angle * Math.PI / 180, x = (500 + r * Math.cos(a)).toFixed(1), y = (500 + r * Math.sin(a)).toFixed(1);
-      return `<circle class="sat" cx="${x}" cy="${y}" r="${size}"/><circle class="sat pulse" cx="${x}" cy="${y}" r="${size}"/>`;
-    };
-    hero.insertAdjacentHTML("afterbegin", `<svg class="dl-orbit" viewBox="0 0 1000 1000" aria-hidden="true" focusable="false">
-      ${ring(210)}${ring(300, "dash")}${ring(410)}${ring(490, "dash")}
-      <g transform="translate(500 500) scale(4.2) translate(-33 -32)">
-        <path class="glyph" pathLength="1" d="M8 6h20c18 0 30 10 30 26S46 58 28 58H8V6Z"/>
-        <path class="glyph cut" pathLength="1" d="M24.5 16V43.5H42"/>
-      </g></svg>`);
-    const orbit = hero.querySelector(".dl-orbit");
-    let ticking = false;
-    addEventListener("scroll", () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        ticking = false;
-        const y = Math.min(scrollY, innerHeight);
-        orbit.style.setProperty("--dl-shift", (y * 0.25).toFixed(1) + "px");
-      });
-    }, { passive: true });
-  }
-
-  // 2. Появление блоков при прокрутке, с небольшой задержкой внутри одной сетки.
-  if ("IntersectionObserver" in window) {
-    const targets = [
-      ".section > h2", ".section > p", ".service-group > h3", ".product-feature > *",
-      ".product-card", ".offer-panel", ".solution-content", ".exhibit",
-      ".home-facts > *", ".home-growth > a", ".home-process > li",
-      ".audience-section .service-grid > article", ".loss-grid > article", ".shift", ".trust-strip > div", ".bundle-flow > li", ".bundle-row", ".capacity", ".bundle-teaser", ".audience-related > a",
-      ".sub > h2", ".case-gallery-frame", ".ready-solutions-grid > article",
-      ".notfound > *", ".pt-section > h2", ".pt-steps > *", ".pt-roles > *",
-      ".gm-about > h2", ".gm-about-grid > *", ".gm-how > *", ".gm-cta",
-    ].join(",");
-    const seen = new IntersectionObserver(entries => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        entry.target.classList.add("dl-in");
-        seen.unobserve(entry.target);
-      }
-    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
-    function observe(container) {
-      for (const el of container.querySelectorAll(targets)) {
-        if (el.closest(".hero, .audience-hero, .pt-hero, .pt-app, [data-reveal]")) continue;
-        // То, что уже видно, не прячем: так нет мигания первого экрана.
-        if (el.getBoundingClientRect().top < innerHeight * 0.9) continue;
-        const siblings = [...el.parentElement.children].filter(child => child.matches(targets));
-        el.style.setProperty("--dl-i", Math.min(siblings.indexOf(el), 5));
-        el.setAttribute("data-reveal", "");
-        seen.observe(el);
-      }
-    }
-    observe(document);
-    document.addEventListener("toggle", event => {
-      if (event.target instanceof HTMLDetailsElement && event.target.open) observe(event.target);
-    }, true);
-    root.classList.add("dl-motion");
-  }
-
-  // 3. Блик за курсором на карточках.
-  if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
-    const cards = document.querySelectorAll(".service-grid article, .product-card, .case, .offer-panel, .pt-direction, .segment-card, .home-growth > a, .audience-related > a, .gm-about-grid article");
-    for (const card of cards) {
-      card.setAttribute("data-glow", "");
-      card.addEventListener("pointermove", event => {
-        const box = card.getBoundingClientRect();
-        card.style.setProperty("--gx", (event.clientX - box.left) + "px");
-        card.style.setProperty("--gy", (event.clientY - box.top) + "px");
-      });
-    }
-  }
-
-  // 4. Логотип в шапке проигрывает анимацию после перехода на внутреннюю страницу.
-  const greet = () => {
-    const logo = document.querySelector("header devlarion-logo");
-    if (!logo || logo.hasAttribute("intro")) return;
-    customElements.whenDefined("devlarion-logo").then(() => setTimeout(() => logo.play?.(), 380));
-  };
-  if (document.readyState === "complete") greet(); else addEventListener("load", greet, { once: true });
-  addEventListener("pageshow", event => { if (event.persisted) greet(); });
-})();
-
-/* Devlarion motion, часть 2: полоса прогресса, «живая» шапка, параллакс первого экрана,
-   слова заголовков поднимаются по одному, магнитные кнопки, наклон кейсов, бегущая строка
-   ускоряется от прокрутки, линия пакета прорисовывается по мере чтения, кнопка «наверх»
-   с кольцом прогресса и пасхалка: наберите на клавиатуре «devlarion». */
+/* Пасхалки и сертификат. */
 (() => {
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
   const root = document.documentElement;
   const ru = root.lang === "ru";
 
@@ -251,13 +163,12 @@
     document.querySelector("main")?.animate([{ transform: "none" }, { transform: "rotate(-.6deg) translateY(4px)" }, { transform: "rotate(.4deg)" }, { transform: "none" }], { duration: 700, easing: "ease-in-out" });
   });
 
-  // Ночной визит: одна тихая записка за сессию.
+  // Ночной визит засчитывается без уведомления.
   try {
     const hour = new Date().getHours();
     if (hour < 5 && !sessionStorage.getItem("dl-night")) {
       sessionStorage.setItem("dl-night", "1");
       setTimeout(() => found("night"), 0);
-      setTimeout(() => note(ru ? "Поздно, а вы всё ещё выбираете подрядчика. Оставьте заявку — утром ответим первым делом." : "It’s late and you’re still choosing a contractor. Leave an enquiry and we’ll reply first thing.", null, 7000), 9000);
     }
   } catch {}
 
@@ -273,8 +184,8 @@
     setTimeout(() => tag.remove(), 2600);
   }
   function fine152() {
-    note(ru ? "152-ФЗ: утечка данных 10–100 тыс. человек — штраф 5–10 млн ₽, повторная — до 3% выручки." : "152-FZ: a leak of 10–100k people’s data means a RUB 5–10m fine; a repeat one, up to 3% of revenue.",
-      [ru ? "Как этого избежать" : "How to avoid it", home + "private-ai/"], 6400);
+    note(ru ? "Данные для ИИ можно обрабатывать внутри вашей инфраструктуры." : "You can process AI data on your own infrastructure.",
+      [ru ? "Как работает локальное развёртывание" : "How on-premises deployment works", home + "private-ai/"], 6400);
   }
   // Потерянный GPU: крошечный чип в подвале.
   const fineRow = document.querySelector("body > footer .fine");
@@ -282,11 +193,11 @@
     const chip = document.createElement("button");
     chip.type = "button";
     chip.className = "dl-chip";
-    chip.setAttribute("aria-label", ru ? "Что это?" : "What is this?");
+    chip.setAttribute("aria-label", ru ? "Секрет: потерянный чип" : "Secret: the lost chip");
     chip.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 6V3m3 3V3m3 3V3M9 21v-3m3 3v-3m3 3v-3M6 9H3m3 3H3m3 3H3m18-6h-3m3 3h-3m3 3h-3"/></svg>';
     chip.addEventListener("click", () => {
       found("chip");
-      note(ru ? "Вы нашли потерянный GPU. В этом году они ценнее золота." : "You found a lost GPU. This year they are worth more than gold.", [ru ? "Ещё в магазине" : "More in the shop", home + "shop/#dgx-spark"], 4800);
+      note(ru ? "Вы нашли потерянный чип." : "You found the lost chip.", [ru ? "Открыть магазин" : "Open the shop", home + "shop/#dgx-spark"], 4800);
       if (!reduced) chip.animate([{ transform: "rotate(0) scale(1)" }, { transform: "rotate(360deg) scale(1.6)" }, { transform: "rotate(360deg) scale(1)" }], { duration: 800, easing: "cubic-bezier(.3,1.3,.5,1)" });
     });
     fineRow.append(chip);
@@ -314,6 +225,7 @@
     store.push(id);
     try { localStorage.setItem("dl-eggs", JSON.stringify(store)); } catch {}
     renderPill();
+    if (id === "night") return;
     if (!reduced && pill) pill.animate([{ transform: "scale(1)" }, { transform: "scale(1.18)" }, { transform: "scale(1)" }], { duration: 420, easing: "cubic-bezier(.3,1.4,.5,1)" });
     if (store.length === NEED) setTimeout(reward, 1600);
   }
@@ -438,113 +350,38 @@
     if (tgLink) console.log((ru ? "Связаться: " : "Contact: ") + tgLink);
   } catch {}
 
-  if (reduced) return;
-  root.classList.add("dl-motion-plus");
+})();
 
-  // Полоса прогресса чтения и кнопка «наверх» с кольцом.
-  const bar = document.createElement("div");
-  bar.className = "dl-progress";
-  bar.setAttribute("aria-hidden", "true");
-  document.body.append(bar);
+/* Возврат к началу страницы. */
+(() => {
+  const root = document.documentElement;
+  const preference = matchMedia("(prefers-reduced-motion: reduce)");
   const top = document.createElement("button");
   top.type = "button";
   top.className = "dl-top";
-  top.setAttribute("aria-label", ru ? "Наверх" : "Back to top");
+  top.setAttribute("aria-label", root.lang === "ru" ? "Наверх" : "Back to top");
   top.innerHTML = '<svg viewBox="0 0 44 44" aria-hidden="true"><circle class="dl-top-track" cx="22" cy="22" r="19"/><circle class="dl-top-ring" cx="22" cy="22" r="19" pathLength="1"/><path d="M22 29V15m0 0l-6 6m6-6l6 6"/></svg>';
-  top.addEventListener("click", () => scrollTo({ top: 0, behavior: "smooth" }));
+  top.addEventListener("click", event => {
+    if (event.detail === 0) document.querySelector("body > header .wordmark")?.focus({ preventScroll: true });
+    scrollTo({ top: 0, behavior: preference.matches ? "instant" : "smooth" });
+  });
   document.body.append(top);
 
-  const header = document.querySelector("body > header");
-  const heroCopy = document.querySelector(".hero-copy, .audience-hero-copy");
-  const heroArt = document.querySelector(".featured-case, .page-art");
-  const flow = document.querySelector(".bundle-flow");
-  const tracks = [...document.querySelectorAll(".stack-track")];
-
-  let lastY = scrollY, velocity = 0, queued = false, lastRate = 1, tracksVisible = true;
-  if (tracks[0] && 'IntersectionObserver' in window) new IntersectionObserver(([e]) => { tracksVisible = e.isIntersecting; }).observe(tracks[0]);
-  function frame() {
+  let queued = false;
+  function update() {
     queued = false;
-    const y = scrollY;
-    const max = Math.max(1, root.scrollHeight - innerHeight);
-    const p = Math.min(1, y / max);
-    bar.style.transform = "scaleX(" + p.toFixed(4) + ")";
-    top.style.setProperty("--p", p.toFixed(4));
-    top.toggleAttribute("data-show", y > innerHeight * 0.9);
-    header?.toggleAttribute("data-scrolled", y > 12);
-    if (y < innerHeight * 1.2) {
-    }
-    if (flow) {
-      const box = flow.getBoundingClientRect();
-      const k = Math.min(1, Math.max(0, (innerHeight * 0.85 - box.top) / (box.height + innerHeight * 0.4)));
-      flow.style.setProperty("--dl-flow", k.toFixed(3));
-    }
-    velocity = velocity * 0.85 + Math.abs(y - lastY) * 0.15;
-    lastY = y;
-    const rate = Math.round((1 + Math.min(velocity / 12, 5)) * 4) / 4;
-    if (rate !== lastRate && tracksVisible) { lastRate = rate; for (const track of tracks) for (const anim of track.getAnimations()) anim.playbackRate = rate; }
-    if (velocity > 0.3) queue();
+    const progress = Math.min(1, scrollY / Math.max(1, root.scrollHeight - innerHeight));
+    top.style.setProperty("--p", progress.toFixed(4));
+    top.toggleAttribute("data-show", scrollY > innerHeight * 0.9);
   }
-  function queue() { if (!queued) { queued = true; requestAnimationFrame(frame); } }
+  function queue() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(update);
+  }
   addEventListener("scroll", queue, { passive: true });
   addEventListener("resize", queue, { passive: true });
-  frame();
-
-  // Слова заголовков поднимаются по одному, когда секция входит в экран.
-  const heads = document.querySelectorAll(".section > h2, .audience-section > h2, .bundle-teaser h2, .audience-close h2");
-  const wordIO = new IntersectionObserver(entries => {
-    for (const entry of entries) if (entry.isIntersecting) { entry.target.classList.add("dl-words-in"); wordIO.unobserve(entry.target); }
-  }, { rootMargin: "0px 0px -10% 0px" });
-  for (const h of heads) {
-    if (h.closest(".hero, .audience-hero") || h.children.length || h.getBoundingClientRect().top < innerHeight * 0.9) continue;
-    const words = h.textContent.trim().split(/\s+/);
-    h.setAttribute("aria-label", h.textContent.trim());
-    h.textContent = "";
-    words.forEach((word, i) => {
-      const outer = document.createElement("span");
-      outer.className = "dl-word";
-      outer.setAttribute("aria-hidden", "true");
-      const inner = document.createElement("span");
-      inner.textContent = word;
-      inner.style.setProperty("--w", i);
-      outer.append(inner);
-      h.append(outer, i < words.length - 1 ? " " : "");
-    });
-    h.classList.add("dl-words");
-    wordIO.observe(h);
-  }
-
-  // Номера в карточках «Цена ожидания» отсчитываются при появлении.
-  const counters = document.querySelectorAll(".loss-index");
-  const countIO = new IntersectionObserver(entries => {
-    for (const entry of entries) {
-      if (!entry.isIntersecting) continue;
-      countIO.unobserve(entry.target);
-      const end = Number(entry.target.textContent), t0 = performance.now();
-      const tick = now => {
-        const k = Math.min(1, (now - t0) / 700);
-        entry.target.textContent = String(Math.round(end * k)).padStart(2, "0");
-        if (k < 1) requestAnimationFrame(tick);
-      };
-      entry.target.textContent = "00";
-      requestAnimationFrame(tick);
-    }
-  }, { threshold: 0.6 });
-  counters.forEach(c => countIO.observe(c));
-
-  if (!fine) return;
-
-  // Магнитные кнопки: тянутся к курсору на несколько пикселей.
-  for (const btn of document.querySelectorAll(".button, .hero .ghost, .audience-hero .ghost, .capacity .button, header .cta, .bundle-teaser .ghost")) {
-    btn.classList.add("dl-magnet");
-    btn.addEventListener("pointermove", event => {
-      const box = btn.getBoundingClientRect();
-      const dx = (event.clientX - box.left - box.width / 2) / box.width;
-      const dy = (event.clientY - box.top - box.height / 2) / box.height;
-      btn.style.transform = "translate(" + (dx * 8).toFixed(1) + "px," + (dy * 6).toFixed(1) + "px)";
-    });
-    btn.addEventListener("pointerleave", () => { btn.style.transform = ""; });
-  }
-
+  update();
 })();
 
 /* Подвал раскрывает логотип и освобождает место от плавающих кнопок. */
@@ -588,7 +425,7 @@
 /* Производительность: тяжёлые анимации на паузе вне экрана; переходы по якорям — мгновенно, без долгого плавного скролла (Safari). */
 (() => {
   if ("IntersectionObserver" in window) {
-    const heavy = document.querySelectorAll(".dl-orbit, .stack, .page-art, .r3-stage, .story-stage");
+    const heavy = document.querySelectorAll(".stack, .page-art, .r3-stage, .story-stage");
     const io = new IntersectionObserver(entries => entries.forEach(e => e.target.classList.toggle("dl-offscreen", !e.isIntersecting)), { rootMargin: "100px" });
     heavy.forEach(el => io.observe(el));
   }

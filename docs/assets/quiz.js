@@ -107,7 +107,7 @@
     const converted = !requestOnly && region.currency !== 'RUB'
       && Number.isFinite(region.rate) && region.rate > 0;
     const active = converted ? region : rub;
-    const quote = t('По ТЗ', 'Quoted after scoping');
+    const quote = t('По запросу', 'On request');
     const quoteRate = rate => rate && !requestOnly ? formatRate(rate, tier, active) : quote;
     const headline = min ? formatRate(total, tier, active)
       : supportRate && !manual.length ? t('Ежемесячная поддержка', 'Monthly support')
@@ -139,10 +139,10 @@
 
     const code = referral.value.trim();
     const guidance = [t(
-      'Предварительная оценка. Итоговую смету согласуем по ТЗ и фиксируем в договоре. Доступны проектные и реферальные скидки.',
-      'Preliminary estimate. We agree a final quote based on your brief and confirm it in the contract. Project and referral discounts are available.'
+      'Это ориентир. Итоговую смету согласуем после обсуждения задачи и зафиксируем в договоре.',
+      'This is an estimate. We agree the final quote after discussing your brief and confirm it in the contract.'
     )];
-    if (!requestOnly && manual.length && min) guidance.push(t('Остальное оценим по ТЗ.', 'We’ll quote the remaining items after scoping.'));
+    if (!requestOnly && manual.length && min) guidance.push(t('Остальные работы оценим после обсуждения задачи.', 'We’ll quote the remaining work after discussing your brief.'));
     if (serviceChoices.some(input => ['private-ai', 'fine-tuning', 'agents', 'assistant'].includes(input.value))) {
       guidance.push(t('Оборудование, аренду, вычислительные ресурсы, API и лицензии согласуем отдельно.',
         'Hardware, rental, compute resources, APIs and licences are quoted separately.'));
@@ -173,8 +173,8 @@
     const contact = form.querySelector('[data-brief]');
     contact.href = telegram.href;
     contact.textContent = requestOnly || !min && !supportRate
-      ? t('Запросить смету в Telegram', 'Request a quote on Telegram')
-      : t('Отправить расчёт в Telegram', 'Send estimate on Telegram');
+      ? t('Открыть запрос в Telegram', 'Open the request in Telegram')
+      : t('Открыть расчёт в Telegram', 'Open the estimate in Telegram');
 
     const share = new URL('#quiz', page.origin + page.pathname);
     share.searchParams.set('service', serviceChoices.map(input => input.value).join(' '));
@@ -183,15 +183,7 @@
     if (region.code) share.searchParams.set('currency', requestOnly ? 'other' : active.currency);
     share.searchParams.set('calculated', '1');
     const portalLink = form.querySelector('[data-portal]');
-    if (portalLink && form.dataset.portalUrl) {
-      // Кабинет заново проверяет выбор и считает цену на сервере; здесь передаём только ответы.
-      const start = new URL('start', form.dataset.portalUrl.replace(/\/?$/, '/'));
-      for (const [key, value] of share.searchParams) if (key !== 'calculated') start.searchParams.set(key, value);
-      if (code) start.searchParams.set('ref', code);
-      start.searchParams.set('lang', ru ? 'ru' : 'en');
-      portalLink.href = start.href;
-      portalLink.hidden = false;
-    }
+    if (portalLink && form.dataset.portalUrl) portalLink.hidden = false;
     if (timeline.value) share.searchParams.set('timeline', timeline.value);
     const shareButton = form.querySelector('[data-share]');
     shareButton.dataset.shareUrl = share.href;

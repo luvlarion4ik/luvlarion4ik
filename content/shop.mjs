@@ -328,7 +328,6 @@ export function renderShop(lang, ctx) {
     const price = rub == null ? `<p class="audience-price">${pick(lang, 'По запросу', 'On request')}</p>`
       : `<p class="audience-price" data-region-price-row>${priceMarkup(lang, rub, unitLabel(unit))}</p>`;
     const marketLine = market ? `<p class="shop-market">${marketText(market, unit)}</p>` : '';
-    const quote = kind === 'hw' ? `<p class="shop-quote">${pick(lang, 'Цена по запросу: указанная — ориентир, не финальная. Точную рассчитаем под вашу конфигурацию, курс и сроки поставки.', 'Price on request: the figure shown is a guide, not final. We calculate the exact price for your configuration, exchange rate and lead time.')}</p>` : '';
     const L = lang === 'ru' ? 1 : 2;
     const optDef = opts ? { base: title, groups: opts.groups.map(([gid, , vals]) => ({ id: gid, values: vals.map(v => ({ v: v[0], label: v[L] })) })), allow: opts.allow, notes: Object.fromEntries(Object.entries(opts.notes || {}).map(([k, v]) => [k, v[lang]])) } : null;
     const optSel = opts ? opts.groups.map(([, , vals]) => vals[0][0]).join('|') : '';
@@ -342,7 +341,7 @@ export function renderShop(lang, ctx) {
       ${specs ? `<ul class="shop-specs">${specs.map(s => `<li>${esc(s)}</li>`).join('')}</ul>` : ''}
       ${configs ? configPicker(title, configs, chips) : ''}${optPicker}
       ${more ? `<details class="shop-more"><summary>${pick(lang, 'Подробнее', 'Details')}</summary><dl>${more.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl></details>` : ''}
-      <div class="shop-foot">${price}${marketLine}${quote}
+      <div class="shop-foot">${price}${marketLine}
       <div class="shop-qty" data-qty hidden><button type="button" data-dec aria-label="${pick(lang, 'Меньше', 'Fewer')}">−</button><output data-count>1</output><button type="button" data-inc aria-label="${pick(lang, 'Больше', 'More')}">+</button></div>
       <button type="button" class="btn shop-add" data-add="${id}"><span class="shop-add-label">${pick(lang, 'В корзину', 'Add to basket')}</span></button></div></div></article>`;
   };
@@ -367,11 +366,11 @@ export function renderShop(lang, ctx) {
       <div class="shop-list-rows" data-grid="svc-${cat}">${serviceCards[n]}</div></div>`).join('');
   const chips = [['all', pick(lang, 'Весь каталог', 'Everything')], ['hw-apple', 'Apple'], ['hw-nvidia', 'NVIDIA'], ['hw-servers', pick(lang, 'Серверы', 'Servers')], ['hw-net', pick(lang, 'Хранение и сеть', 'Storage & network')], ['hw-rent', pick(lang, 'Аренда GPU', 'GPU rental')], ['svc', pick(lang, 'Услуги', 'Services')]];
   const labels = JSON.stringify({
-    empty: pick(lang, 'Корзина пуста. Добавьте услуги или железо из каталога.', 'Your basket is empty. Add services or hardware from the catalogue.'),
+    empty: pick(lang, 'Добавьте оборудование или услуги из каталога.', 'Add hardware or services from the catalogue.'),
     total: pick(lang, 'Итого от', 'Total from'), monthly: pick(lang, 'Ежемесячно от', 'Monthly from'), hourly: pick(lang, 'Аренда, в час от', 'Rental, per hour from'),
     onRequest: pick(lang, 'Позиции по запросу оценим отдельно', 'Items on request are quoted separately'),
-    greeting: pick(lang, 'Здравствуйте! Хочу обсудить заказ:', 'Hello! I would like to discuss an order:'),
-    remove: pick(lang, 'Убрать', 'Remove'), saved: pick(lang, 'Заказ сохранён в кабинете.', 'Order saved in your account.'), login: pick(lang, 'Войдите в кабинет, чтобы сохранить заказ.', 'Sign in to your account to save the order.'), open: pick(lang, 'Открыть кабинет', 'Open account'), added: pick(lang, 'В корзине', 'In basket'), from: pick(lang, 'от', 'from'), request: pick(lang, 'по запросу', 'on request'),
+    greeting: pick(lang, 'Здравствуйте! Прошу рассчитать стоимость:', 'Hello! Could you quote the following:'),
+    remove: pick(lang, 'Убрать', 'Remove'), saved: pick(lang, 'Заявка отправлена из кабинета.', 'Enquiry sent from your account.'), login: pick(lang, 'Войдите в кабинет, чтобы отправить заявку.', 'Sign in to send an enquiry.'), open: pick(lang, 'Открыть кабинет', 'Open account'), added: pick(lang, 'В корзине', 'In basket'), from: pick(lang, 'от', 'from'), request: pick(lang, 'по запросу', 'on request'),
     hour: pick(lang, '/ час', '/ hour'), month: pick(lang, '/ мес.', '/ month'), none: pick(lang, 'Ничего не нашлось. Попробуйте другое слово.', 'Nothing found. Try another word.'), lang,
   });
   return `<section class="section wrap audience-section shop" data-shop data-tg="${esc(ctx.tg)}" data-labels="${esc(labels)}">
@@ -382,44 +381,38 @@ export function renderShop(lang, ctx) {
         <label class="shop-sort"><span class="sr-only">${pick(lang, 'Сортировка', 'Sort')}</span><select data-sort><option value="default">${pick(lang, 'По разделам', 'By section')}</option><option value="asc">${pick(lang, 'Сначала дешевле', 'Price: low to high')}</option><option value="desc">${pick(lang, 'Сначала дороже', 'Price: high to low')}</option></select></label>
       </div>
     </div>
-    <section class="shop-section" data-section="hw"><div class="shop-section-head"><p class="shop-kicker">${pick(lang, 'Оборудование', 'Hardware')}</p><h2>${pick(lang, 'Техника под ключ: поставка, настройка, гарантия', 'Turnkey hardware: supply, set-up, warranty')}</h2></div>${hwGroups}</section>
-    <section class="shop-section" data-section="svc"><div class="shop-section-head"><p class="shop-kicker">${pick(lang, 'Услуги', 'Services')}</p><h2>${pick(lang, 'Разработка и сопровождение: прайс-лист', 'Development and support: price list')}</h2></div>${svcGroups}</section>
+    <section class="shop-section" data-section="hw"><div class="shop-section-head"><h2>${pick(lang, 'Оборудование', 'Hardware')}</h2><p class="audience-note-line">${pick(lang, 'Цены ориентировочные. Подтвердим стоимость и сроки поставки для выбранной конфигурации.', 'Prices are indicative. We’ll confirm the price and lead time for your chosen configuration.')}</p></div>${hwGroups}</section>
+    <section class="shop-section" data-section="svc"><div class="shop-section-head"><h2>${pick(lang, 'Разработка и сопровождение', 'Development and support')}</h2></div>${svcGroups}</section>
     <p class="shop-none" data-none hidden></p>
   </section>
   ${renderWhyPrice(lang)}
   <button type="button" class="shop-fab" data-shop-open aria-controls="shop-cart" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h3l2.4 11h10.2L21 7H7"/><circle cx="10" cy="19.5" r="1.5"/><circle cx="17" cy="19.5" r="1.5"/></svg><span>${pick(lang, 'Корзина', 'Basket')}</span><b data-shop-count>0</b></button>
   <div class="shop-scrim" data-shop-scrim hidden></div>
   <aside class="shop-cart" id="shop-cart" aria-label="${pick(lang, 'Корзина', 'Basket')}" hidden>
-    <div class="shop-cart-head"><h2>${pick(lang, 'Ваш заказ', 'Your order')}</h2><button type="button" class="shop-close" data-shop-close aria-label="${pick(lang, 'Закрыть', 'Close')}">×</button></div>
+    <div class="shop-cart-head"><h2>${pick(lang, 'Подборка для заявки', 'Items for your enquiry')}</h2><button type="button" class="shop-close" data-shop-close aria-label="${pick(lang, 'Закрыть', 'Close')}">×</button></div>
     <ul class="shop-list" data-shop-list></ul>
     <div class="shop-total" data-shop-total></div>
-    <a class="button shop-send" data-shop-send href="${esc(ctx.tg)}">${pick(lang, 'Отправить заявку в Telegram', 'Send enquiry on Telegram')}</a>
-    <button type="button" class="shop-save" data-shop-save>${pick(lang, 'Сохранить заказ в кабинете', 'Save the order in my account')}</button>
+    <a class="button shop-send" data-shop-send href="${esc(ctx.tg)}">${pick(lang, 'Открыть черновик в Telegram', 'Open draft in Telegram')}</a>
+    <button type="button" class="shop-save" data-shop-save>${pick(lang, 'Отправить заявку из кабинета', 'Send from your account')}</button>
     <p class="shop-save-status" data-shop-status role="status"></p>
     <button type="button" class="shop-clear" data-shop-clear>${pick(lang, 'Очистить корзину', 'Clear basket')}</button>
-    <p class="audience-note-line">${pick(lang, 'Это заявка, а не оплата. Итоговую цену, сроки поставки и условия фиксируем в коммерческом предложении и договоре.', 'This is an enquiry, not a payment. Final price, lead time and terms are fixed in the quote and contract.')}</p>
+    <p class="audience-note-line">${pick(lang, 'Стоимость, сроки и условия подтвердим в предложении.', 'We’ll confirm the price, lead time and terms in your quote.')}</p>
   </aside>`;
 }
 
 function renderWhyPrice(lang) {
   const items = lang === 'ru' ? [
-    ['Всё от покупки до запуска — в наших руках', 'Подбор, поставка, монтаж, установка ОС и драйверов, развёртывание модели (vLLM), API и проверка под вашей нагрузкой. Вы получаете работающую систему, а не коробку.'],
-    ['Гарантия', 'Даём гарантию на нашу работу и сами ведём гарантийные случаи с поставщиком: вам не нужно разбираться с вендором.'],
-    ['Одна команда отвечает за всё', 'Если модель тормозит или падает, не нужно выяснять, виноваты железо, драйверы или софт. Отвечаем мы.'],
-    ['Документы для службы безопасности', 'Даём документы о размещении и описание архитектуры — то, что обычно спрашивают при проверке.'],
-    ['Поддержка после запуска', 'Первые два месяца исправления входят в проект, дальше — сопровождение по договору.'],
-    ['Честный ориентир', 'Рядом с ценой показываем диапазон у других поставщиков. Мы у верхней границы, потому что в цену входят настройка, гарантия и сопровождение.'],
+    ['Подбор и поставка', 'Подбираем конфигурацию под ваши модели и нагрузку, согласуем сроки поставки.'],
+    ['Настройка и проверка', 'Устанавливаем ОС и драйверы, разворачиваем модель и API, проверяем работу системы под нагрузкой.'],
+    ['Гарантия и документы', 'Ведём гарантийные обращения к поставщику и передаём описание архитектуры для службы безопасности.'],
   ] : [
-    ['From purchase to launch, it is on us', 'Sizing, supply, mounting, OS and drivers, model deployment (vLLM), an API and a load test. You get a working system, not a box.'],
-    ['Warranty', 'We guarantee our work and handle warranty claims with the supplier for you.'],
-    ['One team owns it all', 'If the model is slow or crashes, you do not have to work out whether hardware, drivers or software are at fault.'],
-    ['Documents for your security team', 'Hosting documents and an architecture description, the things usually asked for in a review.'],
-    ['Support after launch', 'Two months of fixes are included, then a support contract.'],
-    ['An honest reference', 'Next to each price we show what other suppliers charge. We sit near the top because set-up, warranty and support are included.'],
+    ['Sizing and supply', 'We choose a configuration for your models and workload and agree on delivery.'],
+    ['Set-up and testing', 'We install the OS and drivers, deploy the model and API, and test the system under load.'],
+    ['Warranty and documentation', 'We handle supplier warranty claims and provide an architecture description for your security team.'],
   ];
-  return `<section class="section wrap audience-section why-price"><p class="loss-badge">${pick(lang, 'Про цены', 'About pricing')}</p>
-    <h2>${pick(lang, 'Почему наша цена у верхней границы рынка', 'Why our price sits near the top of the market')}</h2>
-    <div class="loss-grid">${items.map(([t, d], n) => `<article><span class="loss-index" aria-hidden="true">${String(n + 1).padStart(2, '0')}</span><h3>${esc(t)}</h3><p>${esc(d)}</p></article>`).join('')}</div>
-    <p class="audience-note-line">${pick(lang, 'Рыночные диапазоны — открытые цены российских поставщиков на ноябрь 2026 года. Железо поставляем под заказ через партнёров: цена зависит от курса и конфигурации, итог фиксируем в КП.', 'Market ranges are public prices of Russian suppliers as of November 2026. Hardware is supplied to order through partners; the price depends on exchange rates and configuration and is fixed in the quote.')}</p>
+  return `<section class="section wrap audience-section why-price">
+    <h2>${pick(lang, 'Как поставляем оборудование', 'How we supply hardware')}</h2>
+    <div class="loss-grid">${items.map(([t, d]) => `<article><h3>${esc(t)}</h3><p>${esc(d)}</p></article>`).join('')}</div>
+    <p class="audience-note-line">${pick(lang, 'Рыночные диапазоны взяты из открытых цен российских поставщиков на ноябрь 2026 года.', 'Market ranges are from prices published by Russian suppliers in November 2026.')}</p>
   </section>`;
 }

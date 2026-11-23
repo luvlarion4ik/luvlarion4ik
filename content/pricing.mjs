@@ -221,8 +221,8 @@ export function renderQuiz(lang, telegramURL, overrides = {}, portal = {}) {
       <p class="quiz-guidance" data-currency-note hidden></p>
       <dl class="quiz-breakdown" data-breakdown></dl>
       <p class="quiz-guidance" data-guidance></p>
-      <div class="quiz-actions"><a class="btn primary" href="${tg}" data-brief>${t('Отправить расчёт в Telegram', 'Send estimate on Telegram')}</a>
-        <a class="btn" href="${portal.url || '#'}" data-portal hidden>${t('Продолжить в кабинете', 'Continue in the portal')}</a>
+      <div class="quiz-actions"><a class="btn primary" href="${tg}" data-brief>${t('Открыть расчёт в Telegram', 'Open the estimate in Telegram')}</a>
+        <a class="btn" href="${portal.url || '#'}" data-portal hidden>${t('Войти в кабинет', 'Sign in to the portal')}</a>
         <button class="btn" type="button" data-copy>${t('Скопировать расчёт', 'Copy estimate')}</button>
         <button class="btn" type="button" data-share>${t('Поделиться', 'Share')}</button>
         <button class="quiz-edit" type="button" data-edit>${t('Изменить ответы', 'Edit answers')}</button>

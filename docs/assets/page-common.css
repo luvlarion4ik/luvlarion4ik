@@ -853,17 +853,6 @@ footer{padding:2rem 0}.fine{margin-top:1.5rem;flex-wrap:wrap}.sub{padding:4rem 0
 #theme-choices .version-choices {margin-top:.55rem;padding:.45rem;border-top:1px solid var(--rule)}
 #theme-choices .version-choices legend {position:static;clip-path:none;width:auto;height:auto;font-size:.8rem;color:var(--sub);font-weight:600}
 .version-choices .btn {display:flex;width:100%;justify-content:flex-start;text-align:left;padding:.35rem .55rem;margin-top:.3rem;white-space:nowrap}
-.version-prompt {position:fixed;z-index:4;bottom:1rem;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100% - 1.5rem);display:flex;align-items:center;gap:.65rem;padding:.65rem .75rem;background:var(--paper);color:var(--ink);border:1px solid var(--rule);border-radius:.35rem;box-shadow:0 .35rem 1rem color-mix(in srgb,var(--night) 20%,transparent)}
-.version-prompt p {font-weight:650}
-.version-prompt-actions {display:flex;gap:.35rem;flex-wrap:wrap}
-.version-prompt .btn {padding:.35rem .65rem;min-height:2.5rem;gap:.3rem}
-.version-dismiss {width:2.5rem;height:2.5rem;font-size:1.4rem;flex:none}
-/* На телефоне предложение остаётся под первым экраном и не перекрывает выбор сегмента. */
-@media (max-width:719px) {
-  .version-prompt {position:static;transform:none;width:90%;max-width:none;margin:1rem auto 0;display:grid;grid-template-columns:minmax(0,1fr) auto;padding:.65rem}
-  .version-prompt-actions {grid-column:1/-1;grid-row:2}
-  .version-dismiss {grid-row:1;grid-column:2}
-}
 
 /* Page artwork */
 .audience-hero-grid {display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(1.5rem,4vw,4rem);align-items:center}
@@ -904,11 +893,7 @@ footer{padding:2rem 0}.fine{margin-top:1.5rem;flex-wrap:wrap}.sub{padding:4rem 0
 .loss-badge {display:inline-flex;align-items:center;gap:.5rem;margin:0 0 .75rem;padding:.3rem .8rem;border:1px solid var(--accent);border-radius:99px;color:var(--accent);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase}
 .loss-lead {max-width:62ch;margin:.4rem 0 1.6rem;font-size:1.08rem;line-height:1.55;color:var(--sub)}
 .loss-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
-.loss-grid article {position:relative;overflow:hidden;padding:1.5rem 1.5rem 1.6rem 1.5rem;border:1px solid var(--rule);border-radius:16px;background:var(--surface);transition:border-color .25s,transform .25s}
-.loss-grid article::before {content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);transform:scaleY(0);transform-origin:top;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
-.loss-grid article:hover {border-color:var(--accent)}
-.loss-grid article:hover::before,.loss-grid article.is-visible::before,.loss-grid article[data-revealed]::before {transform:scaleY(1)}
-.loss-index {display:block;margin-bottom:.6rem;font-family:"Source Serif 4",serif;font-size:2.4rem;line-height:1;color:var(--accent);opacity:.75}
+.loss-grid article {padding:1.5rem 1.5rem 1.6rem;border:1px solid var(--rule);border-radius:16px;background:var(--surface)}
 .loss-grid h3 {margin:0 0 .45rem;font-size:1.15rem;line-height:1.3}
 .loss-grid p {margin:0;color:var(--sub);line-height:1.55}
 .shift-list {display:grid;gap:.8rem}
@@ -920,12 +905,9 @@ footer{padding:2rem 0}.fine{margin-top:1.5rem;flex-wrap:wrap}.sub{padding:4rem 0
 .shift-after {background:var(--surface);border-color:var(--accent)}
 .shift-after small {color:var(--accent)}
 .shift-arrow {align-self:center;font-size:1.5rem;color:var(--accent)}
-.capacity {display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:1.4rem;margin-block:clamp(1.5rem,3vw,2.5rem);padding:1.5rem 1.8rem;border:1px solid var(--accent);border-radius:18px;background:linear-gradient(120deg,var(--surface),transparent)}
+.capacity {display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:1.4rem;margin-block:clamp(1.5rem,3vw,2.5rem);padding:1.5rem 1.8rem;border:1px solid var(--accent);border-radius:18px;background:var(--surface)}
 .capacity strong {display:block;margin-bottom:.3rem;font-size:1.15rem}
 .capacity p {margin:0;max-width:62ch;color:var(--sub);line-height:1.5}
-.capacity-pulse {position:relative;width:14px;height:14px}
-.capacity-pulse i {position:absolute;inset:0;border-radius:50%;background:var(--accent)}
-.capacity-pulse::after {content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--accent);opacity:.6}
 .bundle-teaser {display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:1.4rem;margin-block:clamp(1rem,2vw,2rem);padding:1.6rem 1.8rem;border-radius:18px;background:var(--surface);border:1px solid var(--rule)}
 .bundle-teaser h2 {margin:0 0 .4rem;font-size:1.35rem}
 .bundle-teaser p {margin:0;max-width:66ch;color:var(--sub);line-height:1.55}
@@ -948,13 +930,6 @@ footer{padding:2rem 0}.fine{margin-top:1.5rem;flex-wrap:wrap}.sub{padding:4rem 0
 .bundle-head>span {border-top:0;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--sub);font-weight:600}
 .bundle-head>span:last-child {color:var(--accent)}
 .bundle-plans article p {color:var(--sub)}
-@keyframes cap-ping {0% {transform:scale(1);opacity:.6} 100% {transform:scale(3);opacity:0}}
-@keyframes flow-glow {0% {transform:scale(1);box-shadow:0 0 0 0 var(--accent)} 100% {transform:scale(1);box-shadow:0 0 0 14px transparent}}
-@media (prefers-reduced-motion:no-preference) {
-  .capacity-pulse::after {animation:cap-ping 2.2s ease-out infinite}
-  .bundle-node {animation:flow-glow 3s ease-out infinite;animation-delay:calc(var(--i) * .6s)}
-  .shift-arrow {animation:pa-drift 3s ease-in-out infinite}
-}
 @media (max-width:860px) {
   .trust-strip {grid-template-columns:repeat(2,minmax(0,1fr))}
   .trust-strip>div {padding:1rem .8rem 1rem 0;border-right:0;border-bottom:1px solid var(--rule)}
@@ -1164,8 +1139,7 @@ footer{padding:2rem 0}.fine{margin-top:1.5rem;flex-wrap:wrap}.sub{padding:4rem 0
 .shop-more dl {margin:.6rem 0 0;display:grid;gap:.55rem;animation:menu-in .25s ease-out}
 .shop-more dt {font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--sub)}
 .shop-more dd {margin:.15rem 0 0;font-size:.9rem;line-height:1.45}
-.shop-hide {opacity:0!important;transform:translateY(16px) scale(.96)!important;pointer-events:none!important}
-.shop-fab,.dl-top {transition:opacity .3s,transform .35s cubic-bezier(.3,1.2,.5,1)}
+.shop-hide {visibility:hidden!important}
 
 /* ===== Сторителлинг: кадры меняются при прокрутке ===== */
 .story {display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(1.5rem,4vw,4rem);align-items:start;max-width:var(--wrap,78rem);margin-inline:auto;padding:2rem var(--edge,1.5rem)}
@@ -1412,8 +1386,7 @@ footer{padding:2rem 0}.fine{margin-top:1.5rem;flex-wrap:wrap}.sub{padding:4rem 0
 .shop-3d {align-self:flex-start}
 
 /* Без декоративных точек */
-.svc-root-dot,.capacity-pulse {display:none!important}
-.capacity {grid-template-columns:minmax(0,1fr) auto}
+.svc-root-dot {display:none!important}
 .svc-root {padding-left:.1rem}
 
 .services-top {grid-template-columns:1fr}
@@ -1679,8 +1652,7 @@ header .wordmark {
   header .wordmark { --logo-height: 25px; }
 }
 
-/* Devlarion motion: переходы между страницами, SVG-орбиты на первом экране,
-   появление блоков при прокрутке. Всё отключается при prefers-reduced-motion. */
+/* Переходы, навигация и анимация фирменного знака. */
 
 /* Переходы между страницами (Chrome, Edge, Safari 18.2+). Логотип в шапке остаётся на месте. */
 @media (prefers-reduced-motion: no-preference) {
@@ -1693,104 +1665,48 @@ header .wordmark {
 @keyframes dl-page-out { to { opacity: 0; transform: translateY(-10px); } }
 @keyframes dl-page-in { from { opacity: 0; transform: translateY(16px); } }
 
-/* Первый экран: знак Devlarion с орбитами за текстом. */
+/* Первый экран: контур фирменного знака на фоне. */
 .hero, .audience-hero { position: relative; isolation: isolate; }
 .audience-hero { overflow: hidden; }
 :is(.hero, .audience-hero) > .wrap { position: relative; z-index: 1; }
 .dl-orbit {
-  position: absolute; z-index: 0; pointer-events: none;
-  top: 50%; left: 50%; width: min(1100px, 130vw); height: auto;
-  transform: translate(-50%, -50%) translate3d(0, var(--dl-shift, 0px), 0);
-  color: var(--accent); opacity: .34;
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  top: 50%;
+  left: 50%;
+  width: min(1100px, 130vw);
+  height: auto;
+  transform: translate(-50%, -50%);
+  color: #e8ac8c;
+  opacity: .2;
 }
-:root:not([data-theme]) .dl-orbit, :root[data-theme=copper] .dl-orbit { color: #e8ac8c; }
-.audience-hero .dl-orbit { color: var(--accent); opacity: .18; left: 72%; }
-:root[data-theme] .audience-hero .dl-orbit { color: var(--accent); }
 .dl-orbit .ring { fill: none; stroke: currentColor; stroke-width: 1; vector-effect: non-scaling-stroke; }
 .dl-orbit .ring.dash { stroke-dasharray: 2 7; }
-.dl-orbit .spin { transform-box: view-box; transform-origin: 50% 50%; }
-.dl-orbit .sat { fill: currentColor; }
 .dl-orbit .glyph { fill: none; stroke: currentColor; stroke-width: .28; stroke-linejoin: round; stroke-linecap: round; }
-@media (prefers-reduced-motion: no-preference) {
-  .dl-orbit .glyph { stroke-dasharray: 1; stroke-dashoffset: 1; animation: dl-draw 2.4s cubic-bezier(.4, 0, .2, 1) .3s forwards; }
-  .dl-orbit .glyph.cut { animation-delay: 1.4s; animation-duration: 1.2s; }
-  .dl-orbit .s1 { animation: dl-spin 60s linear infinite; }
-  .dl-orbit .s2 { animation: dl-spin 90s linear infinite reverse; }
-  .dl-orbit .s3 { animation: dl-spin 38s linear infinite; }
-  .dl-orbit .ring { stroke-dashoffset: 0; }
-  .dl-orbit .pulse { transform-box: fill-box; transform-origin: 50% 50%; animation: dl-pulse 3.2s ease-out infinite; }
+@media (max-width: 760px) { .dl-orbit { opacity: .15; } }
+
+.dl-top {
+  position: fixed;
+  right: 1.1rem;
+  bottom: 5.6rem;
+  z-index: 55;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink);
+  visibility: hidden;
 }
-@keyframes dl-draw { to { stroke-dashoffset: 0; } }
-@keyframes dl-spin { to { transform: rotate(360deg); } }
-@keyframes dl-pulse { 0% { opacity: .8; transform: scale(1); } 100% { opacity: 0; transform: scale(3); } }
-@media (max-width: 760px) { .dl-orbit { top: 30%; opacity: .22; } }
-@media (prefers-reduced-motion: reduce) { .dl-orbit { display: none; } }
-
-/* Появление при прокрутке. Без JS (.dl-motion не выставлен) всё видно сразу. */
-@media (prefers-reduced-motion: no-preference) {
-  .dl-motion [data-reveal] {
-    opacity: 0; transform: translateY(22px);
-    transition: opacity .7s cubic-bezier(.2, .7, .2, 1), transform .7s cubic-bezier(.2, .7, .2, 1);
-    transition-delay: calc(var(--dl-i, 0) * 70ms);
-  }
-  .dl-motion [data-reveal].dl-in { opacity: 1; transform: none; }
-  .dl-motion [data-reveal]:focus-within { opacity: 1; transform: none; transition: none; }
-
-  /* Медная линия под заголовками разделов прорисовывается слева направо. */
-  .dl-motion .section > h2[data-reveal]::after {
-    content: ""; display: block; width: 56px; height: 2px; margin-top: .55em;
-    background: var(--accent); transform: scaleX(0); transform-origin: left;
-    transition: transform .9s cubic-bezier(.2, .7, .2, 1) .25s;
-  }
-  .dl-motion .section > h2[data-reveal].dl-in::after { transform: scaleX(1); }
-}
-
-/* Мягкий блик за курсором на карточках. */
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  [data-glow] { position: relative; isolation: isolate; }
-  [data-glow]::before {
-    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: -1;
-    background: radial-gradient(260px circle at var(--gx, 50%) var(--gy, 50%), color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%);
-    opacity: 0; transition: opacity .3s;
-  }
-  [data-glow]:hover::before { opacity: 1; }
-}
-
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .segment-card {transition:transform .18s ease,border-color .18s ease}
-  .segment-card:hover {transform:translateY(-2px)}
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .version-prompt:not([hidden]) {animation:version-prompt-in .22s ease-out}
-  @keyframes version-prompt-in {
-    from {opacity:0;translate:0 .5rem}
-  }
-}
-
-/* ---- Motion, часть 2 ---- */
-.dl-progress { position: fixed; inset: 0 0 auto; z-index: 60; height: 3px; transform-origin: left; transform: scaleX(0); pointer-events: none;
-  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 40%, var(--light, #fff))); box-shadow: 0 0 12px var(--accent); }
-.dl-top { position: fixed; right: 1.1rem; bottom: 5.6rem; z-index: 55; display: grid; place-items: center; width: 46px; height: 46px; padding: 0; border: 0; border-radius: 50%;
-  background: color-mix(in srgb, var(--paper) 85%, transparent); backdrop-filter: blur(8px); color: var(--ink); cursor: pointer;
-  opacity: 0; transform: translateY(14px) scale(.9); pointer-events: none; transition: opacity .3s, transform .35s cubic-bezier(.3,1.4,.5,1); }
-.dl-top[data-show] { opacity: 1; transform: none; pointer-events: auto; }
-.dl-top:hover { transform: translateY(-3px); }
+.dl-top[data-show] { visibility: visible; }
 .dl-top svg { width: 46px; height: 46px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .dl-top-track { stroke: var(--rule); }
 .dl-top-ring { stroke: var(--accent); stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--p, 0)); transform: rotate(-90deg); transform-origin: center; }
 @media (min-width: 861px) { .dl-top { bottom: 1.4rem; } }
-.dl-motion-plus body > header { transition: box-shadow .3s, background-color .3s, backdrop-filter .3s; }
-.dl-motion-plus body > header[data-scrolled] { box-shadow: 0 10px 30px -18px rgba(0,0,0,.6); backdrop-filter: blur(12px) saturate(1.2); }
-.dl-motion-plus .hero-copy, .dl-motion-plus .audience-hero-copy, .dl-motion-plus .featured-case, .dl-motion-plus .page-art { will-change: transform; }
-.dl-words .dl-word { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .08em; margin-bottom: -.08em; }
-.dl-words .dl-word > span { display: inline-block; transform: translateY(105%); transition: transform .7s cubic-bezier(.2,.85,.25,1); transition-delay: calc(var(--w) * 55ms); }
-.dl-words.dl-words-in .dl-word > span { transform: none; }
-.dl-magnet { transition: transform .25s cubic-bezier(.3,1.4,.5,1); }
-.bundle-flow::before { transform-origin: left; transform: scaleX(var(--dl-flow, 1)); transition: transform .15s linear; }
-@media (max-width: 860px) { .bundle-flow::before { transform-origin: top; transform: scaleY(var(--dl-flow, 1)); } }
-@media (prefers-reduced-motion: reduce) { .dl-progress, .dl-top { display: none; } }
-
 
 /* ---------- Пасхалки ---------- */
 .dl-note { position: fixed; left: 50%; bottom: 1.4rem; z-index: 90; display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1rem; max-width: min(560px, calc(100vw - 2rem));
@@ -1821,15 +1737,7 @@ header .wordmark {
 .dl-s-led { fill: #7fc495; animation: pa-blink 1s ease-in-out infinite; }
 @keyframes dl-drive { 0% { transform: translateX(0) rotate(-3deg); } 15% { transform: translateX(22vw) translateY(-6px) rotate(2deg); } 50% { transform: translateX(calc(50vw + 100px)) translateY(4px) rotate(-1deg); } 85% { transform: translateX(78vw) translateY(-6px) rotate(2deg); } 100% { transform: translateX(calc(100vw + 260px)) rotate(0); } }
 
-/* Иконки прорисовываются, когда карточка появляется при прокрутке */
-@media (prefers-reduced-motion: no-preference) {
-  .dl-motion [data-reveal] .service-mark svg :is(path, circle, rect, line, polyline, polygon) { stroke-dasharray: 160; stroke-dashoffset: 160; }
-  .dl-motion [data-reveal].dl-in .service-mark svg :is(path, circle, rect, line, polyline, polygon) { animation: dl-icon-draw 1.1s cubic-bezier(.4,0,.2,1) forwards; animation-delay: calc(.15s + var(--dl-i, 0) * 80ms); }
-  .service-mark { transition: transform .3s cubic-bezier(.3,1.4,.5,1); }
-}
-@keyframes dl-icon-draw { to { stroke-dashoffset: 0; } }
-
-/* The footer has one home link with room for the animated lettering. */
+/* В подвале знак и надпись составляют одну ссылку. */
 .footer-brand { align-items: center; gap: 1rem; }
 .dl-footer-mark {
   --logo-height: 48px;
@@ -1867,12 +1775,11 @@ footer[data-in-view="false"] .dl-footer-word span { opacity: 0; }
 }
 
 /* Секреты: счётчик, распродажа-шутка, чип, награда */
-.dl-eggs { position: fixed; left: 1rem; bottom: 1rem; z-index: 86; padding: .45rem .8rem; border: 1px solid var(--rule); border-radius: 99px; background: var(--paper); color: var(--sub);
-  font: 600 .78rem/1 system-ui, sans-serif; letter-spacing: .04em; cursor: pointer; box-shadow: 0 10px 30px -18px rgba(0,0,0,.6); }
+.dl-eggs { display: inline-block; margin-left: .6rem; padding: .45rem .8rem; border: 1px solid var(--rule); border-radius: 99px; background: var(--paper); color: var(--sub);
+  font: 600 .78rem/1 system-ui, sans-serif; letter-spacing: .04em; cursor: pointer; }
 .dl-eggs[data-ready] { border-color: var(--accent); color: var(--accent); }
 .dl-eggs[data-ready]::after { content: " · подарок"; }
 :root[lang="en"] .dl-eggs[data-ready]::after { content: " · gift"; }
-@media (max-width: 860px) { .dl-eggs { bottom: 5.4rem; } }
 .dl-sale { position: fixed; inset: 0; z-index: 85; display: grid; place-items: center; pointer-events: none; }
 .dl-sale span { padding: 1rem 2.4rem; border: 3px dashed var(--accent); border-radius: 18px; color: var(--accent); background: var(--paper); font: 700 clamp(3rem, 9vw, 7rem)/1 Georgia, serif;
   animation: dl-sale 2.6s cubic-bezier(.3,1.4,.5,1) forwards; }
@@ -1885,7 +1792,8 @@ footer[data-in-view="false"] .dl-footer-word span { opacity: 0; }
 .dl-reward[open] { animation: dl-note-in .45s cubic-bezier(.2,.9,.3,1.1); }
 .dl-reward-card { position: relative; display: grid; gap: .8rem; padding: clamp(1.3rem, 4vw, 2rem); }
 .dl-reward-art { width: 72px; height: 72px; }
-.dl-reward-art circle { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 330; stroke-dashoffset: 330; animation: dl-icon-draw 1.2s ease-out forwards; }
+.dl-reward-art circle { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 330; stroke-dashoffset: 330; animation: dl-reward-draw 1.2s ease-out forwards; }
+@keyframes dl-reward-draw { to { stroke-dashoffset: 0; } }
 .dl-reward-art path { fill: var(--accent); }
 .dl-reward-art .cut { fill: none; stroke: var(--paper); stroke-width: 6; }
 .dl-reward-eyebrow { margin: 0; color: var(--accent); font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; }
@@ -1903,10 +1811,10 @@ footer[data-in-view="false"] .dl-footer-word span { opacity: 0; }
 .dl-reward-status { margin: 0; min-height: 1.2em; color: var(--sub); font-size: .9rem; }
 .dl-reward-close { position: absolute; top: .9rem; right: .9rem; width: 2.2rem; height: 2.2rem; border: 1px solid var(--rule); border-radius: 50%; background: transparent; color: var(--ink); font-size: 1.2rem; cursor: pointer; }
 
-/* Секреты теперь живут в подвале и ничего не закрывают */
-.dl-eggs {position:static!important;display:inline-block;margin-left:.6rem;box-shadow:none!important}
-.shop-fab,.dl-top {transition:opacity .6s ease,transform .8s cubic-bezier(.22,1,.36,1)!important}
+@media (prefers-reduced-motion: reduce) {
+  :is(.dl-note, .dl-term, .dl-term p, .dl-reward[open], .dl-reward-preview img) { animation: none; }
+  .dl-reward-art circle { animation: none; stroke-dashoffset: 0; }
+}
 
 /* Вне экрана тяжёлое не анимируется */
 .dl-offscreen, .dl-offscreen * { animation-play-state: paused !important; }
-.dl-motion-plus .hero-copy, .dl-motion-plus .audience-hero-copy, .dl-motion-plus .featured-case, .dl-motion-plus .page-art { will-change: auto !important; }
