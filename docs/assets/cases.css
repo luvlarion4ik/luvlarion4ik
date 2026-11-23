@@ -49,132 +49,199 @@
   font-weight: 600;
 }
 
-.product-preview {
+.product-list .product-card {
   display: flex;
-  min-height: 13.5rem;
-  align-items: center;
-  justify-content: center;
   flex-direction: column;
-  border-radius: 3px;
-  overflow: hidden;
-  padding: 1.5rem 1rem;
+  gap: 1.15rem;
+  min-width: 0;
+  margin: 0;
+  padding: clamp(1rem, 1.7vw, 1.55rem);
+  border: 1px solid var(--rule);
+  border-radius: .65rem;
+  background: var(--surface);
+}
+
+.product-card .product-copy {
+  flex: 1;
+}
+
+.product-card .product-copy h3 {
+  margin-top: .3rem;
+  font-size: clamp(1.5rem, 2.25vw, 2rem);
+  line-height: 1.15;
+}
+
+.product-card .product-links {
+  margin-top: 0;
+}
+
+.product-card .product-details {
+  min-width: 0;
+  margin-top: 0;
+}
+
+.product-preview {
+  display: grid;
+  align-content: start;
+  gap: .9rem;
+  min-height: 15rem;
+  margin: 0;
+  padding: clamp(.85rem, 1.5vw, 1.25rem);
+  border: 1px solid #ffffff24;
+  border-radius: .45rem;
+  color: var(--product-text);
+  background: var(--product-bg);
+}
+
+.product-preview figcaption {
+  color: var(--product-accent);
+  font-size: .84rem;
+  font-weight: 650;
+  line-height: 1.4;
 }
 
 .systems-preview {
-  background-color: #21342c;
-  background-image: radial-gradient(#6b8275 0.7px, transparent 0.9px);
-  background-size: 11px 11px;
-  color: #f0f6ef;
+  --product-bg: #1e322a;
+  --product-text: #eef6ef;
+  --product-accent: #abd5b5;
 }
 
-.system-node {
-  display: flex;
-  align-items: center;
-  gap: .75rem;
-  padding: .55rem .8rem;
-  border: 1px solid #93aa99;
-  border-radius: 4px;
-  background: #284437;
-  font-size: .875rem;
-  font-weight: 500;
+.system-flow {
+  display: grid;
+  gap: .45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.system-node svg {
-  width: 1.1rem;
-  height: 1.1rem;
-}
-
-.connection {
+.system-flow li {
   position: relative;
-  width: 1px;
-  height: 1.6rem;
-  background: #bed6c3;
+  display: grid;
+  grid-template-columns: 1.4rem minmax(0, 1fr);
+  align-items: center;
+  gap: .6rem;
+  min-height: 2.4rem;
+  padding: .34rem .5rem;
+  border: 1px solid #abd5b55c;
+  border-radius: .3rem;
+  background: #ffffff0c;
+  font-size: .82rem;
+  line-height: 1.3;
 }
 
-.connection::before,
-.connection::after {
+.system-flow li + li::before {
   content: "";
   position: absolute;
-  left: -2px;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #bed6c3;
+  top: -.5rem;
+  left: 1.2rem;
+  width: 1px;
+  height: .5rem;
+  background: var(--product-accent);
 }
 
-.connection::after {
-  bottom: 0;
+.system-flow li:last-child {
+  border-color: var(--product-accent);
+  background: #abd5b523;
+}
+
+.system-flow svg {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--product-accent);
 }
 
 .audience-preview {
-  background: #3f2f35;
-  color: #33272d;
+  --product-bg: #382a35;
+  --product-text: #fff1f1;
+  --product-accent: #f1baa9;
 }
 
-.creative-sample {
-  width: min(11rem, 76%);
-  height: 4.8rem;
-  display: flex;
+.review-question {
+  padding: .4rem .62rem;
+  border-inline-start: 2px solid var(--product-accent);
+  background: #ffffff0b;
+  font-family: 'Bureau Serif', Georgia, serif;
+  font-size: clamp(1rem, 1.45vw, 1.25rem);
+  line-height: 1.2;
+}
+
+.review-findings {
+  display: grid;
+  gap: .5rem;
+  margin: 0;
+}
+
+.review-findings div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  align-items: baseline;
   gap: .65rem;
-  align-items: center;
-  padding: .8rem;
-  border: 1px solid #caafac;
-  background: #f0dcd0;
-  transform: rotate(-5deg) translateX(-.8rem);
-  border-radius: 5px;
+  padding-top: .45rem;
+  border-top: 1px solid #f1baa945;
+  font-size: .82rem;
+  line-height: 1.3;
 }
 
-.creative-sample i {
-  width: 43%;
-  height: 100%;
-  border-radius: 2px;
-  background: radial-gradient(circle at 68% 31%, #f4d5a1 0 12%, transparent 13%),
-    linear-gradient(140deg, transparent 52%, #a56d74 53% 68%, #705465 69%), #d4aaa2;
-}
-
-.creative-sample span {
-  width: 44%;
-  height: 2rem;
-  background: linear-gradient(#5e4550 0 19%, transparent 19% 42%, #b29296 42% 51%, transparent 51% 68%, #b29296 68% 77%, transparent 77%);
-}
-
-.review-prompt {
-  position: relative;
-  margin: -.15rem 0 0 2rem;
-  padding: .6rem .9rem;
-  border-radius: .85rem .85rem .85rem 2px;
-  background: #f9eee8;
-  font-size: .875rem;
-  line-height: 1.35;
-  max-width: 14rem;
-}
+.review-findings dt { color: var(--product-accent); }
+.review-findings dd { margin: 0; font-weight: 650; }
 
 .tutor-preview {
-  color: #272c42;
-  background-color: #dce2ed;
-  background-image: linear-gradient(#afb9cc6b 1px,transparent 1px),linear-gradient(90deg,#afb9cc6b 1px,transparent 1px);
-  background-size: 16px 16px;
+  --product-bg: #243044;
+  --product-text: #f2f6ff;
+  --product-accent: #c0d5fa;
+  background-image: linear-gradient(#e0e9ff12 1px,transparent 1px), linear-gradient(90deg,#e0e9ff12 1px,transparent 1px);
+  background-size: 18px 18px;
+}
+
+.equation,
+.tutor-steps strong {
+  white-space: nowrap;
+  font: 400 1.1rem/1.2 'Bureau Serif', Georgia, serif;
 }
 
 .equation {
-  font: 400 clamp(2rem,3vw,3rem)/1.1 'Bureau Serif', Georgia, serif;
-  letter-spacing: -.04em;
-  margin-bottom: 1rem;
+  font-size: clamp(1.65rem, 2.3vw, 2.2rem);
+  letter-spacing: -.03em;
 }
 
-.tutor-step {
-  padding: .6rem .9rem;
-  border-left: 2px solid #5f6686;
-  background: #f5f5fa;
+.tutor-steps {
+  display: grid;
+  gap: .4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.tutor-step span {
-  display: block;
+.tutor-steps li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .2rem .6rem;
+  padding: .36rem .55rem;
+  border-inline-start: 2px solid var(--product-accent);
+  background: var(--product-bg);
   font-size: .8rem;
 }
 
-.tutor-step strong {
-  font: 400 1.4rem/1.25 'Bureau Serif', Georgia, serif;
+.tutor-steps li:last-child strong {
+  color: var(--product-accent);
+}
+
+@supports (grid-template-rows: subgrid) {
+  @media (min-width: 901px) {
+    #products .product-list .product-card {
+      display: grid;
+      grid-row: span 4;
+      grid-template-rows: subgrid;
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  #products .product-list { grid-template-columns: 1fr; }
+  .product-preview { min-height: 0; }
 }
 
 .discovery {
