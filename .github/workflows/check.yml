@@ -12,3 +12,4 @@ jobs:
           node-version: 22
       - run: node scripts/build.mjs --check
       - run: node --test scripts/test-growth-map.mjs
+      - run: node --test scripts/test-growth-map-server.mjs
