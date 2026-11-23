@@ -547,14 +547,15 @@
 
 })();
 
-/* Плавающие кнопки скрываются у подвала. */
+/* Подвал раскрывает логотип и освобождает место от плавающих кнопок. */
 (() => {
   const footer = document.querySelector("body > footer");
   if (footer && "IntersectionObserver" in window) {
     const floating = () => document.querySelectorAll(".shop-fab, .dl-top");
     new IntersectionObserver(([entry]) => {
+      footer.dataset.inView = String(entry.isIntersecting);
       for (const el of floating()) el.classList.toggle("shop-hide", entry.isIntersecting);
-    }, { rootMargin: "0px 0px -40px 0px" }).observe(footer);
+    }, { rootMargin: "0px 0px -96px 0px" }).observe(footer);
   }
 })();
 

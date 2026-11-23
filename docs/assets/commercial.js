@@ -9,11 +9,17 @@
     observer.observe(hero);
   }
 
-  const footer = document.querySelector('body > footer');
-  if (footer && mobileBar && 'IntersectionObserver' in window) {
-    new IntersectionObserver(([entry]) => {
-      mobileBar.classList.toggle('is-at-footer', entry.isIntersecting);
-    }, { threshold: 0.15 }).observe(footer);
+  if (mobileBar && 'IntersectionObserver' in window) {
+    const visibleContacts = new Set();
+    const observer = new IntersectionObserver(entries => {
+      for (const { target, intersectionRatio } of entries) {
+        if (intersectionRatio >= 0.15) visibleContacts.add(target);
+        else visibleContacts.delete(target);
+      }
+      mobileBar.classList.toggle('is-near-contact', visibleContacts.size > 0);
+    }, { threshold: 0.15 });
+    document.querySelectorAll('#contact .actions .button, body > footer')
+      .forEach(target => observer.observe(target));
   }
 
   const filter = document.querySelector('[data-case-filter]');

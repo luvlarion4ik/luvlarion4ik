@@ -46,15 +46,6 @@
 .header-share { border: 0; color: inherit; }
 .header-share:hover { background: #ffffff16; }
 .header-share svg { width: 1.2em; height: 1.2em; }
-@media (min-width: 481px) {
-  .header-social {
-    display: inline-grid;
-    place-items: center;
-    min-width: 44px;
-    min-height: 44px;
-  }
-  .header-social:hover { background: #ffffff16; }
-}
 .share-control { font-size: .86rem; color: var(--accent); }
 .share-control:hover { text-decoration: underline; text-underline-offset: .22em; }
 .share-actions { width: min(28rem, 90vw); min-width: 0; padding: 1.3rem; }
@@ -151,9 +142,6 @@
   padding-top: 1.5rem;
   border-top: 1px solid var(--rule);
 }
-#contact .social--icons,
-#quiz .social--icons { margin-top: 1rem; }
-
 .ready-solutions h1 { margin-bottom: 2rem; }
 
 @media (max-width: 700px) {
@@ -174,7 +162,6 @@
   [data-solution][aria-selected="true"]:focus-visible > span > svg,
   [data-company-panel] summary:focus-visible > span > svg,
   .social-icon:is(:focus-visible, :active) > svg,
-  .header-social:is(:focus-visible, :active) > svg,
   .header-share:is(:focus-visible, :active) > svg,
   #theme:is(:focus-visible, :active) > svg {
     animation: service-icon-react 430ms ease-out both;
@@ -184,7 +171,6 @@
     [data-solution]:hover > span > svg,
     [data-company-panel] summary:hover > span > svg,
     .social-icon:hover > svg,
-    .header-social:hover > svg,
     .header-share:hover > svg,
     #theme:hover > svg {
       animation: service-icon-react 430ms ease-out both;
