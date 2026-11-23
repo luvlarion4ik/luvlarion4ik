@@ -510,7 +510,8 @@
     }
 
     function tabsHtml(active) {
-      const ids = state.example ? ['compare'] : ['brief', 'blocks', 'compare', ...(selected() ? ['block'] : [])];
+      const ids = state.example ? ['compare'] : ['brief', 'blocks', 'compare'];
+      if (selected()) ids.push('block');
       const buttons = ids.map(id => button('gm-tab', text('tab.' + id), { tab: id },
         'id="gm-tab-' + id + '" role="tab" aria-selected="' + (id === active) +
         '" aria-controls="gm-tab-panel" tabindex="' + (id === active ? 0 : -1) + '"')).join('');
@@ -650,6 +651,7 @@
       if (tab !== previous.tab && tab === 'block' && sheetSize === 'closed') sheetSize = 'half';
       panel.dataset.sheet = sheetSize;
       if (state.phase === 'brief') furthestStep = Math.max(furthestStep, state.step || 1);
+      const hadTabFocus = content.contains(document.activeElement) && document.activeElement.matches('[role="tab"]');
       renderContent();
       renderEconomy();
       if (moved && ['choose', 'resume', 'text'].includes(state.phase)) {
@@ -660,7 +662,7 @@
         content.querySelector('h2')?.focus({ preventScroll: true });
       } else if (state.phase === 'map' && previous.tab !== tab) {
         const selectedTab = content.querySelector('[aria-selected="true"]');
-        if (tab !== 'block') selectedTab?.focus({ preventScroll: true });
+        if (tab !== 'block' || hadTabFocus) selectedTab?.focus({ preventScroll: true });
       }
       previous = { phase: state.phase, tab, step: state.step };
     }

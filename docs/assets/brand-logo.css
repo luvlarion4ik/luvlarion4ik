@@ -13,11 +13,6 @@ header .wordmark {
   --wordmark-static: url("./brand/logo-horizontal-copper-light.svg");
 }
 
-:root[data-theme="bordeaux"] footer .wordmark {
-  --logo-color: #84364e;
-  --wordmark-static: url("./brand/logo-horizontal-bordeaux.svg");
-}
-
 :root[data-theme="midnight"] .wordmark,
 :root[data-theme="sage"] header .wordmark {
   --logo-color: #faf4ea;

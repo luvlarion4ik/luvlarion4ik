@@ -9,6 +9,13 @@
     observer.observe(hero);
   }
 
+  const footer = document.querySelector('body > footer');
+  if (footer && mobileBar && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([entry]) => {
+      mobileBar.classList.toggle('is-at-footer', entry.isIntersecting);
+    }, { threshold: 0.15 }).observe(footer);
+  }
+
   const filter = document.querySelector('[data-case-filter]');
   if (filter) {
     const articles = [...document.querySelectorAll('[data-case-people]')];

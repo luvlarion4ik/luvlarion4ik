@@ -119,11 +119,6 @@ export function renderPortalPage(lang, { home, tg, icons, portal, referral }) {
 
   const stages = [l('Разбор', 'Scoping'), l('Проектирование', 'Design'), l('Разработка', 'Build'), l('Приёмка', 'Review'), l('Сопровождение', 'Support')];
   const stageList = stages.map((name, i) => `<li class="${i < 2 ? 'done' : i === 2 ? 'now' : ''}" ${i === 2 ? 'aria-current="step"' : ''}><i></i><span>${name}</span></li>`).join('');
-  const requestSteps = [
-    l('Заявка получена', 'Request received'), l('Менеджер уточняет детали', 'A manager clarifies details'),
-    l('Предложение и договор', 'Proposal and contract'), l('Проект утверждён', 'Project approved'),
-  ];
-
   const channels = [l('Ответы', 'Replies'), l('Согласования', 'Approvals'), l('Документы', 'Documents'), l('Акции', 'Offers')];
   const channelRows = channels.map((name, i) => `<tr><th scope="row">${name}</th>
       <td><label class="pt-switch"><input type="checkbox" ${i < 3 ? 'checked' : ''} aria-label="${name}: ${l('почта', 'email')}"><span></span></label></td>
@@ -166,15 +161,13 @@ export function renderPortalPage(lang, { home, tg, icons, portal, referral }) {
                 <label>${l('Как с вами связаться', 'How to reach you')}<input name="contact" maxlength="120" autocomplete="email" data-pt-contact placeholder="${l('E-mail или Telegram', 'Email or Telegram')}"></label>
               </div>
               <p class="pt-hint pt-hint--error" role="alert" data-pt-request-error hidden>${l('Опишите задачу хотя бы в двух предложениях и укажите, как с вами связаться.', 'Describe the task in a couple of sentences and add a way to reach you.')}</p>
-              <div class="pt-actions"><button class="pt-btn pt-btn--primary" type="submit">${l('Отправить заявку', 'Send request')}</button><span class="pt-hint">${l('Менеджер ответит в рабочие часы.', 'A manager replies during working hours.')}</span></div>
+              <div class="pt-actions"><button class="pt-btn pt-btn--primary" type="submit">${l('Подготовить заявку', 'Prepare request')}</button></div>
             </form>
-            <article class="pt-card pt-sent" data-pt-sent hidden>
+            <article class="pt-card pt-sent" data-pt-sent tabindex="-1" aria-label="${l('Заявка готова к отправке', 'Request ready to send')}" hidden>
               <div class="pt-sent-head"><span class="pt-check-art" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21" pathLength="1"/><path d="M14 25l7 7 13-15" pathLength="1"/></svg></span>
-                <div><small>${l('Заявка', 'Request')} <b data-pt-id></b></small><strong>${l('Заявка отправлена', 'Request sent')}</strong></div></div>
-              <ol class="pt-timeline">${requestSteps.map((step, i) => `<li class="${i === 0 ? 'done' : i === 1 ? 'now' : ''}"><i></i><span>${step}</span></li>`).join('')}</ol>
-              <p>${l('Студия вручную проверит заявку, уточнит задачу и приложит предложение. Договор и проект подключаются к вашему кабинету после согласования.', 'The studio reviews the request by hand, clarifies the task and attaches a proposal. The contract and project are linked to your portal once everything is agreed.')}</p>
-              <p class="pt-hint">${l('В предпросмотре заявка никуда не уходит. Чтобы передать её студии сейчас, отправьте текст в Telegram.', 'In this preview the request is not transmitted. To pass it to the studio now, send the text on Telegram.')}</p>
-              <div class="pt-actions"><a class="pt-btn pt-btn--primary" data-pt-telegram data-base="${esc(tg)}" href="${esc(tg)}" target="_blank" rel="noopener">${l('Отправить в Telegram', 'Send on Telegram')}</a><button type="button" class="pt-btn" data-pt-go="support">${l('Открыть чат', 'Open chat')}</button><button type="button" class="pt-btn" data-pt-edit-request>${l('Изменить заявку', 'Edit request')}</button></div>
+                <div><small>${l('Заявка', 'Request')} <b data-pt-id></b></small><strong>${l('Заявка готова к отправке', 'Request ready to send')}</strong></div></div>
+              <p>${l('Откройте Telegram и отправьте подготовленное сообщение в чат Devlarion. Менеджер ответит в рабочие часы.', 'Open Telegram and send the prepared message in the Devlarion chat. A manager will reply during working hours.')}</p>
+              <div class="pt-actions"><a class="pt-btn pt-btn--primary" data-pt-telegram data-base="${esc(tg)}" href="${esc(tg)}" target="_blank" rel="noopener">${l('Открыть Telegram', 'Open Telegram')}</a><button type="button" class="pt-btn" data-pt-go="support">${l('Демо-чат', 'Chat demo')}</button><button type="button" class="pt-btn" data-pt-edit-request>${l('Изменить заявку', 'Edit request')}</button></div>
             </article>
             <article class="pt-card pt-hint-card"><div class="pt-empty-mark"><devlarion-logo variant="mark" height="46" view aria-hidden="true"></devlarion-logo><span class="ring"></span><span class="ring r2"></span></div>
               <div><strong>${l('Как проект появляется здесь', 'How a project appears here')}</strong><p>${l('Менеджер вручную подключает проект к вашему аккаунту после согласования и договора. Вы сразу увидите этапы, версии, счета и куратора.', 'A manager links the project to your account by hand after the proposal and contract are agreed. You will then see stages, versions, invoices and your account lead.')}</p></div></article>

@@ -14,7 +14,7 @@
   const copyStatus = form.querySelector('[data-copy-status]');
   const back = form.querySelector('[data-back]');
   const selectionNeeded = form.querySelector('[data-selection-needed]');
-  const referral = form.elements.referral;
+  const { referral, timeline } = form.elements;
   const page = new URL(location.href);
   const initialCode = page.searchParams.get('ref') || page.searchParams.get('start')?.match(/^ref_(.+)$/)?.[1];
   if (initialCode) referral.value = initialCode.slice(0, referral.maxLength);
@@ -108,6 +108,7 @@
       && Number.isFinite(region.rate) && region.rate > 0;
     const active = converted ? region : rub;
     const quote = t('По ТЗ', 'Quoted after scoping');
+    const quoteRate = rate => rate && !requestOnly ? formatRate(rate, tier, active) : quote;
     const headline = min ? formatRate(total, tier, active)
       : supportRate && !manual.length ? t('Ежемесячная поддержка', 'Monthly support')
         : t('Индивидуальная смета', 'Tailored quote');
@@ -131,18 +132,17 @@
     for (const input of selected) {
       const rate = inputRate(input, tier);
       const scope = input.getAttribute(`data-scope-${tier}`);
-      addLine(breakdown, scope ? `${label(input)}. ${scope}` : label(input),
-        rate && !requestOnly ? formatRate(rate, tier, active) : quote);
+      addLine(breakdown, scope ? `${label(input)}. ${scope}` : label(input), quoteRate(rate));
     }
     if (discount && !requestOnly) addLine(breakdown, t('Комбо-скидка на разовые работы', 'Bundle discount on one-off work'), `−${discount}%`);
-    if (support) addLine(breakdown, label(support), supportRate && !requestOnly ? formatRate(supportRate, tier, active) : quote);
+    if (support) addLine(breakdown, label(support), quoteRate(supportRate));
 
     const code = referral.value.trim();
     const guidance = [t(
       'Предварительная оценка. Итоговую смету согласуем по ТЗ и фиксируем в договоре. Доступны проектные и реферальные скидки.',
       'Preliminary estimate. We agree a final quote based on your brief and confirm it in the contract. Project and referral discounts are available.'
     )];
-    if (manual.length && min) guidance.push(t('Остальное оценим по ТЗ.', 'We’ll quote the remaining items after scoping.'));
+    if (!requestOnly && manual.length && min) guidance.push(t('Остальное оценим по ТЗ.', 'We’ll quote the remaining items after scoping.'));
     if (serviceChoices.some(input => ['private-ai', 'fine-tuning', 'agents', 'assistant'].includes(input.value))) {
       guidance.push(t('Оборудование, аренду, вычислительные ресурсы, API и лицензии согласуем отдельно.',
         'Hardware, rental, compute resources, APIs and licences are quoted separately.'));
@@ -151,21 +151,16 @@
       'Referral code added. We confirm the discount after the referred client pays for their first stage.'));
     form.querySelector('[data-guidance]').textContent = guidance.join('\n');
 
-    const briefCurrency = active;
-    const briefRows = selected.map(input => {
-      const rate = inputRate(input, tier);
-      return `${label(input)} — ${rate ? formatRate(rate, tier, briefCurrency) : quote}`;
-    });
-    const timeline = form.elements.timeline;
+    const briefRows = selected.map(input => `${label(input)} — ${quoteRate(inputRate(input, tier))}`);
     const source = ['utm_source', 'utm_medium', 'utm_campaign'].map(key => page.searchParams.get(key)?.slice(0, 64)).filter(Boolean);
     const profile = form.querySelector('[name="tier"]:checked').labels[0].querySelector('strong').textContent;
     brief = [
       t('Хочу обсудить проект с Devlarion.', 'I’d like to discuss a project with Devlarion.'),
       `${t('Масштаб проекта', 'Project size')} — ${profile}`,
       ...briefRows,
-      discount && `${t('Комбо-скидка', 'Bundle discount')} — ${discount}%`,
-      min && `${t('Разовые работы', 'One-off work')} — ${formatRate(total, tier, briefCurrency)}`,
-      support && `${label(support)} — ${supportRate ? formatRate(supportRate, tier, briefCurrency) : quote}`,
+      !requestOnly && discount && `${t('Комбо-скидка', 'Bundle discount')} — ${discount}%`,
+      !requestOnly && min && `${t('Разовые работы', 'One-off work')} — ${formatRate(total, tier, active)}`,
+      support && `${label(support)} — ${quoteRate(supportRate)}`,
       timeline.value && `${t('Желаемый срок', 'Target delivery')} — ${timeline.selectedOptions[0].textContent}`,
       converted && currencyNote.textContent,
       source.length && `${t('Источник', 'Source')} — ${source.join(' / ')}`,
@@ -197,6 +192,7 @@
       portalLink.href = start.href;
       portalLink.hidden = false;
     }
+    if (timeline.value) share.searchParams.set('timeline', timeline.value);
     const shareButton = form.querySelector('[data-share]');
     shareButton.dataset.shareUrl = share.href;
     questions.hidden = true;
@@ -269,6 +265,8 @@
     applySelection(link.dataset.estimateServices, link.dataset.estimateTier, link.dataset.estimateOptions);
   });
 
+  const requestedTimeline = page.searchParams.get('timeline');
+  if ([...timeline.options].some(option => option.value === requestedTimeline)) timeline.value = requestedTimeline;
   showStep(0, false);
   form.hidden = false;
   if (applySelection(page.searchParams.get('service'), page.searchParams.get('tier'), page.searchParams.get('options'), false)

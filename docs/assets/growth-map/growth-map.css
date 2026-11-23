@@ -80,9 +80,10 @@
   .gm-scene { flex: none; height: 60dvh; min-height: 320px; }
   .gm-toolbar { min-width: 0; max-width: 100%; flex-direction: column; align-items: stretch; justify-content: start; padding: .3rem .5rem; }
   .gm-variants { min-width: 0; max-width: 100%; overflow-x: auto; scrollbar-width: thin; }
-  .gm-variants button, .gm-tools button, .gm-tools summary { min-height: 44px; }
+  .gm-tools button, .gm-tools summary { min-height: 44px; }
   .gm-variants button { flex: 1 0 auto; justify-content: center; }
-  .gm-tools { min-width: 0; max-width: 100%; margin-inline-start: 0; justify-content: end; }
+  .gm-tools { min-width: 0; max-width: 100%; margin-inline-start: 0; justify-content: end; flex-wrap: wrap; }
+  .gm-zoom { flex: none; }
   .gm-tools button, .gm-tools summary { min-width: 38px; }
   .gm-app[data-phase="brief"] .gm-main { display: none; }
   .gm-panel { border-inline: 0; }
@@ -90,7 +91,7 @@
   .gm-action-links button { min-height: 44px; }
 }
 @media (max-width: 380px) {
-  .gm-tools { gap: 0; flex-wrap: wrap; }
+  .gm-tools { gap: 0; }
   .gm-tools button, .gm-tools summary { min-width: 34px; }
   .gm-zoom { gap: 0; }
 }
@@ -675,7 +676,7 @@
   .gm-app[data-phase="map"] .gm-pane { overflow: visible; }
   .gm-toolbar-cta { display: none !important; }
   .gm-scene { height: 58dvh; min-height: 340px; }
-  .gm-variants button[aria-pressed="true"] { background: var(--ink); }
+  .gm-variants button { min-height: 44px; }
   .gm-app[data-phase="map"].is-panel-collapsed .gm-panel { display: block; }
   [data-gm-action="panel"] { display: none; }
 }
@@ -684,6 +685,10 @@
 .gm-foot .gm-toolbar-cta { align-self: center; margin: 0 .85rem; }
 .gm-app:not([data-phase="map"]) .gm-foot { display: none; }
 @media (max-width: 899px) { .gm-foot { display: block; } }
+@media (max-width: 520px) {
+  .gm-app[data-phase="map"] .gm-variants { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gm-app[data-phase="map"] .gm-variants button { flex-wrap: wrap; gap: .2rem .35rem; white-space: normal; }
+}
 .gm-app small { font-family: inherit; letter-spacing: 0; text-transform: none; }
 .gm-app:not(.is-panel-collapsed) .gm-foot .gm-toolbar-cta { display: none; }
 @media (max-width: 899px) { .gm-app .gm-foot .gm-toolbar-cta { display: none !important; } }

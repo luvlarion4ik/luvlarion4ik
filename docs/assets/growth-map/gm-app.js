@@ -60,7 +60,7 @@
   const aiOn = config.ai === 'on' && /^(https:\/\/|http:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/|$))/.test(aiBase);
   const aiPref = (key, fallback) => { try { const v = sessionStorage.getItem(key); return v === null ? fallback : v === '1'; } catch { return fallback; } };
   const aiSave = (key, value) => { try { sessionStorage.setItem(key, value ? '1' : '0'); } catch {} };
-  let aiConsent = aiPref('devlarion-gm-ai', true);
+  let aiConsent = aiPref('devlarion-gm-ai', false);
   let aiTextConsent = aiPref('devlarion-gm-ai-text', false);
   let aiPending = false;
   let aiAbort = null;

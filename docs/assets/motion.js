@@ -33,13 +33,7 @@
     }, { passive: true });
   }
 
-  // 2. Футер: знак, который прорисовывается, когда до него долистали.
-  const footer = document.querySelector("body > footer");
-  if (footer && !footer.querySelector(".dl-footer-mark")) {
-    footer.insertAdjacentHTML("afterbegin", `<div class="dl-footer-mark" aria-hidden="true"><devlarion-logo variant="mark" height="54" view></devlarion-logo></div>`);
-  }
-
-  // 3. Появление блоков при прокрутке, с небольшой задержкой внутри одной сетки.
+  // 2. Появление блоков при прокрутке, с небольшой задержкой внутри одной сетки.
   if ("IntersectionObserver" in window) {
     const targets = [
       ".section > h2", ".section > p", ".service-group > h3", ".product-feature > *",
@@ -75,7 +69,7 @@
     root.classList.add("dl-motion");
   }
 
-  // 4. Блик за курсором на карточках.
+  // 3. Блик за курсором на карточках.
   if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
     const cards = document.querySelectorAll(".service-grid article, .product-card, .case, .offer-panel, .pt-direction, .segment-card, .home-growth > a, .audience-related > a, .gm-about-grid article");
     for (const card of cards) {
@@ -88,7 +82,7 @@
     }
   }
 
-  // 5. Логотип в шапке проигрывает анимацию после перехода на внутреннюю страницу.
+  // 4. Логотип в шапке проигрывает анимацию после перехода на внутреннюю страницу.
   const greet = () => {
     const logo = document.querySelector("header devlarion-logo");
     if (!logo || logo.hasAttribute("intro")) return;
@@ -553,41 +547,14 @@
 
 })();
 
-/* Мега-меню по наведению, плавающие кнопки не заезжают на подвал, знак в подвале раскрывается в слово. */
+/* Плавающие кнопки скрываются у подвала. */
 (() => {
-  const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
-  const nav = document.querySelector(".bar .services-nav");
-  if (nav && fine) {
-    let timer;
-    const place = () => {
-      const panel = nav.querySelector(".services-nav-links");
-      nav.style.setProperty("--menu-x", "-.8rem");
-      const r = panel.getBoundingClientRect();
-      const over = r.right - (innerWidth - 16);
-      if (over > 0) nav.style.setProperty("--menu-x", `calc(-.8rem - ${Math.ceil(over)}px)`);
-    };
-    nav.addEventListener("mouseenter", () => { clearTimeout(timer); if (!nav.open) { nav.open = true; place(); } });
-    nav.addEventListener("mouseleave", () => { timer = setTimeout(() => { nav.open = false; }, 220); });
-    nav.addEventListener("toggle", () => { if (nav.open) place(); });
-  }
-
   const footer = document.querySelector("body > footer");
   if (footer && "IntersectionObserver" in window) {
     const floating = () => document.querySelectorAll(".shop-fab, .dl-top");
     new IntersectionObserver(([entry]) => {
       for (const el of floating()) el.classList.toggle("shop-hide", entry.isIntersecting);
     }, { rootMargin: "0px 0px -40px 0px" }).observe(footer);
-  }
-
-  const mark = document.querySelector(".dl-footer-mark");
-  if (mark && !mark.querySelector(".dl-footer-word")) {
-    const word = document.createElement("span");
-    word.className = "dl-footer-word";
-    word.setAttribute("aria-hidden", "true");
-    [..."evlarion"].forEach((ch, i) => { const s = document.createElement("span"); s.textContent = ch; s.style.setProperty("--i", i); word.append(s); });
-    mark.append(word);
-    mark.tabIndex = 0;
-    mark.setAttribute("aria-label", "Devlarion");
   }
 })();
 

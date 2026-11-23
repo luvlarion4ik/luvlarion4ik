@@ -47,3 +47,12 @@ footer{padding:2rem 0}.fine{margin-top:1.5rem;flex-wrap:wrap}.sub{padding:4rem 0
 @media(max-width:740px){.work-gallery{grid-template-columns:1fr;gap:2.3rem}}
 .bar nav a,.tools .button{white-space:nowrap}
 @media(min-width:951px) and (max-width:1180px){.bar{gap:.9rem}.bar nav{gap:.95rem;flex-wrap:nowrap;font-size:.82rem}.tools{gap:.6rem;flex-shrink:0}.tools .button{padding-inline:.8rem;font-size:.82rem}}
+
+.sub h2 {
+  hyphens: auto;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 700px) {
+  .mobilebar:not(:focus-within).is-at-footer { visibility: hidden; }
+}

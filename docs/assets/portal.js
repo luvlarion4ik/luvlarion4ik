@@ -178,10 +178,16 @@
     panels.forEach(panel => { panel.hidden = panel.id !== 'pt-panel-' + id; });
     if (id === 'support' && unread) { unread.hidden = true; app.dataset.supportSeen = '1'; }
   }
+  const mobileTabs = matchMedia('(max-width: 860px)');
+  const tablist = tabs[0].parentElement;
+  const updateTabOrientation = () => tablist.setAttribute('aria-orientation', mobileTabs.matches ? 'horizontal' : 'vertical');
+  updateTabOrientation();
+  mobileTabs.addEventListener('change', updateTabOrientation);
   tabs.forEach((tab, i) => {
     tab.addEventListener('click', () => select(tab.dataset.ptTab));
     tab.addEventListener('keydown', event => {
-      const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[event.key];
+      const arrows = mobileTabs.matches ? { ArrowRight: 1, ArrowLeft: -1 } : { ArrowDown: 1, ArrowUp: -1 };
+      const step = arrows[event.key];
       if (event.key === 'Home' || event.key === 'End') {
         event.preventDefault();
         select(tabs[event.key === 'Home' ? 0 : tabs.length - 1].dataset.ptTab, true);
@@ -211,13 +217,20 @@
     const id = 'DL-' + String(Date.now()).slice(-5);
     sent.querySelector('[data-pt-id]').textContent = id;
     const area = directionField.selectedOptions[0].textContent;
-    const body = `${t('Заявка', 'Request')} ${id}\n${t('Направление', 'Area')}: ${area}\n${t('Задача', 'Task')}: ${task}\n${t('Связь', 'Contact')}: ${contact}`;
+    const timeline = request.elements.timeline.value;
+    const body = [
+      `${t('Заявка', 'Request')} ${id}`,
+      `${t('Направление', 'Area')}: ${area}`,
+      timeline && `${t('Желаемый срок', 'Target date')}: ${timeline}`,
+      `${t('Задача', 'Task')}: ${task}`,
+      `${t('Связь', 'Contact')}: ${contact}`,
+    ].filter(Boolean).join('\n');
     const base = telegram.dataset.base;
     telegram.href = base + (base.includes('?') ? '&' : '?') + 'text=' + encodeURIComponent(body);
     request.hidden = true;
     sent.hidden = false;
     sent.querySelector('.pt-check-art')?.replaceWith(sent.querySelector('.pt-check-art').cloneNode(true));
-    sent.scrollIntoView({ block: 'nearest', behavior: reduced ? 'auto' : 'smooth' });
+    sent.focus();
   });
   app.querySelector('[data-pt-edit-request]')?.addEventListener('click', () => {
     sent.hidden = true; request.hidden = false; taskField.focus();
