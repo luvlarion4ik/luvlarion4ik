@@ -653,7 +653,53 @@
       });
       return [key, { ...variant, nodes, edges }];
     }));
-    return { ...doc, ...(doc.version === undefined ? {} : { version: 1 }), variants };
+    const ai = sanitizeAi(doc.ai, catalog);
+    return { ...doc, ...(doc.version === undefined ? {} : { version: 1 }), variants, ...(ai ? { ai } : { ai: undefined }) };
+  }
+
+
+  // Variants assembled from explicit block lists (used when the AI adjusts the generated plan).
+  // Later levels always contain earlier ones; blocks that exist only in "now" are never touched.
+  function rebuild(raw, current, sets, catalog = api.catalog) {
+    const blocks = blocksById(catalog);
+    const ok = id => Object.hasOwn(blocks, id) && blocks[id].tier > 0;
+    const base = unique((sets.base ?? []).filter(ok));
+    const boost = unique([...base, ...(sets.boost ?? []).filter(ok)]);
+    const auto = unique([...boost, ...(sets.auto ?? []).filter(ok)]);
+    const lists = { base, boost, auto };
+    const auto3 = layout(connect(makeVariant('auto', auto, catalog), catalog), catalog);
+    const positions = new Map(auto3.nodes.map(node => [node.block, { x: node.x, y: node.y }]));
+    const stageOf = node => blocks[node.block].stage;
+    const align = variant => {
+      const placed = layout(variant, catalog);
+      const affected = new Set(placed.nodes.filter(node => !positions.has(node.block)).map(stageOf));
+      return { ...placed, nodes: placed.nodes.map(node => affected.has(stageOf(node)) ? node : { ...node, ...positions.get(node.block) }) };
+    };
+    return {
+      now: current.now,
+      base: align(connect(makeVariant('base', lists.base, catalog), catalog)),
+      boost: align(connect(makeVariant('boost', lists.boost, catalog), catalog)),
+      auto: auto3,
+    };
+  }
+
+  const aiText = (value, max) => typeof value === 'string' ? value.replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, max) : '';
+  function sanitizeAi(ai, catalog = api.catalog) {
+    if (!record(ai)) return undefined;
+    const blocks = blocksById(catalog);
+    const pitch = {}, notes = {};
+    for (const key of ['base', 'boost', 'auto']) pitch[key] = aiText(ai.pitch?.[key], 320);
+    for (const [id, note] of Object.entries(record(ai.notes) ? ai.notes : {})) {
+      if (Object.hasOwn(blocks, id)) notes[id] = aiText(note, 180);
+    }
+    const gaps = (Array.isArray(ai.gaps) ? ai.gaps : []).slice(0, 3).map(gap => ({
+      title: aiText(gap?.title, 80), text: aiText(gap?.text, 360),
+    })).filter(gap => gap.title && gap.text);
+    const objections = (Array.isArray(ai.objections) ? ai.objections : []).slice(0, 3).map(item => ({
+      q: aiText(item?.q, 90), a: aiText(item?.a, 340),
+    })).filter(item => item.q && item.a);
+    const reasons = (Array.isArray(ai.reasons) ? ai.reasons : []).slice(0, 4).map(item => aiText(item, 200)).filter(Boolean);
+    return { headline: aiText(ai.headline, 140), pitch, notes, gaps, objections, reasons };
   }
 
   const demoBrief = Object.freeze({
@@ -663,7 +709,7 @@
 
   api.engine = Object.freeze({
     normalizeBrief, buildNow, buildVariant, buildAll, economy, compare,
-    layout, contribution, uplift, parseText, migrate, demoBrief,
+    layout, contribution, uplift, parseText, migrate, demoBrief, rebuild, sanitizeAi,
     buildDemo: (catalog = api.catalog) => buildAll(demoBrief, catalog),
   });
 })();

@@ -55,6 +55,101 @@
   let saveTimer, economyTimer;
   let storageWarned = false;
 
+  // Optional AI layer (content/site.json → growthMap.ai = "on" + endpoint). Every failure falls back to the local engine.
+  const aiBase = String(config.endpoint || '').replace(/\/+$/, '');
+  const aiOn = config.ai === 'on' && /^(https:\/\/|http:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/|$))/.test(aiBase);
+  const aiPref = (key, fallback) => { try { const v = sessionStorage.getItem(key); return v === null ? fallback : v === '1'; } catch { return fallback; } };
+  const aiSave = (key, value) => { try { sessionStorage.setItem(key, value ? '1' : '0'); } catch {} };
+  let aiConsent = aiPref('devlarion-gm-ai', true);
+  let aiTextConsent = aiPref('devlarion-gm-ai-text', false);
+  let aiPending = false;
+  let aiAbort = null;
+  const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+  async function aiCall(path, body, timeout = 28000) {
+    aiAbort?.abort();
+    const controller = aiAbort = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(aiBase + path, {
+        method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body), signal: controller.signal,
+      });
+      if (!response.ok) throw new Error('http ' + response.status);
+      return await response.json();
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+  const briefFields = ['category', 'niche', 'nicheCustom', 'models', 'items', 'check', 'cycle', 'size', 'revenueBand', 'leads',
+    'repeatBand', 'sources', 'mainSource', 'intake', 'payment', 'pains', 'wishes', 'timing'];
+  const publicBrief = brief => Object.fromEntries(briefFields.filter(key => brief[key] !== undefined && brief[key] !== null && brief[key] !== '')
+    .map(key => [key, brief[key]]));
+  function cleanAiBrief(raw) {
+    if (!raw || typeof raw !== 'object') return {};
+    const ids = rows => new Set(rows.map(row => row.id));
+    const lists = {
+      models: ids(catalog.models), sources: ids(catalog.sources), intake: ids(catalog.intake), payment: ids(catalog.payment),
+      pains: ids(catalog.pains), wishes: ids(catalog.wishes),
+    };
+    const out = {};
+    for (const [key, allowed] of Object.entries(lists)) {
+      if (Array.isArray(raw[key])) out[key] = [...new Set(raw[key].filter(id => allowed.has(id)))].slice(0, key === 'pains' ? 3 : 12);
+      if (!out[key]?.length) delete out[key];
+    }
+    const category = catalog.categoryById[raw.category];
+    if (category) {
+      out.category = category.id;
+      if (category.niches.some(item => item.id === raw.niche)) out.niche = raw.niche;
+    }
+    if (lists.sources.has(raw.mainSource)) out.mainSource = raw.mainSource;
+    for (const key of ['check', 'leads']) if (Number.isFinite(raw[key]) && raw[key] > 0 && raw[key] < 1e9) out[key] = Math.round(raw[key]);
+    if (Number.isInteger(raw.revenueBand) && raw.revenueBand >= 0 && raw.revenueBand <= 4) out.revenueBand = raw.revenueBand;
+    if (Number.isInteger(raw.repeatBand) && raw.repeatBand >= 0 && raw.repeatBand <= 2) out.repeatBand = raw.repeatBand;
+    if (['solo', 'team', 'mid', 'large'].includes(raw.size)) out.size = raw.size;
+    if (['day', 'week', 'month', 'long'].includes(raw.cycle)) out.cycle = raw.cycle;
+    if (Array.isArray(raw.items)) out.items = raw.items.filter(item => typeof item === 'string').map(item => item.trim().slice(0, 60)).filter(Boolean).slice(0, 12);
+    if (typeof raw.currency === 'string' && /^[A-Z]{3}$/.test(raw.currency)) out.currency = raw.currency;
+    return out;
+  }
+  function analyzePayload(generated) {
+    const { economies } = engine.compare(generated.brief, generated.variants, catalog, { lang, money, pricing });
+    const pick = row => ({
+      revenue: Math.round(row.revenue), profit: Math.round(row.profit), growth: Math.round(row.growth * 100) / 100,
+      yearProfit: Math.round(row.yearProfit || 0), payback: row.payback, weeks: row.weeks,
+      price: row.price.quote ? 'quote' : [Math.round(row.price.min), Math.round(row.price.max)],
+      lostLeads: Math.round(row.projectedLostLeads), hours: Math.round(row.hours || 0),
+    });
+    return {
+      lang, currency: 'RUB', brief: publicBrief(generated.brief),
+      variants: Object.fromEntries(variants.map(key => [key, [...new Set(generated.variants[key].nodes.map(node => node.block))]])),
+      economy: { ...Object.fromEntries(variants.map(key => [key, pick(economies[key])])), leaking: Math.round(economies.now.leaking) },
+    };
+  }
+  function applyAi(generated, result) {
+    if (!result || typeof result !== 'object' || !result.variants) return;
+    const blockOk = id => catalog.byId[id] && (catalog.byId[id].tier > 0 || catalog.byId[id].stage === 'traffic');
+    const sets = {};
+    for (const key of ['base', 'boost', 'auto']) {
+      const current = generated.variants[key].nodes.map(node => node.block);
+      const change = result.variants[key] || {};
+      const remove = new Set((Array.isArray(change.remove) ? change.remove : []).slice(0, 6));
+      const add = (Array.isArray(change.add) ? change.add : []).filter(blockOk).slice(0, 6);
+      sets[key] = [...current.filter(id => !remove.has(id)), ...add];
+    }
+    const rebuilt = engine.rebuild(generated.brief, generated.variants, sets, catalog);
+    const ai = engine.sanitizeAi({
+      headline: result.headline, reasons: result.reasons, gaps: result.gaps, objections: result.objections,
+      pitch: Object.fromEntries(['base', 'boost', 'auto'].map(key => [key, result.variants[key]?.pitch])),
+      notes: Object.assign({}, ...['base', 'boost', 'auto'].map(key => result.variants[key]?.notes || {})),
+    }, catalog);
+    if (!ai) return;
+    for (const key of ['base', 'boost', 'auto']) {
+      if (generated.variants[key].edited) continue;
+      generated.variants[key] = { ...rebuilt[key], nodes: rebuilt[key].nodes.map(node => ({ ...node, note: ai.notes[node.block] || '' })) };
+    }
+    generated.ai = ai;
+    generated.source = 'ai';
+  }
+
   function money(rubles) {
     const region = window.devlarionRegion;
     const currency = region?.currency ?? 'RUB';
@@ -148,7 +243,8 @@
       phase, brief: phase === 'map' ? doc.brief : draft, draft, detected, source, step, tab,
       variant, variants: doc?.variants, comparison, selected, readOnly: readOnly(),
       briefDirty: Boolean(doc && JSON.stringify(draft) !== JSON.stringify(editableBrief(doc.brief))),
-      example, shared, resumeName: displayName(pending), scanIndex,
+      example, shared, resumeName: displayName(pending), scanIndex, ai: phase === 'map' ? doc?.ai : undefined,
+      aiOn, aiConsent, aiTextConsent, aiPending,
     });
   }
 
@@ -270,6 +366,7 @@
 
   function finishScan() {
     if (phase !== 'scan') return;
+    if (aiPending) { aiAbort?.abort(); aiPending = false; }
     scanTimers.forEach(clearTimeout);
     scanTimers = [];
     openMap(pending, { reveal: true });
@@ -293,18 +390,31 @@
       }
     }
     pending = generated;
-    if (reduced.matches) {
+    const useAi = aiOn && aiConsent;
+    if (reduced.matches && !useAi) {
       phase = 'scan';
       finishScan();
       return;
     }
     scanIndex = 0;
     phase = 'scan';
+    aiPending = useAi;
     render();
     for (let index = 1; index < 4; index += 1) {
-      scanTimers.push(setTimeout(() => { scanIndex = index; refreshPanel(); }, index * 950 + 400));
+      scanTimers.push(setTimeout(() => { scanIndex = index; refreshPanel(); }, (reduced.matches ? 0 : index * 950 + 400)));
     }
-    scanTimers.push(setTimeout(finishScan, 4800));
+    if (!useAi) {
+      scanTimers.push(setTimeout(finishScan, 4800));
+      return;
+    }
+    goal('ai_analyze', true);
+    const request = aiCall('/analyze', analyzePayload(generated))
+      .then(result => { if (pending === generated && phase === 'scan') applyAi(generated, result); })
+      .catch(() => {});
+    Promise.all([request, wait(reduced.matches ? 0 : 4800)]).then(() => {
+      aiPending = false;
+      if (pending === generated) finishScan();
+    });
   }
 
   function chooseVariant(key) {
@@ -618,6 +728,11 @@
     toolbarHandlers[button.dataset.gmAction]?.();
   });
 
+  root.addEventListener('change', event => {
+    if (event.target.matches('[data-gm-ai]')) { aiConsent = event.target.checked; aiSave('devlarion-gm-ai', aiConsent); refreshPanel(); }
+    if (event.target.matches('[data-gm-ai-text]')) { aiTextConsent = event.target.checked; aiSave('devlarion-gm-ai-text', aiTextConsent); }
+  });
+
   importField.addEventListener('change', async () => {
     const file = importField.files[0];
     importField.value = '';
@@ -633,8 +748,25 @@
 
   const on = (event, handler) => document.addEventListener('gm:' + event, received => handler(received.detail ?? {}));
   on('mode', ({ mode }) => chooseMode(mode));
-  on('parse', ({ text }) => {
+  on('parse', async ({ text }) => {
     const parsed = engine.parseText(text, catalog, lang);
+    if (aiOn && aiTextConsent && !aiPending) {
+      const submit = find('.gm-text-form button[type="submit"]');
+      aiPending = true;
+      if (submit) { submit.disabled = true; submit.textContent = t('auto.parsing'); }
+      try {
+        const result = await aiCall('/parse', { lang, text: text.slice(0, 2000) }, 20000);
+        const extra = cleanAiBrief(result?.brief);
+        parsed.brief = { ...parsed.brief, ...extra };
+        parsed.detected = [...new Set([...parsed.detected, ...Object.keys(extra).filter(key => key !== 'currency')])];
+        goal('ai_parse', true);
+      } catch {
+        // Local parse stays as is.
+      } finally {
+        aiPending = false;
+      }
+      if (phase !== 'text') return;
+    }
     const selectedRegion = window.devlarionRegion;
     const currency = parsed.brief.currency ?? selectedRegion?.currency ?? 'RUB';
     const rate = currency === 'RUB' ? 1 : selectedRegion?.currency === currency

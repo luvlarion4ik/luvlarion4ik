@@ -92,6 +92,8 @@
           '<fieldset><legend>' + text('auto.examples') + '</legend><div class="gm-chip-list">' + examples + '</div></fieldset>' +
           '<label for="gm-business-text">' + text('auto.hint') + '</label>' +
           '<textarea id="gm-business-text" maxlength="2000" rows="6" required aria-describedby="gm-text-counter"></textarea>' +
+          (state.aiOn ? '<label class="gm-ai-consent"><input type="checkbox" data-gm-ai-text' + (state.aiTextConsent ? ' checked' : '') + '>' +
+            icon('sparkle') + '<span>' + text('ai.consent.text') + '</span></label>' : '') +
           '<div class="gm-text-form-footer">' + button('gm-text-button', text('brief.back'), { mode: 'restart' }) +
           '<output id="gm-text-counter">' + text('auto.counter', { n: 0 }) + '</output>' +
           '<button type="submit" class="button" disabled>' + text('auto.parse') + '</button></div></form>';
@@ -116,7 +118,7 @@
         (offset < position ? 'done' : offset === position ? 'active' : 'todo') + '"' +
         (offset === position ? ' aria-current="step"' : '') + '>' +
         '<span aria-hidden="true">' + (offset < position ? icon('check') : '') + '</span>' +
-        text('scan.' + index, { niche: local(niche?.title ?? category?.title) }) + '</li>').join('');
+        text(index === 4 && state.aiPending ? 'scan.ai' : 'scan.' + index, { niche: local(niche?.title ?? category?.title) }) + '</li>').join('');
     }
 
     function chips(field, records, { multiple = false, icons = false, limit = Infinity } = {}) {
@@ -230,7 +232,9 @@
           field('pains', chips('pains', catalog.pains, { multiple: true, limit: 3 }), { caption: t('brief.pains.hint') });
       }
       return field('wishes', chips('wishes', catalog.wishes, { multiple: true, icons: true })) +
-        field('timing', chips('timing', ['asap', 'soon', 'browsing'].map(id => choice(id, 'brief.timing.' + id))));
+        field('timing', chips('timing', ['asap', 'soon', 'browsing'].map(id => choice(id, 'brief.timing.' + id)))) +
+        (state.aiOn ? '<label class="gm-ai-consent"><input type="checkbox" data-gm-ai' + (state.aiConsent ? ' checked' : '') + '>' +
+          icon('sparkle') + '<span>' + text('ai.consent') + '</span></label>' : '');
     }
 
     function briefHtml() {
@@ -320,6 +324,75 @@
         ? text('cmp.months', { n: numbers.format(row.payback) }) : text('cmp.paybackLong');
     }
 
+    // Sales layer. Every number comes from the engine; AI texts use {placeholders} that are filled here,
+    // so the words and the table can never disagree after edits.
+    function salesValues() {
+      const e = state.comparison.economies;
+      const m = value => shortMoney(Math.max(0, value));
+      const mid = row => row.price.quote ? NaN : (row.price.min + row.price.max) / 2;
+      const values = { lose: m(e.now.leaking), lose_year: m(e.now.leaking * 12), leads_lost: numbers.format(Math.round(e.now.lostLeads)) };
+      for (const key of ['base', 'boost', 'auto']) {
+        const row = e[key];
+        values['rev.' + key] = m(row.revenue);
+        values['gain.' + key] = m(row.profit - e.now.profit);
+        values['year.' + key] = m(row.yearProfit);
+        values['payback.' + key] = row.payback && !row.price.quote ? t('cmp.months', { n: numbers.format(row.payback) }) : t('cmp.paybackLong');
+        values['price.' + key] = row.price.quote || !row.price.max ? t('cmp.quote') : t('eco.range', { min: m(row.price.min), max: m(row.price.max) });
+        values['weeks.' + key] = row.weeks.length ? t('cmp.weeks', { from: row.weeks[0], to: row.weeks[1] }) : '';
+        values['growth.' + key] = formatPct(row.growth);
+      }
+      values['gap.base_boost'] = m(e.boost.profit - e.base.profit);
+      values['gap.boost_auto'] = m(e.auto.profit - e.boost.profit);
+      const upgrade = (mid(e.boost) - mid(e.base)) / (e.boost.profit - e.base.profit);
+      values.upgrade = Number.isFinite(upgrade) && upgrade > 0 && upgrade <= 24
+        ? t('cmp.months', { n: numbers.format(Math.max(1, Math.ceil(upgrade * 2) / 2)) }) : '';
+      const top = state.comparison.differences[1]?.top ?? [];
+      values.t1 = local(catalog.byId[top[0]?.block]?.title);
+      values.t2 = local(catalog.byId[top[1]?.block]?.title);
+      return values;
+    }
+
+    const fill = (template, values) => escape(template).replace(/\{([a-z0-9_.]+)\}/g, (all, key) => escape(values[key] ?? ''))
+      .replace(/(?<!\.)\.\.(?!\.)/g, '.').replace(/\s{2,}/g, ' ');
+
+    function recommendationHtml(values) {
+      const ai = state.ai;
+      const e = state.comparison.economies;
+      let reasons = ai?.reasons?.length ? ai.reasons.map(item => fill(item, values)) : [
+        e.boost.payback && !e.boost.price.quote ? text('rec.r1', values) : text('rec.r1.quote', values),
+        values.t1 ? text(values.t2 ? 'rec.r2' : 'rec.r2.one', values) : '',
+        values.upgrade ? text('rec.r3', values) : '',
+        text('rec.r4', values),
+      ];
+      reasons = reasons.filter(Boolean).slice(0, 4);
+      const toAuto = e.auto.profit > e.boost.profit ? '<p class="gm-rec-next">' + text('rec.auto', values) + '</p>' : '';
+      return '<section class="gm-rec" aria-labelledby="gm-rec-title"><p class="gm-rec-kicker">' + icon('sparkle') +
+        text(ai ? 'rec.kicker.ai' : 'rec.kicker') + '</p><h3 id="gm-rec-title">' + text('rec.title') + '</h3>' +
+        '<ul>' + reasons.map(item => '<li>' + icon('check') + '<span>' + item + '</span></li>').join('') + '</ul>' + toAuto +
+        '<div class="gm-rec-actions">' + (state.variant.key === 'boost' ? '' : button('gm-secondary', text('rec.show'), { variant: 'boost' })) +
+        (state.example ? '' : '<button type="button" class="button" data-gm-action="handoff">' + icon('telegram') + text('rec.cta') + '</button>') +
+        '</div></section>';
+    }
+
+    function objectionsHtml(values) {
+      const items = state.ai?.objections?.length ? state.ai.objections.map(item => ({ q: fill(item.q, values), a: fill(item.a, values) }))
+        : [1, 2, 3].map(n => ({ q: text('obj.' + n + '.q'), a: text('obj.' + n + '.a', values) }));
+      return '<section class="gm-objections"><h3>' + text('obj.title') + '</h3>' + items.map((item, i) =>
+        '<details' + (i === 0 ? ' open' : '') + '><summary>' + item.q + '</summary><p>' + item.a + '</p></details>').join('') + '</section>';
+    }
+
+    function nudgeHtml() {
+      if (!state.comparison || state.phase !== 'map') return '';
+      const order = ['now', 'base', 'boost', 'auto'];
+      const next = order[order.indexOf(state.variant.key) + 1];
+      if (!next) return '<p class="gm-nudge gm-nudge-top">' + icon('check') + text('nudge.top') + '</p>';
+      const e = state.comparison.economies;
+      const gap = e[next].profit - e[state.variant.key].profit;
+      if (gap <= 0) return '';
+      return button('gm-nudge', icon('trend') + '<span>' + text('nudge.next', { variant: t('v.' + next), money: shortMoney(gap) }) + '</span>' +
+        '<span aria-hidden="true">→</span>', { variant: next });
+    }
+
     function comparisonHtml() {
       const comparison = state.comparison;
       if (!comparison) return '';
@@ -349,9 +422,11 @@
       const table = bars + '<p class="gm-baseline">' + text('cmp.now', { money: amountText(economies.now.revenue),
         leads: numbers.format(Math.round(economies.now.projectedLostLeads)) }) + '</p>' +
         '<div class="gm-vcards" aria-label="' + text('tab.compare') + '">' + cards + '</div>';
+      const values = salesValues();
+      const aiGaps = state.ai?.gaps?.length === 3 ? state.ai.gaps : null;
       const diff = '<section class="gm-differences"><h3>' + text('cmp.differences') + '</h3>' +
-        differences.map(row => '<article class="gm-difference"><h4>' + escape(row.title) + '</h4><strong>' +
-          text('cmp.growth.month', { money: money(row.money) }) + '</strong><p>' + escape(row.text) + '</p>' +
+        differences.map((row, i) => '<article class="gm-difference"><h4>' + (aiGaps ? fill(aiGaps[i].title, values) : escape(row.title)) + '</h4><strong>' +
+          text('cmp.growth.month', { money: money(row.money) }) + '</strong><p>' + (aiGaps ? fill(aiGaps[i].text, values) : escape(row.text)) + '</p>' +
           (row.top?.length ? '<ul>' + row.top.map(item => '<li>' + label(catalog.byId[item.block]) + '</li>').join('') + '</ul>' : '') +
           '</article>').join('') + '</section>';
       const guarantees = config.guarantees?.length ? '<section class="gm-proof"><h3>' + text('cmp.guarantees') +
@@ -363,11 +438,15 @@
           (item.business ? ' · ' + escape(item.business) : '') + '</figcaption></figure>').join('') + '</section>' : '';
       const incomplete = economies.now.defaultsUsed.length && isEditable() && !state.example
         ? button('gm-text-button gm-defaults-note', text('brief.defaults'), { defaults: economies.now.defaultsUsed.includes('check') ? 2 : 3 }) : '';
+      const pitch = state.ai?.pitch?.[state.variant.key];
+      const headline = state.ai?.headline ? fill(state.ai.headline, values) : text('cmp.headline', values);
       return '<section class="gm-pane gm-compare-pane"><h2 tabindex="-1">' + text('tab.compare') + '</h2>' +
-        '<p class="gm-variant-description">' + text('v.' + state.variant.key + '.tagline') + '</p>' +
+        '<p class="gm-headline">' + headline + '</p>' +
+        '<p class="gm-variant-description">' + (pitch ? fill(pitch, values) : text('v.' + state.variant.key + '.tagline')) + '</p>' +
         (state.example ? button('button gm-own-map', text('mode.demo.back'), { mode: 'restart' }) : '') +
         (state.shared ? button('gm-secondary', text('act.saveShared'), { saveshared: '' }) : '') +
-        table + incomplete + diff + guarantees + reviews + '</section>';
+        table.replace('<p class="gm-baseline">', recommendationHtml(values) + '<p class="gm-baseline">') +
+        incomplete + diff + objectionsHtml(values) + guarantees + reviews + '</section>';
     }
 
     function settingInput(node, key) {
@@ -477,7 +556,7 @@
         (canGrow ? paybackLabel(row) : text('cmp.noValue')) + '</dd></div><div><dt>' + text('eco.build') +
         '</dt><dd>' + (canGrow ? priceLabel(row) : text('cmp.noValue')) + '</dd></div></dl>';
       const body = '<div class="gm-economy-content" data-open="' + economyOpen + '">' + stats +
-        '<p class="gm-economy-footnote">' + text('eco.footnote') + '</p></div>';
+        nudgeHtml() + '<p class="gm-economy-footnote">' + text('eco.footnote') + '</p></div>';
       let visible = economy.querySelector('.gm-economy-visible');
       if (!visible) {
         economy.innerHTML = '<div class="gm-economy-visible"></div><p class="gm-sr" role="status" data-gm-p-announce></p>';

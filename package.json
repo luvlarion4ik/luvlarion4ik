@@ -7,6 +7,9 @@
     "admin": "node scripts/admin.mjs",
     "referrals": "node scripts/referrals.mjs",
     "rates": "node scripts/update-exchange.mjs && node scripts/build.mjs",
-    "test:gm": "node --test scripts/test-growth-map.mjs"
+    "test:gm": "node --test scripts/test-growth-map.mjs",
+    "test:gm-server": "node --test scripts/test-growth-map-server.mjs",
+    "ai": "node server/growth-map/server.mjs",
+    "ai:check": "node server/growth-map/server.mjs --check"
   }
 }
