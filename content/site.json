@@ -8,5 +8,13 @@
   "team": [],
   "achievements": [],
   "referral": { "percent": 5, "days": 90, "cap": 15 },
-  "portal": { "status": "soon", "url": "" }
+  "portal": { "status": "soon", "url": "" },
+  "growthMap": {
+    "ai": "off",
+    "endpoint": "",
+    "turnstileSiteKey": "",
+    "handoffNote": "",
+    "guarantees": [],
+    "reviews": []
+  }
 }

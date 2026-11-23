@@ -69,6 +69,12 @@
 | `src_tenders` | Тендеры и закупки | `gavel` | 0.08 | b2b_services, logistics, repair | Крупные заказы от компаний и госзаказчиков |
 | `src_email` | Email-база | `mail` | 0.06 | b2b_services, digital, education | Своя база, которую никто не отнимет и не заблокирует |
 | `src_events` | Выставки и мероприятия | `ticket` | 0.06 | b2b_services, events, realty | Живые знакомства с клиентами, которые приезжают купить |
+<<<<<<< HEAD
+=======
+| `src_site` | Свой сайт | `web` | 0.00 | Только выбранный источник | Клиенты находят предложение и оставляют заявку на вашем сайте |
+
+`src_site` добавляется только по ответам в брифе. Как действующий источник он не даёт прибавки к потоку.
+>>>>>>> growth-map/8-verified
 
 Иконки брендов (`avito`, `vk`, `telegram`, `instagram`, YouTube в `play` по желанию) берутся из Simple Icons (CC0, лицензия уже лежит в `docs/assets/licenses/simple-icons.txt`). Если знака нет в Simple Icons, рисуется нейтральная линейная иконка.
 
@@ -159,7 +165,11 @@
 | `proc_table` | Таблица заявок | leak .15, hours 5 | null | 1 | sizes: solo | Простой учёт без CRM, пока заявок немного |
 | `proc_sla` | Контроль скорости ответа | leak .20, conv .06 | automation · .2 | 2 | sizes: team, mid, large | Если менеджер не ответил за 10 минут, заявку видит руководитель |
 | `proc_route` | Автораспределение заявок | leak .10, hours 10 | automation · .2 | 2 | sizes: mid, large | Заявка уходит свободному менеджеру по очереди или по навыку |
+<<<<<<< HEAD
 | `proc_kp` | Генератор КП и смет | conv .12, hours 25 | automation · .5 | 2 | models: b2b; categories: repair, b2b_services, logistics, events, realty | Коммерческое предложение за минуту вместо вечера в Excel |
+=======
+| `proc_kp` | Генератор КП и смет | conv .12, hours 25 | automation · .5 | 2 | models: b2b; categories: repair, b2b_services, logistics, events, realty; отдельно подходит нише `repair/furniture` | Коммерческое предложение за минуту вместо вечера в Excel |
+>>>>>>> growth-map/8-verified
 | `proc_scoring` | ИИ-оценка заявок | conv .10, hours 10 | agents · .3 | 3 | sizes: mid, large | Нейросеть отмечает, кто готов купить сегодня, а кто только смотрит |
 | `proc_calltrack` | Запись и разбор звонков | conv .08, hours 8 | assistant · .3 | 3 | | Видно, где менеджер теряет клиента, и ИИ подсказывает, что поправить |
 | `proc_staff` | Приложение для сотрудников | hours 30 | platform · .6 | 3 | sizes: mid, large | Мастера и менеджеры видят задачи, расписание и клиентов в телефоне |

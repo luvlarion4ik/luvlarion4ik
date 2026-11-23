@@ -274,3 +274,134 @@ Map: {shareUrl}
 | `home.teaser.title` | Сколько денег теряет ваш бизнес? | How much is your business leaving on the table? |
 | `home.teaser.text` | Опишите, как к вам приходят клиенты, и за минуту получите схему с расчётом: где утекают заявки и что вернёт их обратно. | Describe how customers reach you and get a costed map in a minute: where enquiries leak and what brings them back. |
 | `home.teaser.cta` | Собрать карту роста | Build my growth map |
+<<<<<<< HEAD
+=======
+
+## Дополнительные подписи приложения
+
+| Ключ | RU | EN |
+| --- | --- | --- |
+| `auto.example1.label` | Барбершоп | Barbershop |
+| `auto.example1.text` | Барбершоп в Казани, 3 мастера. Клиенты из Яндекс Карт и Instagram, записываем через WhatsApp. Средний чек 1800, в месяц около 400 стрижек, оборот около 700 тысяч | A barbershop in Manchester with 3 barbers. Customers find us on Google Maps and Instagram, bookings come through WhatsApp. Average ticket £28, about 400 cuts a month |
+| `auto.example2.label` | Кухни на заказ | Custom kitchens |
+| `auto.example2.text` | Делаю кухни на заказ. Заявки с Авито и от знакомых, считаю всё вручную в Excel. Чек от 250 тысяч, 10–15 заказов в месяц | I build custom kitchens. Leads come from Facebook Marketplace and referrals, I quote everything by hand in Excel. Jobs start at £9,000, 10–15 a month |
+| `auto.example3.label` | Онлайн-курс | Online course |
+| `auto.example3.text` | Онлайн-курс по иллюстрации. Продаю через Telegram-канал на 12 тысяч подписчиков, оплату принимаю переводом на карту | An online illustration course. I sell through a Telegram channel with 12k subscribers and take bank transfers |
+| `brief.progress` | Шаг {step} из 6 | Step {step} of 6 |
+| `brief.required` | Заполните обязательные поля, чтобы продолжить | Fill in the required fields to continue |
+| `brief.search.empty` | Сфера не найдена | No matching industries |
+| `brief.sources.other` | Другое | Other |
+| `brief.sources.other.ph` | Укажите источник | Enter a source |
+| `brief.cycle.day` | В тот же день | Same day |
+| `brief.cycle.week` | До недели | Within a week |
+| `brief.cycle.month` | До месяца | Within a month |
+| `brief.cycle.long` | Дольше | Longer |
+| `brief.size.solo` | Работаю один | Just me |
+| `brief.size.team` | Команда до 10 человек | Team of up to 10 |
+| `brief.size.mid` | 10–50 человек | 10–50 people |
+| `brief.size.large` | Больше 50 человек | More than 50 people |
+| `brief.revenue.below` | До {money} | Up to {money} |
+| `brief.revenue.range` | {min}–{max} | {min}–{max} |
+| `brief.revenue.above` | Больше {money} | Over {money} |
+| `brief.repeat.0` | Почти нет | Almost none |
+| `brief.repeat.1` | Около трети | Around a third |
+| `brief.repeat.2` | Половина и больше | Half or more |
+| `brief.timing.asap` | Как можно скорее | As soon as possible |
+| `brief.timing.soon` | В течение 1–2 месяцев | Within 1–2 months |
+| `brief.timing.browsing` | Присматриваюсь | Exploring options |
+| `brief.optional` | Можно пропустить | Optional |
+| `brief.insta.note` | * Meta признана экстремистской организацией в РФ. | * Russia has designated Meta as an extremist organisation. |
+| `mode.demo.back` | Собрать свою карту | Build my own map |
+| `mode.demo.name` | Кофейня | Coffee shop |
+| `tb.zoomIn` | Приблизить | Zoom in |
+| `tb.zoomOut` | Отдалить | Zoom out |
+| `tb.list` | Показать списком | Show as a list |
+| `tb.map` | Показать схему | Show the map |
+| `tb.more` | Действия с картой | Map actions |
+| `tb.close` | Закрыть | Close |
+| `canvas.label` | Схема | Map |
+| `canvas.keys` | Нажимайте стрелки, чтобы сдвинуть вид, плюс и минус для масштаба. Нажмите Tab, чтобы перейти к блокам, и Enter, чтобы открыть выбранный блок. | Use the arrow keys to pan and plus or minus to zoom. Press Tab to move through blocks and Enter to open the selected block. |
+| `canvas.connections` | Связан с: {nodes} | Connected to: {nodes} |
+| `canvas.disconnect` | Удалить связь | Remove connection |
+| `canvas.return` | Клиент возвращается и приводит друзей | Customers come back and bring friends |
+| `canvas.noReturn` | Клиенты не возвращаются | Customers aren’t coming back |
+| `canvas.existing` | было | existing |
+| `canvas.new` | новое | new |
+| `canvas.edited` | изменён | edited |
+| `fx.t` | +{n}% клиентов | +{n}% more enquiries |
+| `fx.leak` | −{n}% потерь | −{n}% enquiries lost |
+| `fx.conv` | +{n}% к продажам | +{n}% sales conversion |
+| `fx.repeat` | +{n}% повторных | +{n}% repeat business |
+| `fx.check` | +{n}% к чеку | +{n}% average order |
+| `fx.hours` | −{n} ч/мес | −{n} h/month |
+| `lib.empty` | Блоки не найдены | No matching blocks |
+| `insp.connect` | Соединить с… | Connect to… |
+| `insp.split` | Добавить рассрочку на карту | Add instalment payments to the map |
+| `insp.readOnly` | Для правки блока выйдите из режима «Объём». | Exit 3D view to edit this block. |
+| `cmp.guarantees` | Условия работы | What’s included |
+| `cmp.reviews` | Что говорят клиенты | What clients say |
+| `eco.announce` | {variant}: выручка {money} в месяц, прирост {growth}% | {variant}: monthly revenue {money}, growth {growth}% |
+| `eco.expand` | Показать расчёт | Show estimate |
+| `eco.collapse` | Свернуть расчёт | Hide estimate |
+| `eco.hours` | {n} ч | {n} h |
+| `act.share.short` | Ссылка сокращена. Полную карту сохраните файлом | Link shortened. Download the file to keep the full map |
+| `act.share.error` | Скопируйте ссылку из этого поля | Copy the link from this field |
+| `act.saveShared` | Сохранить себе | Save a copy |
+| `act.nameFallback` | Мой бизнес | My business |
+| `act.notFound` | Карта не найдена в этом браузере | This map isn’t saved in this browser |
+| `act.noScript` | Включите JavaScript, чтобы собрать свою карту. | Enable JavaScript to build your map. |
+| `act.openPortal` | Открыть кабинет | Open portal |
+| `home.quiz.growthMap` | Хотите увидеть всю схему бизнеса? Соберите карту роста → | Want to see how the whole business fits together? Build a growth map → |
+
+## Карточки разницы
+
+| Ключ | RU | EN |
+| --- | --- | --- |
+| `diff.now.title` | Оставить как есть | Keep things as they are |
+| `diff.now.body` | Каждый месяц ≈ {lostLeads} заявок уходят без ответа. Это {moneyLost} прибыли, которую вы недополучаете. Заявки помогут вернуть блоки «{top1}», «{top2}» и «{top3}». | Around {lostLeads} enquiries go unanswered each month. That’s {moneyLost} in missed profit. The blocks “{top1}”, “{top2}” and “{top3}” help recover those enquiries. |
+| `diff.base.title` | Остановиться на «Фундаменте» | Stop at Foundation |
+| `diff.base.body` | «Ускорение» добавляет {gap} прибыли в месяц, или {gapYear} за год. Основную разницу дают блоки «{top1}» и «{top2}». | Momentum adds {gap} in monthly profit, or {gapYear} over a year. The blocks “{top1}” and “{top2}” account for most of the difference. |
+| `diff.boost.title` | Не включать «Автопилот» | Skip Autopilot |
+| `diff.boost.body` | Главный вклад даёт блок «{top1}». Разница с «Ускорением» составляет {gap} в месяц, и вы освобождаете ещё ≈ {hoursGap} часов. | The block “{top1}” makes the biggest difference. Autopilot adds {gap} a month over Momentum and frees up around {hoursGap} more hours. |
+| `diff.boost.small` | Для вашего масштаба «Ускорения» хватает с запасом. К «Автопилоту» можно вернуться, когда поток обращений вырастет. | Momentum covers your current scale. Revisit Autopilot as your enquiry volume grows. |
+| `mode.example.edit` | Собрать свою карту | Build your own map |
+| `act.handoff.error` | Не удалось открыть Telegram. Скопируйте ссылку на карту. | Telegram couldn’t open. Copy the map link to share it. |
+
+## Подписи брифа и панели
+
+| Ключ | RU | EN |
+| --- | --- | --- |
+| `brief.niche.ph` | Укажите направление | Enter your niche |
+| `brief.item.remove` | Удалить «{item}» | Remove “{item}” |
+| `brief.band.unset` | Пока не указывать | Leave blank for now |
+| `brief.revenue.set` | Указать оборот | Add monthly revenue |
+| `brief.revenue.clear` | Не указывать оборот | Clear monthly revenue |
+| `brief.source.star` | Основной источник: {source} | Main source: {source} |
+| `brief.source.one` | Выберите хотя бы один источник | Choose at least one source |
+| `brief.business.badge` | Бизнес: {name} | Business: {name} |
+| `auto.counter` | {n} из 2 000 символов | {n} of 2,000 characters |
+| `auto.empty` | Добавьте описание бизнеса | Add a description of your business |
+| `cmp.differences` | Что вы теряете, если… | What you miss out on if you… |
+| `cmp.noValue` | — | — |
+| `cmp.growth.month` | {money} в месяц | {money} a month |
+| `eco.preview` | {variant}: {growth} · окупится за {months} | {variant}: {growth} · pays back in {months} |
+| `eco.preview.noPayback` | {variant}: {growth} | {variant}: {growth} |
+| `panel.size.closed` | Свернуть панель | Collapse panel |
+| `panel.size.half` | Показать половину панели | Show half the panel |
+| `panel.size.full` | Развернуть панель | Expand panel |
+| `panel.tabs` | Панель карты | Map panel |
+| `insp.unpriced` | Стоимость уточним после разбора | We’ll confirm the price after a review |
+| `insp.effect.none` | Этот блок показывает, как устроен текущий процесс | This block shows how the current process works |
+| `insp.provider.none` | Выбрать | Choose |
+| `insp.service.landing` | Лендинг | Landing page |
+| `insp.service.web` | Корпоративный сайт | Company website |
+| `insp.service.shop` | Интернет-магазин | Online store |
+| `insp.service.automation` | Боты и автоматизация | Bots and automation |
+| `insp.service.assistant` | ИИ-ассистент | AI assistant |
+| `insp.service.mini` | Мини-приложение | Mini app |
+| `insp.service.platform` | Веб-приложение или личный кабинет | Web app or client portal |
+| `insp.service.mobile` | Мобильное приложение | Mobile app |
+| `insp.service.agents` | Мультиагентная система | Multi-agent system |
+| `insp.service.design` | Дизайн | Design |
+| `lib.limit.action` | Обсудить проект | Discuss the project |
+>>>>>>> growth-map/8-verified

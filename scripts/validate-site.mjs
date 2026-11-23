@@ -135,9 +135,40 @@ function validateAchievements(value) {
   }
 }
 
+function validateGrowthMap(config) {
+  const path = 'growthMap';
+  const keys = ['ai', 'endpoint', 'turnstileSiteKey', 'handoffNote', 'guarantees', 'reviews'];
+  record(config, path, keys, keys);
+  check(['off', 'on'].includes(config.ai), path + '.ai', 'выберите off или on');
+  const https = value => {
+    try {
+      const url = new URL(value);
+      return url.protocol === 'https:' && !url.username && !url.password && !/\s/.test(value);
+    } catch {
+      return false;
+    }
+  };
+  check(config.endpoint === '' || (typeof config.endpoint === 'string' && https(config.endpoint)),
+    path + '.endpoint', 'нужен адрес https:// или пустая строка');
+  string(config.turnstileSiteKey, path + '.turnstileSiteKey', true);
+  string(config.handoffNote, path + '.handoffNote', true);
+  check(Array.isArray(config.guarantees), path + '.guarantees', 'нужен список гарантий');
+  config.guarantees.forEach((item, index) => ruen(item, path + '.guarantees[' + index + ']'));
+  check(Array.isArray(config.reviews), path + '.reviews', 'нужен список отзывов');
+  config.reviews.forEach((item, index) => {
+    const field = path + '.reviews[' + index + ']';
+    record(item, field, ['name', 'business', 'text', 'url', 'date'], ['name', 'text', 'url', 'date']);
+    string(item.name, field + '.name');
+    if (item.business !== undefined) string(item.business, field + '.business', true);
+    ruen(item.text, field + '.text');
+    check(typeof item.url === 'string' && https(item.url), field + '.url', 'нужен адрес https://');
+    date(item.date, field + '.date');
+  });
+}
+
 export async function validateSite(value) {
   const keys = ['exchange', 'legal', 'pricing', 'ready', 'caseOverrides', 'founderPhoto', 'team', 'achievements', 'referral', 'portal'];
-  record(value, 'site.json', keys, keys);
+  record(value, 'site.json', [...keys, 'growthMap'], keys);
   const { exchange, legal, referral } = value;
   const currencies = { BYN: 1, KZT: 100, USD: 1, EUR: 1 };
   const exchangeKeys = ['date', ...Object.keys(currencies)];
@@ -173,6 +204,7 @@ export async function validateSite(value) {
     check(value.portal.url === '' || /^https:\/\/[^\s]+$/.test(value.portal.url), 'portal.url', 'нужен адрес https://');
     check(value.portal.status !== 'open' || value.portal.url !== '', 'portal.url', 'для статуса open укажите адрес кабинета');
   }
+  if (value.growthMap !== undefined) validateGrowthMap(value.growthMap);
   record(referral, 'referral', ['percent', 'days', 'cap'], ['percent', 'days', 'cap']);
   positive(referral.percent, 'referral.percent', true);
   positive(referral.days, 'referral.days', true);

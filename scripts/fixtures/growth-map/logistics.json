@@ -1,0 +1,14 @@
+{
+  "name": "Грузоперевозки",
+  "category": "logistics",
+  "niche": "cargo",
+  "size": "mid",
+  "models": ["b2b", "services"],
+  "check": 60000,
+  "leads": 200,
+  "sources": ["src_cold", "src_tenders", "src_site"],
+  "mainSource": "src_cold",
+  "intake": ["crm"],
+  "payment": ["invoice"],
+  "pains": ["slow_reply", "no_numbers"]
+}
