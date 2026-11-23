@@ -20,6 +20,7 @@ const versionedAssets = await Promise.all([
   "site-version.js", "studio.js", "currency.js", "commercial.js", "devlarion-logo.js", "solutions.js", "quiz.js", "payback.js", "portal.js", "shop.js", "viewer3d.js", "motion.js",
   "brand/favicon.svg", "brand/favicon-32.png", "brand/favicon-48.png", "brand/apple-touch-icon.png",
   "brand/logo-horizontal-copper-light.svg", "brand/logo-horizontal-copper.svg", "brand/og-ru.png", "brand/og-en.png",
+  "products/city-integration.svg", "products/cognivue-attention.svg", "products/axenta-tutor.svg", "growth-map/growth-flow.svg",
   "exchange-rates.json", "growth-map/growth-map.css", ...growthMapAssets,
 ].map(async name => {
   const bytes = await readFile(new URL("docs/assets/" + name, root));
@@ -173,34 +174,34 @@ for(const lang of ["ru","en"]){
  const watchIntro=l("Ассистент для iPhone и Apple Watch в закрытом бета-тестировании. В режиме «Тихий суфлёр» подсказка появляется на затемнённом экране часов.","An assistant for iPhone and Apple Watch, currently in closed beta. Silent Prompter displays a suggestion on the dimmed watch face.");
  const portalIntro=l("Заявка, смета, версии работы, счета и поддержка в личном кабинете Devlarion.","Your request, estimate, work versions, invoices and support in the Devlarion client portal.");
  const productPreviews = {
-   city: `<figure class="product-preview systems-preview">
-     <figcaption>${l("Как пользователь получает услугу", "How a user gets the service")}</figcaption>
-     <ol class="system-flow">
-       <li><span aria-hidden="true">${icons.server}</span>${l("Коммерческий сервис", "Commercial service")}</li>
-       <li><span aria-hidden="true">${icons.layers}</span>${l("Государственная платформа", "Public-sector platform")}</li>
-       <li><span aria-hidden="true">${icons.web}</span>${l("Услуга в привычном интерфейсе", "Service in a familiar interface")}</li>
-     </ol>
-   </figure>`,
-   cognivue: `<figure class="product-preview audience-preview">
-     <figcaption>${l("Пример отчёта по макету", "Example design review")}</figcaption>
-     <div class="review-question">${l("Что первым привлекло внимание?", "What caught your eye first?")}</div>
-     <dl class="review-findings">
-       <div><dt>${l("Что заметили", "What stood out")}</dt><dd>${l("Заголовок", "Headline")}</dd></div>
-       <div><dt>${l("Что проверить", "What to test")}</dt><dd>${l("Заметность кнопки", "Button visibility")}</dd></div>
-     </dl>
-   </figure>`,
-   axenta: `<figure class="product-preview tutor-preview">
-     <figcaption>${l("Пример разбора уравнения", "Example equation walkthrough")}</figcaption>
-     <div class="equation">2<var>x</var> + 4 = 10</div>
-     <ol class="tutor-steps">
-       <li><span>${l("Вычитаем 4 из обеих частей", "Subtract 4 from both sides")}</span><strong>2<var>x</var> = 6</strong></li>
-       <li><span>${l("Делим обе части на 2", "Divide both sides by 2")}</span><strong><var>x</var> = 3</strong></li>
-     </ol>
-   </figure>`
+   city: {
+     file: "city-integration.svg",
+     title: l("Интеграция городской услуги", "Connecting a public service"),
+     caption: l("Коммерческий сервис передаёт услугу на государственную платформу.", "A commercial service connects to a public-sector platform."),
+   },
+   cognivue: {
+     file: "cognivue-attention.svg",
+     title: l("Пример карты внимания", "Example attention map"),
+     caption: l("Видно, какие элементы макета замечают первыми.", "See which parts of a design attract attention first."),
+   },
+   axenta: {
+     file: "axenta-tutor.svg",
+     title: l("Разбор задания по фото", "Working through a photographed problem"),
+     caption: l("От записи в тетради к решению уравнения по шагам.", "From a handwritten problem to a step-by-step solution."),
+     alt: l("Уравнение 2x + 4 = 10. После двух шагов x = 3.", "The equation 2x + 4 = 10. The two-step solution gives x = 3."),
+   },
+ };
+ const renderProductPreview = key => {
+   const preview = productPreviews[key];
+   if (!preview) return "";
+   return `<figure class="product-preview product-preview--${key}">
+     <img src="${asset}products/${preview.file}" width="480" height="300" alt="${esc(preview.alt ?? "")}" loading="lazy" decoding="async">
+     <figcaption><strong>${preview.title}</strong><span>${preview.caption}</span></figcaption>
+   </figure>`;
  };
  const productCards = lab.map(product => `<article class="${product.preview ? "product-card" : "product-lead"}">
    <div class="product-copy"><small>${esc(product.status)}</small><h3>${esc(product.name)}</h3><p>${esc(product.summary)}</p></div>
-   ${productPreviews[product.preview] ?? ""}
+   ${renderProductPreview(product.preview)}
    ${renderProductDetails(lang,product.details)}
    ${product.links.length ? `<div class="product-links">${product.links.map(item => link(item.label,item.href)).join("")}</div>` : ""}
  </article>`).join("");
@@ -292,7 +293,7 @@ for(const lang of ["ru","en"]){
    </div>
    ${teamSection}
    ${processSection}
-   ${renderGrowthMapTeaser(lang, home)}
+   ${renderGrowthMapTeaser(lang, home, asset)}
    ${section("contact-links", l("С чего начать", "Explore Devlarion"), `<div class="actions">
      ${link(t.estimate, home + "#quiz", "ghost")}
      ${link(t.cases, home + "#work", "ghost")}
@@ -305,7 +306,7 @@ for(const lang of ["ru","en"]){
  <section class="wrap segment-strip" aria-label="${esc(front.audience)}"><h2 class="segment-strip-title">${esc(front.audience)}</h2>${segmentPicker}</section>
  ${stylePrompt}
  <div id="services">${renderOffers(lang,icons,site.ready)}</div>
- ${renderGrowthMapTeaser(lang,home)}
+ ${renderGrowthMapTeaser(lang, home, asset)}
  ${section("service-directions",t.services,`<div id="small-business" class="service-group"><h3>${l("Фиксированные цены: самозанятые, ИП и небольшие команды","Fixed prices: freelancers, sole traders and small teams")}</h3><p>${l("Для самозанятых, ИП и небольших команд. В каждом пакете один сценарий. Если нужны оплата, CRM или дополнительные функции, оценим их отдельно.","For freelancers, sole proprietors and small teams. Each package covers one workflow. We quote payment processing, CRM integrations and extra features separately.")}</p><p><a class="link" href="${home}self-employed/">${l("Все пакеты для самозанятых и ИП →","All packages for freelancers and sole proprietors →")}</a> <a class="link" href="${home}business/">${l("Малому и среднему бизнесу →","Small and medium business →")}</a></p><div class="service-grid">${packages.map(p=>`<article><span class="service-mark">${icons[serviceIcon[p.id]]}</span><h4>${esc(p.title)}</h4><p>${esc(p.description)}</p><div class="rate"><div class="starter-price" data-region-price-row><span class="starter-price-prefix">${l("от", "from")}</span><strong class="starter-price-amount" data-region-price="${p.rub}">${formatStartingPrice(p.rub,lang)}</strong></div></div>${link(l("Обсудить пакет","Discuss this package"),id.telegram+"?text="+encodeURIComponent(l("Хочу обсудить пакет «","I'd like to discuss the “")+p.title+l("».","”.")),"link","telegram")}</article>`).join("")}</div></div>
  <p data-region-note hidden></p>
  <div id="companies" class="service-group"><h3>${l("Крупные задачи: ИИ, интеграции и сервисы под ключ","Larger projects: AI, integrations and bespoke services")}</h3>

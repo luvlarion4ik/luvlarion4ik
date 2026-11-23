@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="300" viewBox="0 0 480 300">
+  <defs>
+    <linearGradient id="field" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#2f2031"/>
+      <stop offset=".58" stop-color="#1c1525"/>
+      <stop offset="1" stop-color="#141521"/>
+    </linearGradient>
+    <radialGradient id="ambience" cx=".67" cy=".4" r=".63">
+      <stop stop-color="#aa586d" stop-opacity=".44"/>
+      <stop offset="1" stop-color="#633b56" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="chassis" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#ab7385"/>
+      <stop offset=".35" stop-color="#5b3b59"/>
+      <stop offset="1" stop-color="#352a3e"/>
+    </linearGradient>
+    <linearGradient id="canvas" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#512947"/>
+      <stop offset=".56" stop-color="#352448"/>
+      <stop offset="1" stop-color="#272344"/>
+    </linearGradient>
+    <linearGradient id="Sun" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#ffd3ad"/>
+      <stop offset=".55" stop-color="#e69585"/>
+      <stop offset="1" stop-color="#98587f"/>
+    </linearGradient>
+    <linearGradient id="hills" x2=".75" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#a3618e"/>
+      <stop offset=".6" stop-color="#5b467b"/>
+      <stop offset="1" stop-color="#392d58"/>
+    </linearGradient>
+    <linearGradient id="warmStroke" x2="1" y2=".25" gradientUnits="objectBoundingBox">
+      <stop stop-color="#af7d9e" stop-opacity=".28"/>
+      <stop offset=".5" stop-color="#edaa99" stop-opacity=".84"/>
+      <stop offset="1" stop-color="#c6809e" stop-opacity=".35"/>
+    </linearGradient>
+    <radialGradient id="hot">
+      <stop stop-color="#fff2b1" stop-opacity=".96"/>
+      <stop offset=".23" stop-color="#ffbf80" stop-opacity=".85"/>
+      <stop offset=".55" stop-color="#ff6e86" stop-opacity=".68"/>
+      <stop offset=".79" stop-color="#d361ad" stop-opacity=".32"/>
+      <stop offset="1" stop-color="#af68db" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="cool">
+      <stop stop-color="#b98df6" stop-opacity=".7"/>
+      <stop offset=".55" stop-color="#9d78f5" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#8264eb" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="9" height="9" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r=".63" fill="#e9b0aa" opacity=".38"/>
+    </pattern>
+    <clipPath id="desktop">
+      <rect x="77" y="58" width="274" height="155" rx="5"/>
+    </clipPath>
+    <clipPath id="handset">
+      <rect x="347" y="108" width="66" height="134" rx="10"/>
+    </clipPath>
+  </defs>
+
+  <path fill="url(#field)" d="M0 0h480v300H0z"/>
+  <path fill="url(#ambience)" d="M0 0h480v300H0z"/>
+  <path fill="url(#dots)" d="M0 0h480v300H0z" opacity=".4"/>
+  <path d="M-22 266h526M-22 269h526M-22 291h526M74 236 38 300m119-64-21 64m96-64-2 64m75-64 17 64m61-64 36 64m18-64 36 55" fill="none" stroke="#bf829e" stroke-opacity=".13"/>
+  <circle cx="323" cy="132" r="111" fill="none" stroke="#cd94a9" stroke-opacity=".17"/>
+  <circle cx="323" cy="132" r="99" fill="none" stroke="#cd94a9" stroke-dasharray="2 7" stroke-opacity=".26"/>
+  <ellipse cx="248" cy="254" rx="166" ry="21" fill="#0b0a14" opacity=".55"/>
+
+  <path d="M199 216h31l8 24h33v6H159v-6h32z" fill="url(#chassis)" stroke="#b4869e" stroke-opacity=".5"/>
+  <path d="M153 246h123" stroke="#e2a4ab" stroke-opacity=".48"/>
+  <rect x="67" y="49" width="295" height="175" rx="12" fill="url(#chassis)" stroke="#cb95a4" stroke-opacity=".65"/>
+  <rect x="73" y="54" width="283" height="165" rx="9" fill="#1a1421"/>
+
+  <g clip-path="url(#desktop)">
+    <path fill="url(#canvas)" d="M77 58h274v155H77z"/>
+    <path fill="#251b31" d="M77 58h274v16H77z"/>
+    <path d="M77 74h274" stroke="#c394ae" stroke-opacity=".26"/>
+    <circle cx="86" cy="66" r="1.5" fill="#d38195"/>
+    <circle cx="92" cy="66" r="1.5" fill="#b2709e"/>
+    <circle cx="98" cy="66" r="1.5" fill="#936590"/>
+    <path d="M314 66h24" stroke="#d2aab9" stroke-width="2" stroke-opacity=".4" stroke-linecap="round"/>
+
+    <circle cx="266" cy="131" r="45" fill="url(#Sun)"/>
+    <circle cx="266" cy="131" r="54" fill="none" stroke="#d2a2ab" stroke-opacity=".35"/>
+    <path d="M183 171c31-34 61-27 83-12 24 16 38 10 85-13v67H163Z" fill="#654471"/>
+    <path d="M125 213c39-7 72-35 103-38 41-4 52 18 86 9l37-14v43Z" fill="url(#hills)"/>
+    <path d="M158 209c44-25 76-24 109-12 30 12 56 3 84-12m-186 26c36-14 67-14 101-5 30 8 55 5 85-7" fill="none" stroke="#d3a0ae" stroke-opacity=".57"/>
+    <path d="M242 119h49m-59 9h69m-73 9h77m-73 9h69" stroke="#ffd6b3" stroke-opacity=".29"/>
+
+    <path d="M105 91h19" stroke="#edbc9c" stroke-width="2" stroke-linecap="round" opacity=".84"/>
+    <path d="M103 107h89l-3 6h-86zm0 14h72l-3 6h-69z" fill="#f2d2c3"/>
+    <path d="M104 143h57m-57 7h43" stroke="#c3a1b9" stroke-width="2" stroke-linecap="round"/>
+    <rect x="102" y="164" width="67" height="18" rx="9" fill="#edb79c"/>
+    <path d="M118 173h27m7-3 3 3-3 3" fill="none" stroke="#492f47" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <ellipse cx="145" cy="115" rx="70" ry="37" fill="url(#hot)"/>
+    <ellipse cx="135" cy="173" rx="45" ry="24" fill="url(#hot)" opacity=".82"/>
+    <ellipse cx="267" cy="120" rx="53" ry="48" fill="url(#cool)"/>
+    <ellipse cx="278" cy="111" rx="40" ry="34" fill="url(#hot)" opacity=".8"/>
+
+    <g fill="none">
+      <ellipse cx="145" cy="115" rx="23" ry="12" stroke="#fff0ca" stroke-opacity=".87"/>
+      <ellipse cx="145" cy="115" rx="40" ry="21" stroke="#ffe0c4" stroke-opacity=".53"/>
+      <ellipse cx="135" cy="173" rx="27" ry="13" stroke="#fff0ca" stroke-opacity=".68"/>
+      <circle cx="278" cy="111" r="15" stroke="#fff0ca" stroke-opacity=".8"/>
+      <circle cx="278" cy="111" r="24" stroke="#f9c3c2" stroke-opacity=".54"/>
+      <path d="M148 114c26-18 62-30 125-5m-130 10c-24 15-23 33-10 53" stroke="#ffded0" stroke-opacity=".8" stroke-dasharray="3 4"/>
+      <path d="M145 109v12m-6-6h12m-16 52v12m-6-6h12m137-68v12m-6-6h12" stroke="#fff2d7" stroke-linecap="round"/>
+    </g>
+  </g>
+  <circle cx="215" cy="219" r="1.25" fill="#edc3c9" opacity=".7"/>
+
+  <g transform="rotate(10 381 177)">
+    <rect x="341" y="101" width="78" height="149" rx="16" fill="url(#chassis)" stroke="#cc9ba9"/>
+    <rect x="344" y="104" width="72" height="143" rx="13" fill="#1b1626"/>
+    <g clip-path="url(#handset)">
+      <path d="M347 108h66v134h-66z" fill="url(#canvas)"/>
+      <circle cx="384" cy="143" r="25" fill="url(#Sun)"/>
+      <path d="M345 163c18-16 33-13 51-3 6 3 11 1 17-3v25h-66z" fill="url(#hills)"/>
+      <path d="M347 171c23-11 44 11 66-3" fill="none" stroke="#efb6bb" stroke-opacity=".5"/>
+      <path d="M357 185h43l-3 4h-40zm0 8h31l-3 4h-28z" fill="#fee2cb"/>
+      <rect x="357" y="209" width="36" height="10" rx="5" fill="#edb79c"/>
+      <ellipse cx="379" cy="191" rx="37" ry="29" fill="url(#hot)" opacity=".84"/>
+      <ellipse cx="383" cy="144" rx="31" ry="34" fill="url(#cool)"/>
+      <ellipse cx="379" cy="191" rx="14" ry="9" fill="none" stroke="#fff0ca" stroke-opacity=".7"/>
+      <path d="M375 191h8m-4-4v8" stroke="#fff2d7"/>
+    </g>
+    <rect x="371" y="109" width="18" height="4" rx="2" fill="#22182d"/>
+    <path d="M373 237h14" stroke="#f9dadd" stroke-width="1.4" stroke-opacity=".75" stroke-linecap="round"/>
+  </g>
+
+  <g fill="none" stroke="url(#warmStroke)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M61 98H50V46h48m210 5 17-17h56l15 15m-113 185 16 24h39M62 196v28h49"/>
+    <path d="M37 119c9-12 21-12 30 0-9 12-21 12-30 0Z" fill="#312235" stroke="#df9da5"/>
+    <circle cx="52" cy="119" r="4.7" stroke="#ffc5a3"/>
+    <path d="M430 74h16m-8-8v16m-27 186h10m-5-5v10m-377-20h10m-5-5v10"/>
+  </g>
+  <g fill="#f6b6a4">
+    <circle cx="396" cy="49" r="2.4"/>
+    <circle cx="338" cy="258" r="2.1"/>
+    <circle cx="111" cy="224" r="2.1"/>
+    <circle cx="62" cy="98" r="1.7"/>
+  </g>
+</svg>

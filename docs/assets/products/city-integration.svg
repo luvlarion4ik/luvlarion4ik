@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="300" viewBox="0 0 480 300">
+  <defs>
+    <radialGradient id="sky" cx=".51" cy=".55" r=".68">
+      <stop stop-color="#21463d"/>
+      <stop offset=".63" stop-color="#102824"/>
+      <stop offset="1" stop-color="#0c1718"/>
+    </radialGradient>
+    <linearGradient id="plaza" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#1a4037"/>
+      <stop offset="1" stop-color="#0b1f20"/>
+    </linearGradient>
+    <linearGradient id="west" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#497566"/>
+      <stop offset="1" stop-color="#1d453d"/>
+    </linearGradient>
+    <linearGradient id="east" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#31584f"/>
+      <stop offset="1" stop-color="#17332e"/>
+    </linearGradient>
+    <linearGradient id="roof" x2="1" y2="1">
+      <stop stop-color="#7ba491"/>
+      <stop offset=".5" stop-color="#355a50"/>
+      <stop offset="1" stop-color="#24433b"/>
+    </linearGradient>
+    <linearGradient id="screen" x2="0" y2="1">
+      <stop stop-color="#284840"/>
+      <stop offset="1" stop-color="#102724"/>
+    </linearGradient>
+    <radialGradient id="halo">
+      <stop stop-color="#b3e7bd" stop-opacity=".38"/>
+      <stop offset="1" stop-color="#b3e7bd" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="12" height="12" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r=".7" fill="#a5c7b6" opacity=".31"/>
+    </pattern>
+    <pattern id="tile" width="32" height="12" patternUnits="userSpaceOnUse">
+      <path d="M0 6 16 0 32 6 16 12Z" fill="none" stroke="#71a695" stroke-opacity=".35" stroke-width=".6"/>
+    </pattern>
+  </defs>
+
+  <path fill="url(#sky)" d="M0 0h480v300H0z"/>
+  <path fill="url(#dots)" d="M12 12h456v276H12z" opacity=".63"/>
+  <g fill="none" stroke="#537e71" stroke-opacity=".48">
+    <path d="M17 39V17h22m402 0h22v22m0 222v22h-22m-402 0H17v-22"/>
+    <path d="M16 56h105l34-13h49m72 0h53l29 13h105M16 256h92l34 13h56m80 0h64l32-13h89" stroke-dasharray="2 6"/>
+    <path d="M80 215v-57m320 57v-68M124 233v-84m232 84v-84" stroke-opacity=".25"/>
+  </g>
+
+  <path d="m60 216 180-68 180 68-180 69Z" fill="url(#plaza)" stroke="#619989" stroke-opacity=".55"/>
+  <path d="m60 216 180-68 180 68-180 69Z" fill="url(#tile)" opacity=".9"/>
+  <path d="m60 216 180 69 180-69v6l-180 69-180-69Z" fill="#0d2523" stroke="#325d52"/>
+  <path d="m139 220 101-38 104 38-104 39Z" fill="#041212" opacity=".46"/>
+
+  <!-- Connections from the business service and the resident's device to the civic hub. -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m63 171 61 23 21-8 63 24m64 0 60-22 21 8 67-25" stroke="#6ad4b1" stroke-opacity=".10" stroke-width="11"/>
+    <path d="m63 171 61 23 21-8 63 24m64 0 60-22 21 8 67-25" stroke="#72c3a7" stroke-width="2"/>
+    <path d="m77 175 46 17 23-8 33 13m116 3 36-14 22 8 49-18" stroke="#d7efce" stroke-opacity=".7" stroke-dasharray="2 8"/>
+    <path d="m89 203 36 14 27-9m178 0 27 10 36-14" stroke="#bd916c" stroke-opacity=".67" stroke-dasharray="2 6"/>
+  </g>
+  <g fill="#b9e7c8" stroke="#214239" stroke-width="2">
+    <circle cx="124" cy="194" r="4"/>
+    <circle cx="353" cy="196" r="4"/>
+  </g>
+  <circle cx="89" cy="203" r="3.2" fill="#dba87f"/>
+  <circle cx="393" cy="204" r="3.2" fill="#dba87f"/>
+
+  <!-- A three-dimensional platform supports the shared service. -->
+  <path d="m155 208 85-32 87 32-86 34Z" fill="#326254" stroke="#8fbea5"/>
+  <path d="m155 208 86 34v11l-86-34Z" fill="#1d3f39" stroke="#517f72"/>
+  <path d="m241 242 86-34v11l-86 34Z" fill="#122f2c" stroke="#517f72"/>
+  <path d="m164 212 76 30 78-30" fill="none" stroke="#c1e3c3" stroke-opacity=".5"/>
+
+  <path d="m182 140 59 23v60l-59-23Z" fill="url(#west)" stroke="#8cbfa9"/>
+  <path d="m241 163 60-23v60l-60 23Z" fill="url(#east)" stroke="#8cbfa9"/>
+  <path d="m172 139 69-27 70 27-70 27Z" fill="url(#roof)" stroke="#a3c9ab"/>
+  <path d="m172 139 69 27v8l-69-27Z" fill="#274c43" stroke="#8cbfa9"/>
+  <path d="m241 166 70-27v8l-70 27Z" fill="#193b36" stroke="#8cbfa9"/>
+  <path d="m172 139 69 27 70-27" fill="none" stroke="#def0cb" stroke-width="1.5"/>
+
+  <g fill="#122d2b" stroke="#77a491" stroke-width=".8">
+    <path d="m190 158 9 3.5v23l-9-3.5Z"/>
+    <path d="m203 163 9 3.5v23l-9-3.5Z"/>
+    <path d="m216 168 9 3.5v23l-9-3.5Z"/>
+    <path d="m229 173 5 2v23l-5-2Z"/>
+    <path d="m248 175 7-2.7v22l-7 2.7Z"/>
+    <path d="m261 170 8-3v22l-8 3Z"/>
+    <path d="m276 164 8-3v22l-8 3Z"/>
+    <path d="m289 159 6-2.3v22l-6 2.3Z"/>
+  </g>
+  <path d="m192 168 5 2m8 3 5 2m8 3 5 2m26 7 4-1.5m10-4 4-1.5m11-4 4-1.5m9-3.5 3-1.2" fill="none" stroke="#e1ab83" stroke-linecap="round"/>
+  <path d="m191 198 50 20 52-20" fill="none" stroke="#a6c6af" stroke-opacity=".6"/>
+  <path d="m235 219 6 3 8-3" fill="none" stroke="#efba8c" stroke-width="1.8"/>
+
+  <!-- Rooftop beacon. -->
+  <circle cx="241" cy="99" r="59" fill="url(#halo)"/>
+  <path d="m209 132 32-12 32 12-32 12Z" fill="#183c34" stroke="#95bda4"/>
+  <path d="M209 132v6l32 12v-6Zm54 0v6l-22 12v-6Z" fill="#24473e" stroke="#81a591"/>
+  <path d="m221 121 20-8 20 8-20 8Z" fill="#47836b" stroke="#b2d0ab"/>
+  <path d="M221 121v10l20 8v-10Zm40 0v10l-20 8v-10Z" fill="#234b42" stroke="#9dc8ab"/>
+  <path d="M241 114V79" stroke="#c0e8b4" stroke-width="1.5" stroke-dasharray="2 4"/>
+  <g fill="none" stroke="#a4e6bd">
+    <circle cx="241" cy="75" r="19" opacity=".26"/>
+    <circle cx="241" cy="75" r="11" opacity=".5"/>
+    <path d="m241 63 12 12-12 12-12-12Z" fill="#214f43"/>
+  </g>
+  <circle cx="241" cy="75" r="3.2" fill="#f4d2aa"/>
+
+  <!-- Source system and destination service have distinct silhouettes. -->
+  <g stroke-linejoin="round">
+    <path d="m46 120 31-12 35 13-32 13Z" fill="#31574e" stroke="#80ad9c"/>
+    <path d="m46 120 34 14v44l-34-14Z" fill="#153b33" stroke="#80ad9c"/>
+    <path d="m80 134 32-13v44l-32 13Z" fill="#102e29" stroke="#80ad9c"/>
+    <path d="m52 132 22 9v6l-22-9Zm0 13 22 9v6l-22-9Zm0 13 22 9v5l-22-9Z" fill="#0c2220" stroke="#759d8b" stroke-width=".9"/>
+    <path d="m86 143 20-8m-20 19 20-8m-20 19 20-8" stroke="#75b69b" stroke-opacity=".75"/>
+    <circle cx="57" cy="137" r="1.4" fill="#efba8c"/><circle cx="57" cy="150" r="1.4" fill="#b6e7c1"/><circle cx="57" cy="163" r="1.4" fill="#b6e7c1"/>
+    <path d="m377 120 39-15 12 5v62l-39 15-12-5Z" fill="#193c33" stroke="#8fb89e"/>
+    <path d="m389 125 39-15v62l-39 15Z" fill="url(#screen)" stroke="#9bc5ab"/>
+    <path d="m394 134 29-11v39l-29 11Z" fill="#132d29" stroke="#628c7a"/>
+    <path d="m399 159 19-7m-19 11 11-4m-4 18 5-2" stroke="#96c6ad" stroke-linecap="round"/>
+    <path d="m402 144 4 2 8-10" fill="none" stroke="#efba8c" stroke-width="2" stroke-linecap="round"/>
+  </g>
+</svg>

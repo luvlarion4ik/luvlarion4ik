@@ -81,153 +81,40 @@
 }
 
 .product-preview {
+  --product-field: #15232c;
+  --product-accent: #ddc9e6;
   display: grid;
-  align-content: start;
-  gap: .9rem;
-  min-height: 15rem;
+  grid-template-rows: auto 1fr;
   margin: 0;
-  padding: clamp(.85rem, 1.5vw, 1.25rem);
-  border: 1px solid #ffffff24;
-  border-radius: .45rem;
-  color: var(--product-text);
-  background: var(--product-bg);
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--product-accent) 24%, transparent);
+  border-radius: .55rem;
+  background: var(--product-field);
+  color: #e9e6e6;
+}
+
+.product-preview--city { --product-field: #152722; --product-accent: #c7e1cb; }
+.product-preview--cognivue { --product-field: #29202e; --product-accent: #f0c5c3; }
+.product-preview--axenta { --product-field: #1a253a; --product-accent: #c9d7fa; }
+
+.product-preview img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 8 / 5;
 }
 
 .product-preview figcaption {
-  color: var(--product-accent);
-  font-size: .84rem;
-  font-weight: 650;
-  line-height: 1.4;
-}
-
-.systems-preview {
-  --product-bg: #1e322a;
-  --product-text: #eef6ef;
-  --product-accent: #abd5b5;
-}
-
-.system-flow {
-  display: grid;
-  gap: .45rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.system-flow li {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1.4rem minmax(0, 1fr);
-  align-items: center;
-  gap: .6rem;
-  min-height: 2.4rem;
-  padding: .34rem .5rem;
-  border: 1px solid #abd5b55c;
-  border-radius: .3rem;
-  background: #ffffff0c;
-  font-size: .82rem;
-  line-height: 1.3;
-}
-
-.system-flow li + li::before {
-  content: "";
-  position: absolute;
-  top: -.5rem;
-  left: 1.2rem;
-  width: 1px;
-  height: .5rem;
-  background: var(--product-accent);
-}
-
-.system-flow li:last-child {
-  border-color: var(--product-accent);
-  background: #abd5b523;
-}
-
-.system-flow svg {
-  display: block;
-  width: 1.25rem;
-  height: 1.25rem;
-  color: var(--product-accent);
-}
-
-.audience-preview {
-  --product-bg: #382a35;
-  --product-text: #fff1f1;
-  --product-accent: #f1baa9;
-}
-
-.review-question {
-  padding: .4rem .62rem;
-  border-inline-start: 2px solid var(--product-accent);
-  background: #ffffff0b;
-  font-family: 'Bureau Serif', Georgia, serif;
-  font-size: clamp(1rem, 1.45vw, 1.25rem);
-  line-height: 1.2;
-}
-
-.review-findings {
-  display: grid;
-  gap: .5rem;
-  margin: 0;
-}
-
-.review-findings div {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
-  align-items: baseline;
-  gap: .65rem;
-  padding-top: .45rem;
-  border-top: 1px solid #f1baa945;
-  font-size: .82rem;
-  line-height: 1.3;
-}
-
-.review-findings dt { color: var(--product-accent); }
-.review-findings dd { margin: 0; font-weight: 650; }
-
-.tutor-preview {
-  --product-bg: #243044;
-  --product-text: #f2f6ff;
-  --product-accent: #c0d5fa;
-  background-image: linear-gradient(#e0e9ff12 1px,transparent 1px), linear-gradient(90deg,#e0e9ff12 1px,transparent 1px);
-  background-size: 18px 18px;
-}
-
-.equation,
-.tutor-steps strong {
-  white-space: nowrap;
-  font: 400 1.1rem/1.2 'Bureau Serif', Georgia, serif;
-}
-
-.equation {
-  font-size: clamp(1.65rem, 2.3vw, 2.2rem);
-  letter-spacing: -.03em;
-}
-
-.tutor-steps {
-  display: grid;
-  gap: .4rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.tutor-steps li {
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: .2rem .6rem;
-  padding: .36rem .55rem;
-  border-inline-start: 2px solid var(--product-accent);
-  background: var(--product-bg);
-  font-size: .8rem;
+  flex-direction: column;
+  gap: .32rem;
+  padding: .85rem 1rem 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--product-accent) 20%, transparent);
+  font-size: .82rem;
+  line-height: 1.45;
 }
 
-.tutor-steps li:last-child strong {
-  color: var(--product-accent);
-}
+.product-preview figcaption strong { color: var(--product-accent); font-size: .92rem; }
 
 @supports (grid-template-rows: subgrid) {
   @media (min-width: 901px) {
@@ -241,7 +128,6 @@
 
 @media (max-width: 900px) {
   #products .product-list { grid-template-columns: 1fr; }
-  .product-preview { min-height: 0; }
 }
 
 .discovery {
