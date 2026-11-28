@@ -353,7 +353,7 @@
   });
   const securityNote = app.querySelector('[data-pt-security-note]');
   const notes = {
-    password: t('Демо: ссылка для смены пароля приходит на e-mail и действует один раз.', 'Demo: a password-change link is emailed and works once.'),
+    password: t('Демо: при восстановлении доступа код приходит в привязанный Telegram. Здесь код не отправляется.', 'Demo: for account recovery, the code goes to your linked Telegram account. This preview sends no code.'),
     mfa: t('Демо: двухфакторный вход подтверждается кодом из приложения-аутентификатора.', 'Demo: two-factor sign-in is confirmed with an authenticator code.'),
     delete: t('Демо: перед удалением аккаунта мы просим подтвердить его по e-mail, а проекты и документы остаются у студии по договору.', 'Demo: before deleting an account we ask for email confirmation, and projects and documents stay with the studio under the contract.'),
   };

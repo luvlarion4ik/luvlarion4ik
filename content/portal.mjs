@@ -34,7 +34,7 @@ function renderSavedMaps(lang, home) {
 
 // Страница «Личный кабинет». Кабинет — отдельное приложение, поэтому до его запуска страница
 // честно называется предпросмотром, а вход включается одной строкой в content/site.json:
-// "portal": { "status": "open", "url": "https://cabinet.devlarion.ru/" }.
+// "portal": { "status": "open", "url": "https://devlarion.ru/account/" }.
 
 export function portalState(portal = {}) {
   const open = portal.status === 'open' && Boolean(portal.url);
@@ -79,7 +79,17 @@ const art = {
 export function renderPortalPage(lang, { home, tg, icons, portal, referral }) {
   const ru = lang === 'ru';
   const l = (a, b) => ru ? a : b;
-  const { open } = portalState(portal);
+  const { open, url } = portalState(portal);
+  const authLink = mode => {
+    const target = new URL(url);
+    target.searchParams.set('mode', mode);
+    return esc(target.href);
+  };
+  const resetUrl = open ? authLink('reset') : '';
+  const actions = `<div class="actions">${portalLoginLink(lang, portal, tg)}
+    ${open ? `<a class="ghost" href="${authLink('register')}" data-goal="portal_register">${l('Создать аккаунт', 'Create an account')}</a>` : ''}
+    <a class="ghost" href="${home}#quiz">${l('Рассчитать проект', 'Estimate a project')}</a>
+  </div>`;
   const cap = referral?.cap ?? 15;
 
   const tabs = [
@@ -301,7 +311,7 @@ export function renderPortalPage(lang, { home, tg, icons, portal, referral }) {
               <div class="pt-themes" role="group" aria-label="${l('Цветовая тема', 'Colour theme')}">${themes.map(([id, name]) => `<button type="button" data-pt-theme="${id}" aria-pressed="false"><i class="sw sw--${id}"></i>${name}</button>`).join('')}</div>
               <small>${l('Уведомления', 'Notifications')}</small>
               <table class="pt-table pt-table--compact"><thead><tr><th></th><th>${l('Почта', 'Email')}</th><th>Telegram</th></tr></thead><tbody>${channelRows}</tbody></table>
-              <p class="pt-hint">${l('Письма подтверждения и восстановления доступа приходят всегда.', 'Confirmation and account-recovery emails are always sent.')}</p></article>
+              <p class="pt-hint">${l('Коды для регистрации и восстановления доступа приходят в привязанный Telegram.', 'Registration and account recovery codes go to your linked Telegram account.')}</p></article>
             <article class="pt-card"><small>${l('Безопасность', 'Security')}</small>
               <ul class="pt-sessions" data-pt-sessions>
                 <li><div><strong>${l('Этот браузер', 'This browser')}</strong><span>${l('Краснодар · сейчас', 'Krasnodar · now')}</span></div><span class="pt-chip pt-chip--done">${l('Текущий', 'Current')}</span></li>
@@ -343,14 +353,17 @@ export function renderPortalPage(lang, { home, tg, icons, portal, referral }) {
   const principles = [
     [l('Данные компаний разделены', 'Company data is isolated'), l('Клиент видит только выданные ему проекты, файлы и счета. Отзыв доступа действует сразу.', 'A client only sees the projects, files and invoices assigned to them. Revoked access takes effect immediately.')],
     [l('Журнал действий', 'Audit trail'), l('Операции с деньгами и доступом фиксируют автора, время и результат.', 'Operations with money or access record who did what, when, and the result.')],
-    [l('Безопасный вход', 'Safe sign-in'), l('Пароли хранятся хешем, ссылки подтверждения одноразовые и ограничены по времени, сессии можно завершить.', 'Passwords are hashed, confirmation links are single-use and time-limited, sessions can be ended.')],
-    [l('Русский и английский', 'Russian and English'), l('Интерфейс, письма и ошибки на двух языках, светлая и тёмная темы, уменьшенное движение по настройке системы.', 'Interface, emails and errors in both languages, light and dark themes, reduced motion by system setting.')],
+    [l('Безопасный вход', 'Safe sign-in'), l('Входите с паролем. Для регистрации и восстановления доступа бот отправляет одноразовый код в привязанный Telegram.', 'Sign in with a password. For registration and account recovery, the bot sends a one-time code to your linked Telegram account.')],
+    [l('Оформление кабинета', 'Portal appearance'), l('Светлая и тёмная темы. Анимация учитывает настройку уменьшенного движения.', 'Light and dark themes. Animation respects your reduced-motion preference.')],
   ];
 
   const faqs = [
     [l('Кабинет уже работает?', 'Is the portal live?'), open
-      ? l('Да, вход открыт. Если у вас уже есть проект, менеджер привяжет его к вашему аккаунту.', 'Yes, sign-in is open. If you already have a project, a manager will link it to your account.')
+      ? l('Да. После регистрации аккаунт доступен сразу. Менеджер отдельно подключит проект после согласования заявки и договора.', 'Yes. You can access your account as soon as you register. Your manager links your project separately after agreeing the brief and contract.')
       : l('Пока это предпросмотр с демо-данными. Сначала студия проходит две приёмки на тестовых заказчиках, потом открывает регистрацию. Запросите доступ, и мы напишем, когда он появится.', 'This is a preview with demo data for now. The studio first completes two acceptance runs with test clients, then opens registration. Request access and we will let you know.')],
+    ...(open ? [[l('Как восстановить пароль?', 'How do I reset my password?'),
+      l(`Откройте <a href="${resetUrl}">восстановление доступа</a>, получите одноразовый код в привязанном Telegram и задайте новый пароль.`,
+        `Open <a href="${resetUrl}">account recovery</a>, get a one-time code in your linked Telegram account and set a new password.`)]] : []),
     [l('Нужно ли регистрироваться, чтобы получить смету?', 'Do I need an account to get a quote?'), l('Нет. Расчёт и заявку можно отправить в Telegram без кабинета. Кабинет нужен, чтобы вести проект, версии, счета и поддержку в одном месте.', 'No. You can send an estimate and request through Telegram without the portal. The portal is for running the project, versions, invoices and support in one place.')],
     [l('Как проект появляется в кабинете?', 'How does a project appear in the portal?'), l('После согласования заявки и договора менеджер подключает проект к вашему аккаунту вручную. До этого в разделах «Версии» и «Счета» пусто.', 'After the request and contract are agreed, a manager links the project to your account by hand. Until then the Versions and Invoices sections are empty.')],
     [l('Как работает согласование версий?', 'How does version approval work?'), l('Открываете конкретную версию со ссылкой на репозиторий и нажимаете «Принять» или «Запросить правки». Для правок нужен комментарий. Решение остаётся в истории с автором и временем.', 'You open a specific version with its repository link and choose Approve or Request changes. Changes need a comment. The decision stays on record with its author and time.')],
@@ -362,8 +375,11 @@ export function renderPortalPage(lang, { home, tg, icons, portal, referral }) {
         <p class="eyebrow"><i></i>${l('Клиентский портал', 'Client portal')}</p>
         <h1>${l('Личный кабинет Devlarion', 'Devlarion client portal')}</h1>
         <p class="intro">${l('Заявка, смета, версии работы, счета и поддержка в одном месте. Видно, что происходит с проектом и что ждут от вас.', 'Your request, estimate, work versions, invoices and support in one place. See what is happening with the project and what is expected from you.')}</p>
-        <div class="actions">${portalLoginLink(lang, portal, tg)}<a class="ghost" href="${home}#quiz">${l('Рассчитать проект', 'Estimate a project')}</a></div>
-        <p class="pt-status ${open ? 'pt-status--open' : ''}"><i aria-hidden="true"></i>${open ? l('Кабинет открыт', 'Portal is open') : l('Предпросмотр · регистрация откроется после тестовых приёмок', 'Preview · registration opens after test acceptance runs')}</p>
+        ${actions}
+        <div class="pt-account-help">
+          <p class="pt-status ${open ? 'pt-status--open' : ''}"><i aria-hidden="true"></i>${open ? l('Доступ сразу после регистрации', 'Immediate access after registration') : l('Предпросмотр · регистрация откроется после тестовых приёмок', 'Preview · registration opens after test acceptance runs')}</p>
+          ${open ? `<a class="pt-link" href="${resetUrl}">${l('Забыли пароль?', 'Forgot your password?')}</a>` : ''}
+        </div>
       </div>
       <div class="pt-hero-art" aria-hidden="true">${art.orbit}<div class="pt-hero-mark"><devlarion-logo variant="mark" height="132" intro></devlarion-logo></div></div>
     </section>
@@ -379,6 +395,6 @@ export function renderPortalPage(lang, { home, tg, icons, portal, referral }) {
     <section class="wrap pt-section"><h2>${l('Надёжность', 'Reliability')}</h2>
       <div class="pt-roles">${principles.map(([h, p]) => `<article><h3>${h}</h3><p>${p}</p></article>`).join('')}</div></section>
     <section class="wrap pt-section"><h2>${l('Вопросы о кабинете', 'Portal questions')}</h2>${faqs.map(([q, a]) => `<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</section>
-    <section class="wrap pt-section pt-cta"><devlarion-logo variant="full" height="46" view aria-hidden="true"></devlarion-logo><h2>${l('Начнём с расчёта', 'Start with an estimate')}</h2><div class="actions">${portalLoginLink(lang, portal, tg)}<a class="ghost" href="${home}#quiz">${l('Рассчитать проект', 'Estimate a project')}</a></div></section>
+    <section class="wrap pt-section pt-cta"><devlarion-logo variant="full" height="46" view aria-hidden="true"></devlarion-logo><h2>${l('Начнём с расчёта', 'Start with an estimate')}</h2>${actions}</section>
   </div>`;
 }

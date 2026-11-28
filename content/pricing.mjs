@@ -62,6 +62,8 @@ export const estimator = {
   'fine-tuning': { small: 45000, medium: [180000, 450000], large: [850000, 1500000] },
   design: { small: 25000, medium: [60000, 150000], large: [150000, 400000] },
   security: { small: 25000, medium: [60000, 200000], large: [200000, 600000] },
+  seo: { small: 15000, medium: [35000, 90000], large: [90000, 250000] },
+  geo: { small: 20000, medium: [45000, 120000], large: [120000, 300000] },
   support: { small: 8000, medium: [15000, 50000], large: [50000, 150000] },
   custom: { small: null, medium: null, large: null }
 };
@@ -92,13 +94,16 @@ const modules = [
   ['fine-tuning', 'Дообучение модели', 'Model fine-tuning', ['Аудит данных и оценка пилота.', 'Data audit and pilot assessment.'], ['Пилот одной готовой модели на подготовленных примерах с проверкой качества.', 'Pilot of one existing model on prepared examples, with evaluation.'], ['Дообучение с интеграцией в рабочую систему.', 'Fine-tuning with production integration.']],
   ['design', 'Дизайн и редизайн', 'Design and redesign', ['Дизайн одной ключевой страницы.', 'Design for one key page.']],
   ['security', 'Аудит и меры защиты', 'Security audit and controls', ['Проверка небольшого сайта и отчёт.', 'A review of a small website and a written report.']],
+  ['seo', 'SEO-оптимизация', 'SEO', ['Аудит и техническая настройка одного сайта.', 'Audit and technical set-up for one website.']],
+  ['geo', 'GEO — видимость в ИИ-поиске', 'GEO — AI search visibility', ['Аудит видимости бренда в ответах ИИ и базовая разметка.', 'Brand visibility audit in AI answers and baseline markup.']],
   ['support', 'Поддержка / месяц', 'Support / month'],
   ['custom', 'Другая задача', 'Another project']
 ];
 
+export const crmStartingPrice = 35000;
 const digital = ['landing', 'web', 'shop', 'automation', 'assistant', 'mini', 'platform', 'mobile', 'agents', 'private-ai'];
 const options = [
-  ['crm', 'Интеграция с готовой CRM', 'Integration with an existing CRM', [35000, 75000], ['landing', 'web', 'shop', 'automation', 'assistant', 'mini', 'mobile', 'agents']],
+  ['crm', 'Интеграция с готовой CRM', 'Integration with an existing CRM', [crmStartingPrice, 75000], ['landing', 'web', 'shop', 'automation', 'assistant', 'mini', 'mobile', 'agents']],
   ['payment', 'Подключение оплаты', 'Payment processing', null, ['landing', 'web', 'shop', 'automation', 'mini', 'platform', 'mobile']],
   ['api', '1С или нестандартный API', '1C or a custom API', null, digital],
   ['priority', 'Срочный запуск', 'Priority delivery', null, null],
@@ -141,6 +146,16 @@ export function serviceRate(id, tier, overrides) {
 export function startingPrice(id, tier = 'small', overrides = {}) {
   const rate = serviceRate(id, tier, overrides);
   return Array.isArray(rate) ? rate[0] : rate;
+}
+
+export function packageStartingPrice(price, overrides = {}) {
+  if (!price) return null;
+  if (price === 'growth') return 120000;
+  if (price === 'bot-crm') {
+    const bot = startingPrice('automation', 'small', overrides);
+    return bot === null ? null : bot + crmStartingPrice;
+  }
+  return startingPrice(price[0], price[1], overrides);
 }
 
 export function starterPackages(lang, overrides = {}) {

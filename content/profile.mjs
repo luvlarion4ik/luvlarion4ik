@@ -33,3 +33,51 @@ export const copy = {
   faqs:[["How do I price a small project?","The services section lists starting prices and what each package covers. For integrations or multiple workflows, we’ll discuss scope and any applicable discount on a call, then send a final quote."],["Can we arrange a meeting?","We can start with a video call. For an in-person meeting, send your city and the topics you’d like to cover so we can agree on the format in advance."],["Can you deploy on our infrastructure?","Yes. We review your compute capacity, data requirements and access restrictions before selecting the deployment architecture."],["Can we work under NDA?","We agree on confidentiality terms before you share restricted materials."],["How do revisions and source ownership work?","The agreement sets out the revision scope, source delivery and rights before development begins."],["What happens after two months?","Further work is quoted separately. A support subscription is available for ongoing needs."]]
  }
 };
+
+export const homeCopy = {
+  ru: {
+    title: 'Сайты, боты и ИИ-сервисы, которые приносят заявки',
+    intro: 'Помогаю бизнесу принимать заявки и сокращать ручную работу. Выберите, кто вы, — покажем подходящие решения и цены.',
+    audience: 'Для кого',
+    segmentAction: 'Смотреть решения',
+    visited: 'Вы смотрели',
+    why: 'Почему это важно для вашего бизнеса',
+    whyFacts: [
+      ['Клиенты ищут до того, как звонят', 'Прежде чем написать, человек открывает поисковик, карты или спрашивает ИИ. Если вас там нет, он выбирает того, кто есть.'],
+      ['Заявки не теряются', 'Сайт и бот принимают обращения ночью и в выходные и сразу передают их вам в Telegram или CRM.'],
+      ['Меньше ручной работы', 'Ответы на частые вопросы, запись и расчёт стоимости происходят без менеджера.'],
+    ],
+    whyLink: 'Подробнее — зачем бизнесу сайт',
+    growth: 'Рост после запуска',
+    growthLinks: [['SEO', 'Видимость в Яндексе и Google.'], ['GEO', 'Присутствие в ответах ИИ.'], ['Сопровождение', 'Правки, мониторинг и развитие.']],
+    allCases: 'Все кейсы',
+    moreProducts: 'Ещё продукты',
+    studio: 'Devlarion разрабатывает сайты, ботов, мобильные приложения и ИИ-сервисы. Ведём проект от анализа задачи до запуска и поддержки. Состав работ, смету и этапы согласуем до старта.',
+    quote: 'Не знаете, что выбрать? Рассчитайте проект за 1 минуту',
+  },
+  en: {
+    title: 'Websites, bots and AI services that bring in enquiries',
+    intro: 'I help businesses take enquiries and cut manual work. Choose the option that fits your business to see solutions and prices.',
+    audience: 'Who we work with',
+    segmentAction: 'Explore solutions',
+    visited: 'You viewed this',
+    why: 'Why it matters for your business',
+    whyFacts: [
+      ['Customers look before they call', 'People check search engines and maps or ask AI before getting in touch. If they cannot find you, they may choose a business they can find.'],
+      ['Enquiries reach you', 'A website and bot take enquiries at night and at weekends and send them straight to Telegram or your CRM.'],
+      ['Less manual work', 'Customers can get answers, make bookings and request an estimate without waiting for your team.'],
+    ],
+    whyLink: 'Read more about why businesses need a website',
+    growth: 'Growth after launch',
+    growthLinks: [['SEO', 'Visibility in Google and Yandex.'], ['GEO', 'Visibility in AI answers.'], ['Support', 'Updates, monitoring and improvements.']],
+    allCases: 'All case studies',
+    moreProducts: 'More products',
+    studio: 'Devlarion builds websites, bots, mobile apps and AI services. We take projects from discovery through to launch and support. We agree on the scope, budget and milestones before work starts.',
+    quote: 'Unsure where to start? Estimate your project in one minute',
+  },
+};
+
+export const styleCopy = {
+  ru: { label: 'Версия сайта', classic: 'Классическая', motion: 'С анимацией', prompt: 'Хотите посмотреть версию с анимацией?', link: 'Версия с анимацией', dismiss: 'Закрыть предложение' },
+  en: { label: 'Site version', classic: 'Classic', motion: 'Animated', prompt: 'Would you like to see the animated version?', link: 'Animated version', dismiss: 'Dismiss the suggestion' },
+};

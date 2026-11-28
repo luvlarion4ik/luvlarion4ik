@@ -202,3 +202,7 @@
   color: var(--accent);
   font-family: 'Bureau Serif', Georgia, serif;
 }
+
+/* Подпись над заголовком кейса не должна прилипать к крупному h1 */
+.case-detail > small { display: inline-block; margin-bottom: .9rem; letter-spacing: .04em; }
+.case-detail > small + .demo-badge, .case-detail > .demo-badge { margin-bottom: .9rem; }

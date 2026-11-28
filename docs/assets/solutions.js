@@ -177,3 +177,52 @@ if (companySolutions) {
   companySolutions.dataset.enhanced = 'true';
   moveToDeepLink();
 }
+
+const segmentCards = [...document.querySelectorAll('[data-segment]')];
+
+if (segmentCards.length) {
+  const key = 'devlarion-segment';
+  function showLastSegment() {
+    let last;
+    try { last = localStorage.getItem(key); } catch {}
+    for (const card of segmentCards) {
+      card.querySelector('.segment-visited').hidden = card.dataset.segment !== last;
+    }
+  }
+  showLastSegment();
+  window.addEventListener('pageshow', showLastSegment);
+  for (const card of segmentCards) {
+    card.addEventListener('click', () => {
+      try { localStorage.setItem(key, card.dataset.segment); } catch {}
+      showLastSegment();
+    });
+  }
+}
+
+function redirectLegacySegment() {
+  const id = location.hash.slice(1);
+  const route = document.getElementById(id)?.dataset.legacySegment;
+  if (!route) return;
+  const target = new URL(route, location.href);
+  target.search = location.search;
+  location.replace(target);
+}
+
+redirectLegacySegment();
+window.addEventListener('hashchange', redirectLegacySegment);
+
+const servicesMenu = document.querySelector('.bar .services-nav');
+if (servicesMenu) {
+  document.addEventListener('pointerdown', event => {
+    if (!servicesMenu.contains(event.target)) servicesMenu.open = false;
+  });
+  servicesMenu.addEventListener('focusout', event => {
+    if (event.relatedTarget && !servicesMenu.contains(event.relatedTarget)) servicesMenu.open = false;
+  });
+  servicesMenu.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && servicesMenu.open) {
+      servicesMenu.open = false;
+      servicesMenu.querySelector('summary').focus();
+    }
+  });
+}
