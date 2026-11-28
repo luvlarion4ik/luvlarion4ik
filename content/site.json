@@ -27,8 +27,8 @@
     "url": "https://devlarion.ru/account/"
   },
   "growthMap": {
-    "ai": "off",
-    "endpoint": "",
+    "ai": "on",
+    "endpoint": "https://devlarion.ru/gm-ai",
     "turnstileSiteKey": "",
     "handoffNote": "",
     "guarantees": [],
